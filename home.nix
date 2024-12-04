@@ -64,7 +64,7 @@
     ./fastfetch/main.nix # Fastfetch Configuration
     ./fish/main.nix # Fish Shell Configuration
     ./mako/main.nix # Mako Notification Daemon Configuration
-    # ./Mangohud/main.nix # MangoHud Configuration
+    ./Mangohud/main.nix # MangoHud Configuration
     # ./mpv/main.nix # MPV Configuration
     # ./swappy/main.nix # Swappy Configuration
     # ./sway/main.nix # Sway Window Manager Configuration
