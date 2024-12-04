@@ -1,0 +1,36 @@
+{ ... }:
+
+{
+  programs.alacritty.settings = {
+    colors = {
+      primary = {
+        background = "#122637";
+        foreground = "#ffffff";
+      };
+      cursor = {
+        text = "#122637";
+        cursor = "#f0cb09";
+      };
+      normal = {
+        black = "#000000";
+        red = "#ff0000";
+        green = "#37dd21";
+        yellow = "#fee409";
+        blue = "#1460d2";
+        magenta = "#ff005d";
+        cyan = "#00bbbb";
+        white = "#bbbbbb";
+      };
+      bright = {
+        black = "#545454";
+        red = "#f40d17";
+        green = "#3bcf1d";
+        yellow = "#ecc809";
+        blue = "#5555ff";
+        magenta = "#ff55ff";
+        cyan = "#6ae3f9";
+        white = "#ffffff";
+      };
+    };
+  };
+}

@@ -60,7 +60,7 @@
   ########################################
   programs.home-manager.enable = true;
   imports = [
-    # ./alacritty/main.nix # Alacritty Terminal Configuration
+    ./alacritty/main.nix # Alacritty Terminal Configuration
     # ./fastfetch/main.nix # Fastfetch Configuration
     # ./fish/main.nix # Fish Shell Configuration
     # ./mako/main.nix # Mako Notification Daemon Configuration

@@ -1,0 +1,51 @@
+{ ... }:
+
+{
+  programs.alacritty.settings = {
+    colors = {
+      primary = {
+        foreground = "#e3e3e3";
+        bright_foreground = "#ffffff";
+        background = "#1f1f1f";
+      };
+      cursor = {
+        text = "#191622";
+        cursor = "#f8f8f2";
+      };
+      search = {
+        matches = { foreground = "#b2b2b2"; background = "#b26818"; };
+        focused_match = { foreground = "CellBackground"; background = "CellForeground"; };
+      };
+      normal = {
+        black = "#000000";
+        red = "#b21818";
+        green = "#18b218";
+        yellow = "#b26818";
+        blue = "#1818b2";
+        magenta = "#b218b2";
+        cyan = "#18b2b2";
+        white = "#b2b2b2";
+      };
+      bright = {
+        black = "#686868";
+        red = "#ff5454";
+        green = "#54ff54";
+        yellow = "#ffff54";
+        blue = "#5454ff";
+        magenta = "#ff54ff";
+        cyan = "#54ffff";
+        white = "#ffffff";
+      };
+      dim = {
+        black = "#000000";
+        red = "#b21818";
+        green = "#18b218";
+        yellow = "#b26818";
+        blue = "#1818b2";
+        magenta = "#b218b2";
+        cyan = "#18b2b2";
+        white = "#b2b2b2";
+      };
+    };
+  };
+}
