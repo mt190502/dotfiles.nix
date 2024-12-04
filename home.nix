@@ -62,7 +62,7 @@
   imports = [
     ./alacritty/main.nix # Alacritty Terminal Configuration
     # ./fastfetch/main.nix # Fastfetch Configuration
-    # ./fish/main.nix # Fish Shell Configuration
+    ./fish/main.nix # Fish Shell Configuration
     # ./mako/main.nix # Mako Notification Daemon Configuration
     # ./Mangohud/main.nix # MangoHud Configuration
     # ./mpv/main.nix # MPV Configuration
