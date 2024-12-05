@@ -71,7 +71,7 @@
     ./swaylock/main.nix # Swaylock Configuration
     ./swaynag/main.nix # Swaynag Configuration
     # ./tmux/main.nix # Tmux Configuration
-    # ./waybar/main.nix # Waybar Configuration
+    ./waybar/main.nix # Waybar Configuration
     # ./wofi/main.nix # Wofi Configuration
   ];
 
