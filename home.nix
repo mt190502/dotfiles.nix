@@ -67,7 +67,7 @@
     ./Mangohud/main.nix # MangoHud Configuration
     ./mpv/main.nix # MPV Configuration
     ./swappy/main.nix # Swappy Configuration
-    # ./sway/main.nix # Sway Window Manager Configuration
+    ./sway/main.nix # Sway Window Manager Configuration
     ./swaylock/main.nix # Swaylock Configuration
     ./swaynag/main.nix # Swaynag Configuration
     # ./tmux/main.nix # Tmux Configuration
