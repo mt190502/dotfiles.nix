@@ -4,16 +4,19 @@ let modifier = config.wayland.windowManager.sway.config.modifier;
 in {
   wayland.windowManager.sway = {
     config = {
-      floating.modifier = "${modifier}";
       bars = [{
-        position = "top";
         command = "waybar";
+        position = "top";
+        workspaceButtons = true;
       }];
+      floating.border = 5;
+      floating.modifier = "${modifier}";
+      fonts = { size = 10.0; };
       gaps = {
         inner = 5;
         outer = 0;
       };
-      window.hideEdgeBorders = "none";
+      window.border = 0;
       workspaceLayout = "tabbed";
       menu = "wofi --prompt 'Search Apps' --show drun";
       terminal = "alacritty";
@@ -23,6 +26,7 @@ in {
       #~~~ window
       default_border                                   pixel 5
       default_floating_border                          none
+      hide_edge_borders --i3                           none
 
       #~~~ window rules
       for_window [app_id="flameshot" title="flameshot"]           fullscreen disable, move absolute position 0 0
