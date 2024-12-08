@@ -1,7 +1,15 @@
-{ ... }:
+{ lib, ... }:
 
 {
-  programs.swaylock = {
+  options.swaylock = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable swaylock configuration.";
+    };
+  };
+
+  config.programs.swaylock = {
     enable = true;
 
     settings = {

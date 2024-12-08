@@ -1,7 +1,14 @@
-{ ... }:
+{ lib, ... }:
 
 {
-  wayland.windowManager.sway.swaynag = {
+  options.swaynag = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable swaynag configuration.";
+    };
+  };
+  config.wayland.windowManager.sway.swaynag = {
     enable = true;
     settings = {
       "wpgtheme" = {

@@ -20,6 +20,7 @@
     bat-extras.batman
     bat
     fastfetch
+    grim
     k9s
     kubectl
     mako
@@ -28,13 +29,38 @@
     nixfmt-classic
     postgresql_17
     scrcpy
+    slurp
     swappy
     sway
     swaylock
     tmux
     waybar
     wofi
+    wpgtk
   ];
+
+  ########################################
+  #
+  ## Options
+  #
+  ########################################
+  alacritty = {
+    enable = true;
+    theme = "vibrant-ink";
+  };
+  fastfetch = { enable = true; };
+  fish = { enable = true; };
+  mako = { enable = true; };
+  mangohud = { enable = true; };
+  mpv = { enable = true; };
+  swappy = { enable = true; };
+  sway = { enable = true; };
+  swaylock = { enable = true; };
+  swaynag = { enable = true; };
+  tmux = { enable = true; };
+  waybar = { enable = true; };
+  wofi = { enable = true; };
+  wpg = { enable = true; };
 
   ########################################
   #
@@ -60,19 +86,20 @@
   ########################################
   programs.home-manager.enable = true;
   imports = [
-    ./alacritty/main.nix # Alacritty Terminal Configuration
-    ./fastfetch/main.nix # Fastfetch Configuration
-    ./fish/main.nix # Fish Shell Configuration
-    ./mako/main.nix # Mako Notification Daemon Configuration
-    ./Mangohud/main.nix # MangoHud Configuration
-    ./mpv/main.nix # MPV Configuration
-    ./swappy/main.nix # Swappy Configuration
-    ./sway/main.nix # Sway Window Manager Configuration
-    ./swaylock/main.nix # Swaylock Configuration
-    ./swaynag/main.nix # Swaynag Configuration
-    ./tmux/main.nix # Tmux Configuration
-    ./waybar/main.nix # Waybar Configuration
-    ./wofi/main.nix # Wofi Configuration
+    ./alacritty # Alacritty Terminal Configuration
+    ./fastfetch # Fastfetch Configuration
+    ./fish # Fish Shell Configuration
+    ./mako # Mako Notification Daemon Configuration
+    ./Mangohud # MangoHud Configuration
+    ./mpv # MPV Configuration
+    ./swappy # Swappy Configuration
+    ./sway # Sway Window Manager Configuration
+    ./swaylock # Swaylock Configuration
+    ./swaynag # Swaynag Configuration
+    ./tmux # Tmux Configuration
+    ./waybar # Waybar Configuration
+    ./wofi # Wofi Configuration
+    ./wpg # Wpg Configuration
   ];
 
   ########################################
@@ -80,5 +107,9 @@
   ## Home Activation
   #
   ########################################
-  home.activation = { };
+  home.activation = {
+    postInstall = ''
+      $SHELL -c "fisher install ilancosman/tide" &>/dev/null
+    '';
+  };
 }

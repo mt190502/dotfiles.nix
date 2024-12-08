@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  programs.fastfetch = {
-    enable = true;
+  options.fastfetch = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable fastfetch configuration.";
+    };
+  };
+  config.programs.fastfetch = {
+    enable = config.fastfetch.enable;
 
     settings = {
       display = {

@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  services.mako = {
-    enable = true;
+  options.mako = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable mako configuration.";
+    };
+  };
+  config.services.mako = {
+    enable = config.mako.enable;
 
     backgroundColor = "#12100c";
     borderColor = "#5b9fcb";
@@ -15,6 +22,7 @@
     margin = "16";
     maxIconSize = 64;
     sort = "-time";
+    textColor = "#FFFFFF";
 
     extraConfig = ''
       [urgency=high]

@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  programs.wofi = {
-    enable = true;
+  options.wofi = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable wofi configuration.";
+    };
+  };
+  config.programs.wofi = {
+    enable = config.wofi.enable;
 
     settings = {
       allow_images = true;

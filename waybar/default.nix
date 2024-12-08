@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  programs.waybar = {
-    enable = true;
+  options.waybar = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable waybar configuration.";
+    };
+  };
+  config.programs.waybar = {
+    enable = config.waybar.enable;
 
     settings = {
       mainBar = {
@@ -247,61 +254,61 @@
     };
 
     style = ''
-        @define-color activeColor   #5b9fcb;
-        @define-color inactiveColor #3e6d8c;
-        @define-color urgentColor   #FF0000;
-        @define-color color00       #12100c;
-        @define-color color01       #689ACF;
-        @define-color color02       #5177A7;
-        @define-color color03       #90AED4;
-        @define-color color04       #0A73C7;
-        @define-color color05       #B3B6B8;
-        @define-color color06       #318CCB;
-        @define-color color07       #c8d4e3;
-        @define-color color08       #302a1f;
-        @define-color color09       #72c7ff;
-        @define-color color10       #5998e9;
-        @define-color color11       #a4dfff;
-        @define-color color12       #0196ff;
-        @define-color color13       #d1f1ff;
-        @define-color color14       #2fb8ff;
-        @define-color color15       #eefdff;
-        
-        * {
-        	border-radius: 5px;
-        	font-family: Ubuntu Medium, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
-        	font-size: 13px;
-        	min-height: 0;
-        }
-        
-        window#waybar {
-        	background-color: transparent;
-        }
-        
-        window#waybar.empty #window label {
-        	background-color: transparent;
-        }
-        
-        #tray,
-        #workspaces,
-        widget label:not(#custom-space) {
-        	background-color: @inactiveColor;
-        	color: @color15;
-        	margin: 6px 0px 2px 0px;
-        	padding: 0px 10px 0px 10px;
-        }
-        
-        #workspaces button,
-        #workspaces button label {
-        	background-color: @inactiveColor;
-        	color: @color15;
-        	margin: 0px 0px 0px 0px;
-        	padding: 0px 1px 0px 1px;
-        }
-        
-        box.horizontal #tray widget window menu menuitem * {
-        	background-color: transparent;
-        }
+      @define-color activeColor   #5b9fcb;
+      @define-color inactiveColor #3e6d8c;
+      @define-color urgentColor   #FF0000;
+      @define-color color00       #12100c;
+      @define-color color01       #689ACF;
+      @define-color color02       #5177A7;
+      @define-color color03       #90AED4;
+      @define-color color04       #0A73C7;
+      @define-color color05       #B3B6B8;
+      @define-color color06       #318CCB;
+      @define-color color07       #c8d4e3;
+      @define-color color08       #302a1f;
+      @define-color color09       #72c7ff;
+      @define-color color10       #5998e9;
+      @define-color color11       #a4dfff;
+      @define-color color12       #0196ff;
+      @define-color color13       #d1f1ff;
+      @define-color color14       #2fb8ff;
+      @define-color color15       #eefdff;
+
+      * {
+      	border-radius: 5px;
+      	font-family: Ubuntu Medium, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
+      	font-size: 13px;
+      	min-height: 0;
+      }
+
+      window#waybar {
+      	background-color: transparent;
+      }
+
+      window#waybar.empty #window label {
+      	background-color: transparent;
+      }
+
+      #tray,
+      #workspaces,
+      widget label:not(#custom-space) {
+      	background-color: @inactiveColor;
+      	color: @color15;
+      	margin: 6px 0px 2px 0px;
+      	padding: 0px 10px 0px 10px;
+      }
+
+      #workspaces button,
+      #workspaces button label {
+      	background-color: @inactiveColor;
+      	color: @color15;
+      	margin: 0px 0px 0px 0px;
+      	padding: 0px 1px 0px 1px;
+      }
+
+      box.horizontal #tray widget window menu menuitem * {
+      	background-color: transparent;
+      }
     '';
   };
 }

@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  programs.mpv = {
-    enable = true;
+  options.mpv = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable mpv configuration.";
+    };
+  };
+  config.programs.mpv = {
+    enable = config.mpv.enable;
 
     bindings = {
       "Shift+s" = "cycle secondary-sid";

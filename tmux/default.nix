@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  programs.tmux = {
-    enable = true;
+  options.tmux = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable tmux configuration.";
+    };
+  };
+  config.programs.tmux = {
+    enable = config.tmux.enable;
 
     baseIndex = 1;
     clock24 = true;
@@ -84,14 +91,9 @@
     '';
   };
 
-  home.file.".bin/tmux/omt.conf" = {
-    source = ../.bin/tmux/omt.conf;
-    target = ".config/tmux/omt.conf";
-  };
-
-  home.file.".bin/tmux/omt.conf.local" = {
-    source = ../.bin/tmux/omt.conf.local;
-    target = ".config/tmux/omt.conf.local";
-  };
+  config.xdg.configFile = lib.mkMerge [{
+    "tmux/omt.conf".source = ./config/omt.conf;
+    "tmux/omt.conf.local".source = ./config/omt.conf.local;
+  }];
 }
 

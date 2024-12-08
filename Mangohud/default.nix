@@ -1,8 +1,15 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  programs.mangohud = {
-    enable = true;
+  options.mangohud = {
+    enable = lib.mkEnableOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable mangohud configuration.";
+    };
+  };
+  config.programs.mangohud = {
+    enable = config.mangohud.enable;
 
     settings = {
       cpu_load_change = true;
