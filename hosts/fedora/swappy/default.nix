@@ -2,21 +2,11 @@
 
 {
   options.pkgconfig.swappy = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable swappy configuration.";
-    };
+    enable = lib.mkEnableOption "Enable swappy configuration.";
   };
 
-  config.xdg.configFile =
-    if config.pkgconfig.swappy.enable then
-      {
-        "swappy/config".text = ''
-          [Default]
-          save_dir = $HOME/Pictures/Screenshots/grim
-        '';
-      }
-    else
-      { };
+  config.xdg.configFile."swappy/config".text = lib.mkIf config.pkgconfig.swappy.enable ''
+    [Default]
+    save_dir = $HOME/Pictures/Screenshots/grim
+  '';
 }

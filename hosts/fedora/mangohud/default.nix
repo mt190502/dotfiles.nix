@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.mangohud = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable mangohud configuration.";
-    };
+    enable = lib.mkEnableOption "Enable mangohud configuration.";
   };
   config.programs.mangohud = {
     enable = config.pkgconfig.mangohud.enable;

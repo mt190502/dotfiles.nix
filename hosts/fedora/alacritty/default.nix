@@ -2,16 +2,13 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
 {
   options.pkgconfig.alacritty = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable alacritty configuration.";
-    };
+    enable = lib.mkEnableOption "Enable alacritty configuration.";
     theme = lib.mkOption {
       type = lib.types.str;
       default = "vibrant-ink";
@@ -46,8 +43,8 @@
       terminal.shell.program = "tmux";
       window.dynamic_title = true;
 
-      colors =
-        (builtins.fromTOML (builtins.readFile ./themes/${config.pkgconfig.alacritty.theme}.toml)).colors;
+      general.import =
+        inputs.alacritty-theme.packages."${pkgs.system}"."${config.pkgconfig.alacritty.theme}";
     };
   };
 }

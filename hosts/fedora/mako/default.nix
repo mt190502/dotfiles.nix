@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.mako = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable mako configuration.";
-    };
+    enable = lib.mkEnableOption "Enable mako configuration.";
   };
   config.services.mako = {
     enable = config.pkgconfig.mako.enable;

@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.swaylock = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable swaylock configuration.";
-    };
+    enable = lib.mkEnableOption "Enable swaylock configuration.";
   };
 
   config.programs.swaylock = {

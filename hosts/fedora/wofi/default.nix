@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.wofi = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable wofi configuration.";
-    };
+    enable = lib.mkEnableOption "Enable wofi configuration.";
   };
   config.programs.wofi = {
     enable = config.pkgconfig.wofi.enable;

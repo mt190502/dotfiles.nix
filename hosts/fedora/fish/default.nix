@@ -7,11 +7,7 @@
 
 {
   options.pkgconfig.fish = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable fish shell configuration.";
-    };
+    enable = lib.mkEnableOption "Enable fish shell configuration.";
   };
 
   config.programs.fish = {

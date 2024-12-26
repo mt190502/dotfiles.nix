@@ -81,45 +81,23 @@
   }; # ~ for vscode
 
   #~ packages ~#
-  pkgconfig.alacritty = {
-    enable = true;
-    theme = "vibrant-ink";
-  };
-  pkgconfig.fastfetch = {
-    enable = true;
-  };
-  pkgconfig.fish = {
-    enable = true;
-  };
-  pkgconfig.mako = {
-    enable = true;
-  };
-  pkgconfig.mangohud = {
-    enable = true;
-  };
-  pkgconfig.mpv = {
-    enable = true;
-  };
-  pkgconfig.swappy = {
-    enable = true;
-  };
-  pkgconfig.sway = {
-    enable = true;
-  };
-  pkgconfig.swaylock = {
-    enable = true;
-  };
-  pkgconfig.swaynag = {
-    enable = true;
-  };
-  pkgconfig.tmux = {
-    enable = true;
-  };
-  pkgconfig.waybar = {
-    enable = true;
-  };
-  pkgconfig.wofi = {
-    enable = true;
+  pkgconfig = {
+    alacritty = {
+      enable = true;
+      theme = "vibrant-ink";
+    };
+    fastfetch.enable = true;
+    fish.enable = true;
+    mako.enable = true;
+    mangohud.enable = true;
+    mpv.enable = true;
+    swappy.enable = true;
+    sway.enable = true;
+    swaylock.enable = true;
+    swaynag.enable = true;
+    tmux.enable = true;
+    waybar.enable = true;
+    wofi.enable = true;
   };
   #pkgconfig.wpg       = { enable = false; };
 

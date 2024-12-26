@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.mpv = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable mpv configuration.";
-    };
+    enable = lib.mkEnableOption "Enable mpv configuration.";
   };
   config.programs.mpv = {
     enable = config.pkgconfig.mpv.enable;

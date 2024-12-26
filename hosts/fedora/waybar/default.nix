@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.waybar = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable waybar configuration.";
-    };
+    enable = lib.mkEnableOption "Enable waybar configuration.";
   };
   config.programs.waybar = {
     enable = config.pkgconfig.waybar.enable;

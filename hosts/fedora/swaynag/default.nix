@@ -2,11 +2,7 @@
 
 {
   options.pkgconfig.swaynag = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable swaynag configuration.";
-    };
+    enable = lib.mkEnableOption "Enable swaynag configuration.";
   };
   config.wayland.windowManager.sway.swaynag = {
     enable = config.pkgconfig.swaynag.enable;

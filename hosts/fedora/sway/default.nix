@@ -1,17 +1,12 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
 {
   options.pkgconfig.sway = {
-    enable = lib.mkEnableOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable sway window manager configuration.";
-    };
+    enable = lib.mkEnableOption "Enable sway window manager configuration.";
   };
   config.wayland.windowManager.sway = {
     enable = config.pkgconfig.sway.enable;
