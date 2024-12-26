@@ -26,8 +26,12 @@
         #### Modules
         ##
         ################################################
-        modules-left =
-          [ "custom/space" "sway/workspaces" "custom/space" "sway/window" ];
+        modules-left = [
+          "custom/space"
+          "sway/workspaces"
+          "custom/space"
+          "sway/window"
+        ];
         modules-center = [
           "sway/mode"
           "custom/space"
@@ -84,7 +88,10 @@
         "sway/scratchpad" = {
           format = "{icon} {count}";
           show-empty = false;
-          format-icons = [ "" "<U+F2D2>" ];
+          format-icons = [
+            ""
+            "<U+F2D2>"
+          ];
           tooltip = true;
           tooltip-format = "{app}: {title}";
         };
@@ -111,8 +118,7 @@
         cpu = {
           interval = 1;
           format = " {max_frequency:0.2f}GHz | {usage}%";
-          on-click =
-            "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
         };
 
         clock = {
@@ -126,8 +132,7 @@
         memory = {
           interval = 10;
           format = " {used:0.2f} / {total:0.0f} GB";
-          on-click =
-            "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
         };
 
         network = {
@@ -137,8 +142,7 @@
           format-linked = " (No IP)";
           format-disconnected = "⚠  Disconnected";
           format-alt = "{essid} {ipaddr}/{cidr} ";
-          on-click-right =
-            "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T nmtui -e nmtui";
+          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T nmtui -e nmtui";
         };
 
         pulseaudio = {
@@ -154,12 +158,15 @@
             phone = "";
             portable = "";
             car = "";
-            default = [ " " " " " " ];
+            default = [
+              " "
+              " "
+              " "
+            ];
           };
           scroll-step = 5;
           on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          on-click-right =
-            "$HOME/.config/sway/scripts.d/programtoggle.sh pavucontrol";
+          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh pavucontrol";
           on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +5%";
           on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -5%";
           ignored-sinks = [ "Easy Effects Sink" ];
@@ -173,7 +180,13 @@
             critical = 1;
           };
           format = "{icon} {capacity}%";
-          format-icons = [ "" "" "" "" "" ];
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
           max-length = 2;
         };
 
@@ -181,7 +194,13 @@
           format = "";
           format-connected = "";
           format-connected-battery = " {icon} {device_battery_percentage}%";
-          format-icons = [ "" "" "" "" "" ];
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
         };
 
         ##################################################
@@ -195,16 +214,14 @@
         };
 
         "custom/fan" = {
-          exec =
-            "cat $(find /sys/devices/platform -iname '*fan1_input' 2>/dev/null)";
+          exec = "cat $(find /sys/devices/platform -iname '*fan1_input' 2>/dev/null)";
           format = "  {} RPM";
           tooltip = false;
           interval = { };
         };
 
         "custom/powermenu" = {
-          on-click =
-            "$HOME/.config/sway/scripts.d/programtoggle.sh $HOME/.config/sway/scripts.d/powermenu.sh --lockmenu";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh $HOME/.config/sway/scripts.d/powermenu.sh --lockmenu";
           format = "";
           tooltip = false;
         };
@@ -228,8 +245,7 @@
           interval = 3600;
           exec = "curl -s 'https://wttr.in/Istanbul?format=1' | sed 's/ //1'";
           exec-if = "ping wttr.in -c1";
-          on-click =
-            "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T wttr.in -e sh -c 'curl https:##wttr.in/Istanbul; read'";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T wttr.in -e sh -c 'curl https:##wttr.in/Istanbul; read'";
         };
 
         "custom/pomobar" = {

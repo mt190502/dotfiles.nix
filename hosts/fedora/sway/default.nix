@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.sway = {
@@ -11,7 +16,9 @@
   config.wayland.windowManager.sway = {
     enable = config.pkgconfig.sway.enable;
     checkConfig = false;
-    config = { modifier = "Mod4"; };
+    config = {
+      modifier = "Mod4";
+    };
   };
 
   imports = [

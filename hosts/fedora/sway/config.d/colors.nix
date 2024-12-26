@@ -20,7 +20,8 @@ let
   color13 = "#d1f1ff";
   color14 = "#2fb8ff";
   color15 = "#eefdff";
-in {
+in
+{
   wayland.windowManager.sway.config = {
     colors = {
       background = activeColor;

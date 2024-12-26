@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.alacritty = {
@@ -41,8 +46,8 @@
       terminal.shell.program = "tmux";
       window.dynamic_title = true;
 
-      colors = (builtins.fromTOML (builtins.readFile
-        ./themes/${config.pkgconfig.alacritty.theme}.toml)).colors;
+      colors =
+        (builtins.fromTOML (builtins.readFile ./themes/${config.pkgconfig.alacritty.theme}.toml)).colors;
     };
   };
 }

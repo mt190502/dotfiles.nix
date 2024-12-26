@@ -4,7 +4,8 @@ let
   modifier = config.wayland.windowManager.sway.config.modifier;
   menu = config.wayland.windowManager.sway.config.menu;
   terminal = config.wayland.windowManager.sway.config.terminal;
-in {
+in
+{
   wayland.windowManager.sway.config = {
     modes = {
       apptray = {
@@ -25,12 +26,9 @@ in {
         "${modifier}+r" = "mode 'default'";
       };
       screenshot = {
-        "${modifier}+shift+s" =
-          "exec $HOME/.config/sway/scripts.d/screenshot.sh -r; mode 'default'";
-        "a" =
-          " exec $HOME/.config/sway/scripts.d/screenshot.sh -a; mode 'default'";
-        "f" =
-          " exec $HOME/.config/sway/scripts.d/screenshot.sh -f; mode 'default'";
+        "${modifier}+shift+s" = "exec $HOME/.config/sway/scripts.d/screenshot.sh -r; mode 'default'";
+        "a" = " exec $HOME/.config/sway/scripts.d/screenshot.sh -a; mode 'default'";
+        "f" = " exec $HOME/.config/sway/scripts.d/screenshot.sh -f; mode 'default'";
         "Return" = "mode 'default'";
         "Escape" = "mode 'default'";
       };
@@ -56,43 +54,27 @@ in {
       #~~~ window
       "${modifier}+f" = "fullscreen";
       "${modifier}+Shift+space" = "floating toggle";
-      "${modifier}+shift+1" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 1";
-      "${modifier}+shift+2" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 2";
-      "${modifier}+shift+3" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 3";
-      "${modifier}+shift+4" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 4";
-      "${modifier}+shift+5" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 5";
-      "${modifier}+shift+6" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 6";
-      "${modifier}+shift+7" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 7";
-      "${modifier}+shift+8" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 8";
+      "${modifier}+shift+1" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 1";
+      "${modifier}+shift+2" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 2";
+      "${modifier}+shift+3" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 3";
+      "${modifier}+shift+4" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 4";
+      "${modifier}+shift+5" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 5";
+      "${modifier}+shift+6" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 6";
+      "${modifier}+shift+7" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 7";
+      "${modifier}+shift+8" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 8";
 
       #~~~ workspace
       "${modifier}+s" = "layout stacking";
       "${modifier}+w" = "layout tabbed";
       "${modifier}+e" = "layout toggle split";
-      "${modifier}+1" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 1";
-      "${modifier}+2" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 2";
-      "${modifier}+3" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 3";
-      "${modifier}+4" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 4";
-      "${modifier}+5" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 5";
-      "${modifier}+6" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 6";
-      "${modifier}+7" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 7";
-      "${modifier}+8" =
-        "exec $HOME/.config/sway/scripts.d/workspace.sh switch 8";
+      "${modifier}+1" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 1";
+      "${modifier}+2" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 2";
+      "${modifier}+3" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 3";
+      "${modifier}+4" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 4";
+      "${modifier}+5" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 5";
+      "${modifier}+6" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 6";
+      "${modifier}+7" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 7";
+      "${modifier}+8" = "exec $HOME/.config/sway/scripts.d/workspace.sh switch 8";
 
       #~~~ sound
       "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
@@ -123,8 +105,7 @@ in {
       #~~~ other
       "${modifier}+Return" =
         "exec ${terminal} -e bash -c 'tmux new-window && tmux attach -t daemonmodetmux'";
-      "${modifier}+d" =
-        "exec $HOME/.config/sway/scripts.d/programtoggle.sh ${menu}";
+      "${modifier}+d" = "exec $HOME/.config/sway/scripts.d/programtoggle.sh ${menu}";
       "${modifier}+l" = "exec $HOME/.config/sway/scripts.d/powermenu.sh --lock";
       "${modifier}+period" =
         "exec $HOME/.config/sway/scripts.d/programtoggle.sh $HOME/.config/sway/scripts.d/wofimoji.sh";

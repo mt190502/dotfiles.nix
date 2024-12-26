@@ -1,17 +1,23 @@
 { config, ... }:
 
-let modifier = config.wayland.windowManager.sway.config.modifier;
-in {
+let
+  modifier = config.wayland.windowManager.sway.config.modifier;
+in
+{
   wayland.windowManager.sway = {
     config = {
-      bars = [{
-        command = "waybar";
-        position = "top";
-        workspaceButtons = true;
-      }];
+      bars = [
+        {
+          command = "waybar";
+          position = "top";
+          workspaceButtons = true;
+        }
+      ];
       floating.border = 5;
       floating.modifier = "${modifier}";
-      fonts = { size = 10.0; };
+      fonts = {
+        size = 10.0;
+      };
       gaps = {
         inner = 5;
         outer = 0;
@@ -20,7 +26,11 @@ in {
       workspaceLayout = "tabbed";
       menu = "wofi --prompt 'Search Apps' --show drun";
       terminal = "alacritty";
-      seat = { "*" = { xcursor_theme = "Adwaita 16"; }; };
+      seat = {
+        "*" = {
+          xcursor_theme = "Adwaita 16";
+        };
+      };
     };
     extraConfig = ''
       #~~~ window

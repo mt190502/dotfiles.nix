@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   ########################################
@@ -69,27 +75,52 @@
   ## Options
   #
   ########################################
-  nix.registry = lib.mapAttrs (_: value: { flake = value; })
-    inputs; # ~ for nix stable channel
-  nixpkgs.config = { allowUnfree = true; }; # ~ for vscode
+  nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs; # ~ for nix stable channel
+  nixpkgs.config = {
+    allowUnfree = true;
+  }; # ~ for vscode
 
   #~ packages ~#
   pkgconfig.alacritty = {
     enable = true;
     theme = "vibrant-ink";
   };
-  pkgconfig.fastfetch = { enable = true; };
-  pkgconfig.fish = { enable = true; };
-  pkgconfig.mako = { enable = true; };
-  pkgconfig.mangohud = { enable = true; };
-  pkgconfig.mpv = { enable = true; };
-  pkgconfig.swappy = { enable = true; };
-  pkgconfig.sway = { enable = true; };
-  pkgconfig.swaylock = { enable = true; };
-  pkgconfig.swaynag = { enable = true; };
-  pkgconfig.tmux = { enable = true; };
-  pkgconfig.waybar = { enable = true; };
-  pkgconfig.wofi = { enable = true; };
+  pkgconfig.fastfetch = {
+    enable = true;
+  };
+  pkgconfig.fish = {
+    enable = true;
+  };
+  pkgconfig.mako = {
+    enable = true;
+  };
+  pkgconfig.mangohud = {
+    enable = true;
+  };
+  pkgconfig.mpv = {
+    enable = true;
+  };
+  pkgconfig.swappy = {
+    enable = true;
+  };
+  pkgconfig.sway = {
+    enable = true;
+  };
+  pkgconfig.swaylock = {
+    enable = true;
+  };
+  pkgconfig.swaynag = {
+    enable = true;
+  };
+  pkgconfig.tmux = {
+    enable = true;
+  };
+  pkgconfig.waybar = {
+    enable = true;
+  };
+  pkgconfig.wofi = {
+    enable = true;
+  };
   #pkgconfig.wpg       = { enable = false; };
 
   ########################################
@@ -138,7 +169,6 @@
   #
   ########################################
   home.activation = {
-    postInstall =
-      "	$SHELL -c \"fisher install ilancosman/tide\" &>/dev/null\n	$SHELL -c \"tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes\" &>/dev/null\n";
+    postInstall = "	$SHELL -c \"fisher install ilancosman/tide\" &>/dev/null\n	$SHELL -c \"tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes\" &>/dev/null\n";
   };
 }

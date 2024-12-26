@@ -91,9 +91,10 @@
     '';
   };
 
-  config.xdg.configFile = lib.mkMerge [{
-    "tmux/omt.conf".source = ./config/omt.conf;
-    "tmux/omt.conf.local".source = ./config/omt.conf.local;
-  }];
+  config.xdg.configFile = lib.mkMerge [
+    {
+      "tmux/omt.conf".source = ./config/omt.conf;
+      "tmux/omt.conf.local".source = ./config/omt.conf.local;
+    }
+  ];
 }
-

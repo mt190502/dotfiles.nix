@@ -9,11 +9,14 @@
     };
   };
 
-  config.xdg.configFile = if config.pkgconfig.swappy.enable then {
-    "swappy/config".text = ''
-      [Default]
-      save_dir = $HOME/Pictures/Screenshots/grim
-    '';
-  } else
-    { };
+  config.xdg.configFile =
+    if config.pkgconfig.swappy.enable then
+      {
+        "swappy/config".text = ''
+          [Default]
+          save_dir = $HOME/Pictures/Screenshots/grim
+        '';
+      }
+    else
+      { };
 }

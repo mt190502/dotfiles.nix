@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.fish = {
@@ -12,7 +17,9 @@
   config.programs.fish = {
     enable = config.pkgconfig.fish.enable;
 
-    functions = { cd = "builtin cd $argv; lsd"; };
+    functions = {
+      cd = "builtin cd $argv; lsd";
+    };
 
     generateCompletions = true;
 
