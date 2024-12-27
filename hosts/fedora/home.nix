@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   ########################################
@@ -24,6 +18,7 @@
   ########################################
   home.packages = with pkgs; [
     (config.lib.nixGL.wrap alacritty)
+    alacritty-theme
     ansible
     aria2
     bat-extras.batman
@@ -75,16 +70,15 @@
   ## Options
   #
   ########################################
-  nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs; # ~ for nix stable channel
-  nixpkgs.config = {
-    allowUnfree = true;
-  }; # ~ for vscode
+  nix.registry = lib.mapAttrs (_: value: { flake = value; })
+    inputs; # ~ for nix stable channel
+  nixpkgs.config = { allowUnfree = true; }; # ~ for vscode
 
   #~ packages ~#
   pkgconfig = {
     alacritty = {
       enable = true;
-      theme = "vibrant-ink";
+      theme = "hyper";
     };
     fastfetch.enable = true;
     fish.enable = true;
@@ -147,6 +141,7 @@
   #
   ########################################
   home.activation = {
-    postInstall = "	$SHELL -c \"fisher install ilancosman/tide\" &>/dev/null\n	$SHELL -c \"tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes\" &>/dev/null\n";
+    postInstall =
+      "	$SHELL -c \"fisher install ilancosman/tide\" &>/dev/null\n	$SHELL -c \"tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes\" &>/dev/null\n";
   };
 }

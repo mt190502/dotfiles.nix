@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
-}:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   options.pkgconfig.alacritty = {
@@ -43,8 +37,9 @@
       terminal.shell.program = "tmux";
       window.dynamic_title = true;
 
-      general.import =
-        inputs.alacritty-theme.packages."${pkgs.system}"."${config.pkgconfig.alacritty.theme}";
+      general.import = [
+        inputs.alacritty-theme.packages."${pkgs.system}"."${config.pkgconfig.alacritty.theme}"
+      ];
     };
   };
 }
