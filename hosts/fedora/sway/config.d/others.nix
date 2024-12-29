@@ -21,17 +21,19 @@
       }
       { command = "/usr/bin/solaar -w hide"; }
       {
-        command = "${pkgs.swayidle}/bin/swayidle -w timeout 120 '~/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 'swaymsg output * dpms off' resume 'swaymsg output * dpms on'";
+        command = "${pkgs.swayidle}/bin/swayidle -w timeout 120 '~/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${pkgs.sway}/bin/swaymsg output * dpms off' resume '${pkgs.sway}/bin/swaymsg output * dpms on'";
       }
       { command = "${pkgs.tmux}/bin/tmux new-session -ds daemonmodetmux"; }
       {
-        command = "${pkgs.wl-clipboard}/bin/wl-paste -w $HOME/scripts/cliphist store";
+        command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${pkgs.cliphist}/bin/cliphist store";
       }
       { command = "${pkgs.wlsunset}/bin/wlsunset -S '07:00' -s '19:00'"; }
-      { command = "/usr/bin/kdeconnectd"; }
-      { command = "/usr/libexec/kf6/polkit-kde-authentication-agent-1"; }
-      { command = "/usr/libexec/packagekitd"; }
-      { command = "$HOME/scripts/pomobar-server"; }
+      {
+        command = "/usr/bin/kdeconnectd";
+      }
+      # { command = "/usr/libexec/kf6/polkit-kde-authentication-agent-1"; }
+      # { command = "/usr/libexec/packagekitd"; }
+      # { command = "$HOME/scripts/pomobar-server"; }
 
       {
         command = "$HOME/.config/sway/scripts.d/tmux_server.sh";
