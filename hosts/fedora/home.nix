@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   ########################################
@@ -17,7 +23,6 @@
   #
   ########################################
   home.packages = with pkgs; [
-    (config.lib.nixGL.wrap alacritty)
     alacritty-theme
     ansible
     aria2
@@ -25,21 +30,19 @@
     bat
     binwalk
     btop
+    cliphist
     delta
-    fastfetch
     gcolor3
     grim
     hugo
     hyperfine
     iftop
-    (config.lib.nixGL.wrap imv)
+    (config.lib.nixGL.wrap imagemagick)
     iperf
+    jq
     k9s
     kubectl
     lxappearance
-    mako
-    mangohud
-    mpv
     nixd
     nixfmt-classic
     nmap
@@ -48,17 +51,17 @@
     shellcheck
     slurp
     swappy
+    swaybg
     swayidle
     tesseract
+    translate-shell
     tmux
     vscode
-    waybar
     (config.lib.nixGL.wrap wdisplays)
     wl-clipboard
     wlroots_0_18
     wlr-randr
     wlsunset
-    wofi
     wpgtk
     wtype
     ydotool
@@ -70,9 +73,10 @@
   ## Options
   #
   ########################################
-  nix.registry = lib.mapAttrs (_: value: { flake = value; })
-    inputs; # ~ for nix stable channel
-  nixpkgs.config = { allowUnfree = true; }; # ~ for vscode
+  nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs; # ~ for nix stable channel
+  nixpkgs.config = {
+    allowUnfree = true;
+  }; # ~ for vscode
 
   #~ packages ~#
   pkgconfig = {
@@ -141,7 +145,6 @@
   #
   ########################################
   home.activation = {
-    postInstall =
-      "	$SHELL -c \"fisher install ilancosman/tide\" &>/dev/null\n	$SHELL -c \"tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes\" &>/dev/null\n";
+    postInstall = "	$SHELL -c \"fisher install ilancosman/tide\" &>/dev/null\n	$SHELL -c \"tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes\" &>/dev/null\n";
   };
 }
