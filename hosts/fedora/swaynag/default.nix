@@ -6,6 +6,7 @@
   };
   config.wayland.windowManager.sway.swaynag = {
     enable = config.pkgconfig.swaynag.enable;
+
     settings = {
       "wpgtheme" = {
         background = "#12100c00";

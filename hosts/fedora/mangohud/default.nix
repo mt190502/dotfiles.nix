@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.mangohud = {
@@ -6,6 +11,7 @@
   };
   config.programs.mangohud = {
     enable = config.pkgconfig.mangohud.enable;
+    package = pkgs.mangohud;
 
     settings = {
       cpu_load_change = true;

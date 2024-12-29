@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.mako = {
@@ -6,6 +11,7 @@
   };
   config.services.mako = {
     enable = config.pkgconfig.mako.enable;
+    package = pkgs.mako;
 
     backgroundColor = "#12100c";
     borderColor = "#5b9fcb";

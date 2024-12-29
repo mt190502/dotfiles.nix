@@ -12,6 +12,7 @@
 
   config.programs.fish = {
     enable = config.pkgconfig.fish.enable;
+    package = pkgs.fish;
 
     functions = {
       cd = "builtin cd $argv; lsd";
