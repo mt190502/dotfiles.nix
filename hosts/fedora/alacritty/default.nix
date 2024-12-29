@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   options.pkgconfig.alacritty = {
@@ -34,7 +40,7 @@
       };
 
       #~ Settings
-      terminal.shell.program = "tmux";
+      terminal.shell.program = lib.getExe pkgs.tmux;
       window.dynamic_title = true;
 
       general.import = [
