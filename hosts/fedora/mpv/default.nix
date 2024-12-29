@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.mpv = {
@@ -6,11 +11,12 @@
   };
   config.programs.mpv = {
     enable = config.pkgconfig.mpv.enable;
+    package = config.lib.nixGL.wrap pkgs.mpv;
 
     bindings = {
       "Shift+s" = "cycle secondary-sid";
-      "Shift+z" = "secondary-sub-delay -0.1";
-      "Shift+x" = "secondary-sub-delay +0.1";
+      "Shift+z" = "add secondary-sub-delay -0.1";
+      "Shift+x" = "add secondary-sub-delay +0.1";
     };
 
     config = {
@@ -71,7 +77,7 @@
       sub-gray = "yes";
 
       #~ subtitle paths
-      sub-file-paths = "~/NextCloud/Documents/srt/";
+      # sub-file-paths = "~/NextCloud/Documents/srt/";
 
       #################################################
       #
