@@ -18,7 +18,7 @@
       cd = "builtin cd $argv; lsd";
     };
 
-    generateCompletions = true;
+    generateCompletions = false;
 
     loginShellInit = ''
       if [ $XDG_VTNR = 1 ]; and [ $SHLVL = 1 ]; and [ ! $container ]

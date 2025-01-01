@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   wayland.windowManager.sway.config = {
@@ -13,8 +13,7 @@
       };
       "*" = {
         adaptive_sync = "on";
-        #bg = "~/.config/wpg/.current fill";
-        bg = "~/Pictures/Wallpapers/Landspaces/wallpaper-000289.jpg fill";
+        bg = "${config.stylix.image} fill";
         subpixel = "rgb";
       };
     };

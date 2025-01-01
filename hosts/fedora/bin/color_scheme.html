@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Palette Preview</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .upload-container {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .color-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .color-box {
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+      }
+      .color-name {
+        font-size: 12px;
+        margin-top: 5px;
+        color: white;
+      }
+      .alert {
+        color: red;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Color Palette Preview</h1>
+
+    <div class="upload-container">
+      <input type="file" id="fileInput" accept=".json" />
+    </div>
+
+    <div id="error" class="alert" style="display: none"></div>
+
+    <div class="color-container" id="colorContainer"></div>
+
+    <script>
+      document.getElementById('fileInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file && file.type === 'application/json') {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              const jsonData = JSON.parse(e.target.result);
+              if (jsonData && jsonData.base00) {
+                displayColors(jsonData);
+                document.getElementById('error').style.display = 'none';
+              } else {
+                throw new Error('Unsupported JSON structure');
+              }
+            } catch (error) {
+              document.getElementById('error').style.display = 'block';
+              document.getElementById('error').textContent = 'Unsupported JSON structure';
+            }
+          };
+          reader.readAsText(file);
+        } else {
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('error').textContent = 'Please select a JSON file';
+        }
+      });
+
+      function displayColors(data) {
+        const colorContainer = document.getElementById('colorContainer');
+        colorContainer.innerHTML = '';
+
+        for (let key in data) {
+          if (key.startsWith('base')) {
+            const colorBox = document.createElement('div');
+            colorBox.classList.add('color-box');
+            colorBox.style.backgroundColor = `#${data[key]}`;
+
+            const colorCode = document.createElement('span');
+            colorCode.textContent = `#${data[key]}`;
+            colorBox.appendChild(colorCode);
+
+            const colorName = document.createElement('div');
+            colorName.classList.add('color-name');
+            colorName.textContent = key;
+            colorBox.appendChild(colorName);
+
+            colorContainer.appendChild(colorBox);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

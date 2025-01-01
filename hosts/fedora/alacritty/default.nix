@@ -21,7 +21,7 @@
 
     settings = {
       #~ Font
-      font.size = 9;
+      font.size = config.stylix.fonts.sizes.terminal;
       font.normal = {
         family = "MesloLGS NF";
         style = "Bold";

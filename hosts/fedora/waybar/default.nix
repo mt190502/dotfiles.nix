@@ -5,6 +5,7 @@
   ...
 }:
 
+with config.lib.stylix.colors.withHashtag;
 {
   options.pkgconfig.waybar = {
     enable = lib.mkEnableOption "Enable waybar configuration.";
@@ -132,10 +133,21 @@
         };
 
         clock = {
-          tooltip-format = ''
-            <big>{:%Y %B}</big>
-            <tt><small>{calendar}</small></tt>'';
           format = "{:%a %d %b  %H:%M:%S}";
+          tooltip-format = "<tt><small>{calendar}</small></tt>";
+          calendar = {
+            mode = "year";
+            mode-mon-col = 3;
+            weeks-pos = "left";
+            on-scroll = 1;
+            format = {
+              months = "<span color='#ffead3'><b>{}</b></span>";
+              days = "<span color='#ecc6d9'><b>{}</b></span>";
+              weeks = "<span color='#99ffdd'><b>W{}</b></span>";
+              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
+              today = "<span background='#ffffff' color='#000000'><b>{}</b></span>";
+            };
+          };
           interval = 1;
         };
 
@@ -280,25 +292,11 @@
     };
 
     style = ''
-      @define-color activeColor   #5b9fcb;
-      @define-color inactiveColor #3e6d8c;
+      @define-color activeColor   ${base02};
+      @define-color inactiveColor ${base0F};
+      @define-color inactiveColor2 ${base0D};
       @define-color urgentColor   #FF0000;
-      @define-color color00       #12100c;
-      @define-color color01       #689ACF;
-      @define-color color02       #5177A7;
-      @define-color color03       #90AED4;
-      @define-color color04       #0A73C7;
-      @define-color color05       #B3B6B8;
-      @define-color color06       #318CCB;
-      @define-color color07       #c8d4e3;
-      @define-color color08       #302a1f;
-      @define-color color09       #72c7ff;
-      @define-color color10       #5998e9;
-      @define-color color11       #a4dfff;
-      @define-color color12       #0196ff;
-      @define-color color13       #d1f1ff;
-      @define-color color14       #2fb8ff;
-      @define-color color15       #eefdff;
+
 
       * {
       	border-radius: 5px;
@@ -318,7 +316,7 @@
       #tray,
       #workspaces,
       widget label:not(#custom-space) {
-      	background-color: @inactiveColor;
+      	background-color: @activeColor;
       	color: @color15;
       	margin: 6px 0px 2px 0px;
       	padding: 0px 10px 0px 10px;
@@ -326,7 +324,7 @@
 
       #workspaces button,
       #workspaces button label {
-      	background-color: @inactiveColor;
+      	background-color: @activeColor;
       	color: @color15;
       	margin: 0px 0px 0px 0px;
       	padding: 0px 1px 0px 1px;

@@ -5,6 +5,7 @@
   ...
 }:
 
+with config.lib.stylix.colors.withHashtag;
 {
   options.pkgconfig.wofi = {
     enable = lib.mkEnableOption "Enable wofi configuration.";
@@ -31,29 +32,29 @@
       #input,
       #text {
       	margin: 5px;
-      	background-color: #12100c;
+      	background-color: ${base00};
       }
 
       #window {
-      	border: 4px solid #5b9fcb;
+      	border: 4px solid ${base02};
       	border-radius: 5px;
       	color: #eefdff;
       }
 
       #input {
       	border: none;
-      	border-bottom: 2px solid #5b9fcb;
+      	border-bottom: 2px solid ${base02};
       }
 
       #text {
-      	color: #eefdff;
+      	color: ${base06};
       	font-size: 16px;
       }
 
       #entry:selected,
       #img:selected,
       #text:selected {
-      	background-color: #3e6d8c;
+      	background-color: ${base0E};
       }
     '';
   };

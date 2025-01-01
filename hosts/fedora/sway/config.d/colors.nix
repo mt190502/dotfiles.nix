@@ -1,43 +1,41 @@
-{ ... }:
+{ config, ... }:
 
+with config.lib.stylix.colors.withHashtag;
 let
-  activeColor = "#5b9fcb";
-  inactiveColor = "#3e6d8c";
+  activeColor = base02;
+  inactiveColor = base0F;
+  inactiveColor2 = base0D;
   urgentColor = "#FF0000";
-  color00 = "#12100c";
-  color01 = "#689ACF";
-  color02 = "#5177A7";
-  color03 = "#90AED4";
-  color04 = "#0A73C7";
-  color05 = "#B3B6B8";
-  color06 = "#318CCB";
-  color07 = "#c8d4e3";
-  color08 = "#302a1f";
-  color09 = "#72c7ff";
-  color10 = "#5998e9";
-  color11 = "#a4dfff";
-  color12 = "#0196ff";
-  color13 = "#d1f1ff";
-  color14 = "#2fb8ff";
-  color15 = "#eefdff";
+
+  fonts.size = config.stylix.fonts.sizes.applications + 0.0;
+
 in
 {
   wayland.windowManager.sway.config = {
+    inherit fonts;
     colors = {
       background = activeColor;
 
       focused = {
         background = activeColor;
         border = activeColor;
-        text = color15;
+        text = base06;
         indicator = activeColor;
         childBorder = activeColor;
+      };
+
+      focusedInactive = {
+        background = inactiveColor2;
+        border = inactiveColor2;
+        text = base06;
+        indicator = inactiveColor2;
+        childBorder = inactiveColor2;
       };
 
       unfocused = {
         background = inactiveColor;
         border = inactiveColor;
-        text = color15;
+        text = base06;
         indicator = inactiveColor;
         childBorder = inactiveColor;
       };
@@ -45,7 +43,7 @@ in
       urgent = {
         background = urgentColor;
         border = urgentColor;
-        text = color15;
+        text = "#FFFFFF";
         indicator = urgentColor;
         childBorder = urgentColor;
       };

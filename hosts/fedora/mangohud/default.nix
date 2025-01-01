@@ -19,7 +19,7 @@
       cpu_power = true;
       cpu_stats = true;
       cpu_temp = true;
-      font_size = 17;
+      font_size = lib.mkForce 17;
       fps = true;
       gpu_core_clock = true;
       gpu_mem_clock = true;

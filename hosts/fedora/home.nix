@@ -97,7 +97,6 @@
     waybar.enable = true;
     wofi.enable = true;
   };
-  #pkgconfig.wpg       = { enable = false; };
 
   ########################################
   #
@@ -129,6 +128,7 @@
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
+    ./stylix # Stylix Configuration
     ./swappy # Swappy Configuration
     ./sway # Sway Window Manager Configuration
     ./swaylock # Swaylock Configuration
@@ -136,7 +136,6 @@
     ./tmux # Tmux Configuration
     ./waybar # Waybar Configuration
     ./wofi # Wofi Configuration
-    #./wpg # Wpg Configuration
   ];
 
   ########################################
