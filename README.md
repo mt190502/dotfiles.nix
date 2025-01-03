@@ -45,3 +45,8 @@ This dots is created for my personal use. I using with Nix Package Manager, so y
     ```
 
 - Enjoy!
+
+## Screenshot
+
+![image](https://github.com/user-attachments/assets/07a3f209-b253-475a-a681-2f6c03eaa512)
+
