@@ -5,19 +5,19 @@
     floating.criteria = [
       {
         app_id = "(firefox|LibreWolf)";
-        title = "^(.*)Sharing Indicator";
+        title = "^(.*)Sharing Indicator(.*)";
       }
       {
         app_id = "(firefox|LibreWolf)";
-        title = "^Extension:.*";
+        title = "^Extension:(.*)";
       }
       {
         app_id = "(firefox|LibreWolf)";
-        title = "^Library";
+        title = "^Library$";
       }
       {
         app_id = "(firefox|LibreWolf)";
-        title = "^Picture-in-Picture";
+        title = "^Picture-in-Picture(.*)$";
       }
       {
         app_id = "Alacritty";

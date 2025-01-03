@@ -15,6 +15,7 @@
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
   home.stateVersion = "24.11";
+  programs.home-manager.enable = true;
   nixGL.packages = inputs.nixgl.packages;
 
   ########################################
@@ -65,6 +66,7 @@
     wpgtk
     wtype
     ydotool
+    yq
     yt-dlp
   ];
 
@@ -98,6 +100,16 @@
     wofi.enable = true;
   };
 
+  #~ colors ~#
+  colors = {
+    activeColor = config.lib.stylix.colors.withHashtag.base02;
+    backgroundColor = config.lib.stylix.colors.withHashtag.base00;
+    inactiveColor = config.lib.stylix.colors.withHashtag.base0F;
+    inactiveColor2 = config.lib.stylix.colors.withHashtag.base0D;
+    urgentColor = "#FF0000";
+    textColor = config.lib.stylix.colors.withHashtag.base07;
+  };
+
   ########################################
   #
   ## Source Files
@@ -120,7 +132,6 @@
   ## Program Configurations and Imports
   #
   ########################################
-  programs.home-manager.enable = true;
   imports = [
     ./alacritty # Alacritty Terminal Configuration
     ./fastfetch # Fastfetch Configuration

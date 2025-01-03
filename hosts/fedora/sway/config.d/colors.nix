@@ -1,51 +1,41 @@
 { config, ... }:
 
-with config.lib.stylix.colors.withHashtag;
-let
-  activeColor = base02;
-  inactiveColor = base0F;
-  inactiveColor2 = base0D;
-  urgentColor = "#FF0000";
-
-  fonts.size = config.stylix.fonts.sizes.applications + 0.0;
-
-in
 {
   wayland.windowManager.sway.config = {
-    inherit fonts;
+    fonts.size = config.stylix.fonts.sizes.applications + 0.0;
     colors = {
-      background = activeColor;
+      background = config.colors.activeColor;
 
       focused = {
-        background = activeColor;
-        border = activeColor;
-        text = base06;
-        indicator = activeColor;
-        childBorder = activeColor;
+        background = config.colors.activeColor;
+        border = config.colors.activeColor;
+        text = config.colors.textColor;
+        indicator = config.colors.activeColor;
+        childBorder = config.colors.activeColor;
       };
 
       focusedInactive = {
-        background = inactiveColor2;
-        border = inactiveColor2;
-        text = base06;
-        indicator = inactiveColor2;
-        childBorder = inactiveColor2;
+        background = config.colors.inactiveColor2;
+        border = config.colors.inactiveColor2;
+        text = config.colors.textColor;
+        indicator = config.colors.inactiveColor2;
+        childBorder = config.colors.inactiveColor2;
       };
 
       unfocused = {
-        background = inactiveColor;
-        border = inactiveColor;
-        text = base06;
-        indicator = inactiveColor;
-        childBorder = inactiveColor;
+        background = config.colors.inactiveColor;
+        border = config.colors.inactiveColor;
+        text = config.colors.textColor;
+        indicator = config.colors.inactiveColor;
+        childBorder = config.colors.inactiveColor;
       };
 
       urgent = {
-        background = urgentColor;
-        border = urgentColor;
+        background = config.colors.urgentColor;
+        border = config.colors.urgentColor;
         text = "#FFFFFF";
-        indicator = urgentColor;
-        childBorder = urgentColor;
+        indicator = config.colors.urgentColor;
+        childBorder = config.colors.urgentColor;
       };
     };
   };

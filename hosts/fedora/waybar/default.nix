@@ -5,7 +5,6 @@
   ...
 }:
 
-with config.lib.stylix.colors.withHashtag;
 {
   options.pkgconfig.waybar = {
     enable = lib.mkEnableOption "Enable waybar configuration.";
@@ -292,10 +291,10 @@ with config.lib.stylix.colors.withHashtag;
     };
 
     style = ''
-      @define-color activeColor   ${base02};
-      @define-color inactiveColor ${base0F};
-      @define-color inactiveColor2 ${base0D};
-      @define-color urgentColor   #FF0000;
+      @define-color activeColor   ${config.colors.activeColor};
+      @define-color inactiveColor ${config.colors.inactiveColor};
+      @define-color inactiveColor2 ${config.colors.inactiveColor2};
+      @define-color urgentColor   ${config.colors.urgentColor};
 
 
       * {

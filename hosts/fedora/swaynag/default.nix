@@ -8,23 +8,23 @@
     enable = config.pkgconfig.swaynag.enable;
 
     settings = {
-      "wpgtheme" = {
-        background = "#12100c00";
-        border = "#12100c00";
-        border-bottom = "#eefdff00";
-        button-background = "#3e6d8c";
-        text = "#eefdff";
-        button-text = "#eefdff";
+      "theme" = {
+        background = "${config.colors.backgroundColor}00";
+        border = "${config.colors.backgroundColor}00";
+        border-bottom = "${config.colors.textColor}00";
+        button-background = config.colors.activeColor;
+        text = config.colors.textColor;
+        button-text = config.colors.textColor;
         border-bottom-size = "0";
         message-padding = "5";
-        details-background = "#12100c00";
+        details-background = "${config.colors.backgroundColor}00";
         details-border-size = "0";
         button-border-size = "3";
         button-gap = "5";
         button-dismiss-gap = "10";
         button-margin-right = "10";
         button-padding = "5";
-        font = "Ubuntu Medium 10";
+        font = config.stylix.fonts.serif.name + " " + (toString config.stylix.fonts.sizes.applications);
       };
     };
   };

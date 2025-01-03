@@ -5,7 +5,6 @@
   ...
 }:
 
-with config.lib.stylix.colors.withHashtag;
 {
   options.pkgconfig.swaylock = {
     enable = lib.mkEnableOption "Enable swaylock configuration.";
@@ -39,41 +38,41 @@ with config.lib.stylix.colors.withHashtag;
       #line-uses-ring = true;
       #no-unlock-indicator = true;       #~~~ hide indicator
 
-      bs-hl-color = base0E;
-      caps-lock-bs-hl-color = base0E;
-      caps-lock-key-hl-color = base0E;
-      key-hl-color = base0E;
+      bs-hl-color = config.colors.activeColor;
+      caps-lock-bs-hl-color = config.colors.activeColor;
+      caps-lock-key-hl-color = config.colors.activeColor;
+      key-hl-color = config.colors.activeColor;
 
-      layout-bg-color = base02;
-      layout-border-color = base0E;
+      layout-bg-color = config.colors.backgroundColor;
+      layout-border-color = config.colors.activeColor;
       #layout-text-color = "#FFFFFF";
 
-      separator-color = base02;
+      separator-color = config.colors.backgroundColor;
 
-      inside-color = "${base02}00";
-      line-color = base02;
-      ring-color = base03;
+      inside-color = "${config.colors.backgroundColor}00";
+      line-color = config.colors.backgroundColor;
+      ring-color = config.colors.inactiveColor;
       text-color = "#FFFFFF";
 
-      inside-clear-color = "${base02}00";
-      line-clear-color = base02;
-      ring-clear-color = base03;
+      inside-clear-color = "${config.colors.backgroundColor}00";
+      line-clear-color = config.colors.backgroundColor;
+      ring-clear-color = config.colors.inactiveColor;
       text-clear-color = "#FFFFFF";
 
-      inside-caps-lock-color = "${base02}00";
-      line-caps-lock-color = base02;
-      ring-caps-lock-color = base03;
+      inside-caps-lock-color = "${config.colors.backgroundColor}00";
+      line-caps-lock-color = config.colors.backgroundColor;
+      ring-caps-lock-color = config.colors.inactiveColor;
       text-caps-lock-color = "#FFFFFF";
 
-      inside-ver-color = "${base02}00";
-      line-ver-color = base02;
-      ring-ver-color = base03;
+      inside-ver-color = "${config.colors.backgroundColor}00";
+      line-ver-color = config.colors.backgroundColor;
+      ring-ver-color = config.colors.inactiveColor;
       text-ver-color = "#FFFFFF";
 
-      inside-wrong-color = "${base02}00";
-      line-wrong-color = base02;
-      ring-wrong-color = "#FF0000";
-      text-wrong-color = "#FF0000";
+      inside-wrong-color = "${config.colors.backgroundColor}00";
+      line-wrong-color = config.colors.backgroundColor;
+      ring-wrong-color = config.colors.urgentColor;
+      text-wrong-color = config.colors.urgentColor;
 
       #~~~ keyboard layout config
       #show-keyboard-layout = true;
