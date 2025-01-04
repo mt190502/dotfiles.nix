@@ -1,6 +1,6 @@
 # mt190502's dots
 
-This dots is created for my personal use. I using with Nix Package Manager, so you can use it with NixOS or Nix installed on your system.
+This dotfiles is made for my personal use. I use it with Nix Package Manager, so you can use it with NixOS or Nix installed on your system.
 
 ## Installation
 
@@ -10,7 +10,7 @@ This dots is created for my personal use. I using with Nix Package Manager, so y
     sudo dnf install -y git curl swaylock
     ```
 
-  - I installed swaylock on Fedora because home-manager doesn't compatible with pam-locking. If you're using another distro, you can install it with your package manager.
+  - We need to install Swaylock using the distribution's own package manager. Because the home-manager is not compatible with pam-locking. If you use another distribution, you can install it with your package manager.
 
 - Set up Nix Package Manager on your system (if you haven't already or you don't have NixOS installed)
 
@@ -49,4 +49,3 @@ This dots is created for my personal use. I using with Nix Package Manager, so y
 ## Screenshot
 
 ![image](https://github.com/user-attachments/assets/07a3f209-b253-475a-a681-2f6c03eaa512)
-
