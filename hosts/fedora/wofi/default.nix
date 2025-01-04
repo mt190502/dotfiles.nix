@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 
 {
   options.pkgconfig.wofi = {
@@ -11,7 +6,6 @@
   };
   config.programs.wofi = {
     enable = config.pkgconfig.wofi.enable;
-    package = pkgs.wofi;
 
     settings = {
       allow_images = true;

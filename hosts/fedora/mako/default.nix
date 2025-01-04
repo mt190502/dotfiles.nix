@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   makoOpacity = lib.toHexString (((builtins.ceil (config.stylix.opacity.popups * 100)) * 255) / 100);
@@ -14,7 +9,6 @@ in
   };
   config.services.mako = {
     enable = config.pkgconfig.mako.enable;
-    package = pkgs.mako;
 
     backgroundColor = config.colors.backgroundColor + makoOpacity;
     borderColor = config.colors.activeColor;

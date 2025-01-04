@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 
 {
   options.pkgconfig.fastfetch = {
@@ -11,7 +6,6 @@
   };
   config.programs.fastfetch = {
     enable = config.pkgconfig.fastfetch.enable;
-    package = pkgs.fastfetch;
 
     settings = {
       display = {

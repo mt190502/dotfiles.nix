@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 
 {
   options.pkgconfig.tmux = {
@@ -11,7 +6,6 @@
   };
   config.programs.tmux = {
     enable = config.pkgconfig.tmux.enable;
-    package = pkgs.tmux;
 
     baseIndex = 1;
     clock24 = true;
