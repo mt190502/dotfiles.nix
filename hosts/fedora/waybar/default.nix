@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 {
   options.pkgconfig.waybar = {
@@ -13,12 +8,10 @@
     enable = config.pkgconfig.waybar.enable;
     package = pkgs.waybar.overrideAttrs (oldAttrs: {
       buildInputs = oldAttrs.buildInputs or [ ] ++ [ pkgs.makeWrapper ];
-      postInstall =
-        oldAttrs.postInstall or ""
-        + ''
-          wrapProgram $out/bin/waybar \
-            --set GTK_THEME Adwaita:dark
-        '';
+      postInstall = oldAttrs.postInstall or "" + ''
+        wrapProgram $out/bin/waybar \
+          --set GTK_THEME Adwaita:dark
+      '';
     });
 
     settings = {
@@ -36,12 +29,8 @@
         #### Modules
         ##
         ################################################
-        modules-left = [
-          "custom/space"
-          "sway/workspaces"
-          "custom/space"
-          "sway/window"
-        ];
+        modules-left =
+          [ "custom/space" "sway/workspaces" "custom/space" "sway/window" ];
         modules-center = [
           "sway/mode"
           "custom/space"
@@ -98,10 +87,7 @@
         "sway/scratchpad" = {
           format = "{icon} {count}";
           show-empty = false;
-          format-icons = [
-            ""
-            "<U+F2D2>"
-          ];
+          format-icons = [ "" "<U+F2D2>" ];
           tooltip = true;
           tooltip-format = "{app}: {title}";
         };
@@ -128,7 +114,8 @@
         cpu = {
           interval = 1;
           format = " {max_frequency:0.2f}GHz | {usage}%";
-          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
+          on-click =
+            "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
         };
 
         clock = {
@@ -144,7 +131,8 @@
               days = "<span color='#ecc6d9'><b>{}</b></span>";
               weeks = "<span color='#99ffdd'><b>W{}</b></span>";
               weekdays = "<span color='#ffcc66'><b>{}</b></span>";
-              today = "<span background='#ffffff' color='#000000'><b>{}</b></span>";
+              today =
+                "<span background='#ffffff' color='#000000'><b>{}</b></span>";
             };
           };
           interval = 1;
@@ -153,7 +141,8 @@
         memory = {
           interval = 10;
           format = " {used:0.2f} / {total:0.0f} GB";
-          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
+          on-click =
+            "$HOME/.config/sway/scripts.d/programtoggle.sh kitty -e htop";
         };
 
         network = {
@@ -163,7 +152,8 @@
           format-linked = " (No IP)";
           format-disconnected = "⚠  Disconnected";
           format-alt = "{essid} {ipaddr}/{cidr} ";
-          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T nmtui -e nmtui";
+          on-click-right =
+            "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T nmtui -e nmtui";
         };
 
         pulseaudio = {
@@ -179,15 +169,12 @@
             phone = "";
             portable = "";
             car = "";
-            default = [
-              " "
-              " "
-              " "
-            ];
+            default = [ " " " " " " ];
           };
           scroll-step = 5;
           on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh pavucontrol";
+          on-click-right =
+            "$HOME/.config/sway/scripts.d/programtoggle.sh pavucontrol";
           on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +5%";
           on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -5%";
           ignored-sinks = [ "Easy Effects Sink" ];
@@ -201,13 +188,7 @@
             critical = 1;
           };
           format = "{icon} {capacity}%";
-          format-icons = [
-            ""
-            ""
-            ""
-            ""
-            ""
-          ];
+          format-icons = [ "" "" "" "" "" ];
           max-length = 2;
         };
 
@@ -215,13 +196,7 @@
           format = "";
           format-connected = "";
           format-connected-battery = " {icon} {device_battery_percentage}%";
-          format-icons = [
-            ""
-            ""
-            ""
-            ""
-            ""
-          ];
+          format-icons = [ "" "" "" "" "" ];
         };
 
         ##################################################
@@ -235,14 +210,16 @@
         };
 
         "custom/fan" = {
-          exec = "cat $(find /sys/devices/platform -iname '*fan1_input' 2>/dev/null)";
+          exec =
+            "cat $(find /sys/devices/platform -iname '*fan1_input' 2>/dev/null)";
           format = "  {} RPM";
           tooltip = false;
           interval = { };
         };
 
         "custom/powermenu" = {
-          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh $HOME/.config/sway/scripts.d/powermenu.sh --lockmenu";
+          on-click =
+            "$HOME/.config/sway/scripts.d/programtoggle.sh $HOME/.config/sway/scripts.d/powermenu.sh --lockmenu";
           format = "";
           tooltip = false;
         };
@@ -266,7 +243,8 @@
           interval = 3600;
           exec = "curl -s 'https://wttr.in/Istanbul?format=1' | sed 's/ //1'";
           exec-if = "ping wttr.in -c1";
-          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T wttr.in -e sh -c 'curl https:##wttr.in/Istanbul; read'";
+          on-click =
+            "$HOME/.config/sway/scripts.d/programtoggle.sh alacritty msg create-window -T wttr.in -e sh -c 'curl https:##wttr.in/Istanbul; read'";
         };
 
         "custom/pomobar" = {
@@ -291,10 +269,11 @@
     };
 
     style = ''
-      @define-color activeColor   ${config.colors.activeColor};
-      @define-color inactiveColor ${config.colors.inactiveColor};
+      @define-color activeColor    ${config.colors.activeColor};
+      @define-color inactiveColor  ${config.colors.inactiveColor};
       @define-color inactiveColor2 ${config.colors.inactiveColor2};
-      @define-color urgentColor   ${config.colors.urgentColor};
+      @define-color urgentColor    ${config.colors.urgentColor};
+      @define-color textColor      ${config.colors.textColor};
 
 
       * {
@@ -316,7 +295,7 @@
       #workspaces,
       widget label:not(#custom-space) {
       	background-color: @activeColor;
-      	color: @color15;
+      	color: @textColor;
       	margin: 6px 0px 2px 0px;
       	padding: 0px 10px 0px 10px;
       }
@@ -324,7 +303,7 @@
       #workspaces button,
       #workspaces button label {
       	background-color: @activeColor;
-      	color: @color15;
+      	color: @textColor;
       	margin: 0px 0px 0px 0px;
       	padding: 0px 1px 0px 1px;
       }

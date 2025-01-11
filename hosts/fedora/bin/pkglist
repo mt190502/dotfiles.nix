@@ -108,6 +108,7 @@ colord-libs
 color-filesystem
 composefs-libs
 compsize
+containerd.io
 container-selinux
 coreutils
 coreutils-common
@@ -167,6 +168,11 @@ dnf-utils
 dnsmasq
 docbook-dtds
 docbook-style-xsl
+docker-buildx-plugin
+docker-ce
+docker-ce-cli
+docker-ce-rootless-extras
+docker-compose-plugin
 dolphin
 dolphin-libs
 dos2unix
@@ -354,11 +360,6 @@ gparted
 gperftools-libs
 gpgme
 gpgmepp
-gpg-pubkey
-gpg-pubkey
-gpg-pubkey
-gpg-pubkey
-gpg-pubkey
 gpg-pubkey
 gpm-libs
 graphene
@@ -715,6 +716,7 @@ libcap-ng
 libcbor
 libcdio
 libcdio-paranoia
+libcgroup
 libchromaprint
 libcloudproviders
 libcollection
@@ -1151,7 +1153,6 @@ mutter
 mutter-common
 nano
 nano-default-editor
-nautilus
 nautilus-extensions
 nautilus-python
 nct6687d
@@ -1170,7 +1171,6 @@ NetworkManager-wwan
 newt
 nextcloud-client
 nextcloud-client-libs
-nextcloud-client-nautilus
 nfs-utils
 nftables
 nmap-ncat
@@ -1598,6 +1598,7 @@ shadow-utils
 shared-mime-info
 signon-qt6
 slang
+slirp4netns
 smartmontools
 smartmontools-selinux
 snappy
@@ -1666,6 +1667,7 @@ tailscale
 tar
 tcpdump
 tecla
+telnet
 tesseract-libs
 thrift
 time

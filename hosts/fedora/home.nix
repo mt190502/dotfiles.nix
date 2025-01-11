@@ -44,6 +44,7 @@
     k9s
     kubectl
     lxappearance
+    minikube
     nixd
     nixfmt-classic
     nmap
