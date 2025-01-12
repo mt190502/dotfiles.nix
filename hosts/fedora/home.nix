@@ -48,6 +48,7 @@
     nixd
     nixfmt-classic
     nmap
+    nvtopPackages.amd
     postgresql_17
     scrcpy
     shellcheck

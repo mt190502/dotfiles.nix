@@ -643,9 +643,9 @@ kio-fuse
 kmod
 kmod-libs
 kmod-nct6687d
-kmod-nct6687d-6.12.6-200.fc41.x86_64
+kmod-nct6687d-6.12.8-200.fc41.x86_64
 kmodtool
-kmod-v4l2loopback-6.12.6-200.fc41.x86_64
+kmod-v4l2loopback-6.12.8-200.fc41.x86_64
 kpartx
 krb5-libs
 kvantum
@@ -847,6 +847,7 @@ libmodulemd
 libmount
 libmount-devel
 libmpc
+libmpdclient
 libmpeg2
 libmtp
 libmysofa
@@ -1610,6 +1611,7 @@ sound-theme-freedesktop
 soundtouch
 source-highlight
 soxr
+spdlog
 speex
 spice-glib
 spice-gtk3
@@ -1743,6 +1745,7 @@ vulkan-loader
 vulkan-loader-devel
 vulkan-tools
 wavpack
+waybar
 waydroid
 waydroid-selinux
 wayland-devel
