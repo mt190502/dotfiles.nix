@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 {
-  wayland.windowManager.sway.config = {
-    startup = [
+  wayland.windowManager.sway = {
+    config.startup = [
       #~~~ gtk configuration
       {
         command = "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XAUTHORITY SSH_AUTH_SOCK GNOME_KEYRING_CONTROL";
@@ -52,5 +52,8 @@
       # { command = "$HOME/.config/sway/scripts.d/starter.sh"; }
       # { command = "bash -c 'while true; do wpg -m; sleep 1800; done'"; }
     ];
+    extraConfig = ''
+      for_window [app_id="Alacritty" title="wttr.in"] resize set 48ppt 65ppt
+    '';
   };
 }
