@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 {
   options.colors = {
@@ -60,6 +55,7 @@
     targets = {
       alacritty.enable = false;
       mako.enable = false;
+      mangohud.enable = false;
       gtk.enable = false;
       kde.enable = false;
       sway.enable = false;
