@@ -31,14 +31,17 @@
     bat
     binwalk
     btop
+	  bun
     cliphist
     delta
     gcolor3
+    go
     grim
     hugo
     hyperfine
     iftop
     (config.lib.nixGL.wrap imagemagick)
+    iosevka
     iperf
     jq
     k9s
@@ -70,6 +73,7 @@
     ydotool
     yq
     yt-dlp
+    zola
   ];
 
   ########################################

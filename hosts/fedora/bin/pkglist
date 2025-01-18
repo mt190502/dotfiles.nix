@@ -39,6 +39,8 @@ appstream
 appstream-data
 appstream-qt
 aribb24
+ark
+ark-libs
 at
 atk
 atkmm
@@ -231,6 +233,7 @@ file
 file-libs
 filesystem
 findutils
+finger
 fira-code-fonts
 firewall-config
 firewalld
@@ -676,6 +679,7 @@ libacl
 libadwaita
 libaio
 libaom
+libappindicator
 libappindicator-gtk3
 libarchive
 libaribcaption
@@ -732,6 +736,7 @@ libdatrie
 libdav1d
 libdb
 libdbusmenu
+libdbusmenu-gtk2
 libdbusmenu-gtk3
 libde265
 libdecor
@@ -812,6 +817,10 @@ libijs
 libimagequant
 libimobiledevice
 libimobiledevice-glue
+libindicator
+libindicator-gtk3
+libindicator-gtk3-tools
+libindicator-tools
 libini_config
 libinput
 libipt
@@ -1221,6 +1230,7 @@ osinfo-db-tools
 ostree-libs
 p11-kit
 p11-kit-trust
+p7zip-plugins
 PackageKit
 PackageKit-command-not-found
 PackageKit-cron
@@ -1580,6 +1590,7 @@ samba-client-libs
 samba-common
 samba-common-libs
 satyr
+scenefx
 scrub
 sdbus-cpp
 SDL2
@@ -1639,9 +1650,9 @@ sudo
 supermin
 svt-av1-libs
 svt-hevc-libs
-sway
 swaybg
-sway-config-upstream
+swayfx
+swayfx-config-upstream
 swaylock
 sway-wallpapers
 switcheroo-control
@@ -1763,7 +1774,7 @@ whois-nls
 wireless-regdb
 wireplumber
 wireplumber-libs
-wlroots
+wlroots0.17
 wmctrl
 woff2
 words
