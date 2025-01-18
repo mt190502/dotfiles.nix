@@ -31,7 +31,7 @@
     bat
     binwalk
     btop
-	  bun
+    bun
     cliphist
     delta
     gcolor3

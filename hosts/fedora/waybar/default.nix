@@ -13,10 +13,12 @@
     enable = config.pkgconfig.waybar.enable;
     package = pkgs.waybar.overrideAttrs (oldAttrs: {
       buildInputs = oldAttrs.buildInputs or [ ] ++ [ pkgs.makeWrapper ];
-      postInstall = oldAttrs.postInstall or "" + ''
-        wrapProgram $out/bin/waybar \
-          --set GTK_THEME Adwaita:dark
-      '';
+      postInstall =
+        oldAttrs.postInstall or ""
+        + ''
+          wrapProgram $out/bin/waybar \
+            --set GTK_THEME Adwaita:dark
+        '';
     });
 
     settings = {
