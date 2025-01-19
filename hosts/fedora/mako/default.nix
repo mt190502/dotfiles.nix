@@ -17,7 +17,7 @@ in
     borderRadius = 0;
     borderSize = 5;
     defaultTimeout = 10000;
-    font = config.stylix.fonts.serif.name + " " + (toString config.stylix.fonts.sizes.applications);
+    font = config.stylix.fonts.sansSerif.name + " " + (toString config.stylix.fonts.sizes.applications);
     ignoreTimeout = true;
     layer = "overlay";
     margin = "16";

@@ -23,7 +23,7 @@
       #~ Font
       font.size = config.stylix.fonts.sizes.terminal;
       font.normal = {
-        family = "MesloLGS NF";
+        family = config.stylix.fonts.monospace.name;
         style = "Bold";
       };
       font.bold = {

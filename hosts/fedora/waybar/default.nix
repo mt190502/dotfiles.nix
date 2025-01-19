@@ -300,8 +300,8 @@
 
       * {
       	border-radius: 5px;
-      	font-family: Ubuntu Medium, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
-      	font-size: 13px;
+      	font-family: ${config.stylix.fonts.sansSerif.name}, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
+      	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
       	min-height: 0;
       }
 

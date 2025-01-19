@@ -2,7 +2,13 @@
 
 {
   wayland.windowManager.sway.config = {
-    fonts.size = config.stylix.fonts.sizes.applications + 0.0;
+    fonts = {
+      names = [
+        config.stylix.fonts.sansSerif.name
+        "pango"
+      ];
+      size = config.stylix.fonts.sizes.applications + 0.0;
+    };
     colors = {
       background = config.colors.activeColor;
 
