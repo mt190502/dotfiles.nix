@@ -12,7 +12,7 @@
 
   config.wayland.windowManager.sway = {
     enable = config.pkgconfig.sway.enable;
-    package = (config.lib.nixGL.wrap pkgs.sway);
+    package = (config.lib.nixGL.wrap pkgs.swayfx);
     checkConfig = false;
     config = {
       modifier = "Mod4";
