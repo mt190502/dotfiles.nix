@@ -54,6 +54,7 @@
         terminal = 9;
       };
     };
+
     image = ../bin/wallpaper.jpg;
 
     polarity = "dark";
