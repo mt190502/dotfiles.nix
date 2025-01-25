@@ -65,6 +65,7 @@
       ls = "lsd";
       mv = "mv -i";
       rm = "rm -i";
+      sysdup = "sudo dnf --refresh upgrade && nix-channel --update && flatpak update && hm .#fedora";
 
       #~ Git
       gita = "git add -A";
@@ -98,12 +99,10 @@
       ##################################################
       #~ common ~#
       direnv export fish | source
-      #docker completion fish | source
-      #helm completion fish | source
+      helm completion fish | source
       hugo completion fish | source
       kubectl completion fish | source
       tailscale completion fish | source
-      #velero completion fish | source
 
       #~ nvm ~#
       #set -gx NVM_DIR "$HOME/.nvm"
@@ -117,6 +116,12 @@
 
       #~ rust ~# 
       #source "$HOME/.cargo/env.fish"
+
+      #~ grc ~#
+      for cmd in g++ gas head make ld ping6 tail traceroute6 $( ls ${pkgs.grc}/share/grc/ | grep -vE 'jobs|systemctl' )
+        set cmd "$(echo $cmd | sed 's/conf\.//g')"
+        type "$cmd" >/dev/null 2>&1 && alias "$cmd"="$( which grc ) --colour=auto $cmd"
+      end 
     '';
   };
 }

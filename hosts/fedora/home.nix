@@ -38,6 +38,7 @@
     delta
     gcolor3
     go
+    grc
     grim
     hack-font
     hugo
@@ -46,8 +47,10 @@
     iosevka
     iperf
     jq
+    k0sctl
     k9s
     kubectl
+    kubernetes-helm
     minikube
     nixd
     nixfmt-classic

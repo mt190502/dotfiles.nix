@@ -333,6 +333,7 @@ gnome-keyring
 gnome-keyring-pam
 gnome-menus
 gnome-online-accounts
+gnome-online-accounts-gtk
 gnome-session
 gnome-session-wayland-session
 gnome-settings-daemon
@@ -368,7 +369,6 @@ gpm-libs
 graphene
 graphite2
 graphviz-libs
-grc
 grep
 grim
 groff-base
@@ -648,9 +648,9 @@ kio-fuse
 kmod
 kmod-libs
 kmod-nct6687d
-kmod-nct6687d-6.12.8-200.fc41.x86_64
+kmod-nct6687d-6.12.10-200.fc41.x86_64
 kmodtool
-kmod-v4l2loopback-6.12.8-200.fc41.x86_64
+kmod-v4l2loopback-6.12.10-200.fc41.x86_64
 kpartx
 krb5-libs
 kvantum
@@ -1416,6 +1416,7 @@ python3-gobject
 python3-gobject-base
 python3-hawkey
 python3-idna
+python3-inotify
 python3-libcomps
 python3-libdnf
 python3-libreport
