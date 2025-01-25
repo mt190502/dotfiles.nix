@@ -18,7 +18,10 @@
       url = "github:alexghr/alacritty-theme.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix";
+    stylix = {
+      url = "github:danth/stylix/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
