@@ -328,6 +328,7 @@ gnome-control-center
 gnome-control-center-filesystem
 gnome-desktop3
 gnome-desktop4
+gnome-disk-utility
 gnome-icon-theme
 gnome-keyring
 gnome-keyring-pam
@@ -760,6 +761,7 @@ libestr
 libev
 libevdev
 libevent
+libewf
 libexif
 libfakekey
 libfastjson
@@ -1685,6 +1687,7 @@ tcpdump
 tecla
 telnet
 tesseract-libs
+testdisk
 thrift
 time
 totem-pl-parser
