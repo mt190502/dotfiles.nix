@@ -51,6 +51,7 @@
     k9s
     kubectl
     kubernetes-helm
+    minio-client
     minikube
     nixd
     nixfmt-classic
