@@ -28,6 +28,7 @@
             src = ./scripts.d + "/${path}";
             env = {
               alacritty = lib.getExe config.programs.alacritty.package;
+              cliphist = lib.getExe pkgs.cliphist;
               grim = lib.getExe pkgs.grim;
               imagemagick = pkgs.imagemagick;
               imv = (config.lib.nixGL.wrap pkgs.imv);

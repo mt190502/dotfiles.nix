@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let
   modifier = config.wayland.windowManager.sway.config.modifier;
@@ -87,8 +87,8 @@ in
 
       #~~~ clipboard
       "${modifier}+v" =
-        "exec $HOME/scripts/cliphist list | wofi --show dmenu | $HOME/scripts/cliphist decode | wl-copy";
-      "${modifier}+shift+v" = "exec $HOME/scripts/cliphist wipe";
+        "exec ${pkgs.cliphist}/bin/cliphist list | wofi --show dmenu | ${pkgs.cliphist}/bin/cliphist decode | wl-copy";
+      "${modifier}+shift+v" = "exec ${pkgs.cliphist}/bin/cliphist wipe";
 
       #~~~ playerctl
       "XF86AudioPlay" = "exec playerctl play-pause";
