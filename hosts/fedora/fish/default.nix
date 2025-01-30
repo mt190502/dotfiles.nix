@@ -24,7 +24,6 @@
       		export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
       		export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
       		export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
-      		export PATH
       		dbus-update-activation-environment --systemd --all
       		XDG_CURRENT_DESKTOP=sway sway &>$HOME/.cache/swaywm.log
       	end
@@ -88,9 +87,9 @@
       #
       ##################################################
       set fish_greeting ""
-      set TERM "xterm-256color"
-      set XDG_DATA_DIRS "$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
-      set PATH "$HOME/.local/share/JetBrains/Toolbox/scripts:/usr/local/go/bin:$HOME/go/bin:$HOME/scripts:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+      export TERM="xterm-256color"
+      export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
+      export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:/usr/local/go/bin:$HOME/go/bin:$HOME/scripts:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
       ##################################################
       #
