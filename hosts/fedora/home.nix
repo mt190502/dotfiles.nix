@@ -14,7 +14,7 @@
   ########################################
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
   programs.home-manager.enable = true;
   nixGL.packages = inputs.nixgl.packages;
 
@@ -155,7 +155,7 @@
   ## Options
   #
   ########################################
-  nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs; # ~ for nix stable channel
+  # nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs; # ~ for nix stable channel
   nixpkgs.config = {
     allowUnfree = true;
   }; # ~ for vscode
