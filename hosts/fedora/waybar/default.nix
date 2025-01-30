@@ -8,6 +8,11 @@
 {
   options.pkgconfig.waybar = {
     enable = lib.mkEnableOption "Enable waybar configuration.";
+    weather_location = lib.mkOption {
+      default = "Istanbul";
+      type = lib.types.str;
+      description = "The location for the weather module.";
+    };
   };
   config.programs.waybar = {
     enable = config.pkgconfig.waybar.enable;
@@ -92,7 +97,7 @@
 
         "sway/language" = {
           format = "{short} {variant}";
-          on-click = ''swaymsg input "type:keyboard" xkb_switch_layout next'';
+          on-click = ''${pkgs.sway}/bin/swaymsg input "type:keyboard" xkb_switch_layout next'';
         };
 
         "sway/scratchpad" = {
@@ -248,7 +253,7 @@
         };
 
         "custom/screenshot" = {
-          on-click = "~/.config/sway/scripts.d/screenshot.sh";
+          on-click = "$HOME/.config/sway/scripts.d/screenshot.sh";
           format = "";
           tooltip = false;
         };
@@ -264,7 +269,7 @@
         "custom/weather" = {
           format = "{}";
           interval = 3600;
-          exec = "curl -s 'https://wttr.in/Istanbul?format=1' | sed 's/ //1'";
+          exec = "curl -s 'https://wttr.in/${config.pkgconfig.waybar.weather_location}?format=1' | sed 's/ //1'";
           exec-if = "ping wttr.in -c1";
           on-click = "${lib.getExe config.programs.alacritty.package} msg create-window -T wttr.in -e sh -c 'curl https://wttr.in/Istanbul; read'";
         };

@@ -23,11 +23,6 @@ in
       workspaceLayout = "tabbed";
       menu = "wofi --prompt 'Search Apps' --show drun";
       terminal = "alacritty";
-      # seat = {
-      #   "*" = {
-      #     xcursor_theme = "Adwaita 16";
-      #   };
-      # };
     };
     extraConfig = ''
       #~~~ window

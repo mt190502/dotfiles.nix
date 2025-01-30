@@ -36,6 +36,12 @@
     enable = true;
     # autoEnable = false;
 
+    cursor = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+      size = 16;
+    };
+
     fonts = {
       monospace = {
         name = "MesloLGS NF";

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.wofi = {
@@ -15,7 +20,7 @@
       line_wrap = "word_char";
       mode = "dmenu";
       no_actions = true;
-      term = "alacritty";
+      term = pkgs.alacritty;
       width = "40%";
     };
 
