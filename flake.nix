@@ -18,6 +18,7 @@
       url = "github:alexghr/alacritty-theme.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.5.2";
     stylix = {
       url = "github:danth/stylix/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,6 +29,7 @@
     inputs@{
       nixpkgs,
       home-manager,
+      nix-flatpak,
       stylix,
       ...
     }:
@@ -41,6 +43,7 @@
         extraSpecialArgs = { inherit inputs; };
         modules = [
           stylix.homeManagerModules.stylix
+          nix-flatpak.homeManagerModules.nix-flatpak
           ./hosts/fedora/home.nix
         ];
       };
