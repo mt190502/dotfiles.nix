@@ -33,7 +33,8 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - Clone this repository
 
     ```sh
-    git clone git@github.com:mt190502/dotfiles.nix
+    git clone git@github.com:mt190502/dotfiles.nix     # With SSH
+    git clone https://github.com/mt190502/dotfiles.nix # With HTTPS
     cd dotfiles.nix
     ```
 
