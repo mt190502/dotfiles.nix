@@ -702,7 +702,6 @@ libmodulemd
 libmount
 libmount-devel
 libmpc
-libmpdclient
 libmpeg2
 libmtp
 libmysofa
@@ -1469,7 +1468,6 @@ sound-theme-freedesktop
 soundtouch
 source-highlight
 soxr
-spdlog
 speex
 spice-glib
 spice-gtk3
@@ -1604,7 +1602,6 @@ vulkan-loader
 vulkan-loader-devel
 vulkan-tools
 wavpack
-waybar
 waydroid
 waydroid-selinux
 wayland-devel
