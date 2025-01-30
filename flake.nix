@@ -33,13 +33,15 @@
       stylix,
       ...
     }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
     {
+      # packages."x86_64-linux" = nixpkgs.lib.mapAttrs' (n: v: {
+      #   name = (nixpkgs.lib.removeSuffix ".nix" n);
+      #   value = v;
+      # }) (nixpkgs.lib.genAttrs
+      #   (nixpkgs.lib.attrNames (builtins.readDir ./packages)) (p:
+      #     nixpkgs.legacyPackages."x86_64-linux".callPackage ./packages/${p} { }));
       homeConfigurations."fedora" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs; };
         modules = [
           stylix.homeManagerModules.stylix
