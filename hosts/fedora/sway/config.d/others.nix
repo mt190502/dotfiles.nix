@@ -28,7 +28,6 @@
         command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${pkgs.cliphist}/bin/cliphist store";
       }
       { command = "${pkgs.wlsunset}/bin/wlsunset -S '07:00' -s '19:00'"; }
-      { command = "/usr/bin/kdeconnectd"; }
       {
         command = "/usr/bin/env XDG_CURRENT_DESKTOP=KDE /usr/libexec/kf6/polkit-kde-authentication-agent-1";
       }
@@ -52,8 +51,5 @@
       # { command = "$HOME/.config/sway/scripts.d/starter.sh"; }
       # { command = "bash -c 'while true; do wpg -m; sleep 1800; done'"; }
     ];
-    extraConfig = ''
-      for_window [app_id="Alacritty" title="wttr.in"] resize set 48ppt 65ppt
-    '';
   };
 }
