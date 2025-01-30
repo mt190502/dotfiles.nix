@@ -15,10 +15,8 @@
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
   home.stateVersion = "24.11";
-  fonts.fontconfig.enable = true;
   programs.home-manager.enable = true;
   nixGL.packages = inputs.nixgl.packages;
-  services.flatpak.enable = true;
 
   ########################################
   #
@@ -26,21 +24,15 @@
   #
   ########################################
   home.packages = with pkgs; [
+    #~ wrapped packages ~#
+    (config.lib.nixGL.wrap libsForQt5.qt5ct)
+    (config.lib.nixGL.wrap kdePackages.qt6ct)
     (config.lib.nixGL.wrap imagemagick)
     (config.lib.nixGL.wrap nwg-displays)
-    (flameshot.overrideAttrs (oldAttrs: {
-      src = pkgs.fetchFromGitHub {
-        owner = "flameshot-org";
-        repo = "flameshot";
-        rev = "10d12e0";
-        sha256 = "sha256-3ujqwiQrv/H1HzkpD/Q+hoqyrUdO65gA0kKqtRV0vmw=";
-      };
-      cmakeFlags = [
-        "-DUSE_WAYLAND_CLIPBOARD=1"
-        "-DUSE_WAYLAND_GRIM=1"
-      ];
-      buildInputs = oldAttrs.buildInputs ++ [ pkgs.libsForQt5.kguiaddons ];
-    }))
+    config.wrappedPkgs.dolphin
+    config.wrappedPkgs.flameshot
+
+    #~ standard packages ~#
     alacritty-theme
     ansible
     aria2
@@ -64,8 +56,16 @@
     jq
     k0sctl
     k9s
+    kdePackages.dolphin-plugins
+    kdePackages.kio-fuse
+    kdePackages.kio-extras
+    kdePackages.konsole
+    kdePackages.qtsvg
+    kdePackages.qtstyleplugin-kvantum
+    kdePackages.qtwayland
     kubectl
     kubernetes-helm
+    libsForQt5.qtstyleplugin-kvantum
     minio-client
     minikube
     nixd
@@ -73,6 +73,7 @@
     nmap
     nvtopPackages.amd
     nwg-look
+    pavucontrol
     postgresql_17
     scrcpy
     shellcheck
@@ -83,6 +84,7 @@
     tesseract
     tmux
     translate-shell
+    tzdata
     vscode
     wl-clipboard
     wlr-randr
@@ -96,6 +98,7 @@
     zola
   ];
 
+  services.flatpak.enable = true;
   services.flatpak.packages = [
     "ca.desrt.dconf-editor"
     "com.belmoussaoui.ashpd.demo"
@@ -157,6 +160,15 @@
     allowUnfree = true;
   }; # ~ for vscode
 
+  #~ services ~#
+  services = {
+    kdeconnect = {
+      enable = true;
+      package = config.lib.nixGL.wrap pkgs.kdePackages.kdeconnect-kde;
+      indicator = true;
+    };
+  };
+
   #~ packages ~#
   pkgconfig = {
     alacritty = {
@@ -165,6 +177,7 @@
     };
     fastfetch.enable = true;
     fish.enable = true;
+    fontconfig.enable = true;
     mako.enable = true;
     mangohud.enable = true;
     mpv.enable = true;
@@ -217,9 +230,11 @@
     ./fastfetch # Fastfetch Configuration
     ./fish # Fish Shell Configuration
     ./flatpak # Flatpak Configuration
+    ./fontconfig # Fontconfig Configuration
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
+    ./packages # Custom packages
     ./stylix # Stylix Configuration
     ./swappy # Swappy Configuration
     ./sway # Sway Window Manager Configuration
