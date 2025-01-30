@@ -15,8 +15,10 @@
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
   home.stateVersion = "24.11";
+  fonts.fontconfig.enable = true;
   programs.home-manager.enable = true;
   nixGL.packages = inputs.nixgl.packages;
+  services.flatpak.enable = true;
 
   ########################################
   #
@@ -26,6 +28,19 @@
   home.packages = with pkgs; [
     (config.lib.nixGL.wrap imagemagick)
     (config.lib.nixGL.wrap nwg-displays)
+    (flameshot.overrideAttrs (oldAttrs: {
+      src = pkgs.fetchFromGitHub {
+        owner = "flameshot-org";
+        repo = "flameshot";
+        rev = "10d12e0";
+        sha256 = "sha256-3ujqwiQrv/H1HzkpD/Q+hoqyrUdO65gA0kKqtRV0vmw=";
+      };
+      cmakeFlags = [
+        "-DUSE_WAYLAND_CLIPBOARD=1"
+        "-DUSE_WAYLAND_GRIM=1"
+      ];
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.libsForQt5.kguiaddons ];
+    }))
     alacritty-theme
     ansible
     aria2
@@ -81,6 +96,57 @@
     zola
   ];
 
+  services.flatpak.packages = [
+    "ca.desrt.dconf-editor"
+    "com.belmoussaoui.ashpd.demo"
+    "com.github.jms55.Sandbox"
+    "com.github.libresprite.LibreSprite"
+    "com.github.tchx84.Flatseal"
+    "com.google.Chrome"
+    "com.mattjakeman.ExtensionManager"
+    "com.obsproject.Studio"
+    "com.raggesilver.BlackBox"
+    "com.stremio.Stremio"
+    "com.usebottles.bottles"
+    "com.valvesoftware.Steam"
+    "com.vivaldi.Vivaldi"
+    "dev.vencord.Vesktop"
+    "io.github._0xzer0x.qurancompanion"
+    "io.github.mrvladus.List"
+    "io.github.ungoogled_software.ungoogled_chromium"
+    "io.gitlab.librewolf-community"
+    "md.obsidian.Obsidian"
+    "net.davidotek.pupgui2"
+    "org.audacityteam.Audacity"
+    "org.filezillaproject.Filezilla"
+    "org.flameshot.Flameshot"
+    "org.gimp.GIMP"
+    "org.gnome.Calculator"
+    "org.gnome.Calendar"
+    "org.gnome.Evolution"
+    "org.gnome.FileRoller"
+    "org.gnome.Loupe"
+    "org.gnome.Tetravex"
+    "org.gnome.TextEditor"
+    "org.gnome.clocks"
+    "org.gnome.dspy"
+    "org.gnome.seahorse.Application"
+    "org.inkscape.Inkscape"
+    "org.kde.krita"
+    "org.kde.kruler"
+    "org.kde.okular"
+    "org.libreoffice.LibreOffice"
+    "org.mozilla.firefox"
+    "org.onlyoffice.desktopeditors"
+    "org.prismlauncher.PrismLauncher"
+    "org.qbittorrent.qBittorrent"
+    "org.remmina.Remmina"
+    "org.signal.Signal"
+    "org.telegram.desktop"
+    "org.texstudio.TeXstudio"
+    "org.videolan.VLC"
+  ];
+
   ########################################
   #
   ## Options
@@ -107,7 +173,10 @@
     swaylock.enable = true;
     swaynag.enable = true;
     tmux.enable = true;
-    waybar.enable = true;
+    waybar = {
+      enable = true;
+      weather_location = "Istanbul";
+    };
     wofi.enable = true;
   };
 
@@ -147,6 +216,7 @@
     ./alacritty # Alacritty Terminal Configuration
     ./fastfetch # Fastfetch Configuration
     ./fish # Fish Shell Configuration
+    ./flatpak # Flatpak Configuration
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
