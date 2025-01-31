@@ -41,7 +41,6 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - Switch this flake
 
     ```sh
-    home-manager build --no-out-link --flake .#fedora
     home-manager switch --no-out-link --flake .#fedora
     ```
 
