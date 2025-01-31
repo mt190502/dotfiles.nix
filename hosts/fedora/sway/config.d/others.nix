@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   wayland.windowManager.sway = {
@@ -21,7 +21,7 @@
       }
       { command = "/usr/bin/solaar -w hide"; }
       {
-        command = "${pkgs.swayidle}/bin/swayidle -w timeout 120 '~/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${pkgs.sway}/bin/swaymsg output * dpms off' resume '${pkgs.sway}/bin/swaymsg output * dpms on'";
+        command = "${pkgs.swayidle}/bin/swayidle -w timeout 120 '~/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrappedPkgs.sway}/bin/swaymsg output * dpms off' resume '${config.wrappedPkgs.sway}/bin/swaymsg output * dpms on'";
       }
       { command = "${pkgs.tmux}/bin/tmux new-session -ds daemonmodetmux"; }
       {
