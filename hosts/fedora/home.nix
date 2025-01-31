@@ -14,8 +14,8 @@
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
   home.stateVersion = "25.05";
-  programs.home-manager.enable = true;
   nixGL.packages = inputs.nixgl.packages;
+  programs.home-manager.enable = true;
 
   ########################################
   #
@@ -25,12 +25,12 @@
   home.packages = with pkgs; [
     #~ wrapped packages ~#
     config.wrappedPkgs.alacritty
-    config.wrappedPkgs.qt5ct
-    config.wrappedPkgs.qt6ct
-    config.wrappedPkgs.imagemagick
-    config.wrappedPkgs.nwg-displays
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
+    config.wrappedPkgs.imagemagick
+    config.wrappedPkgs.nwg-displays
+    config.wrappedPkgs.qt5ct
+    config.wrappedPkgs.qt6ct
 
     #~ standard packages ~#
     alacritty-theme
@@ -201,6 +201,18 @@
     inactiveColor2 = config.lib.stylix.colors.withHashtag.base0D;
     urgentColor = "#FF0000";
     textColor = config.lib.stylix.colors.withHashtag.base07;
+  };
+
+  #~ xdg ~#
+  xdg.portal = {
+    enable = true;
+    config.common.default = "*";
+    xdgOpenUsePortal = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-wlr
+    ];
   };
 
   ########################################
