@@ -502,9 +502,9 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmod-nct6687d
-kmod-nct6687d-6.12.10-200.fc41.x86_64
+kmod-nct6687d-6.12.11-200.fc41.x86_64
 kmodtool
-kmod-v4l2loopback-6.12.10-200.fc41.x86_64
+kmod-v4l2loopback-6.12.11-200.fc41.x86_64
 kpartx
 krb5-libs
 ladspa
