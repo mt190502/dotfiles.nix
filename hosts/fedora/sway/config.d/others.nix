@@ -2,16 +2,26 @@
 
 {
   wayland.windowManager.sway = {
+    systemd = {
+      enable = true;
+      variables = [
+        "DISPLAY"
+        "GNOME_KEYRING_CONTROL"
+        "NIXOS_OZONE_WL"
+        "SSH_AUTH_SOCK"
+        "SWAYSOCK"
+        "WAYLAND_DISPLAY"
+        "XAUTHORITY"
+        "XCURSOR_SIZE"
+        "XCURSOR_THEME"
+        "XDG_CURRENT_DESKTOP"
+        "XDG_SESSION_TYPE"
+      ];
+    };
     config.startup = [
-      #~~~ gtk configuration
+      #~~~ initial
       {
-        command = "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XAUTHORITY SSH_AUTH_SOCK GNOME_KEYRING_CONTROL";
-      }
-      {
-        command = "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XAUTHORITY SSH_AUTH_SOCK GNOME_KEYRING_CONTROL";
-      }
-      {
-        command = "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XAUTHORITY SSH_AUTH_SOCK GNOME_KEYRING_CONTROL";
+        command = "systemctl --user import-environment DISPLAY GNOME_KEYRING_CONTROL NIXOS_OZONE_WL SSH_AUTH_SOCK SWAYSOCK WAYLAND_DISPLAY XAUTHORITY XCURSOR_SIZE XCURSOR_THEME XDG_CURRENT_DESKTOP XDG_SESSION_TYPE";
       }
 
       #~~~ startup apps
@@ -42,9 +52,7 @@
       }
 
       #~~~ others
-      {
-        command = "$HOME/.config/sway/scripts.d/autostart.sh";
-      }
+      { command = "$HOME/.config/sway/scripts.d/autostart.sh"; }
     ];
   };
 }

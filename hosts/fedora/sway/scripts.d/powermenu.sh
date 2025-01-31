@@ -4,9 +4,6 @@
 #### PowerMenu
 ##
 #################################################
-#~~~ variables
-WAYLAND_DISPLAY="wayland-1"
-
 #~~~ lock function
 blurlock() {
     [[ -n "$(pgrep swaylock)" ]] && exit
@@ -19,7 +16,7 @@ blurlock() {
     done
     touch "$HOME/.cache/swaylock.lock"
     # shellcheck disable=SC2086
-    WAYLAND_DISPLAY=$WAYLAND_DISPLAY swaylock $args
+    swaylock $args
     rm -f "$HOME/.cache/swaylock.lock"
 }
 
