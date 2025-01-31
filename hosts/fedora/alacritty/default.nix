@@ -17,7 +17,7 @@
   };
   config.programs.alacritty = {
     enable = config.pkgconfig.alacritty.enable;
-    package = config.lib.nixGL.wrap pkgs.alacritty;
+    package = config.wrappedPkgs.alacritty;
 
     settings = {
       #~ Font

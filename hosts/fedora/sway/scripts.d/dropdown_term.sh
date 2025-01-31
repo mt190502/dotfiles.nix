@@ -5,7 +5,7 @@
 ##
 #################################################
 #~~~ set term and get screen size
-TERM=@alacritty@
+TERM=@alacritty@/bin/alacritty
 scrwidth=$(@sway@/bin/swaymsg -t get_outputs | @jq@ -r '.[] | select(.focused) | .rect.width')
 
 #~~~ if dropdown term is not started

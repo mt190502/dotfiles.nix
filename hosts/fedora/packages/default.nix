@@ -6,6 +6,49 @@
 }:
 
 {
+  #~ nixGL wrapped packages ~#
+  options.wrappedPkgs.alacritty = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.alacritty);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.imagemagick = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.imagemagick);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.imv = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.imv);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.kdeconnect = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.kdePackages.kdeconnect-kde);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.mpv = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.mpv);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.nwg-displays = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.nwg-displays);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.qt5ct = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.libsForQt5.qt5ct);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.qt6ct = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.kdePackages.qt6ct);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.sway = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.swayfx);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.swaylock = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.swaylock);
+    type = lib.types.package;
+  };
+
+  #~ other wrapped packages ~#
   options.wrappedPkgs.dolphin = lib.mkOption {
     default = (
       config.lib.nixGL.wrap (

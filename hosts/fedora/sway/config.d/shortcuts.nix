@@ -87,7 +87,7 @@ in
 
       #~~~ clipboard
       "${modifier}+v" =
-        "exec ${pkgs.cliphist}/bin/cliphist list | wofi --show dmenu | ${pkgs.cliphist}/bin/cliphist decode | wl-copy";
+        "exec ${pkgs.cliphist}/bin/cliphist list | ${pkgs.wofi} --show dmenu | ${pkgs.cliphist}/bin/cliphist decode | wl-copy";
       "${modifier}+shift+v" = "exec ${pkgs.cliphist}/bin/cliphist wipe";
 
       #~~~ playerctl
@@ -104,7 +104,7 @@ in
 
       #~~~ other
       "${modifier}+Return" =
-        "exec ${terminal} -e bash -c 'tmux new-window && tmux attach -t daemonmodetmux'";
+        "exec ${config.wrappedPkgs.${terminal}}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux new-window && ${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'";
       "${modifier}+d" = "exec $HOME/.config/sway/scripts.d/programtoggle.sh ${menu}";
       "${modifier}+l" = "exec $HOME/.config/sway/scripts.d/powermenu.sh --lock";
       "${modifier}+period" =

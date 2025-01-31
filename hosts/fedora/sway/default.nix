@@ -12,7 +12,7 @@
 
   config.wayland.windowManager.sway = {
     enable = config.pkgconfig.sway.enable;
-    package = (config.lib.nixGL.wrap pkgs.swayfx);
+    package = (config.wrappedPkgs.sway);
     checkConfig = false;
     config = {
       modifier = "Mod4";
@@ -27,17 +27,17 @@
           source = pkgs.substituteAll {
             src = ./scripts.d + "/${path}";
             env = {
-              alacritty = lib.getExe config.programs.alacritty.package;
+              alacritty = config.wrappedPkgs.alacritty;
               cliphist = lib.getExe pkgs.cliphist;
               grim = lib.getExe pkgs.grim;
-              imagemagick = pkgs.imagemagick;
-              imv = (config.lib.nixGL.wrap pkgs.imv);
+              imagemagick = config.wrappedPkgs.imagemagick;
+              imv = config.wrappedPkgs.imv;
               jq = lib.getExe pkgs.jq;
               mako = pkgs.mako;
               slurp = lib.getExe pkgs.slurp;
               # swaylock = lib.getExe pkgs.swaylock;     # not available in non nixos systems
               swappy = lib.getExe pkgs.swappy;
-              sway = pkgs.sway;
+              sway = config.wrappedPkgs.sway;
               tesseract = lib.getExe pkgs.tesseract;
               tmux = lib.getExe pkgs.tmux;
               trans = lib.getExe pkgs.translate-shell;

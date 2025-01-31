@@ -30,7 +30,7 @@ blurlock() {
 }
 [[ "$1" == "--suspend" ]] && {
     blurlock
-    sleep 2
+    sleep 5
     systemctl suspend
     exit 0
 }

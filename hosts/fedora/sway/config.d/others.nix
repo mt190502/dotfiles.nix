@@ -31,8 +31,6 @@
       {
         command = "/usr/bin/env XDG_CURRENT_DESKTOP=KDE /usr/libexec/kf6/polkit-kde-authentication-agent-1";
       }
-      # { command = "/usr/libexec/packagekitd"; }
-      { command = "$HOME/scripts/pomobar-server"; }
 
       {
         command = "$HOME/.config/sway/scripts.d/tmux_server.sh";
@@ -42,14 +40,11 @@
         command = "$HOME/.config/sway/scripts.d/workspace.sh init 1";
         always = true;
       }
-      # { command = "$HOME/.config/sway/scripts.d/screen_setup.sh"; always = true; }
 
       #~~~ others
       {
         command = "$HOME/.config/sway/scripts.d/autostart.sh";
       }
-      # { command = "$HOME/.config/sway/scripts.d/starter.sh"; }
-      # { command = "bash -c 'while true; do wpg -m; sleep 1800; done'"; }
     ];
   };
 }

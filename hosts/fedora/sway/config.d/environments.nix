@@ -9,7 +9,7 @@
       #~~~ apps
       set $browser       flatpak run io.gitlab.librewolf-community
       set $filemanager   ${config.wrappedPkgs.dolphin}/bin/dolphin
-      set $mediaplayer   ${config.programs.mpv.package}/bin/mpv
+      set $mediaplayer   ${config.wrappedPkgs.mpv}/bin/mpv
     '';
   };
 }
