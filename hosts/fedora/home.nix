@@ -99,7 +99,7 @@
     zola
   ];
 
-  services.flatpak.enable = false;
+  services.flatpak.enable = true;
   services.flatpak.packages = [
     "ca.desrt.dconf-editor"
     "com.belmoussaoui.ashpd.demo"
