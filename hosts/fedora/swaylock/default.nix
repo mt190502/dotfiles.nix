@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -12,7 +11,7 @@
 
   config.programs.swaylock = {
     enable = config.pkgconfig.swaylock.enable;
-    package = config.lib.nixGL.wrap pkgs.swaylock;
+    package = config.wrappedPkgs.swaylock;
 
     settings = {
       #################################################

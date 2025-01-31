@@ -25,10 +25,11 @@
   ########################################
   home.packages = with pkgs; [
     #~ wrapped packages ~#
-    (config.lib.nixGL.wrap libsForQt5.qt5ct)
-    (config.lib.nixGL.wrap kdePackages.qt6ct)
-    (config.lib.nixGL.wrap imagemagick)
-    (config.lib.nixGL.wrap nwg-displays)
+    config.wrappedPkgs.alacritty
+    config.wrappedPkgs.qt5ct
+    config.wrappedPkgs.qt6ct
+    config.wrappedPkgs.imagemagick
+    config.wrappedPkgs.nwg-displays
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
 
@@ -98,7 +99,7 @@
     zola
   ];
 
-  services.flatpak.enable = true;
+  services.flatpak.enable = false;
   services.flatpak.packages = [
     "ca.desrt.dconf-editor"
     "com.belmoussaoui.ashpd.demo"
@@ -164,7 +165,7 @@
   services = {
     kdeconnect = {
       enable = true;
-      package = config.lib.nixGL.wrap pkgs.kdePackages.kdeconnect-kde;
+      package = config.wrappedPkgs.kdeconnect;
       indicator = true;
     };
   };

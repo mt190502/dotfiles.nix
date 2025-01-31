@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -41,8 +40,6 @@
         ];
         modules-center = [
           "sway/mode"
-          "custom/space"
-          "custom/pomobar"
           "custom/space"
           "clock"
           "custom/space"
@@ -89,7 +86,7 @@
 
         "sway/language" = {
           format = "{short} {variant}";
-          on-click = ''${pkgs.sway}/bin/swaymsg input "type:keyboard" xkb_switch_layout next'';
+          on-click = ''${config.wrappedPkgs.sway}/bin/swaymsg input "type:keyboard" xkb_switch_layout next'';
         };
 
         "sway/scratchpad" = {
@@ -125,7 +122,7 @@
         cpu = {
           interval = 1;
           format = " {max_frequency:0.2f}GHz | {usage}%";
-          on-click = "${lib.getExe config.programs.alacritty.package} -e btop";
+          on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty -e btop";
         };
 
         clock = {
@@ -150,7 +147,7 @@
         memory = {
           interval = 10;
           format = " {used:0.2f} / {total:0.0f} GB";
-          on-click = "${lib.getExe config.programs.alacritty.package} -e btop";
+          on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty -e btop";
         };
 
         network = {
@@ -160,7 +157,7 @@
           format-linked = " (No IP)";
           format-disconnected = "⚠  Disconnected";
           format-alt = "{essid} {ipaddr}/{cidr} ";
-          on-click-right = "${lib.getExe config.programs.alacritty.package} msg create-window -T nmtui -e nmtui";
+          on-click-right = "${config.wrappedPkgs.alacritty}/bin/alacritty msg create-window -T nmtui -e nmtui";
         };
 
         pulseaudio = {
@@ -263,16 +260,16 @@
           interval = 3600;
           exec = "curl -s 'https://wttr.in/${config.pkgconfig.waybar.weather_location}?format=1' | sed 's/ //1'";
           exec-if = "ping wttr.in -c1";
-          on-click = "${lib.getExe config.programs.alacritty.package} msg create-window -T wttr.in -e sh -c 'curl https://wttr.in/Istanbul; read'";
+          on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty msg create-window -T wttr.in -e sh -c 'curl https://wttr.in/${config.pkgconfig.waybar.weather_location}; read'";
         };
 
         "custom/pomobar" = {
           format = "{}";
           interval = 1;
-          exec = "$HOME/scripts/pomobar-client status";
-          on-click = "$HOME/scripts/pomobar-client pause";
-          on-click-middle = "$HOME/scripts/pomobar-client reset";
-          on-click-right = "$HOME/scripts/pomobar-client resume";
+          exec = "$HOME/.local/bin/pomobar-client status";
+          on-click = "$HOME/.local/bin/pomobar-client pause";
+          on-click-middle = "$HOME/.local/bin/pomobar-client reset";
+          on-click-right = "$HOME/.local/bin/pomobar-client resume";
           return-type = "json";
         };
 

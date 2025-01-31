@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 
 {
   options.pkgconfig.mpv = {
@@ -11,7 +6,7 @@
   };
   config.programs.mpv = {
     enable = config.pkgconfig.mpv.enable;
-    package = config.lib.nixGL.wrap pkgs.mpv;
+    package = config.wrappedPkgs.mpv;
 
     bindings = {
       "Shift+s" = "cycle secondary-sid";

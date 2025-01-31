@@ -92,12 +92,12 @@ case $1 in
     main Active 1
     ;;
 *)
-    MODE1=$(swaynag -t theme -m Screenshot -Z Full 'echo Full' -Z Rectangular 'echo Rectangular')
+    MODE1=$(@sway@/bin/swaynag -t theme -m Screenshot -Z Full 'echo Full' -Z Rectangular 'echo Rectangular')
     [[ -z $MODE1 ]] && exit
 
-    MODE2=$(swaynag -t theme -m "$MODE1 Screenshot" -Z 'Copy' 'echo 1' -Z 'Save' 'echo 2' -Z 'Timeout and Copy' 'echo 3' -Z 'Timeout and Save' 'echo 4')
+    MODE2=$(@sway@/bin/swaynag -t theme -m "$MODE1 Screenshot" -Z 'Copy' 'echo 1' -Z 'Save' 'echo 2' -Z 'Timeout and Copy' 'echo 3' -Z 'Timeout and Save' 'echo 4')
     if [[ "$MODE2" == "3" ]] || [[ "$MODE2" == "4" ]]; then
-        TIMEOUT=$(swaynag -t theme -m Timeout -Z 2 'echo 2' -Z 3 'echo 3' -Z 5 'echo 5' -Z 10 'echo 10' -Z 15 'echo 15' -Z 30 'echo 30')
+        TIMEOUT=$(@sway@/bin/swaynag -t theme -m Timeout -Z 2 'echo 2' -Z 3 'echo 3' -Z 5 'echo 5' -Z 10 'echo 10' -Z 15 'echo 15' -Z 30 'echo 30')
         [[ -z $TIMEOUT ]] && exit
     elif [[ -z $MODE2 ]]; then
         exit
