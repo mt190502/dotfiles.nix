@@ -15,8 +15,8 @@
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
   home.stateVersion = "24.11";
-  programs.home-manager.enable = true;
   nixGL.packages = inputs.nixgl.packages;
+  programs.home-manager.enable = true;
 
   ########################################
   #
@@ -26,12 +26,12 @@
   home.packages = with pkgs; [
     #~ wrapped packages ~#
     config.wrappedPkgs.alacritty
-    config.wrappedPkgs.qt5ct
-    config.wrappedPkgs.qt6ct
-    config.wrappedPkgs.imagemagick
-    config.wrappedPkgs.nwg-displays
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
+    config.wrappedPkgs.imagemagick
+    config.wrappedPkgs.nwg-displays
+    config.wrappedPkgs.qt5ct
+    config.wrappedPkgs.qt6ct
 
     #~ standard packages ~#
     alacritty-theme
