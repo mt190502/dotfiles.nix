@@ -70,6 +70,7 @@
       gita = "git add -A";
       gitca = "git commit -a";
       gitcm = "git commit -m";
+      gitch = "git checkout";
       gitp = "git push";
       gitpp = "git pull";
 
