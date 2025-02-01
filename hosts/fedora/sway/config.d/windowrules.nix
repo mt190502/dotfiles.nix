@@ -4,6 +4,9 @@
   wayland.windowManager.sway.config = {
     floating.criteria = [
       {
+        app_id = "1Password";
+      }
+      {
         app_id = "(firefox|LibreWolf)";
         title = "^(.*)Sharing Indicator(.*)";
       }
@@ -44,6 +47,7 @@
       { app_id = "simple-scan"; }
       { app_id = "tlp-ui"; }
       { app_id = "Waydroid"; }
+      { app_id = "xfce-polkit"; }
       { app_id = "zoom"; }
       {
         class = "jetbrains-(.*)";

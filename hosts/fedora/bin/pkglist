@@ -911,6 +911,8 @@ libXdamage
 libXdmcp
 libxdp
 libXext
+libxfce4ui
+libxfce4util
 libXfixes
 libXfont2
 libXft
@@ -1646,6 +1648,8 @@ xdp-tools
 xdpyinfo
 xen-libs
 xen-licenses
+xfce-polkit
+xfconf
 xhost
 xkbcomp
 xkeyboard-config

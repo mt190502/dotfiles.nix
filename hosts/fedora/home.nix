@@ -29,10 +29,12 @@
     config.wrappedPkgs.flameshot
     config.wrappedPkgs.imagemagick
     config.wrappedPkgs.nwg-displays
+    config.wrappedPkgs.onepassword-gui
     config.wrappedPkgs.qt5ct
     config.wrappedPkgs.qt6ct
 
     #~ standard packages ~#
+    _1password-cli
     alacritty-theme
     ansible
     aria2
@@ -158,7 +160,7 @@
   # nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs; # ~ for nix stable channel
   nixpkgs.config = {
     allowUnfree = true;
-  }; # ~ for vscode
+  }; # ~ for vscode and other non-free packages
 
   #~ services ~#
   services = {
@@ -181,6 +183,7 @@
     mako.enable = true;
     mangohud.enable = true;
     mpv.enable = true;
+    onepassword.enable = true;
     swappy.enable = true;
     sway.enable = true;
     swaylock.enable = true;
@@ -238,6 +241,7 @@
   #
   ########################################
   imports = [
+    ./1password # 1Password Configuration
     ./alacritty # Alacritty Terminal Configuration
     ./fastfetch # Fastfetch Configuration
     ./fish # Fish Shell Configuration

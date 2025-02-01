@@ -31,6 +31,10 @@
     default = (config.lib.nixGL.wrap pkgs.nwg-displays);
     type = lib.types.package;
   };
+  options.wrappedPkgs.onepassword-gui = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs._1password-gui);
+    type = lib.types.package;
+  };
   options.wrappedPkgs.qt5ct = lib.mkOption {
     default = (config.lib.nixGL.wrap pkgs.libsForQt5.qt5ct);
     type = lib.types.package;

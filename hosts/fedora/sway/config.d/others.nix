@@ -39,9 +39,8 @@
       }
       { command = "${pkgs.wlsunset}/bin/wlsunset -S '07:00' -s '19:00'"; }
       {
-        command = "/usr/bin/env XDG_CURRENT_DESKTOP=KDE /usr/libexec/kf6/polkit-kde-authentication-agent-1";
+        command = "/usr/libexec/xfce-polkit";
       }
-
       {
         command = "$HOME/.config/sway/scripts.d/tmux_server.sh";
         always = true;
@@ -49,6 +48,10 @@
       {
         command = "$HOME/.config/sway/scripts.d/workspace.sh init 1";
         always = true;
+      }
+      {
+        command = "/opt/1Password/1password --ozone-platform=wayland --ozone-platform-hint=auto --password-store=gnome --silent";
+        # command = "${config.wrappedPkgs.onepassword-gui}/bin/1password --silent";       #~ not work on home manager only setups
       }
 
       #~~~ others
