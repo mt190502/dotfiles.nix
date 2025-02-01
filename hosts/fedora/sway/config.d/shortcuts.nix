@@ -87,7 +87,7 @@ in
 
       #~~~ clipboard
       "${modifier}+v" =
-        "exec ${pkgs.cliphist}/bin/cliphist list | ${pkgs.wofi} --show dmenu | ${pkgs.cliphist}/bin/cliphist decode | wl-copy";
+        "exec ${pkgs.cliphist}/bin/cliphist list | ${pkgs.wofi}/bin/wofi --show dmenu | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy";
       "${modifier}+shift+v" = "exec ${pkgs.cliphist}/bin/cliphist wipe";
 
       #~~~ playerctl

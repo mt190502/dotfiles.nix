@@ -204,16 +204,16 @@
   };
 
   #~ xdg ~#
-  xdg.portal = {
-    enable = true;
-    config.common.default = "*";
-    xdgOpenUsePortal = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-gnome
-      pkgs.xdg-desktop-portal-wlr
-    ];
-  };
+  # xdg.portal = {
+  #   enable = true;
+  #   config.common.default = "*";
+  #   xdgOpenUsePortal = true;
+  #   extraPortals = [
+  #     pkgs.xdg-desktop-portal-gtk
+  #     pkgs.xdg-desktop-portal-gnome
+  #     pkgs.xdg-desktop-portal-wlr
+  #   ];
+  # };
 
   ########################################
   #
