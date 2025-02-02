@@ -18,6 +18,7 @@
         "XDG_SESSION_TYPE"
       ];
     };
+
     config.startup = [
       #~~~ initial
       {
@@ -38,9 +39,8 @@
         command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${pkgs.cliphist}/bin/cliphist store";
       }
       { command = "${pkgs.wlsunset}/bin/wlsunset -S '07:00' -s '19:00'"; }
-      {
-        command = "/usr/libexec/xfce-polkit";
-      }
+      { command = "${pkgs.mako}/bin/mako "; }
+      { command = "/usr/libexec/xfce-polkit"; }
       {
         command = "$HOME/.config/sway/scripts.d/tmux_server.sh";
         always = true;
