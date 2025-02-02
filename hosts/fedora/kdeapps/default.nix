@@ -1,9 +1,17 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.pkgconfig.kdeapps = {
     enable = lib.mkEnableOption "Enable KDE Application Settings";
   };
+  config.xdg.configFile."menus/applications.menu".text = lib.mkIf config.pkgconfig.kdeapps.enable (
+    builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu" # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
+  );
   config.xdg.configFile."kdeglobals".text = lib.mkIf config.pkgconfig.kdeapps.enable ''
     [General]
     AccentColor=61,174,233
@@ -18,15 +26,15 @@
     menuFont=Ubuntu Medium,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
     smallestReadableFont=Ubuntu Medium,8,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
     toolBarFont=Ubuntu Medium,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
-    
+
     [Icons]
     Theme=Flat-Remix-Blue-Dark
-    
+
     [KDE]
     LookAndFeelPackage=org.kde.breezedark.desktop
     ShowDeleteCommand=true
     widgetStyle=kvantum
-    
+
     [KFileDialog Settings]
     Allow Expansion=false
     Automatically select filename extension=true
@@ -46,11 +54,11 @@
     Sort reversed=false
     Speedbar Width=103
     View Style=DetailTree
-    
+
     [PreviewSettings]
     EnableRemoteFolderThumbnail=false
     MaximumRemoteSize=0
-    
+
     [WM]
     activeBackground=61,61,62
     activeBlend=61,61,62

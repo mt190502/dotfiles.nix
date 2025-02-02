@@ -206,8 +206,6 @@
   };
 
   #~ xdg ~#
-  xdg.configFile."menus/applications.menu".text =
-    builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu"; # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
   xdg.mime.enable = true;
   # xdg.portal = {
   #   enable = true;

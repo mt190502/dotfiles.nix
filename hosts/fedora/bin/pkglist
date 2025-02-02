@@ -1361,7 +1361,6 @@ qemu-ui-spice-app
 qemu-ui-spice-core
 qrencode-libs
 qt
-qt5ct
 qt5-filesystem
 qt5-qtbase
 qt5-qtbase-common
@@ -1376,7 +1375,6 @@ qt5-qtwayland
 qt5-qtx11extras
 qt5-rpm-macros
 qt5-srpm-macros
-qt6ct
 qt6-filesystem
 qt6-qt5compat
 qt6-qtbase
