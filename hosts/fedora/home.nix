@@ -32,6 +32,7 @@
     config.wrappedPkgs.onepassword-gui
     config.wrappedPkgs.qt5ct
     config.wrappedPkgs.qt6ct
+    config.wrappedPkgs.vscode
 
     #~ standard packages ~#
     _1password-cli
@@ -59,17 +60,15 @@
     k0sctl
     k9s
     kdePackages.dolphin-plugins
-    kdePackages.kio-fuse
-    kdePackages.kio-extras
-    kdePackages.konsole
-    kdePackages.qtsvg
+    kdePackages.kdegraphics-thumbnailers
     kdePackages.qtstyleplugin-kvantum
+    kdePackages.qtsvg
     kdePackages.qtwayland
     kubectl
     kubernetes-helm
     libsForQt5.qtstyleplugin-kvantum
-    minio-client
     minikube
+    minio-client
     nixd
     nixfmt-classic
     nmap
@@ -86,8 +85,7 @@
     tesseract
     tmux
     translate-shell
-    tzdata
-    vscode
+    ubuntu_font_family
     wl-clipboard
     wlr-randr
     wlroots_0_17
@@ -180,6 +178,7 @@
     fastfetch.enable = true;
     fish.enable = true;
     fontconfig.enable = true;
+    kdeapps.enable = true;
     mako.enable = true;
     mangohud.enable = true;
     mpv.enable = true;
@@ -207,6 +206,9 @@
   };
 
   #~ xdg ~#
+  xdg.configFile."menus/applications.menu".text =
+    builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu"; # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
+  xdg.mime.enable = true;
   # xdg.portal = {
   #   enable = true;
   #   config.common.default = "*";
@@ -294,6 +296,7 @@
     ./fish # Fish Shell Configuration
     ./flatpak # Flatpak Configuration
     ./fontconfig # Fontconfig Configuration
+    ./kdeapps # KDE Applications Configuration
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
