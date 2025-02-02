@@ -231,6 +231,53 @@
   #
   ########################################
   home.sessionVariables = {
+    ##############################
+    #
+    ## LIBVA/VDPAU
+    #
+    ##############################
+    #DRI_PRIME = "1"
+    LIBVA_DRIVER_NAME = "iHD";
+    VDPAU_DRIVER = "radeonsi";
+
+    ##############################
+    #
+    ## FIREFOX
+    #
+    ##############################
+    MOZ_ENABLE_WAYLAND = "1";
+
+    ##############################
+    #
+    ## FREETYPE
+    #
+    ##############################
+    FREETYPE_PROPERTIES = "truetype:interpreter-version=40";
+    #FREETYPE_PROPERTIES = "cff:darkening-parameters=500,550,1000,25,1667,0,2000,0";
+
+    ##############################
+    #
+    ## QT
+    #
+    ##############################
+    QT_PLUGIN_PATH = "$HOME/.local/lib64/plugins:$HOME/.local/lib/plugins:/usr/local/lib64/plugins:/usr/local/lib/plugins:$HOME/.local/lib64/qt5/plugins:$HOME/.local/lib/qt5/plugins:/usr/local/lib64/qt5/plugins:/usr/local/lib/qt5/plugins:$QT_PLUGIN_PATH";
+    QML_IMPORT_PATH = "$HOME/.local/lib64/qml:$HOME/.local/lib/qml:/usr/local/lib64/qml:/usr/local/lib/qml:$QML_IMPORT_PATH";
+    QML2_IMPORT_PATH = "$HOME/.local/lib64/qml:$HOME/.local/lib/qml:/usr/local/lib64/qml:/usr/local/lib/qml:$QML2_IMPORT_PATH";
+    QT_QPA_PLATFORM = "wayland";
+    #QT_QPA_PLATFORMTHEME = "qt6ct";
+    QT_STYLE_OVERRIDE = "kvantum";
+
+    ##############################
+    #
+    ## SYSTEM
+    #
+    ##############################
+    LD_LIBRARY_PATH = "$HOME/.local/lib64:$HOME/.local/lib:$HOME/.nix-profile/lib64:$HOME/.nix-profile/lib:/usr/local/lib64:/usr/local/lib";
+    XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:$HOME/.nix-profile/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS";
+    PATH = "$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/scripts:/usr/local/go/bin:$HOME/go/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH";
+    NIX_PATH = "$HOME/.local/state/nix/profiles/channels";
+    XDG_CURRENT_DESKTOP = "sway";
+    GTK_USE_PORTAL = "1";
     EDITOR = "vim";
     SYSTEMD_EDITOR = "vim";
   };
