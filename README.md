@@ -7,7 +7,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - First, set up some packages on your system (I'm using Fedora, so you can use this command to install them)
 
     ```sh
-    sudo dnf install -y git curl swaylock
+    sudo dnf install -y git curl swaylock xfce-polkit
     ```
 
   - We need to install Swaylock using the distribution's own package manager. Because the home-manager is not compatible with pam-locking. If you use another distribution, you can install it with your package manager.
