@@ -63,7 +63,7 @@
           postBuild = ''
             wrapProgram $out/bin/dolphin \
               --set QT_STYLE_OVERRIDE kvantum \
-              --set XDG_CURRENT_DESKTOP KDE
+              --set QT_QPA_PLATFORMTHEME qt6ct 
           '';
         }
       )
