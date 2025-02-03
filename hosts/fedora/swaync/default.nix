@@ -41,6 +41,7 @@
       timeout-critical = 0;
       timeout-low = 5;
       transition-time = 200;
+      widgets = [ "title" "mpris" "dnd" "notifications" ];
       widget-config = {
         mpris = {
           image-radius = 12;
@@ -57,7 +58,6 @@
           show-per-app-icon = true;
           show-per-app-label = true;
         };
-        widgets = [ "title" "mpris" "dnd" "notifications" ];
       };
     };
     style = ''
@@ -71,7 +71,9 @@
       * {
         border-radius: 0;
         font-family: ${config.stylix.fonts.sansSerif.name}, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
-      	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
+      	font-size: ${
+         builtins.toString (config.stylix.fonts.sizes.applications + 3)
+       }px;
         color: @textColor;
       }
 
