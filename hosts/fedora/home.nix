@@ -185,6 +185,7 @@
     mpv.enable = true;
     nextcloud-client.enable = true;
     onepassword.enable = true;
+    qtstyle.enable = true;
     swappy.enable = true;
     sway.enable = true;
     swaylock.enable = true;
@@ -303,6 +304,7 @@
     ./mpv # MPV Configuration
     ./nextcloud # Nextcloud Client
     ./packages # Custom packages
+    ./qt # QT Configuration
     ./stylix # Stylix Configuration
     ./swappy # Swappy Configuration
     ./sway # Sway Window Manager Configuration

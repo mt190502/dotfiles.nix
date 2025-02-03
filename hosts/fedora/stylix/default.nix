@@ -61,6 +61,13 @@
       };
     };
 
+    iconTheme = {
+      enable = true;
+      package = pkgs.flat-remix-icon-theme;
+      light = "Flat-Remix-Blue-Light";
+      dark = "Flat-Remix-Blue-Dark";
+    };
+
     image = ../bin/wallpaper.jpg;
 
     polarity = "dark";
@@ -70,6 +77,7 @@
       mangohud.enable = false;
       gtk.enable = false;
       kde.enable = false;
+      qt.enable = false;
       sway.enable = false;
       swaylock.enable = false;
       swaync.enable = false;
