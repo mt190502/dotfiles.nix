@@ -49,7 +49,7 @@
         always = true;
       }
       {
-        command = "/opt/1Password/1password --ozone-platform=wayland --ozone-platform-hint=auto --password-store=gnome --silent";
+        command = "/opt/1Password/1password --silent --password-store=gnome";
         # command = "${config.wrappedPkgs.onepassword-gui}/bin/1password --silent";       #~ not work on home manager only setups
       }
 
