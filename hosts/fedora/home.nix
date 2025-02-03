@@ -103,13 +103,9 @@
   services.flatpak.packages = [
     "ca.desrt.dconf-editor"
     "com.belmoussaoui.ashpd.demo"
-    "com.github.jms55.Sandbox"
     "com.github.libresprite.LibreSprite"
     "com.github.tchx84.Flatseal"
-    "com.google.Chrome"
-    "com.mattjakeman.ExtensionManager"
     "com.obsproject.Studio"
-    "com.raggesilver.BlackBox"
     "com.stremio.Stremio"
     "com.usebottles.bottles"
     "com.valvesoftware.Steam"
@@ -123,24 +119,19 @@
     "net.davidotek.pupgui2"
     "org.audacityteam.Audacity"
     "org.filezillaproject.Filezilla"
-    "org.flameshot.Flameshot"
     "org.gimp.GIMP"
     "org.gnome.Calculator"
     "org.gnome.Calendar"
-    "org.gnome.Evolution"
     "org.gnome.FileRoller"
     "org.gnome.Loupe"
-    "org.gnome.Tetravex"
     "org.gnome.TextEditor"
     "org.gnome.clocks"
-    "org.gnome.dspy"
     "org.gnome.seahorse.Application"
     "org.inkscape.Inkscape"
     "org.kde.krita"
     "org.kde.kruler"
     "org.kde.okular"
     "org.libreoffice.LibreOffice"
-    "org.mozilla.firefox"
     "org.onlyoffice.desktopeditors"
     "org.prismlauncher.PrismLauncher"
     "org.qbittorrent.qBittorrent"
@@ -148,7 +139,6 @@
     "org.signal.Signal"
     "org.telegram.desktop"
     "org.texstudio.TeXstudio"
-    "org.videolan.VLC"
   ];
 
   ########################################
@@ -173,30 +163,11 @@
   #~ packages ~#
   pkgconfig = {
     alacritty = {
-      enable = true;
       theme = "hyper";
     };
-    fastfetch.enable = true;
-    fish.enable = true;
-    fontconfig.enable = true;
-    kdeapps.enable = true;
-    mako.enable = true;
-    mangohud.enable = true;
-    mpv.enable = true;
-    nextcloud-client.enable = true;
-    onepassword.enable = true;
-    qtstyle.enable = true;
-    swappy.enable = true;
-    sway.enable = true;
-    swaylock.enable = true;
-    swaynag.enable = true;
-    swaync.enable = true;
-    tmux.enable = true;
     waybar = {
-      enable = true;
       weather_location = "Istanbul";
     };
-    wofi.enable = true;
   };
 
   #~ colors ~#
@@ -211,16 +182,6 @@
 
   #~ xdg ~#
   xdg.mime.enable = true;
-  # xdg.portal = {
-  #   enable = true;
-  #   config.common.default = "*";
-  #   xdgOpenUsePortal = true;
-  #   extraPortals = [
-  #     pkgs.xdg-desktop-portal-gtk
-  #     pkgs.xdg-desktop-portal-gnome
-  #     pkgs.xdg-desktop-portal-wlr
-  #   ];
-  # };
 
   ########################################
   #

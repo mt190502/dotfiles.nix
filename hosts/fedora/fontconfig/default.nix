@@ -1,11 +1,7 @@
-{ config, lib, ... }:
+{ ... }:
 
 {
-  options.pkgconfig.fontconfig = {
-    enable = lib.mkEnableOption "Enable fontconfig configuration.";
-  };
-
-  config.xdg.configFile."fontconfig/fonts.conf".text = lib.mkIf config.pkgconfig.fontconfig.enable ''
+  xdg.configFile."fontconfig/fonts.conf".text = ''
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
     <fontconfig>

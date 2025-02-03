@@ -5,12 +5,8 @@
 }:
 
 {
-  options.pkgconfig.swaylock = {
-    enable = lib.mkEnableOption "Enable swaylock configuration.";
-  };
-
-  config.programs.swaylock = {
-    enable = config.pkgconfig.swaylock.enable;
+  programs.swaylock = {
+    enable = true;
     package = config.wrappedPkgs.swaylock;
 
     settings = {

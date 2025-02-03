@@ -7,7 +7,6 @@
 
 {
   options.pkgconfig.waybar = {
-    enable = lib.mkEnableOption "Enable waybar configuration.";
     weather_location = lib.mkOption {
       default = "Istanbul";
       type = lib.types.str;
@@ -15,7 +14,7 @@
     };
   };
   config.programs.waybar = {
-    enable = config.pkgconfig.waybar.enable;
+    enable = true;
     package = config.wrappedPkgs.waybar;
 
     settings = {

@@ -1,12 +1,8 @@
-{ config, lib, ... }:
+{ lib, ... }:
 
 {
-  options.pkgconfig.mangohud = {
-    enable = lib.mkEnableOption "Enable mangohud configuration.";
-  };
-  config.programs.mangohud = {
-    enable = config.pkgconfig.mangohud.enable;
-
+  programs.mangohud = {
+    enable = true;
     settings = {
       cpu_load_change = true;
       cpu_mhz = true;

@@ -1,11 +1,8 @@
-{ config, lib, ... }:
+{ ... }:
 
 {
-  options.pkgconfig.tmux = {
-    enable = lib.mkEnableOption "Enable tmux configuration.";
-  };
-  config.programs.tmux = {
-    enable = config.pkgconfig.tmux.enable;
+  programs.tmux = {
+    enable = true;
 
     baseIndex = 1;
     clock24 = true;
@@ -87,7 +84,7 @@
     '';
   };
 
-  config.xdg.configFile = {
+  xdg.configFile = {
     "tmux/omt.conf".source = ./config/omt.conf;
     "tmux/omt.conf.local".source = ./config/omt.conf.local;
   };

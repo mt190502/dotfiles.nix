@@ -1,11 +1,8 @@
-{ config, lib, ... }:
+{ ... }:
 
 {
-  options.pkgconfig.fastfetch = {
-    enable = lib.mkEnableOption "Enable fastfetch configuration.";
-  };
-  config.programs.fastfetch = {
-    enable = config.pkgconfig.fastfetch.enable;
+  programs.fastfetch = {
+    enable = true;
 
     settings = {
       display = {

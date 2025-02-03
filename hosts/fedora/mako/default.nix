@@ -4,12 +4,8 @@ let
   makoOpacity = lib.toHexString (((builtins.ceil (config.stylix.opacity.popups * 100)) * 255) / 100);
 in
 {
-  options.pkgconfig.mako = {
-    enable = lib.mkEnableOption "Enable mako configuration.";
-  };
-  config.services.mako = {
-    enable = config.pkgconfig.mako.enable;
-
+  services.mako = {
+    enable = true;
     backgroundColor = config.colors.backgroundColor + makoOpacity;
     borderColor = config.colors.activeColor;
     textColor = config.colors.textColor;

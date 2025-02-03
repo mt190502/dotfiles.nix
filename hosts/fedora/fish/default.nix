@@ -1,17 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
-  options.pkgconfig.fish = {
-    enable = lib.mkEnableOption "Enable fish shell configuration.";
-  };
-
-  config.programs.fish = {
-    enable = config.pkgconfig.fish.enable;
+  programs.fish = {
+    enable = true;
 
     functions = {
       cd = "builtin cd $argv; lsd";

@@ -1,16 +1,12 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
 
 {
-  options.pkgconfig.wofi = {
-    enable = lib.mkEnableOption "Enable wofi configuration.";
-  };
-  config.programs.wofi = {
-    enable = config.pkgconfig.wofi.enable;
+  programs.wofi = {
+    enable = true;
 
     settings = {
       allow_images = true;

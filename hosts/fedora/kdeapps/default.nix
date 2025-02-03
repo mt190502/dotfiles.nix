@@ -1,18 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
 {
-  options.pkgconfig.kdeapps = {
-    enable = lib.mkEnableOption "Enable KDE Application Settings";
-  };
-  config.xdg.configFile."menus/applications.menu".text = lib.mkIf config.pkgconfig.kdeapps.enable (
-    builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu" # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
-  );
-  config.xdg.configFile."kdeglobals".text = lib.mkIf config.pkgconfig.kdeapps.enable ''
+  xdg.configFile."menus/applications.menu".text =
+    builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu"; # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
+  xdg.configFile."kdeglobals".text = ''
     [General]
     AccentColor=61,174,233
     ColorScheme=Kvantum

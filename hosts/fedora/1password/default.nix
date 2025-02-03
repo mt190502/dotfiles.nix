@@ -1,11 +1,8 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 {
-  options.pkgconfig.onepassword = {
-    enable = lib.mkEnableOption "Enable 1password configuration.";
-  };
-  config.home.file.".var/app/io.gitlab.librewolf-community/.librewolf/native-messaging-hosts/com.1password.1password.json".text =
-    lib.mkIf config.pkgconfig.onepassword.enable ''
+  home.file.".var/app/io.gitlab.librewolf-community/.librewolf/native-messaging-hosts/com.1password.1password.json".text =
+    ''
       {
         "name": "com.1password.1password",
         "description": "1Password BrowserSupport",
@@ -18,14 +15,12 @@
         ]
       }
     '';
-  config.home.file.".var/app/io.gitlab.librewolf-community/data/bin/1password-wrapper.sh" =
-    lib.mkIf config.pkgconfig.onepassword.enable
-      {
-        text = ''
-          #!/bin/sh
-          exec flatpak-spawn --host /opt/1Password/1Password-BrowserSupport "$@"
-          #exec flatpak-spawn --host ${config.home.homeDirectory}/.nix-profile/share/1password/1Password-BrowserSupport "$@"      #~ not work on home manager only setups
-        '';
-        executable = true;
-      };
+  home.file.".var/app/io.gitlab.librewolf-community/data/bin/1password-wrapper.sh" = {
+    text = ''
+      #!/bin/sh
+      exec flatpak-spawn --host /opt/1Password/1Password-BrowserSupport "$@"
+      #exec flatpak-spawn --host ${config.home.homeDirectory}/.nix-profile/share/1password/1Password-BrowserSupport "$@"      #~ not work on home manager only setups
+    '';
+    executable = true;
+  };
 }

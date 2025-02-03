@@ -6,12 +6,8 @@
 }:
 
 {
-  options.pkgconfig.sway = {
-    enable = lib.mkEnableOption "Enable sway window manager configuration.";
-  };
-
-  config.wayland.windowManager.sway = {
-    enable = config.pkgconfig.sway.enable;
+  wayland.windowManager.sway = {
+    enable = true;
     package = (config.wrappedPkgs.sway);
     checkConfig = false;
     config = {
@@ -19,7 +15,7 @@
     };
   };
 
-  config.xdg.configFile = lib.mkIf config.pkgconfig.sway.enable (
+  xdg.configFile = (
     builtins.listToAttrs (
       lib.map (path: {
         name = "sway/scripts.d/${path}";

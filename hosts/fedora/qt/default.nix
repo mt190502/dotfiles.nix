@@ -1,14 +1,11 @@
 { config, lib, ... }:
 
 {
-  options.pkgconfig.qtstyle.enable = lib.mkEnableOption "Enable qt styling";
-
-  config = lib.mkIf config.pkgconfig.qtstyle.enable {
-    xdg.configFile = lib.mkMerge [
-      {
-        "qt5ct/qt5ct.conf".text = ''
-          [Appearance]
-          color_scheme_path=${config.wrappedPkgs.qt5ct}/share/qt5ct/colors/airy.conf
+  xdg.configFile = lib.mkMerge [
+    {
+      "qt5ct/qt5ct.conf".text = ''
+        [Appearance]
+        color_scheme_path=${config.wrappedPkgs.qt5ct}/share/qt5ct/colors/airy.conf
 
           custom_palette=false
           icon_theme=Flat-Remix-Blue-Dark

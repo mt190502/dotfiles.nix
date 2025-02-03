@@ -1,11 +1,8 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 {
-  options.pkgconfig.mpv = {
-    enable = lib.mkEnableOption "Enable mpv configuration.";
-  };
-  config.programs.mpv = {
-    enable = config.pkgconfig.mpv.enable;
+  programs.mpv = {
+    enable = true;
     package = config.wrappedPkgs.mpv;
 
     bindings = {

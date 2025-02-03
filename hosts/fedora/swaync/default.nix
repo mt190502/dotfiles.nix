@@ -1,13 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
-  options.pkgconfig.swaync = { enable = lib.mkEnableOption "Enable swaync"; };
-  config.services.swaync = {
-    enable = config.pkgconfig.swaync.enable;
-    package = pkgs.swaynotificationcenter;
+  services.swaync = {
+    enable = true;
     settings = {
-      "$schema" =
-        "${pkgs.swaynotificationcenter}/etc/xdg/swaync/configSchema.json";
+      "$schema" = "${pkgs.swaynotificationcenter}/etc/xdg/swaync/configSchema.json";
       control-center-height = 500;
       control-center-layer = "top";
       control-center-margin-bottom = 5;
@@ -41,7 +38,12 @@
       timeout-critical = 0;
       timeout-low = 5;
       transition-time = 200;
-      widgets = [ "title" "mpris" "dnd" "notifications" ];
+      widgets = [
+        "title"
+        "mpris"
+        "dnd"
+        "notifications"
+      ];
       widget-config = {
         mpris = {
           image-size = 100;
@@ -70,9 +72,7 @@
       * {
         border-radius: 0;
         font-family: ${config.stylix.fonts.sansSerif.name}, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
-      	font-size: ${
-         builtins.toString (config.stylix.fonts.sizes.applications + 3)
-       }px;
+      	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
         color: @textColor;
       }
 

@@ -8,7 +8,6 @@
 
 {
   options.pkgconfig.alacritty = {
-    enable = lib.mkEnableOption "Enable alacritty configuration.";
     theme = lib.mkOption {
       type = lib.types.str;
       default = "vibrant-ink";
@@ -16,7 +15,7 @@
     };
   };
   config.programs.alacritty = {
-    enable = config.pkgconfig.alacritty.enable;
+    enable = true;
     package = config.wrappedPkgs.alacritty;
 
     settings = {
