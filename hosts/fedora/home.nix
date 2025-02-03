@@ -37,6 +37,7 @@
 
     #~ standard packages ~#
     _1password-cli
+    adw-gtk3
     alacritty-theme
     ansible
     aria2
