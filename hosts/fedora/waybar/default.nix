@@ -250,15 +250,15 @@
 
         "custom/swaync" = {
           tooltip = false;
-          format = "{icon}";
+          format = "{icon} {}";
           format-icons = {
-            notification = "<span foreground='red'><sup></sup></span>";
+            notification = "";
             none = "";
-            dnd-notification = "<span foreground='red'><sup></sup></span>";
+            dnd-notification = "";
             dnd-none = "";
-            inhibited-notification = "<span foreground='red'><sup></sup></span>";
+            inhibited-notification = "";
             inhibited-none = "";
-            dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
+            dnd-inhibited-notification = "";
             dnd-inhibited-none = "";
           };
           return-type = "json";
