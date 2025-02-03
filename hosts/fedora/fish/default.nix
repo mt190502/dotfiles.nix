@@ -73,21 +73,17 @@
     };
 
     shellInit = ''
-      ##################################################
-      #
-      ## Fish Variables
-      #
-      ##################################################
+      #################################################
+      #### Fish Variables
+      #################################################
       set fish_greeting ""
       export TERM="xterm-256color"
       export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
       export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:/usr/local/go/bin:$HOME/go/bin:$HOME/scripts:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
-      ##################################################
-      #
-      ## Applications
-      #
-      ##################################################
+      #################################################
+      #### Applications
+      #################################################
       #~ common ~#
       direnv export fish | source
       helm completion fish | source

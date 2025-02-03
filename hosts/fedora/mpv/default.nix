@@ -13,9 +13,7 @@
 
     config = {
       #################################################
-      #
-      ## Video settings
-      #
+      #### Video settings
       #################################################
       #~ specify high quality video rendering preset (for --vo=<gpu|gpu-next> only)
       profile = "high-quality";
@@ -34,9 +32,7 @@
       demuxer-max-back-bytes = "512M";
 
       #################################################
-      #
-      ## Audio settings
-      #
+      #### Audio settings
       #################################################
       #~ audio output
       ao = "pipewire";
@@ -45,9 +41,7 @@
       alang = "eng,en,enUS,tr,trTR";
 
       #################################################
-      #
-      ## Text Settings
-      #
+      #### Text Settings
       #################################################
       #~ subtitle language
       slang = "eng,en,enUS,tr,trTR";
@@ -72,9 +66,7 @@
       # sub-file-paths = "~/NextCloud/Documents/srt/";
 
       #################################################
-      #
-      ## Interface settings
-      #
+      #### Interface settings
       #################################################
       #~ force starting with centered window
       geometry = "70%:70%";
@@ -93,9 +85,7 @@
       ontop = "yes";
 
       #################################################
-      #
-      ## Other settings
-      #
+      #### Other settings
       #################################################
       #~ format for screenshots
       screenshot-format = "png";

@@ -35,13 +35,11 @@
   config.stylix = {
     enable = true;
     # autoEnable = false;
-
     cursor = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
       size = 16;
     };
-
     fonts = {
       monospace = {
         name = "MesloLGS NF";
@@ -60,16 +58,13 @@
         terminal = 9;
       };
     };
-
     iconTheme = {
       enable = true;
       package = pkgs.flat-remix-icon-theme;
       light = "Flat-Remix-Blue-Light";
       dark = "Flat-Remix-Blue-Dark";
     };
-
     image = ../bin/wallpaper.jpg;
-
     polarity = "dark";
     targets = {
       alacritty.enable = false;

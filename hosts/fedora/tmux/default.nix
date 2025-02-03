@@ -16,9 +16,7 @@
 
     extraConfig = ''
       #################################################
-      ##
       #### General 
-      ##
       #################################################
       #~ global settings
       set -g  display-panes-time  800
@@ -37,9 +35,7 @@
 
 
       #################################################
-      ##
       #### Keybindings
-      ##
       #################################################
       bind-key -n S-Left     split-pane    -h
       bind-key -n S-Right    split-pane    -h
@@ -59,9 +55,7 @@
 
 
       #################################################
-      ##
       #### oh-my-tmux engine
-      ##
       #################################################
       %if #{==:#{TMUX_PROGRAM},}
         run 'TMUX_PROGRAM="$(LSOF=$(PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" command -v lsof); $LSOF -b -w -a -d txt -p #{pid} -Fn 2>/dev/null | perl -n -e "if (s/^n((?:.(?!dylib$|so$))+)$/\1/g && s/(?:\s+\([^\s]+?\))?$//g) { print; exit } } exit 1; {" || readlink "/proc/#{pid}/exe" 2>/dev/null || printf tmux)"; "$TMUX_PROGRAM" -S #{socket_path} set-environment -g TMUX_PROGRAM "$TMUX_PROGRAM"'
