@@ -31,6 +31,7 @@
         title = "wttr.in";
       }
       { app_id = "com.usebottles.bottles"; }
+      { app_id = "com.nextcloud.desktopclient.nextcloud"; }
       {
         app_id = "flameshot";
         title = "flameshot";

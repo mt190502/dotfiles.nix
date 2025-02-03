@@ -101,6 +101,23 @@
     );
     type = lib.types.package;
   };
+  options.wrappedPkgs.nextcloud-client = lib.mkOption {
+    default = (
+      config.lib.nixGL.wrap (
+        pkgs.symlinkJoin {
+          name = "nextcloud-client";
+          paths = [ pkgs.nextcloud-client ];
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/nextcloud \
+              --set QT_STYLE_OVERRIDE kvantum \
+              --set QT_QPA_PLATFORMTHEME qt6ct
+          '';
+        }
+      )
+    );
+    type = lib.types.package;
+  };
   options.wrappedPkgs.pcmanfm-qt = lib.mkOption {
     default = (
       config.lib.nixGL.wrap (

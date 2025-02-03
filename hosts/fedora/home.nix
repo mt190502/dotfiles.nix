@@ -28,6 +28,7 @@
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
     config.wrappedPkgs.imagemagick
+    config.wrappedPkgs.nextcloud-client
     config.wrappedPkgs.nwg-displays
     config.wrappedPkgs.onepassword-gui
     config.wrappedPkgs.qt5ct
@@ -182,6 +183,7 @@
     mako.enable = true;
     mangohud.enable = true;
     mpv.enable = true;
+    nextcloud-client.enable = true;
     onepassword.enable = true;
     swappy.enable = true;
     sway.enable = true;
@@ -299,6 +301,7 @@
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
+    ./nextcloud # Nextcloud Client
     ./packages # Custom packages
     ./stylix # Stylix Configuration
     ./swappy # Swappy Configuration
