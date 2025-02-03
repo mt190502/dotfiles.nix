@@ -187,6 +187,7 @@
     sway.enable = true;
     swaylock.enable = true;
     swaynag.enable = true;
+    swaync.enable = true;
     tmux.enable = true;
     waybar = {
       enable = true;
@@ -304,6 +305,7 @@
     ./sway # Sway Window Manager Configuration
     ./swaylock # Swaylock Configuration
     ./swaynag # Swaynag Configuration
+    ./swaync # Sway Notification Center Configuration
     ./tmux # Tmux Configuration
     ./waybar # Waybar Configuration
     ./wofi # Wofi Configuration

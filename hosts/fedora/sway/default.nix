@@ -38,6 +38,7 @@
               # swaylock = lib.getExe pkgs.swaylock;     # not available in non nixos systems
               swappy = lib.getExe pkgs.swappy;
               sway = config.wrappedPkgs.sway;
+              swaync = pkgs.swaynotificationcenter;
               tesseract = lib.getExe pkgs.tesseract;
               tmux = lib.getExe pkgs.tmux;
               trans = lib.getExe pkgs.translate-shell;

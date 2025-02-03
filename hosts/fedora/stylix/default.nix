@@ -72,6 +72,7 @@
       kde.enable = false;
       sway.enable = false;
       swaylock.enable = false;
+      swaync.enable = false;
       waybar.enable = false;
       wofi.enable = false;
     };

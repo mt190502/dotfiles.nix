@@ -9,9 +9,11 @@ togglemode() {
 	if [ "$(@mako@/bin/makoctl mode)" == "dnd" ]; then
 		@mako@/bin/makoctl mode -s default &>/dev/null
 		rm -f "$XDG_RUNTIME_DIR/dnd_enabled"
+		pkill -RTMIN+9 waybar
 	else
 		@mako@/bin/makoctl mode -s dnd &>/dev/null
 		echo enabled >"$XDG_RUNTIME_DIR/dnd_enabled"
+		pkill -RTMIN+9 waybar
 	fi
 }
 

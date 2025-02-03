@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -60,7 +61,7 @@
           "custom/space"
           "pulseaudio"
           "custom/space"
-          "custom/dnd"
+          "custom/swaync"
           "custom/space"
           "custom/powermenu"
           "custom/space"
@@ -232,7 +233,7 @@
           exec = "cat $(find /sys/devices/platform -iname '*fan1_input' 2>/dev/null)";
           format = "  {} RPM";
           tooltip = false;
-          interval = { };
+          interval = 1;
         };
 
         "custom/powermenu" = {
@@ -247,12 +248,33 @@
           tooltip = false;
         };
 
-        "custom/dnd" = {
+        "custom/swaync" = {
+          tooltip = false;
+          format = "{icon}";
+          format-icons = {
+            notification = "<span foreground='red'><sup></sup></span>";
+            none = "";
+            dnd-notification = "<span foreground='red'><sup></sup></span>";
+            dnd-none = "";
+            inhibited-notification = "<span foreground='red'><sup></sup></span>";
+            inhibited-none = "";
+            dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
+            dnd-inhibited-none = "";
+          };
+          return-type = "json";
+          exec-if = "${pkgs.swaynotificationcenter}/bin/swaync-client";
+          exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
+          on-click = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+          on-click-right = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
+          escape = true;
+        };
+
+        "custom/dnd-mako" = {
           format = "{}";
-          interval = 1;
           exec = "$HOME/.config/sway/scripts.d/dnd.sh status";
           on-click = "$HOME/.config/sway/scripts.d/dnd.sh";
           return-type = "json";
+          signal = 9;
         };
 
         "custom/weather" = {
