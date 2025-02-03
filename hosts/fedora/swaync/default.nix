@@ -44,8 +44,7 @@
       widgets = [ "title" "mpris" "dnd" "notifications" ];
       widget-config = {
         mpris = {
-          image-radius = 12;
-          image-size = 96;
+          image-size = 100;
         };
         title = {
           text = "Notifications";
@@ -165,6 +164,11 @@
         padding: 15px;
         background: none;
         border: 0;
+      }
+
+      .widget-mpris-player,
+      .widget-mpris-album-art {
+        border: 3px solid @activeColor;
       }
     '';
   };
