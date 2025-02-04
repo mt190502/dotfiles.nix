@@ -131,8 +131,6 @@
     "org.inkscape.Inkscape"
     "org.kde.krita"
     "org.kde.kruler"
-    "org.kde.KStyle.Kvantum/x86_64/5.15"
-    "org.kde.KStyle.Kvantum/x86_64/6.6"
     "org.kde.okular"
     "org.libreoffice.LibreOffice"
     "org.onlyoffice.desktopeditors"
@@ -253,7 +251,7 @@
     ./flatpak # Flatpak Configuration
     ./fontconfig # Fontconfig Configuration
     ./kdeapps # KDE Applications Configuration
-    ./mako # Mako Notification Daemon Configuration
+    # ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
     ./nextcloud # Nextcloud Client
