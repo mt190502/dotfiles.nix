@@ -1,6 +1,11 @@
 { config, ... }:
 
 {
+  #########################################################################################################
+  ### NOTE: You need to create file /etc/1password/custom_allowed_browsers with the following content:  ###
+  ### librewolf                                                                                         ###
+  ### flatpak-session-helper                                                                            ###
+  #########################################################################################################
   home.file.".var/app/io.gitlab.librewolf-community/.librewolf/native-messaging-hosts/com.1password.1password.json".text =
     ''
       {
