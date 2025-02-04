@@ -131,6 +131,8 @@
     "org.inkscape.Inkscape"
     "org.kde.krita"
     "org.kde.kruler"
+    "org.kde.KStyle.Kvantum/x86_64/5.15"
+    "org.kde.KStyle.Kvantum/x86_64/6.6"
     "org.kde.okular"
     "org.libreoffice.LibreOffice"
     "org.onlyoffice.desktopeditors"
