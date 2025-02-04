@@ -25,7 +25,7 @@
       notification-2fa-action = true;
       notification-body-image-height = 100;
       notification-body-image-width = 200;
-      notification-icon-size = 40;
+      notification-icon-size = 64;
       notification-inline-replies = true;
       notification-visibility = { };
       notification-window-width = 400;
