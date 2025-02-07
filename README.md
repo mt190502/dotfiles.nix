@@ -15,7 +15,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - Set up Nix Package Manager on your system (if you haven't already or you don't have NixOS installed)
 
     ```sh
-    NIX_VERSION="24.11"
+    NIX_VERSION="unstable"
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
     sudo -i nix-channel --add https://nixos.org/channels/nixos-${NIX_VERSION} nixpkgs
     nix-channel --add https://nixos.org/channels/nixos-${NIX_VERSION} nixpkgs
