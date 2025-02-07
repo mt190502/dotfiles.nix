@@ -6,19 +6,18 @@
 
     functions = {
       cd = "builtin cd $argv; lsd";
-      shell = "nix shell nixpkgs#$argv";
     };
 
     generateCompletions = false;
 
     loginShellInit = ''
       if [ $XDG_VTNR = 1 ]; and [ $SHLVL = 1 ]; and [ ! $container ]
-      		export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
-      		export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
-      		export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
-      		dbus-update-activation-environment --systemd --all
-      		XDG_CURRENT_DESKTOP=sway sway &>$HOME/.cache/swaywm.log
-      	end
+        export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
+        export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
+        export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
+        dbus-update-activation-environment --systemd --all
+        XDG_CURRENT_DESKTOP=sway sway &>$HOME/.cache/swaywm.log
+      end
     '';
 
     plugins = [
