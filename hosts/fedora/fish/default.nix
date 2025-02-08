@@ -6,6 +6,7 @@
 
     functions = {
       cd = "builtin cd $argv; lsd";
+      shell = "nix shell nixpkgs#$argv";
     };
 
     generateCompletions = false;
