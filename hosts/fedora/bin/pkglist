@@ -40,6 +40,7 @@ appstream
 appstream-data
 appstream-qt
 aribb24
+assimp
 at
 atk
 atkmm
@@ -1066,6 +1067,7 @@ openssl
 openssl-devel
 openssl-libs
 openvpn
+openxr-libs
 opus
 orc
 osinfo-db
@@ -1202,6 +1204,7 @@ policycoreutils-python-utils
 polkit
 polkit-libs
 polkit-qt
+poly2tri
 poppler
 poppler-data
 poppler-glib
@@ -1217,6 +1220,7 @@ psacct
 psmisc
 ptyxis
 publicsuffix-list-dafsa
+pugixml
 pulseaudio-libs
 pulseaudio-libs-glib2
 pulseaudio-utils

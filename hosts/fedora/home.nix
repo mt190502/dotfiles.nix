@@ -142,6 +142,7 @@
     "org.signal.Signal"
     "org.telegram.desktop"
     "org.texstudio.TeXstudio"
+    "org.upscayl.Upscayl"
   ];
 
   ########################################
