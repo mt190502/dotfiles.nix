@@ -136,6 +136,7 @@
     "org.kde.KStyle.Kvantum/x86_64/6.6"
     "org.kde.okular"
     "org.libreoffice.LibreOffice"
+    "org.nicotine_plus.Nicotine"
     "org.onlyoffice.desktopeditors"
     "org.prismlauncher.PrismLauncher"
     "org.qbittorrent.qBittorrent"
