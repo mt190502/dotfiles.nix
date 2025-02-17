@@ -28,6 +28,7 @@
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
     config.wrappedPkgs.imagemagick
+    config.wrappedPkgs.jetbrains-toolbox
     config.wrappedPkgs.nextcloud-client
     config.wrappedPkgs.nwg-displays
     config.wrappedPkgs.onepassword-gui
@@ -58,7 +59,6 @@
     iftop
     iosevka
     iperf
-    jetbrains-toolbox
     jq
     k0sctl
     k9s

@@ -19,6 +19,10 @@
     default = (config.lib.nixGL.wrap pkgs.imv);
     type = lib.types.package;
   };
+  options.wrappedPkgs.jetbrains-toolbox = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.jetbrains-toolbox);
+    type = lib.types.package;
+  };
   options.wrappedPkgs.kdeconnect = lib.mkOption {
     default = (config.lib.nixGL.wrap pkgs.kdePackages.kdeconnect-kde);
     type = lib.types.package;
