@@ -29,7 +29,7 @@
     config.wrappedPkgs.flameshot
     config.wrappedPkgs.imagemagick
     config.wrappedPkgs.jetbrains-toolbox
-    config.wrappedPkgs.nextcloud-client
+    # config.wrappedPkgs.nextcloud-client
     config.wrappedPkgs.nwg-displays
     config.wrappedPkgs.onepassword-gui
     config.wrappedPkgs.qt5ct
@@ -256,7 +256,7 @@
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
     ./mpv # MPV Configuration
-    ./nextcloud # Nextcloud Client
+    # ./nextcloud # Nextcloud Client
     ./packages # Custom packages
     ./qt # QT Configuration
     ./stylix # Stylix Configuration
