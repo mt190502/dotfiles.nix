@@ -53,6 +53,8 @@ audit-rules
 augeas-libs
 authselect
 authselect-libs
+avahi
+avahi-devel
 avahi-glib
 avahi-libs
 basesystem
@@ -99,6 +101,7 @@ cmake
 cmake-data
 cmake-filesystem
 cmake-rpm-macros
+cnrdrvcups-ufr2-uk
 codec2
 colord
 colord-gtk4
@@ -112,6 +115,7 @@ coreutils
 coreutils-common
 cpio
 cpp
+cpuinfo
 cracklib
 cronie
 cronie-anacron
@@ -121,9 +125,20 @@ crypto-policies-scripts
 cryptsetup
 cryptsetup-libs
 ctags
+cups
+cups-browsed
+cups-client
+cups-devel
 cups-filesystem
+cups-filters
+cups-filters-driverless
+cups-ipptool
 cups-libs
+cups-lpd
+cups-pdf
 cups-pk-helper
+cups-printerapp
+cups-x2go
 curl
 cyrus-sasl-gssapi
 cyrus-sasl-lib
@@ -194,6 +209,7 @@ elfutils-libs
 emacs-filesystem
 enchant2
 epiphany-runtime
+esmtp
 ethtool
 evolution-data-server
 evolution-data-server-langpacks
@@ -284,6 +300,9 @@ gettext-envsubst
 gettext-libs
 gettext-runtime
 ghc-srpm-macros
+ghostscript
+ghostscript-tools-fonts
+ghostscript-tools-printing
 giflib
 git
 git-core
@@ -305,6 +324,8 @@ glusterfs-client-xlators
 glusterfs-fuse
 glx-utils
 gmp
+gmp-c++
+gmp-devel
 gnat-srpm-macros
 gnome-app-list
 gnome-autoar
@@ -338,7 +359,9 @@ gnome-themes-extra
 gnome-tweaks
 gnupg2
 gnutls
+gnutls-c++
 gnutls-dane
+gnutls-devel
 gnutls-utils
 gobject-introspection
 google-droid-sans-fonts
@@ -410,6 +433,7 @@ harfbuzz
 harfbuzz-icu
 hddtemp
 hdparm
+heimdall
 hexedit
 hicolor-icon-theme
 highcontrast-icon-theme
@@ -498,6 +522,7 @@ kernel-tools-libs
 kexec-tools
 keyutils
 keyutils-libs
+keyutils-libs-devel
 kf5-filesystem
 kimageannotator-common
 kimageannotator-qt6
@@ -507,7 +532,9 @@ kmod-nct6687d
 kmod-nct6687d-6.12.11-200.fc41.x86_64
 kmodtool
 kmod-v4l2loopback-6.12.11-200.fc41.x86_64
+kmod-v4l2loopback-6.12.13-200.fc41.x86_64
 kpartx
+krb5-devel
 krb5-libs
 ladspa
 lame-libs
@@ -579,10 +606,13 @@ libchromaprint
 libcloudproviders
 libcollection
 libcom_err
+libcom_err-devel
 libcomps
 libconfig
 libcue
+libcupsfilters
 libcurl
+libdaemon
 libdatrie
 libdav1d
 libdb
@@ -606,10 +636,12 @@ libedit
 libei
 libeis
 libepoxy
+libesmtp
 libestr
 libev
 libevdev
 libevent
+libevent-devel
 libewf
 libexif
 libfastjson
@@ -661,6 +693,7 @@ libical-glib
 libICE
 libicu
 libidn2
+libidn2-devel
 libiec61883
 libijs
 libimobiledevice
@@ -680,6 +713,7 @@ libjcat
 libjose
 libjpeg-turbo
 libjxl
+libkadm5
 libkcapi
 libkcapi-hasher
 libkcapi-hmaccalc
@@ -690,6 +724,7 @@ libldb
 libldm
 liblerc
 libliftoff
+liblockfile
 liblqr-1
 libluksmeta
 libmad
@@ -745,6 +780,7 @@ libpng
 libportal
 libportal-gtk3
 libportal-gtk4
+libppd
 libpq
 libproxy
 libpsl
@@ -811,6 +847,8 @@ libstdc++-devel
 libstemmer
 libtalloc
 libtasn1
+libtasn1-devel
+libtasn1-tools
 libtdb
 libtevent
 libtextstyle
@@ -845,6 +883,7 @@ libva-vdpau-driver
 libvdpau
 libvdpau-va-gl
 libverto
+libverto-devel
 libverto-libev
 libvirt
 libvirt-client
@@ -905,6 +944,7 @@ libxcb
 libxcb-devel
 libXcomposite
 libxcrypt
+libxcrypt-compat
 libxcrypt-devel
 libXcursor
 libxcvt
@@ -938,6 +978,7 @@ libXv
 libXxf86dga
 libXxf86vm
 libyaml
+libyuv
 libzip
 libzstd
 libzstd-devel
@@ -1014,9 +1055,11 @@ nautilus-python
 nct6687d
 ncurses
 ncurses-base
+ncurses-compat-libs
 ncurses-libs
 ndctl-libs
 nettle
+nettle-devel
 net-tools
 NetworkManager
 NetworkManager-bluetooth
@@ -1074,6 +1117,7 @@ osinfo-db
 osinfo-db-tools
 ostree-libs
 p11-kit
+p11-kit-devel
 p11-kit-trust
 PackageKit
 PackageKit-command-not-found
@@ -1171,6 +1215,8 @@ perl-srpm-macros
 perl-Storable
 perl-Symbol
 perl-Sys-Guestfs
+perl-Sys-Hostname
+perl-Sys-Syslog
 perl-Term-ANSIColor
 perl-Term-Cap
 perl-TermReadKey
@@ -1206,9 +1252,11 @@ polkit-libs
 polkit-qt
 poly2tri
 poppler
+poppler-cpp
 poppler-data
 poppler-glib
 poppler-qt6
+poppler-utils
 popt
 procps-ng
 protobuf
@@ -1363,6 +1411,7 @@ qemu-ui-opengl
 qemu-ui-sdl
 qemu-ui-spice-app
 qemu-ui-spice-core
+qpdf-libs
 qrencode-libs
 qt
 qt5-filesystem
@@ -1412,6 +1461,8 @@ quota-nls
 rav1e-libs
 readline
 realmd
+redhat-lsb
+redhat-lsb-core
 redhat-menus
 redhat-rpm-config
 rest
@@ -1441,6 +1492,7 @@ samba-common
 samba-common-libs
 satyr
 scenefx
+scenefx-0.1
 scrub
 sdbus-cpp
 SDL2
@@ -1464,6 +1516,7 @@ slang
 slirp4netns
 smartmontools
 smartmontools-selinux
+s-nail
 snappy
 solaar
 solaar-udev
@@ -1473,6 +1526,7 @@ sound-theme-freedesktop
 soundtouch
 source-highlight
 soxr
+spax
 speex
 spice-glib
 spice-gtk3
@@ -1622,6 +1676,7 @@ whois-nls
 wireless-regdb
 wireplumber
 wireplumber-libs
+wlroots
 wlroots0.17
 wmctrl
 woff2

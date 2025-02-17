@@ -58,6 +58,7 @@
     iftop
     iosevka
     iperf
+    jetbrains-toolbox
     jq
     k0sctl
     k9s
