@@ -105,6 +105,19 @@
     );
     type = lib.types.package;
   };
+  options.wrappedPkgs.mpd = lib.mkOption {
+    default = (
+      pkgs.symlinkJoin {
+        name = "mpd";
+        paths = [ pkgs.mpd ];
+        buildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/mpd \
+            --set ALSA_PLUGIN_DIR ${pkgs.pipewire}/lib/alsa-lib
+        '';
+      }
+    );
+  };
   options.wrappedPkgs.nextcloud-client = lib.mkOption {
     default = (
       config.lib.nixGL.wrap (

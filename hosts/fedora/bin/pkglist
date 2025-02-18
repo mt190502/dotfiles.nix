@@ -530,6 +530,7 @@ kmod
 kmod-libs
 kmod-nct6687d
 kmod-nct6687d-6.12.11-200.fc41.x86_64
+kmod-nct6687d-6.12.13-200.fc41.x86_64
 kmodtool
 kmod-v4l2loopback-6.12.11-200.fc41.x86_64
 kmod-v4l2loopback-6.12.13-200.fc41.x86_64

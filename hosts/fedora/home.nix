@@ -264,6 +264,7 @@
     ./kdeapps # KDE Applications Configuration
     ./mako # Mako Notification Daemon Configuration
     ./mangohud # MangoHud Configuration
+    ./mpd # MPD Configuration
     ./mpv # MPV Configuration
     # ./nextcloud # Nextcloud Client
     ./packages # Custom packages
