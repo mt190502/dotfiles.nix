@@ -277,6 +277,7 @@
     ./tmux # Tmux Configuration
     ./waybar # Waybar Configuration
     ./wofi # Wofi Configuration
+    ./yt-dlp # yt-dlp Configuration
   ];
 
   ########################################
