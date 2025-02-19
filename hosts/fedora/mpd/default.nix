@@ -1,6 +1,7 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
+  ### (mpd [disabled]) ######################################################
   services.mpd = {
     enable = false;
     package = config.wrappedPkgs.mpd;
@@ -21,8 +22,33 @@
       port = 6600;
     };
   };
+  ###########################################################################
+
+  ### (mopidy [active]) #####################################################
+  services.mopidy = {
+    enable = true;
+    extensionPackages = with pkgs; [
+      mopidy-jellyfin
+      mopidy-mpd
+      mopidy-mpris
+    ];
+    settings = {
+      file = {
+        enabled = false;
+      };
+      mpd = {
+        hostname = "::";
+      };
+    };
+    extraConfigFiles = [
+      "${config.home.homeDirectory}/.config/mopidy/jellyfin.conf"
+    ];
+  };
+  ###########################################################################
+
+  ### (other) ###############################################################
   services.mpd-discord-rpc = {
-    enable = false;
+    enable = true;
     settings = {
       hosts = [ "localhost:6600" ];
       format = {
@@ -32,4 +58,8 @@
       };
     };
   };
+  programs.ncmpcpp = {
+    enable = true;
+  };
+  ###########################################################################
 }
