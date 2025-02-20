@@ -1,12 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  ### (mpd [disabled]) ######################################################
+  ### (mpd [active]) ########################################################
   services.mpd = {
-    enable = false;
-    package = config.wrappedPkgs.mpd;
+    enable = true;
     dataDir = "${config.home.homeDirectory}/.cache/mpd";
-    musicDirectory = "${config.home.homeDirectory}/Music/Artists";
+    musicDirectory = "${config.home.homeDirectory}/Music";
     playlistDirectory = "${config.home.homeDirectory}/Music/Playlists";
     network = {
       listenAddress = "any";
@@ -15,8 +14,8 @@
     };
   };
   services.mpdris2 = {
-    enable = false;
-    notifications = true;
+    enable = true;
+    notifications = false;
     mpd = {
       host = "localhost";
       port = 6600;
@@ -24,9 +23,9 @@
   };
   ###########################################################################
 
-  ### (mopidy [active]) #####################################################
+  ### (mopidy [inactive]) ###################################################
   services.mopidy = {
-    enable = true;
+    enable = false;
     extensionPackages = with pkgs; [
       mopidy-jellyfin
       mopidy-mpd
@@ -34,15 +33,26 @@
     ];
     settings = {
       file = {
-        enabled = false;
+        enabled = true;
+        media_dirs = [
+          "$XDG_MUSIC_DIR|Music"
+        ];
+        follow_symlinks = true;
+        excluded_file_extensions = [
+          ".html"
+          ".zip"
+          ".jpg"
+          ".jpeg"
+          ".png"
+        ];
       };
       mpd = {
         hostname = "::";
       };
     };
-    extraConfigFiles = [
-      "${config.home.homeDirectory}/.config/mopidy/jellyfin.conf"
-    ];
+    #extraConfigFiles = [
+    #  "${config.home.homeDirectory}/.config/mopidy/jellyfin.conf"
+    #];
   };
   ###########################################################################
 

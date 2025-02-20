@@ -37,6 +37,8 @@
         modules-center = [
           "sway/mode"
           "custom/space"
+          "mpd"
+          "custom/space"
           "clock"
           "custom/space"
           "custom/weather"
@@ -141,7 +143,36 @@
         memory = {
           interval = 10;
           format = " {used:0.2f} / {total:0.0f} GB";
-          on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty -e btop";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T BTOP -e btop";
+        };
+
+        mpd = {
+          format = "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon} | {elapsedTime:%M:%S}/{totalTime:%M:%S} | ";
+          format-disconnected = "MPD Off ";
+          interval = 10;
+          consume-icons = {
+              on = " ";
+          };
+          random-icons = {
+              on = " ";
+          };
+          repeat-icons = {
+              on = "";
+          };
+          single-icons = {
+              on = "1 ";
+          };
+          state-icons = {
+              paused = "";
+              playing = "";
+              stopped = "";
+          };
+          tooltip-format = "{artist} - {album} - {title}";
+          on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
+          on-click-middle = "${pkgs.playerctl}/bin/playerctl stop";
+          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T ncmpcpp -e ${pkgs.ncmpcpp}/bin/ncmpcpp";
+          on-scroll-up = "${pkgs.mpc}/bin/mpc volume +5";
+          on-scroll-down = "${pkgs.mpc}/bin/mpc volume -5";
         };
 
         network = {
