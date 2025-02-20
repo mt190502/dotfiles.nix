@@ -33,12 +33,12 @@
       NC='\033[0m'
       
       for f in $(find $HOME/Music -depth -name '*[ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ⧸？&]*'); do
-        new=$(echo "$f" | awk -F '/' '{print $NF}' | sed 's/&/feat./g') 
-        new=$(basename "$new" | sed 'y/ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ⧸？/gusiocGUSIOCaiueoAIUEO|?/')
+        new=$(echo "$f" | awk -F '/' '{print $NF}' | sed 's/&/feat./g; s/？//g; s/⧸/-/g')
+        new=$(basename "$new" | sed 'y/ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ/gusiocGUSIOCaiueoAIUEO/')
         new_filename=$(echo "$f" | sed "s/$(basename "$f")/$new/")
         if [[ -d "$new_filename" ]]; then 
           cp -R "$f"/* "$new_filename"/
-          rm -rf "$f"
+          [[ "$?" == "0" ]] && rm -rf "$f"
           [[ -d "$new_filename" ]] && echo -e "''${YELLOW}Merged contents of \"$f\" to \"$new_filename\"''${NC}"
         elif [[ "$new_filename" != "$f" ]] && [[ ! -f "$new_filename" ]]; then
           mv "$f" "$new_filename"
