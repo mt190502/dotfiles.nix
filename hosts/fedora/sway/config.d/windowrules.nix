@@ -24,6 +24,10 @@
       }
       {
         app_id = "Alacritty";
+        title = "ncmpcpp";
+      }
+      {
+        app_id = "Alacritty";
         title = "nmtui";
       }
       {

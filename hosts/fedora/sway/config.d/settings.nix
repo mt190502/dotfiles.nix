@@ -33,7 +33,9 @@ in
       #~~~ window rules
       for_window [app_id="flameshot" title="flameshot"]           fullscreen disable, move absolute position 0 0
       for_window [shell="xwayland"]                               title_format "[X] %title", border pixel 8
-      for_window [app_id="Alacritty" title="wttr.in"]             resize set 48ppt 65ppt
+      for_window [app_id="Alacritty" title="ncmpcpp"]             resize set 50ppt 50ppt, floating enable
+      for_window [app_id="Alacritty" title="wttr.in"]             resize set 48ppt 65ppt, floating enable
+      for_window [app_id="Alacritty" title="nmtui"]               resize set 50ppt 50ppt, floating enable
 
       #~~~ other
       include $HOME/.config/sway/config.d/*

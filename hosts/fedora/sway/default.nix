@@ -30,6 +30,7 @@
               imv = config.wrappedPkgs.imv;
               jq = lib.getExe pkgs.jq;
               mako = pkgs.mako;
+              ncmpcpp = pkgs.ncmpcpp;
               slurp = lib.getExe pkgs.slurp;
               # swaylock = lib.getExe pkgs.swaylock;     # not available in non nixos systems
               swappy = lib.getExe pkgs.swappy;
