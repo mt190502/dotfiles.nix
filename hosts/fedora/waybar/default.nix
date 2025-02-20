@@ -67,22 +67,14 @@
         #################################################
         #### Module(s) configuration
         #################################################
-        "sway/workspaces" = {
-          format = "{}";
-          format-icons = {
-            focused = "";
-            default = "";
-          };
+        "sway/language" = {
+          format = "{short} {variant}";
+          on-click = ''${config.wrappedPkgs.sway}/bin/swaymsg input "type:keyboard" xkb_switch_layout next'';
         };
 
         "sway/mode" = {
           format = ''<span style="italic">{}</span>'';
           tooltip = false;
-        };
-
-        "sway/language" = {
-          format = "{short} {variant}";
-          on-click = ''${config.wrappedPkgs.sway}/bin/swaymsg input "type:keyboard" xkb_switch_layout next'';
         };
 
         "sway/scratchpad" = {
@@ -102,114 +94,12 @@
           tooltip = false;
         };
 
-        idle_inhibitor = {
-          format = "{icon}";
+        "sway/workspaces" = {
+          format = "{}";
           format-icons = {
-            activated = "";
-            deactivated = "";
+            focused = "";
+            default = "";
           };
-        };
-
-        tray = {
-          spacing = 5;
-          show-passive-items = true;
-        };
-
-        cpu = {
-          interval = 1;
-          format = " {max_frequency:0.2f}GHz | {usage}%";
-          on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty -e btop";
-        };
-
-        clock = {
-          format = "{:%a %d %b  %H:%M:%S}";
-          tooltip-format = "<tt><small>{calendar}</small></tt>";
-          calendar = {
-            mode = "year";
-            mode-mon-col = 3;
-            weeks-pos = "left";
-            on-scroll = 1;
-            format = {
-              months = "<span color='#ffead3'><b>{}</b></span>";
-              days = "<span color='#ecc6d9'><b>{}</b></span>";
-              weeks = "<span color='#99ffdd'><b>W{}</b></span>";
-              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
-              today = "<span background='#ffffff' color='#000000'><b>{}</b></span>";
-            };
-          };
-          interval = 1;
-        };
-
-        memory = {
-          interval = 10;
-          format = " {used:0.2f} / {total:0.0f} GB";
-          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T BTOP -e btop";
-        };
-
-        mpd = {
-          format = "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon} | {elapsedTime:%M:%S}/{totalTime:%M:%S} | ";
-          format-disconnected = "MPD Off ";
-          interval = 10;
-          consume-icons = {
-              on = " ";
-          };
-          random-icons = {
-              on = " ";
-          };
-          repeat-icons = {
-              on = "";
-          };
-          single-icons = {
-              on = "1 ";
-          };
-          state-icons = {
-              paused = "";
-              playing = "";
-              stopped = "";
-          };
-          tooltip-format = "{artist} - {album} - {title}";
-          on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
-          on-click-middle = "${pkgs.playerctl}/bin/playerctl stop";
-          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T ncmpcpp -e ${pkgs.ncmpcpp}/bin/ncmpcpp";
-          on-scroll-up = "${pkgs.mpc}/bin/mpc volume +5";
-          on-scroll-down = "${pkgs.mpc}/bin/mpc volume -5";
-        };
-
-        network = {
-          tooltip = false;
-          format-wifi = "";
-          format-ethernet = "";
-          format-linked = " (No IP)";
-          format-disconnected = "⚠  Disconnected";
-          format-alt = "{essid} {ipaddr}/{cidr} ";
-          on-click-right = "${config.wrappedPkgs.alacritty}/bin/alacritty msg create-window -T nmtui -e nmtui";
-        };
-
-        pulseaudio = {
-          tooltip = false;
-          format = "{icon} {volume}%  {format_source}";
-          format-muted = "";
-          format-source = "{volume}% ";
-          format-source-muted = "";
-          format-icons = {
-            headphone = "";
-            hands-free = "";
-            headset = "";
-            phone = "";
-            portable = "";
-            car = "";
-            default = [
-              " "
-              " "
-              " "
-            ];
-          };
-          scroll-step = 5;
-          on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh pavucontrol";
-          on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -5%";
-          ignored-sinks = [ "Easy Effects Sink" ];
         };
 
         battery = {
@@ -243,12 +133,125 @@
           ];
         };
 
+        clock = {
+          format = "{:%a %d %b  %H:%M:%S}";
+          tooltip-format = "<tt><small>{calendar}</small></tt>";
+          calendar = {
+            mode = "year";
+            mode-mon-col = 3;
+            weeks-pos = "left";
+            on-scroll = 1;
+            format = {
+              months = "<span color='#ffead3'><b>{}</b></span>";
+              days = "<span color='#ecc6d9'><b>{}</b></span>";
+              weeks = "<span color='#99ffdd'><b>W{}</b></span>";
+              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
+              today = "<span background='#ffffff' color='#000000'><b>{}</b></span>";
+            };
+          };
+          interval = 1;
+        };
+
+        cpu = {
+          interval = 1;
+          format = " {max_frequency:0.2f}GHz | {usage}%";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T BTOP -e btop";
+        };
+
+        idle_inhibitor = {
+          format = "{icon}";
+          format-icons = {
+            activated = "";
+            deactivated = "";
+          };
+        };
+
+        memory = {
+          interval = 10;
+          format = " {used:0.2f} / {total:0.0f} GB";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T BTOP -e btop";
+        };
+
+        mpd = {
+          format = "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon} | {elapsedTime:%M:%S}/{totalTime:%M:%S} | ";
+          format-disconnected = "MPD Off ";
+          interval = 10;
+          consume-icons = {
+              on = " ";
+          };
+          random-icons = {
+              on = " ";
+          };
+          repeat-icons = {
+              on = "";
+          };
+          single-icons = {
+              on = "1 ";
+          };
+          state-icons = {
+              paused = "";
+              playing = "";
+              stopped = "";
+          };
+          tooltip-format = "{artist} - {album} - {title}";
+          on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
+          on-click-middle = "${pkgs.playerctl}/bin/playerctl stop";
+          on-click-right = "$HOME/.config/sway/scripts.d/ncmpcpp.sh";
+          on-scroll-up = "${pkgs.mpc}/bin/mpc volume +5";
+          on-scroll-down = "${pkgs.mpc}/bin/mpc volume -5";
+        };
+
+        network = {
+          tooltip = false;
+          format-wifi = "";
+          format-ethernet = "";
+          format-linked = " (No IP)";
+          format-disconnected = "⚠  Disconnected";
+          format-alt = "{essid} {ipaddr}/{cidr} ";
+          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T nmtui -e nmtui";
+        };
+
+        pulseaudio = {
+          tooltip = false;
+          format = "{icon} {volume}%  {format_source}";
+          format-muted = "";
+          format-source = "{volume}% ";
+          format-source-muted = "";
+          format-icons = {
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = [
+              " "
+              " "
+              " "
+            ];
+          };
+          scroll-step = 5;
+          on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh ${pkgs.pavucontrol}/bin/pavucontrol";
+          on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          ignored-sinks = [ "Easy Effects Sink" ];
+        };
+
+        tray = {
+          spacing = 5;
+          show-passive-items = true;
+        };
+
         ###################################################
         #### Other module(s)
         ###################################################
-        "custom/space" = {
-          format = "  ";
-          tooltip = false;
+        "custom/dnd-mako" = {
+          format = "{}";
+          exec = "$HOME/.config/sway/scripts.d/dnd.sh status";
+          on-click = "$HOME/.config/sway/scripts.d/dnd.sh";
+          return-type = "json";
+          signal = 9;
         };
 
         "custom/fan" = {
@@ -256,6 +259,16 @@
           format = "  {} RPM";
           tooltip = false;
           interval = 1;
+        };
+
+        "custom/pomobar" = {
+          format = "{}";
+          interval = 1;
+          exec = "$HOME/.local/bin/pomobar-client status";
+          on-click = "$HOME/.local/bin/pomobar-client pause";
+          on-click-middle = "$HOME/.local/bin/pomobar-client reset";
+          on-click-right = "$HOME/.local/bin/pomobar-client resume";
+          return-type = "json";
         };
 
         "custom/powermenu" = {
@@ -267,6 +280,11 @@
         "custom/screenshot" = {
           on-click = "$HOME/.config/sway/scripts.d/screenshot.sh";
           format = "";
+          tooltip = false;
+        };
+
+        "custom/space" = {
+          format = "  ";
           tooltip = false;
         };
 
@@ -291,12 +309,13 @@
           escape = true;
         };
 
-        "custom/dnd-mako" = {
+        "custom/vpn" = {
           format = "{}";
-          exec = "$HOME/.config/sway/scripts.d/dnd.sh status";
-          on-click = "$HOME/.config/sway/scripts.d/dnd.sh";
+          interval = 1;
+          exec = "$HOME/scripts/togglevpn stat";
+          on-click = "$HOME/scripts/togglevpn sm";
+          on-click-right = "$HOME/scripts/togglevpn tm";
           return-type = "json";
-          signal = 9;
         };
 
         "custom/weather" = {
@@ -305,25 +324,6 @@
           exec = "curl -s 'https://wttr.in/${config.pkgconfig.waybar.weather_location}?format=1' | sed 's/ //1'";
           exec-if = "ping wttr.in -c1";
           on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty msg create-window -T wttr.in -e sh -c 'curl https://wttr.in/${config.pkgconfig.waybar.weather_location}; read'";
-        };
-
-        "custom/pomobar" = {
-          format = "{}";
-          interval = 1;
-          exec = "$HOME/.local/bin/pomobar-client status";
-          on-click = "$HOME/.local/bin/pomobar-client pause";
-          on-click-middle = "$HOME/.local/bin/pomobar-client reset";
-          on-click-right = "$HOME/.local/bin/pomobar-client resume";
-          return-type = "json";
-        };
-
-        "custom/vpn" = {
-          format = "{}";
-          interval = 1;
-          exec = "$HOME/scripts/togglevpn stat";
-          on-click = "$HOME/scripts/togglevpn sm";
-          on-click-right = "$HOME/scripts/togglevpn tm";
-          return-type = "json";
         };
       };
     };
