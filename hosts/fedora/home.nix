@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
@@ -169,6 +170,9 @@
     alacritty = {
       theme = "hyper";
     };
+    mpdris2-rs = {
+      enable = true;
+    };
     waybar = {
       weather_location = "Istanbul";
     };
@@ -280,7 +284,9 @@
     ./waybar # Waybar Configuration
     ./wofi # Wofi Configuration
     ./yt-dlp # yt-dlp Configuration
-  ];
+
+    #~ Custom Modules ~#
+  ] ++ lib.map (p: ./modules + "/${p}") (lib.attrNames (builtins.readDir ./modules));
 
   ########################################
   #

@@ -14,7 +14,7 @@
     };
   };
   services.mpdris2 = {
-    enable = true;
+    enable = false;
     notifications = false;
     mpd = {
       host = "localhost";
