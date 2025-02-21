@@ -62,7 +62,7 @@
     settings = {
       hosts = [ "localhost:6600" ];
       format = {
-        details = "$title";
+        details = "$title ($date)";
         state = "$artist / $album";
         timestamp = "elapsed";
       };
