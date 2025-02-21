@@ -177,21 +177,21 @@
           format-disconnected = "MPD Off ";
           interval = 10;
           consume-icons = {
-              on = " ";
+            on = " ";
           };
           random-icons = {
-              on = " ";
+            on = " ";
           };
           repeat-icons = {
-              on = "";
+            on = "";
           };
           single-icons = {
-              on = "1 ";
+            on = "1 ";
           };
           state-icons = {
-              paused = "";
-              playing = "";
-              stopped = "";
+            paused = "";
+            playing = "";
+            stopped = "";
           };
           tooltip-format = "{artist} - {album} - {title}";
           on-click = "${pkgs.playerctl}/bin/playerctl play-pause";

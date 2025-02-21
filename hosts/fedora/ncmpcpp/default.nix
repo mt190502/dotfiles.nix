@@ -9,7 +9,7 @@
       autocenter_mode = true;
       browser_display_mode = "columns";
       centered_cursor = true;
-      clock_display_seconds = true; 
+      clock_display_seconds = true;
       connected_message_on_startup = false;
       # current_item_inactive_column_prefix = ""
       # current_item_inactive_column_suffix = "";
