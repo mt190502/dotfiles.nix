@@ -37,6 +37,12 @@
     config.wrappedPkgs.qt6ct
     config.wrappedPkgs.vscode
 
+    #~ fonts ~#
+    hack-font
+    font-awesome_5
+    iosevka
+    ubuntu_font_family
+    
     #~ standard packages ~#
     _1password-cli
     adw-gtk3
@@ -55,11 +61,9 @@
     go
     grc
     grim
-    hack-font
     hugo
     hyperfine
     iftop
-    iosevka
     iperf
     jq
     k0sctl
@@ -90,7 +94,6 @@
     tesseract
     tmux
     translate-shell
-    ubuntu_font_family
     wl-clipboard
     wlr-randr
     wlroots_0_17
