@@ -79,9 +79,9 @@
     minikube
     minio-client
     nixd
-    nixfmt-classic
+    nixfmt-rfc-style
     nmap
-    nvtopPackages.amd
+    nvtopPackages.full
     nwg-look
     pavucontrol
     postgresql_17
