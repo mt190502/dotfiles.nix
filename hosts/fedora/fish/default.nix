@@ -92,7 +92,6 @@
       helm completion fish | source
       hugo completion fish | source
       kubectl completion fish | source
-      tailscale completion fish | source
 
       #~ nvm ~#
       #set -gx NVM_DIR "$HOME/.nvm"

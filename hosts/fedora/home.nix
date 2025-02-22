@@ -50,6 +50,7 @@
     bun
     cliphist
     delta
+    direnv
     gcolor3
     go
     grc

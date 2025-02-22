@@ -170,7 +170,6 @@ dhcpcd
 dhcp-client
 dhcp-common
 diffutils
-direnv
 dmidecode
 dnf5
 dnf5-plugins
