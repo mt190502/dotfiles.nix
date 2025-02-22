@@ -8,19 +8,15 @@
 {
   options.colors = {
     activeColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base0E;
       type = lib.types.str;
     };
     backgroundColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base00;
       type = lib.types.str;
     };
     inactiveColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base0F;
       type = lib.types.str;
     };
     inactiveColor2 = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base0D;
       type = lib.types.str;
     };
     urgentColor = lib.mkOption {
@@ -28,7 +24,6 @@
       type = lib.types.str;
     };
     textColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base07;
       type = lib.types.str;
     };
   };

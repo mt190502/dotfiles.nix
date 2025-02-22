@@ -181,11 +181,11 @@
   #~ colors ~#
   colors = {
     activeColor = config.lib.stylix.colors.withHashtag.base02;
-    backgroundColor = config.lib.stylix.colors.withHashtag.base00;
-    inactiveColor = config.lib.stylix.colors.withHashtag.base0F;
-    inactiveColor2 = config.lib.stylix.colors.withHashtag.base0D;
+    backgroundColor = config.lib.stylix.colors.withHashtag.base00; 
+    inactiveColor = config.lib.stylix.colors.withHashtag.base00;
+    inactiveColor2 = config.lib.stylix.colors.withHashtag.base01;
     urgentColor = "#FF0000";
-    textColor = config.lib.stylix.colors.withHashtag.base07;
+    textColor = config.lib.stylix.colors.withHashtag.base05;
   };
 
   #~ xdg ~#
