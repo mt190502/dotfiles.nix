@@ -250,6 +250,8 @@
     EDITOR = "vim";
     GTK_USE_PORTAL = "1";
     SYSTEMD_EDITOR = "vim";
+    XDG_CURRENT_DESKTOP = "sway";
+    XDG_SESSION_DESKTOP = "sway";
   };
 
   ########################################
