@@ -323,7 +323,7 @@
           interval = 3600;
           exec = "curl -s 'https://wttr.in/${config.pkgconfig.waybar.weather_location}?format=1' | sed 's/ //1'";
           exec-if = "ping wttr.in -c1";
-          on-click = "${config.wrappedPkgs.alacritty}/bin/alacritty msg create-window -T wttr.in -e sh -c 'curl https://wttr.in/${config.pkgconfig.waybar.weather_location}; read'";
+          on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrappedPkgs.alacritty}/bin/alacritty -T wttr.in -e sh -c 'curl https://wttr.in/${config.pkgconfig.waybar.weather_location}; read'";
         };
       };
     };
