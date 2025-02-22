@@ -8,7 +8,7 @@
         color_scheme_path=${config.wrappedPkgs.qt5ct}/share/qt5ct/colors/airy.conf
 
         custom_palette=false
-        icon_theme=${config.stylix.cursor.name}
+        icon_theme=${config.stylix.iconTheme.dark}
         standard_dialogs=xdgdesktopportal
         style=kvantum-dark
 
