@@ -42,7 +42,7 @@
     font-awesome_5
     iosevka
     ubuntu_font_family
-    
+
     #~ standard packages ~#
     _1password-cli
     adw-gtk3
@@ -255,7 +255,7 @@
     GTK_USE_PORTAL = "1";
     SYSTEMD_EDITOR = "vim";
     XDG_CURRENT_DESKTOP = "sway";
-   };
+  };
 
   ########################################
   #
