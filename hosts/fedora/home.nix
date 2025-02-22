@@ -181,7 +181,7 @@
   #~ colors ~#
   colors = {
     activeColor = config.lib.stylix.colors.withHashtag.base02;
-    backgroundColor = config.lib.stylix.colors.withHashtag.base00; 
+    backgroundColor = config.lib.stylix.colors.withHashtag.base00;
     inactiveColor = config.lib.stylix.colors.withHashtag.base00;
     inactiveColor2 = config.lib.stylix.colors.withHashtag.base01;
     urgentColor = "#FF0000";
