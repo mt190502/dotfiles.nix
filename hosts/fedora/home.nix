@@ -85,6 +85,7 @@
     nwg-look
     pavucontrol
     postgresql_17
+    r2modman
     scrcpy
     shellcheck
     slurp
