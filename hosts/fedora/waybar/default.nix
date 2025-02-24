@@ -194,8 +194,8 @@
             stopped = "";
           };
           tooltip-format = "{artist} - {album} - {title}";
-          on-click = "${pkgs.playerctl}/bin/playerctl play-pause";
-          on-click-middle = "${pkgs.playerctl}/bin/playerctl stop";
+          on-click = "${pkgs.mpc}/bin/mpc toggle";
+          on-click-middle = "${pkgs.mpc}/bin/mpc stop";
           on-click-right = "$HOME/.config/sway/scripts.d/ncmpcpp.sh";
           on-scroll-up = "${pkgs.mpc}/bin/mpc volume +5";
           on-scroll-down = "${pkgs.mpc}/bin/mpc volume -5";
