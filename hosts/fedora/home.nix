@@ -75,6 +75,7 @@
     kdePackages.qtwayland
     kubectl
     kubernetes-helm
+    kubetail
     libsForQt5.qtstyleplugin-kvantum
     minikube
     minio-client
