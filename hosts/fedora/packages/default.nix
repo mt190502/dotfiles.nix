@@ -57,6 +57,23 @@
   };
 
   #~ other wrapped packages ~#
+    options.wrappedPkgs.code-cursor = lib.mkOption {
+    default = (
+      config.lib.nixGL.wrap (
+        pkgs.symlinkJoin {
+          name = "code-cursor";
+          paths = [ pkgs.code-cursor ];
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/cursor \
+              --set XDG_CURRENT_DESKTOP GNOME \
+              --append-flags "--ozone-platform=wayland --ozone-platform-hint=auto --password-store=gnome"
+          '';
+        }
+      )
+    );
+    type = lib.types.package;
+  };
   options.wrappedPkgs.dolphin = lib.mkOption {
     default = (
       config.lib.nixGL.wrap (

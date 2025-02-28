@@ -58,7 +58,7 @@
       light = "Flat-Remix-Blue-Light";
       dark = "Flat-Remix-Blue-Dark";
     };
-    image = ../bin/wallpaper.jpg;
+    image = ../bin/wallpaper;
     polarity = "dark";
     targets = {
       alacritty.enable = false;

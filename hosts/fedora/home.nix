@@ -26,6 +26,7 @@
   home.packages = with pkgs; [
     #~ wrapped packages ~#
     config.wrappedPkgs.alacritty
+    config.wrappedPkgs.code-cursor
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
     config.wrappedPkgs.imagemagick
@@ -120,6 +121,8 @@
     "com.valvesoftware.Steam"
     "com.vivaldi.Vivaldi"
     "dev.vencord.Vesktop"
+    "fr.romainvigier.MetadataCleaner"
+    "io.bassi.Amberol"
     "io.github._0xzer0x.qurancompanion"
     "io.github.mrvladus.List"
     "io.github.ungoogled_software.ungoogled_chromium"
@@ -131,11 +134,11 @@
     "org.gimp.GIMP"
     "org.gnome.Calculator"
     "org.gnome.Calendar"
+    "org.gnome.clocks"
     "org.gnome.FileRoller"
     "org.gnome.Loupe"
-    "org.gnome.TextEditor"
-    "org.gnome.clocks"
     "org.gnome.seahorse.Application"
+    "org.gnome.TextEditor"
     "org.inkscape.Inkscape"
     "org.kde.krita"
     "org.kde.kruler"
@@ -143,6 +146,8 @@
     "org.kde.KStyle.Kvantum/x86_64/6.6"
     "org.kde.okular"
     "org.libreoffice.LibreOffice"
+    "org.mozilla.Thunderbird"
+    "org.musicbrainz.Picard"
     "org.nicotine_plus.Nicotine"
     "org.onlyoffice.desktopeditors"
     "org.prismlauncher.PrismLauncher"
