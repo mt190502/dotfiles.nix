@@ -69,6 +69,7 @@ bison
 bluez
 bluez-libs
 bluez-obexd
+boost-iostreams
 boost-regex
 boost-system
 boost-thread
@@ -252,6 +253,7 @@ flatpak-session-helper
 flat-remix-icon-theme
 flex
 fmt
+fmt-devel
 fontconfig
 fonts-filesystem
 fonts-srpm-macros
@@ -529,8 +531,10 @@ kmod
 kmod-libs
 kmod-nct6687d
 kmod-nct6687d-6.13.4-200.fc41.x86_64
+kmod-nct6687d-6.13.5-200.fc41.x86_64
 kmodtool
 kmod-v4l2loopback-6.13.4-200.fc41.x86_64
+kmod-v4l2loopback-6.13.5-200.fc41.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -1026,7 +1030,6 @@ mesa-libEGL
 mesa-libEGL-devel
 mesa-libgbm
 mesa-libGL
-mesa-libglapi
 mesa-libGLU
 mesa-va-drivers-freeworld
 mesa-vdpau-drivers

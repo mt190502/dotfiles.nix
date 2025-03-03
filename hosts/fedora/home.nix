@@ -88,6 +88,7 @@
     pavucontrol
     postgresql_17
     r2modman
+    rnnoise-plugin
     scrcpy
     shellcheck
     slurp
@@ -286,6 +287,7 @@
     ./ncmpcpp # Ncmpcpp Configuration
     # ./nextcloud # Nextcloud Client
     ./packages # Custom packages
+    ./pipewire # PipeWire Configuration
     ./qt # QT Configuration
     ./stylix # Stylix Configuration
     ./swappy # Swappy Configuration
