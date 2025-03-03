@@ -276,6 +276,7 @@
     ./fish # Fish Shell Configuration
     ./flatpak # Flatpak Configuration
     ./fontconfig # Fontconfig Configuration
+    ./gh-cli # GitHub CLI Configuration
     ./gtk # GTK Configuration
     ./kdeapps # KDE Applications Configuration
     ./mako # Mako Notification Daemon Configuration

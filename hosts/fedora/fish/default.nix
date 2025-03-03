@@ -67,6 +67,8 @@
       gitpp = "git pull";
 
       #~ Utilities
+      aie = "gh copilot explain";
+      ais = "gh copilot suggest";
       ff = "fastfetch";
       passgen = "cat /dev/urandom | tr -dc [:alnum:] | head -c";
       tldr = "cht.sh";
