@@ -4,7 +4,7 @@
   programs.ncmpcpp = {
     enable = true;
     settings = {
-      allow_for_physical_item_deletion = false;
+      allow_for_physical_item_deletion = true;
       ask_before_clearing_playlists = false;
       autocenter_mode = true;
       browser_display_mode = "columns";
