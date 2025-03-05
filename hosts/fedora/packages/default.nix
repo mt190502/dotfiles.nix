@@ -57,7 +57,7 @@
   };
 
   #~ other wrapped packages ~#
-    options.wrappedPkgs.code-cursor = lib.mkOption {
+  options.wrappedPkgs.code-cursor = lib.mkOption {
     default = (
       config.lib.nixGL.wrap (
         pkgs.symlinkJoin {
