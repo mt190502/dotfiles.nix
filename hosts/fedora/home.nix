@@ -80,6 +80,7 @@
     libsForQt5.qtstyleplugin-kvantum
     minikube
     minio-client
+    mpc
     nixd
     nixfmt-rfc-style
     nmap

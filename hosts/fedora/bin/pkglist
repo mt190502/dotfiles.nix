@@ -573,6 +573,11 @@ libattr
 libavcodec-freeworld
 libavdevice
 libavif
+libayatana-appindicator-gtk2
+libayatana-appindicator-gtk3
+libayatana-ido-gtk3
+libayatana-indicator-gtk2
+libayatana-indicator-gtk3
 libb2
 libbabeltrace
 libbasicobjects
@@ -1598,6 +1603,7 @@ tpm2-tss-fapi
 traceroute
 tracker
 tracker-miners
+trash-cli
 tree
 tslib
 ttmkfdir
