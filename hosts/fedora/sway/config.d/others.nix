@@ -17,6 +17,7 @@
         "XDG_CURRENT_DESKTOP"
         "XDG_SESSION_TYPE"
       ];
+      # xdgAutostart = true;
     };
 
     config.startup = [
