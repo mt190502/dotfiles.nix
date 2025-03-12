@@ -173,7 +173,7 @@
         };
 
         mpd = {
-          format = "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon} | {elapsedTime:%M:%S}/{totalTime:%M:%S} | ";
+          format = "{stateIcon} | {elapsedTime:%M:%S}/{totalTime:%M:%S} | {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}";
           format-disconnected = "MPD Off ";
           interval = 10;
           consume-icons = {
