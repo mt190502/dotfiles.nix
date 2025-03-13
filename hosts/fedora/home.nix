@@ -286,6 +286,7 @@
     ./mpd # MPD Configuration
     ./mpv # MPV Configuration
     ./ncmpcpp # Ncmpcpp Configuration
+    ./neovide # Neovide Configuration
     # ./nextcloud # Nextcloud Client
     ./packages # Custom packages
     ./pipewire # PipeWire Configuration

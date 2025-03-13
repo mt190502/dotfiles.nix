@@ -66,6 +66,8 @@
       mangohud.enable = false;
       gtk.enable = false;
       kde.enable = false;
+      neovim.enable = false;
+      nixvim.enable = false;
       qt.enable = false;
       sway.enable = false;
       swaylock.enable = false;

@@ -19,6 +19,10 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,6 +34,7 @@
       nixpkgs,
       home-manager,
       nix-flatpak,
+      nixvim,
       stylix,
       ...
     }:
@@ -45,6 +50,7 @@
         extraSpecialArgs = { inherit inputs; };
         modules = [
           nix-flatpak.homeManagerModules.nix-flatpak
+          nixvim.homeManagerModules.nixvim
           stylix.homeManagerModules.stylix
           ./hosts/fedora/home.nix
         ];

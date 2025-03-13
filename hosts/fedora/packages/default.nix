@@ -31,6 +31,10 @@
     default = (config.lib.nixGL.wrap pkgs.mpv);
     type = lib.types.package;
   };
+  options.wrappedPkgs.neovide = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.neovide);
+    type = lib.types.package;
+  };
   options.wrappedPkgs.nwg-displays = lib.mkOption {
     default = (config.lib.nixGL.wrap pkgs.nwg-displays);
     type = lib.types.package;
