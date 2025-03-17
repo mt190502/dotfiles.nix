@@ -73,6 +73,7 @@ boost-iostreams
 boost-regex
 boost-system
 boost-thread
+bpftool
 breeze-cursor-theme
 bridge-utils
 brlapi
@@ -85,6 +86,8 @@ build-reproducibility-srpm-macros
 bzip2
 bzip2-libs
 ca-certificates
+cachyos-ksm-settings
+cachyos-settings
 cairo
 cairo-gobject
 cairomm
@@ -97,10 +100,7 @@ cifs-utils
 clevis
 clevis-luks
 clevis-pin-tpm2
-cmake
-cmake-data
 cmake-filesystem
-cmake-rpm-macros
 cnrdrvcups-ufr2-uk
 codec2
 colord
@@ -514,15 +514,12 @@ kbd-legacy
 kbd-misc
 kcolorpicker-qt6
 kde-filesystem
-kernel
-kernel-core
-kernel-devel
-kernel-devel-matched
+kernel-cachyos
+kernel-cachyos-core
+kernel-cachyos-devel
+kernel-cachyos-devel-matched
+kernel-cachyos-modules
 kernel-headers
-kernel-modules
-kernel-modules-core
-kernel-modules-extra
-kernel-modules-internal
 kernel-srpm-macros
 kernel-tools
 kernel-tools-libs
@@ -539,9 +536,9 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmod-nct6687d
-kmod-nct6687d-6.14.0-0.rc6.49.fc42.x86_64
+kmod-nct6687d-6.13.7-cachyos1.fc42.x86_64
 kmodtool
-kmod-v4l2loopback-6.14.0-0.rc6.49.fc42.x86_64
+kmod-v4l2loopback-6.13.7-cachyos1.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -661,7 +658,6 @@ libevent-devel
 libewf
 libexif
 libfastjson
-libfbclient2
 libfdisk
 libfdt
 libffado
@@ -797,7 +793,6 @@ libportal
 libportal-gtk3
 libportal-gtk4
 libppd
-libpq
 libproxy
 libpsl
 libpwquality
@@ -859,7 +854,6 @@ libsss_idmap
 libsss_nss_idmap
 libsss_sudo
 libstdc++
-libstdc++-devel
 libstemmer
 libtalloc
 libtasn1
@@ -873,7 +867,6 @@ libtheora
 libtiff
 libtinysparql
 libtirpc
-libtommath
 libtool-ltdl
 libtpms
 libtraceevent
@@ -979,12 +972,10 @@ libXft
 libXi
 libXinerama
 libxkbcommon
-libxkbcommon-devel
 libxkbcommon-x11
 libxkbfile
 libxml++
 libxml2
-libxml2-devel
 libxmlb
 libXmu
 libXrandr
@@ -1019,7 +1010,9 @@ lsd
 lsof
 lsscsi
 lttng-ust
+lua
 lua-libs
+lua-luv
 lua-srpm-macros
 luksmeta
 lv2
@@ -1039,8 +1032,6 @@ malcontent
 malcontent-libs
 man-db
 man-pages
-mariadb-connector-c
-mariadb-connector-c-config
 mcelog
 mdadm
 mdevctl
@@ -1148,9 +1139,7 @@ PackageKit-glib-devel
 PackageKit-gstreamer-plugin
 PackageKit-gtk3-module
 PackageKit-Qt5
-PackageKit-Qt5-devel
 PackageKit-Qt6
-PackageKit-Qt6-devel
 package-notes-srpm-macros
 pam
 pam-libs
@@ -1187,7 +1176,6 @@ perl-Digest
 perl-Digest-MD5
 perl-DynaLoader
 perl-Encode
-perl-English
 perl-Errno
 perl-Error
 perl-Exporter
@@ -1340,6 +1328,7 @@ python3-policycoreutils
 python3-progressbar2
 python3-psutil
 python3-ptyprocess
+python3-pyclip
 python3-pycparser
 python3-pyudev
 python3-pyyaml
@@ -1413,7 +1402,6 @@ qt
 qt5-filesystem
 qt5-qtbase
 qt5-qtbase-common
-qt5-qtbase-devel
 qt5-qtbase-gui
 qt5-qtdeclarative
 qt5-qtgraphicaleffects
@@ -1422,18 +1410,12 @@ qt5-qtquickcontrols2
 qt5-qtsvg
 qt5-qtwayland
 qt5-qtx11extras
-qt5-rpm-macros
 qt5-srpm-macros
 qt6-filesystem
 qt6-qt5compat
 qt6-qtbase
 qt6-qtbase-common
-qt6-qtbase-devel
 qt6-qtbase-gui
-qt6-qtbase-ibase
-qt6-qtbase-mysql
-qt6-qtbase-odbc
-qt6-qtbase-postgresql
 qt6-qtdeclarative
 qt6-qtmultimedia
 qt6-qtquick3d
@@ -1447,7 +1429,6 @@ qt6-qttools-common
 qt6-qttools-libs-designer
 qt6-qttools-libs-help
 qt6-qtwayland
-qt6-rpm-macros
 qt6-srpm-macros
 qt-common
 qt-settings
@@ -1462,7 +1443,6 @@ redhat-lsb
 redhat-menus
 redhat-rpm-config
 rest
-rhash
 rootfiles
 rpcbind
 rpi-imager
@@ -1491,6 +1471,7 @@ satyr
 scenefx
 scenefx-0.1
 scrub
+scx-scheds
 sdbus-cpp
 sdl2-compat
 SDL2_image
@@ -1612,7 +1593,6 @@ uchardet
 udisks2
 unbound-libs
 unity-gtk-module-common
-unixODBC
 unrar
 unzip
 upower
@@ -1660,9 +1640,7 @@ vte
 vte291
 vte291-gtk4
 vte-profile
-vulkan-headers
 vulkan-loader
-vulkan-loader-devel
 vulkan-tools
 wavpack
 waydroid
@@ -1746,6 +1724,5 @@ zix
 zlib-ng-compat
 zlib-ng-compat-devel
 zram-generator
-zram-generator-defaults
 zstd
 zvbi

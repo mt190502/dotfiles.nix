@@ -12,6 +12,7 @@
       wsl = false;
     };
   };
+
   programs.nixvim = {
     enable = true;
 
@@ -23,6 +24,11 @@
     };
 
     plugins = {
+      colorizer.enable = true;
+      copilot-lua.enable = true;
+      dashboard.enable = true;
+      web-devicons.enable = true;
+
       avante = {
         enable = true;
         settings = {
@@ -53,18 +59,6 @@
         autoEnableSources = true;
       };
 
-      colorizer = {
-        enable = true;
-      };
-
-      copilot-lua = {
-        enable = true;
-      };
-
-      dashboard = {
-        enable = true;
-      };
-
       lualine = {
         enable = true;
         settings = {
@@ -91,10 +85,6 @@
             enable = true;
           };
         };
-      };
-
-      web-devicons = {
-        enable = true;
       };
     };
 

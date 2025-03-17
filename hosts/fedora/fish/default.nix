@@ -6,6 +6,7 @@
 
     functions = {
       cd = "builtin cd $argv; lsd";
+      nvim2 = "neovide $argv &; disown";
       shell = "nix shell nixpkgs#$argv";
     };
 
