@@ -29,6 +29,8 @@
     config.wrappedPkgs.code-cursor
     config.wrappedPkgs.dolphin
     config.wrappedPkgs.flameshot
+    config.wrappedPkgs.gpu-screen-recorder
+    config.wrappedPkgs.gpu-screen-recorder-gtk
     config.wrappedPkgs.imagemagick
     config.wrappedPkgs.jetbrains-toolbox
     # config.wrappedPkgs.nextcloud-client

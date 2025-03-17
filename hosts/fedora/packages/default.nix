@@ -11,6 +11,14 @@
     default = (config.lib.nixGL.wrap pkgs.alacritty);
     type = lib.types.package;
   };
+  options.wrappedPkgs.gpu-screen-recorder = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.gpu-screen-recorder);
+    type = lib.types.package;
+  };
+  options.wrappedPkgs.gpu-screen-recorder-gtk = lib.mkOption {
+    default = (config.lib.nixGL.wrap pkgs.gpu-screen-recorder-gtk);
+    type = lib.types.package;
+  };
   options.wrappedPkgs.imagemagick = lib.mkOption {
     default = (config.lib.nixGL.wrap pkgs.imagemagick);
     type = lib.types.package;
