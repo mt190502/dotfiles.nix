@@ -285,7 +285,6 @@ fwupd
 garcon
 gawk
 gcc
-gcc-c++
 gcc-plugin-annobin
 gcr
 gcr3
@@ -355,6 +354,7 @@ gnome-session
 gnome-session-wayland-session
 gnome-settings-daemon
 gnome-shell
+gnome-shell-common
 gnome-shell-extension-appindicator
 gnome-shell-extension-common
 gnome-shell-extension-dash-to-dock
@@ -771,6 +771,7 @@ libnsl2
 libnvme
 liboeffis
 libogg
+libopenjph
 libopenmpt
 liboping
 libosinfo
