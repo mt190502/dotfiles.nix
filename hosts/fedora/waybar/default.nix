@@ -305,6 +305,7 @@
           exec-if = "${pkgs.swaynotificationcenter}/bin/swaync-client";
           exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
           on-click = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+          on-click-middle = "${pkgs.systemd}/bin/systemctl --user restart swaync"; # temporarily fix for swaync bug
           on-click-right = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
           escape = true;
         };
