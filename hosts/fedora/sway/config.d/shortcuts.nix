@@ -104,7 +104,7 @@ in
 
       #~~~ other
       "${modifier}+Return" =
-        "exec ${config.wrappedPkgs.${terminal}}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux new-window && ${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'";
+        "exec ${config.wrappedPkgs.alacritty}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'";
       "${modifier}+d" = "exec $HOME/.config/sway/scripts.d/programtoggle.sh ${menu}";
       "${modifier}+l" = "exec $HOME/.config/sway/scripts.d/powermenu.sh --lock";
       "${modifier}+period" =
