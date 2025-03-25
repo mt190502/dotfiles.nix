@@ -266,6 +266,7 @@
     GTK_USE_PORTAL = "1";
     SYSTEMD_EDITOR = "vim";
     XDG_CURRENT_DESKTOP = "sway";
+    WLR_DRM_NO_ATOMIC = "1";
   };
 
   ########################################
