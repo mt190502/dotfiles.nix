@@ -3,7 +3,6 @@
 let
   modifier = config.wayland.windowManager.sway.config.modifier;
   menu = config.wayland.windowManager.sway.config.menu;
-  terminal = config.wayland.windowManager.sway.config.terminal;
 in
 {
   wayland.windowManager.sway.config = {
@@ -53,7 +52,8 @@ in
 
       #~~~ window
       "${modifier}+f" = "fullscreen";
-      "${modifier}+Shift+space" = "floating toggle";
+      "${modifier}+Shift+space" =
+        "exec swaymsg input 'type:keyboard' xkb_switch_layout next && swaymsg floating toggle"; # ~ https://github.com/swaywm/sway/issues/8403
       "${modifier}+shift+1" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 1";
       "${modifier}+shift+2" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 2";
       "${modifier}+shift+3" = "exec $HOME/.config/sway/scripts.d/workspace.sh move-container 3";
