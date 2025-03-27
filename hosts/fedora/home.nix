@@ -277,6 +277,7 @@
   imports = [
     ./1password # 1Password Configuration
     ./alacritty # Alacritty Terminal Configuration
+    ./easyeffects # EasyEffects Configuration
     ./fastfetch # Fastfetch Configuration
     ./fish # Fish Shell Configuration
     ./flatpak # Flatpak Configuration
@@ -292,7 +293,7 @@
     ./neovide # Neovide Configuration
     # ./nextcloud # Nextcloud Client
     ./packages # Custom packages
-    ./pipewire # PipeWire Configuration
+    # ./pipewire # PipeWire Configuration
     ./qt # QT Configuration
     ./stylix # Stylix Configuration
     ./swappy # Swappy Configuration
