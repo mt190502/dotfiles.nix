@@ -232,7 +232,8 @@
           };
           scroll-step = 5;
           on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh ${pkgs.pavucontrol}/bin/pavucontrol";
+          on-click-middle = "$HOME/.config/sway/scripts.d/programtoggle.sh ${pkgs.pavucontrol}/bin/pavucontrol";
+          on-click-right = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
           on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +5%";
           on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -5%";
           ignored-sinks = [ "Easy Effects Sink" ];
