@@ -40,6 +40,7 @@ appstream
 appstream-data
 appstream-qt
 aribb24
+arm-image-installer
 assimp
 at
 atk
@@ -1693,6 +1694,7 @@ xen-licenses
 xfce4-panel
 xfce-polkit
 xfconf
+xfsprogs
 xhost
 xkbcomp
 xkeyboard-config
