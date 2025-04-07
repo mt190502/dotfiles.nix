@@ -356,11 +356,6 @@ gnome-session-wayland-session
 gnome-settings-daemon
 gnome-shell
 gnome-shell-common
-gnome-shell-extension-appindicator
-gnome-shell-extension-common
-gnome-shell-extension-dash-to-dock
-gnome-shell-extension-gsconnect
-gnome-shell-extension-user-theme
 gnome-software
 gnome-software-fedora-langpacks
 gnome-themes-extra
@@ -456,13 +451,9 @@ hunspell-filesystem
 hwdata
 hyphen
 i2c-tools
-ibus
 ibus-gtk2
 ibus-gtk3
 ibus-libs
-ibus-panel
-ibus-setup
-ibus-xinit
 igt-gpu-tools
 iio-sensor-proxy
 ilbc
@@ -499,6 +490,7 @@ iwlwifi-mvm-firmware
 jack-audio-connection-kit
 jansson
 jasper-libs
+javascriptcoregtk4.0
 javascriptcoregtk4.1
 javascriptcoregtk6.0
 jbig2dec-libs
@@ -538,9 +530,9 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmod-nct6687d
-kmod-nct6687d-6.14.0-cachyos2.fc42.x86_64
+kmod-nct6687d-6.14.0-cachyos3.fc42.x86_64
 kmodtool
-kmod-v4l2loopback-6.14.0-cachyos2.fc42.x86_64
+kmod-v4l2loopback-6.14.0-cachyos3.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -1283,10 +1275,12 @@ pugixml
 pulseaudio-libs
 pulseaudio-libs-glib2
 pulseaudio-utils
+pyproject-rpm-macros
 pyproject-srpm-macros
 python3
 python3-abrt
 python3-abrt-addon
+python3-aiofiles
 python3-argcomplete
 python3-attrs
 python3-audit
@@ -1299,6 +1293,7 @@ python3-cups
 python3-dasbus
 python3-dateutil
 python3-dbus
+python3-devel
 python3-distro
 python3-dnf
 python3-dnf-plugins-core
@@ -1332,7 +1327,6 @@ python3-policycoreutils
 python3-progressbar2
 python3-psutil
 python3-ptyprocess
-python3-pyclip
 python3-pycparser
 python3-pyudev
 python3-pyyaml
@@ -1340,6 +1334,8 @@ python3-referencing
 python3-requests
 python3-rpds-py
 python3-rpm
+python3-rpm-generators
+python3-rpm-macros
 python3-satyr
 python3-setools
 python3-setuptools
@@ -1350,6 +1346,7 @@ python3-urllib3
 python3-utils
 python3-xlib
 python-pip-wheel
+python-rpm-macros
 python-srpm-macros
 qatlib
 qatzip-libs
@@ -1491,7 +1488,6 @@ setroubleshoot
 setroubleshoot-plugins
 setroubleshoot-server
 setup
-setxkbmap
 shadow-utils
 shared-mime-info
 signon-qt6
@@ -1650,6 +1646,7 @@ wavpack
 waydroid
 waydroid-selinux
 wayland-devel
+webkit2gtk4.0
 webkit2gtk4.1
 webkitgtk6.0
 webrtc-audio-processing
@@ -1701,15 +1698,11 @@ xkeyboard-config
 xml-common
 xmlrpc-c
 xmlrpc-c-client
-xmodmap
 xorg-x11-proto-devel
 xorg-x11-server-Xwayland
-xorg-x11-xauth
-xorg-x11-xinit
 xorriso
 xprop
 xrandr
-xrdb
 xvidcore
 xxd
 xxhash-libs
