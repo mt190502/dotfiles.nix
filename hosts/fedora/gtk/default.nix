@@ -21,9 +21,9 @@
       name = config.stylix.iconTheme.dark;
       package = lib.mkForce config.stylix.iconTheme.package;
     };
-    theme = {
-      name = "adw-gtk3-dark";
-      package = lib.mkForce pkgs.adw-gtk3;
-    };
+    # theme = {
+    #   name = "adw-gtk3-dark";
+    #   package = lib.mkForce pkgs.adw-gtk3;
+    # };
   };
 }
