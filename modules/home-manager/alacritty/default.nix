@@ -1,0 +1,60 @@
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+
+let
+  cfg = config.moduleopts.alacritty;
+in
+{
+  options.moduleopts.alacritty = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Alacritty";
+    };
+    theme = lib.mkOption {
+      type = lib.types.str;
+      default = "vibrant-ink";
+      description = "Alacritty theme";
+    };
+  };
+  config = lib.mkIf cfg.enable {
+    programs.alacritty = {
+      enable = true;
+      package = config.wrapped.alacritty;
+
+      settings = {
+        #~ Font
+        font.size = config.stylix.fonts.sizes.terminal;
+        font.normal = {
+          family = config.stylix.fonts.monospace.name;
+          style = "Bold";
+        };
+        font.bold = {
+          family = "Hack";
+          style = "Bold";
+        };
+        font.italic = {
+          family = "Hack";
+          style = "Italic";
+        };
+        font.bold_italic = {
+          family = "Hack";
+          style = "Bold Italic";
+        };
+
+        #~ Settings
+        terminal.shell.program = lib.getExe pkgs.tmux;
+        window.dynamic_title = true;
+
+        general.import = [
+          inputs.alacritty-theme.packages."${pkgs.system}"."${cfg.theme}"
+        ];
+      };
+    };
+  };
+}

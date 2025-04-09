@@ -1,14 +1,26 @@
 {
-  description = "M.Taha's Nix Configuration";
+  description = "M.Taha's Ultimate Nix Configuration Flake";
 
   inputs = {
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
       flake = true;
     };
+    nixpkgs-stable = {
+      url = "github:NixOS/nixpkgs/nixos-24.11";
+      flake = true;
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager-stable = {
+      url = "github:nix-community/home-manager/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     alacritty-theme = {
       url = "github:alexghr/alacritty-theme.nix";
@@ -35,30 +47,21 @@
   };
 
   outputs =
-    inputs@{
-      nixpkgs,
-      home-manager,
-      nix-flatpak,
-      nixvim,
-      stylix,
-      ...
-    }:
-    {
-      # packages."x86_64-linux" = nixpkgs.lib.mapAttrs' (n: v: {
-      #   name = (nixpkgs.lib.removeSuffix ".nix" n);
-      #   value = v;
-      # }) (nixpkgs.lib.genAttrs
-      #   (nixpkgs.lib.attrNames (builtins.readDir ./packages)) (p:
-      #     nixpkgs.legacyPackages."x86_64-linux".callPackage ./packages/${p} { }));
-      homeConfigurations."fedora" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          nix-flatpak.homeManagerModules.nix-flatpak
-          nixvim.homeManagerModules.nixvim
-          stylix.homeManagerModules.stylix
-          ./hosts/fedora/home.nix
-        ];
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      imports = [
+        ./packages/flake-module.nix
+        ./hosts/flake-module.nix
+      ];
+
+      flake = {
+        nixosModules.mt190502 = import ./modules/hosts/nixos.nix;
+        darwinModules.mt190502 = import ./modules/hosts/darwin.nix;
+        homeManagerModules.mt190502 = import ./modules/home-manager;
       };
     };
 }
