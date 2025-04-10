@@ -530,9 +530,9 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmod-nct6687d
-kmod-nct6687d-6.14.0-cachyos3.fc42.x86_64
+kmod-nct6687d-6.14.1-cachyos1.fc42.x86_64
 kmodtool
-kmod-v4l2loopback-6.14.0-cachyos3.fc42.x86_64
+kmod-v4l2loopback-6.14.1-cachyos1.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
