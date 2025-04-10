@@ -23,6 +23,7 @@
   home.packages = with pkgs; [
     #~ custom ~#
     inputs.self.packages."${pkgs.system}".mpdris2-rs
+    inputs.self.packages."${pkgs.system}".zmem
 
     #~ fonts ~#
     hack-font
