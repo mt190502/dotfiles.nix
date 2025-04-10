@@ -1,0 +1,20 @@
+{ config, lib, ... }:
+
+let
+  cfg = config.moduleopts.swappy;
+in
+{
+  options.moduleopts.swappy = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Swappy";
+    };
+  };
+  config = lib.mkIf cfg.enable {
+    xdg.configFile."swappy/config".text = ''
+      [Default]
+      save_dir = $HOME/Pictures/Screenshots/grim
+    '';
+  };
+}
