@@ -26,12 +26,12 @@
     inputs.self.packages."${pkgs.system}".zmem
 
     #~ fonts ~#
-    hack-font
-    nerd-fonts.droid-sans-mono
     fira-code
     font-awesome_5
-    iosevka
+    hack-font
     jetbrains-mono
+    nerd-fonts.droid-sans-mono
+    nerd-fonts.iosevka
     noto-fonts-color-emoji
     ubuntu_font_family
 

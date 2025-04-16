@@ -50,11 +50,11 @@
         package = pkgs.meslo-lgs-nf;
       };
       sansSerif = {
-        name = "Ubuntu Medium";
+        name = "Ubuntu Light";
         package = pkgs.ubuntu_font_family;
       };
       serif = {
-        name = "Ubuntu Medium";
+        name = "Ubuntu Light";
         package = pkgs.ubuntu_font_family;
       };
       sizes = {
