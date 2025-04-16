@@ -1,5 +1,6 @@
 1password
 abattis-cantarell-vf-fonts
+abseil-cpp
 acl
 add-determinism
 adobe-mappings-cmap
@@ -11,6 +12,8 @@ adwaita-icon-theme-legacy
 akmods
 akmod-v4l2loopback
 alsa-lib
+alsa-ucm
+alsa-utils
 alternatives
 amd-gpu-firmware
 annobin-docs
@@ -42,6 +45,8 @@ bison
 bluez
 bluez-libs
 bluez-obexd
+boost-system
+boost-thread
 bpftool
 btrfs-assistant
 btrfsmaintenance
@@ -142,6 +147,8 @@ elfutils-libs
 emacs-filesystem
 enchant2
 ethtool
+evolution-data-server
+evolution-data-server-langpacks
 exfatprogs
 expat
 faad2-libs
@@ -502,6 +509,7 @@ libhandy
 libi2c
 libibverbs
 libical
+libical-glib
 libICE
 libicu
 libidn2
@@ -562,6 +570,7 @@ libpcap
 libpciaccess
 libpeas1
 libpeas1-gtk
+libphonenumber
 libpipeline
 libpkgconf
 libplacebo
@@ -791,6 +800,7 @@ orc
 ostree-libs
 p11-kit
 p11-kit-devel
+p11-kit-server
 p11-kit-trust
 PackageKit
 PackageKit-command-not-found
@@ -906,6 +916,7 @@ poppler-utils
 popt
 prefixdevname
 procps-ng
+protobuf
 protobuf-c
 psmisc
 publicsuffix-list-dafsa
