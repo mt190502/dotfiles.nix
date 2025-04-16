@@ -16,7 +16,11 @@ in
       default = true;
       description = "MPD / Mopidy";
     };
-    discordrpc = lib.mkEnableOption "Discord RPC";
+    discordrpc = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable Discord RPC integration";
+    };
     bundle = lib.mkOption {
       type = lib.types.enum [
         "mpd"
