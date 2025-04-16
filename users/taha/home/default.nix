@@ -27,31 +27,45 @@
 
     #~ fonts ~#
     hack-font
+    nerd-fonts.droid-sans-mono
+    fira-code
     font-awesome_5
     iosevka
+    jetbrains-mono
+    noto-fonts-color-emoji
     ubuntu_font_family
 
     #~ standard packages ~#
     _1password-cli
     adw-gtk3
     alacritty-theme
+    android-tools
     ansible
     aria2
     bat
     bat-extras.batman
+    bc
     binwalk
     btop
     bun
     cliphist
     delta
     direnv
+    fastfetch
+    ffmpegthumbnailer
     gcolor3
-    go
+    gdb
+    gef
+    gnome-icon-theme
+    gnome-tweaks
     grc
     grim
+    heimdall
+    hicolor-icon-theme
     hugo
     hyperfine
     iftop
+    imagemagick
     iperf
     jq
     k0sctl
@@ -65,18 +79,23 @@
     kubernetes-helm
     kubetail
     libsForQt5.qtstyleplugin-kvantum
+    lsd
     minikube
     minio-client
     mpc
+    netcat
     nixd
     nixfmt-rfc-style
     nmap
     nvtopPackages.full
     nwg-look
+    ocs-url
     pavucontrol
+    playerctl
     postgresql_17
     r2modman
     rnnoise-plugin
+    rsync
     scrcpy
     shellcheck
     slurp
@@ -85,12 +104,16 @@
     swayidle
     tesseract
     tmux
+    traceroute
     translate-shell
+    trash-cli
+    tree
+    unrar
+    unzip
     wl-clipboard
     wlr-randr
     wlroots_0_17
     wlsunset
-    wpgtk
     wtype
     ydotool
     yq
@@ -105,14 +128,10 @@
   ########################################
   #~ custom modules ~#
   moduleopts = {
-    alacritty = {
-      enable = true;
-      theme = "hyper";
-    };
+    alacritty.theme = "hyper";
+    easyeffects.enable = false;
     nextcloud-client.enable = false;
-    waybar = {
-      weather_location = "Istanbul";
-    };
+    waybar.weather_location = "Istanbul";
   };
 
   #~ xdg ~#
