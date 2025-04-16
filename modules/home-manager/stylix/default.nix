@@ -75,6 +75,7 @@
       mako.enable = false;
       mangohud.enable = false;
       gtk.enable = false;
+      k9s.enable = false;
       kde.enable = false;
       neovim.enable = false;
       nixvim.enable = false;
