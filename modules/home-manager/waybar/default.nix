@@ -107,7 +107,7 @@ in
             format = "{}";
             format-icons = {
               focused = "";
-              default = "";
+              default = "";
             };
           };
 
@@ -177,7 +177,7 @@ in
 
           memory = {
             interval = 10;
-            format = " {used:0.2f} / {total:0.0f} GB";
+            format = " {used:0.2f} / {total:0.0f} GB";
             on-click = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrapped.alacritty}/bin/alacritty -T BTOP -e btop";
           };
 
@@ -213,9 +213,9 @@ in
           network = {
             tooltip = false;
             format-wifi = "";
-            format-ethernet = "";
-            format-linked = " (No IP)";
-            format-disconnected = "⚠  Disconnected";
+            format-ethernet = "";
+            format-linked = " (No IP)";
+            format-disconnected = "⚠ Disconnected";
             format-alt = "{essid} {ipaddr}/{cidr} ";
             on-click-right = "$HOME/.config/sway/scripts.d/programtoggle.sh ${config.wrapped.alacritty}/bin/alacritty -T nmtui -e nmtui";
           };
@@ -223,13 +223,13 @@ in
           pulseaudio = {
             tooltip = false;
             format = "{icon} {volume}%  {format_source}";
-            format-muted = "";
+            format-muted = "󰝟";
             format-source = "{volume}% ";
             format-source-muted = "";
             format-icons = {
               headphone = "";
-              hands-free = "";
-              headset = "";
+              hands-free = "󰋎";
+              headset = "󰋎";
               phone = "";
               portable = "";
               car = "";
@@ -266,7 +266,7 @@ in
 
           "custom/fan" = {
             exec = "cat $(find /sys/devices/platform -iname '*fan1_input' 2>/dev/null)";
-            format = "  {} RPM";
+            format = "󰈐 {} RPM";
             tooltip = false;
             interval = 1;
           };
@@ -349,7 +349,7 @@ in
 
         * {
         	border-radius: 5px;
-        	font-family: ${config.stylix.fonts.sansSerif.name}, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
+        	font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
         	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
         	min-height: 0;
         }

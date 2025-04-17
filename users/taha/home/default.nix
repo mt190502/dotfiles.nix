@@ -30,7 +30,6 @@
     cascadia-code
     nerd-fonts.droid-sans-mono
     fira-code
-    font-awesome_5
     hack-font
     jetbrains-mono
     nerd-fonts.droid-sans-mono

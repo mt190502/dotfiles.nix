@@ -87,7 +87,7 @@ in
 
         * {
           border-radius: 0;
-          font-family: ${config.stylix.fonts.sansSerif.name}, FontAwesome5Brands, FontAwesome5Free, Arial, sans-serif;
+          font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
         	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
           color: @textColor;
         }
