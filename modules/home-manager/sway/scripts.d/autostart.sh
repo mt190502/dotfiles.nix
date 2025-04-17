@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@bash@
 #################################################
 #
 ## Autostart Most Used Apps
@@ -18,8 +18,8 @@ while IFS= read -r line; do
     IFS=':' read -r workspace monitor <<<"$ws"
     IFS=':' read -r kind value <<<"$option"
 
-    [[ "$workspace" != "none" ]] && swaymsg "workspace $workspace-$monitor output $monitor"
-    [[ "$kind" != "none" ]] && swaymsg "for_window [$kind=\"$value\"] move container workspace $workspace-$monitor"
+    [[ "$workspace" != "none" ]] && @sway@/bin/swaymsg "workspace $workspace-$monitor output $monitor"
+    [[ "$kind" != "none" ]] && @sway@/bin/swaymsg "for_window [$kind=\"$value\"] move container workspace $workspace-$monitor"
     eval "$app" &
     disown
     sleep 1

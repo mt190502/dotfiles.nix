@@ -22,7 +22,6 @@
   ########################################
   home.packages = with pkgs; [
     #~ custom ~#
-    inputs.self.packages."${pkgs.system}".mpdris2-rs
     inputs.self.packages."${pkgs.system}".zmem
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
 
@@ -131,6 +130,7 @@
   moduleopts = {
     alacritty.theme = "hyper";
     easyeffects.enable = false;
+    mako.enable = false;
     nextcloud-client.enable = false;
     waybar.weather_location = "Istanbul";
   };

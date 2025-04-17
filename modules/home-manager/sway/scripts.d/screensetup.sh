@@ -1,10 +1,10 @@
-#!/bin/bash
+#!@bash@
 #################################################
 ##
 #### Screen setup for multi monitor setup
 ##
 #################################################
-IFS=$'\n' read -r -d '' -a outputs <<<"$(@sway@/bin/swaymsg -t get_outputs | jq -r '.[].name')"
+IFS=$'\n' read -r -d '' -a outputs <<<"$(@sway@/bin/swaymsg -t get_outputs | @jq@ -r '.[].name')"
 
 if [[ "${#outputs[@]}" == "1" ]]; then
   sed -i "s/set \$scr1.*/set \$scr1          ${outputs[0]}/g" "$HOME"/.config/sway/config.d/environments

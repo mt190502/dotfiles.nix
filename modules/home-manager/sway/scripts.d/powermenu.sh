@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@bash@
 #################################################
 ##
 #### PowerMenu
@@ -8,7 +8,7 @@
 blurlock() {
     [[ -n "$(pgrep swaylock)" ]] && exit
     for output in $(@sway@/bin/swaymsg -t get_outputs | @jq@ -r '.[].name'); do
-        image="/tmp/$output-lock"
+        image="$HOME/.cache/$output-lock"
         [[ -e $image ]] && rm "$image"
         @grim@ -l 1 -o "$output" "$image.png"
         @imagemagick@/bin/convert -blur 0x10 "$image.png" "$image-blurred.png"

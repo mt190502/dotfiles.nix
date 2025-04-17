@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   modifier = config.wayland.windowManager.sway.config.modifier;
@@ -8,7 +8,7 @@ in
     config = {
       bars = [
         {
-          command = "waybar";
+          command = "${lib.getExe config.wrapped.waybar}";
           position = "top";
           workspaceButtons = true;
         }
@@ -21,8 +21,8 @@ in
       };
       window.border = 0;
       workspaceLayout = "tabbed";
-      menu = "wofi --prompt 'Search Apps' --show drun";
-      terminal = "alacritty";
+      menu = "${lib.getExe pkgs.wofi} --prompt 'Search Apps' --show drun";
+      terminal = "${lib.getExe config.wrapped.alacritty}";
     };
     extraConfig = ''
       #~~~ window

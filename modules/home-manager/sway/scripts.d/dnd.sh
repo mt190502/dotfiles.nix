@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@bash@
 #################################################
 ##
 #### Mako Do-Not-Disturb mode toggler

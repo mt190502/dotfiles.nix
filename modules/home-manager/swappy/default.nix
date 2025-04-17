@@ -14,7 +14,7 @@ in
   config = lib.mkIf cfg.enable {
     xdg.configFile."swappy/config".text = ''
       [Default]
-      save_dir = $HOME/Pictures/Screenshots/grim
+      save_dir = ${config.home.homeDirectory}/Pictures/Screenshots/grim
     '';
   };
 }

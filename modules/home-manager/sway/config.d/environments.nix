@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   wayland.windowManager.sway = {
@@ -7,9 +7,9 @@
       set $altMod        Mod1
 
       #~~~ apps
-      set $browser       flatpak run io.gitlab.librewolf-community
-      set $filemanager   ${config.wrapped.dolphin}/bin/dolphin
-      set $mediaplayer   ${config.wrapped.mpv}/bin/mpv
+      set $browser       ${lib.getExe pkgs.flatpak} run io.gitlab.librewolf-community
+      set $filemanager   ${lib.getExe config.wrapped.dolphin}
+      set $mediaplayer   ${lib.getExe config.wrapped.mpv}
     '';
   };
 }

@@ -14,7 +14,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "MPD / Mopidy";
+      description = "MPD";
     };
     discordrpc = lib.mkOption {
       type = lib.types.bool;

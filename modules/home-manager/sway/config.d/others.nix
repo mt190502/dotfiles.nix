@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   wayland.windowManager.sway = {
@@ -17,7 +17,7 @@
         "XDG_CURRENT_DESKTOP"
         "XDG_SESSION_TYPE"
       ];
-      # xdgAutostart = true;
+      xdgAutostart = true;
     };
 
     config.startup = [
@@ -27,35 +27,41 @@
       }
 
       #~~~ startup apps
-      { command = "$HOME/.config/sway/scripts.d/powermenu.sh --daemonize"; }
+      { command = "${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --daemonize"; }
+      # {
+      # command = "${config.home.homeDirectory}/bin/bash -c 'sleep 5 && for app in $(realpath ${config.home.homeDirectory}/.config/autostart/*); do ${pkgs.glib}/bin/gio launch $app; done'";
+      # }
       {
-        command = "/usr/bin/bash -c 'sleep 5 && for app in $(realpath ~/.config/autostart/*); do gio launch $app; done'";
+        command = if config.home.username != "nixos" then "/usr/bin/solaar -w hide" else "";
       }
-      { command = "/usr/bin/solaar -w hide"; }
       {
-        command = "${pkgs.swayidle}/bin/swayidle -w timeout 120 '~/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
+        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
       }
-      { command = "${pkgs.tmux}/bin/tmux new-session -ds daemonmodetmux"; }
+      { command = "${lib.getExe pkgs.tmux} new-session -ds daemonmodetmux"; }
       {
-        command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${pkgs.cliphist}/bin/cliphist store";
+        command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${lib.getExe pkgs.cliphist} store";
       }
-      { command = "${pkgs.wlsunset}/bin/wlsunset -S '07:00' -s '19:00'"; }
-      { command = "/usr/libexec/xfce-polkit"; }
+      { command = "${lib.getExe pkgs.wlsunset} -S '07:00' -s '19:00'"; }
+      { command = if config.home.username == "fedora" then "/usr/libexec/xfce-polkit" else ""; }
       {
-        command = "$HOME/.config/sway/scripts.d/tmux_server.sh";
+        command = "${config.home.homeDirectory}/.config/sway/scripts.d/tmux_server.sh";
         always = true;
       }
       {
-        command = "$HOME/.config/sway/scripts.d/workspace.sh init 1";
+        command = "${config.home.homeDirectory}/.config/sway/scripts.d/workspace.sh init 1";
         always = true;
       }
       {
-        command = "/opt/1Password/1password --silent --password-store=gnome";
+        command =
+          if config.home.username != "nixos" then
+            "/opt/1Password/1password --silent --password-store=gnome"
+          else
+            "";
         # command = "${config.wrapped.onepassword-gui}/bin/1password --silent";       #~ not work on home manager only setups
       }
 
       #~~~ others
-      { command = "$HOME/.config/sway/scripts.d/autostart.sh"; }
+      { command = "${config.home.homeDirectory}/.config/sway/scripts.d/autostart.sh"; }
     ];
   };
 }

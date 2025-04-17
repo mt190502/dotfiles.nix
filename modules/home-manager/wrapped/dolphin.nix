@@ -14,5 +14,6 @@
         --set QT_STYLE_OVERRIDE kvantum \
         --set QT_QPA_PLATFORMTHEME qt6ct 
     '';
+    meta.mainProgram = "dolphin";
   }
 ))

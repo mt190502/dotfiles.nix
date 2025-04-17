@@ -39,7 +39,7 @@ in
         cache = "yes";
         cache-on-disk = "yes";
         demuxer-max-bytes = "1024M";
-        demuxer-cache-dir = "~/.cache/";
+        demuxer-cache-dir = "${config.home.homeDirectory}/.cache/";
         demuxer-max-back-bytes = "512M";
 
         #################################################

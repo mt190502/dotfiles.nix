@@ -11,4 +11,5 @@
     wrapProgram $out/bin/waybar \
       --set GTK_THEME Adwaita:dark
   '';
+  meta.mainProgram = "waybar";
 })
