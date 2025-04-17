@@ -364,6 +364,11 @@ kbd
 kbd-legacy
 kbd-misc
 kernel
+kernel-cachyos
+kernel-cachyos-core
+kernel-cachyos-devel
+kernel-cachyos-devel-matched
+kernel-cachyos-modules
 kernel-core
 kernel-devel
 kernel-devel-matched
@@ -379,6 +384,7 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.14.2-300.fc42.x86_64
+kmod-v4l2loopback-6.14.2-cachyos1.fc42.x86_64
 krb5-devel
 krb5-libs
 lame-libs
