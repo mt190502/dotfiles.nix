@@ -3,4 +3,4 @@
   pkgs,
   ...
 }:
-config.lib.nixGL.wrap pkgs.alacritty
+(config.lib.nixGL.wrap pkgs.alacritty)

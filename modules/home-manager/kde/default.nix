@@ -19,6 +19,10 @@ in
   config = lib.mkIf cfg.enable {
     xdg.configFile."menus/applications.menu".text =
       builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu"; # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
+    xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+      [General]
+      theme=KvFlat
+    '';
     xdg.configFile."kdeglobals".text = ''
       [General]
       AccentColor=61,174,233
