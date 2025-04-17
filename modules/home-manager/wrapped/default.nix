@@ -76,10 +76,6 @@ in
       default = pkgs.swayfx;
       type = package;
     };
-    swaylock = lib.mkOption {
-      default = pkgs.swaylock;
-      type = package;
-    };
     vscode = lib.mkOption {
       default = pkgs.vscode;
       type = package;

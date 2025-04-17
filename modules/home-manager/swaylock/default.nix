@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -18,7 +19,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.swaylock = {
       enable = true;
-      package = config.wrapped.swaylock;
+      package = pkgs.swaylock;
 
       settings = {
         #################################################
