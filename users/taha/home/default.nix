@@ -24,8 +24,11 @@
     #~ custom ~#
     inputs.self.packages."${pkgs.system}".mpdris2-rs
     inputs.self.packages."${pkgs.system}".zmem
+    inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
 
     #~ fonts ~#
+    cascadia-code
+    nerd-fonts.droid-sans-mono
     fira-code
     font-awesome_5
     hack-font
@@ -33,7 +36,6 @@
     nerd-fonts.droid-sans-mono
     nerd-fonts.iosevka
     noto-fonts-color-emoji
-    ubuntu_font_family
 
     #~ standard packages ~#
     _1password-cli

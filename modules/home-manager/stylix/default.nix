@@ -50,12 +50,12 @@
         package = pkgs.meslo-lgs-nf;
       };
       sansSerif = {
-        name = "Ubuntu Light";
-        package = pkgs.ubuntu_font_family;
+        name = "Ubuntu Nerd Font Medium";
+        package = inputs.self.packages."${pkgs.system}".ubuntu-fonts-google;
       };
       serif = {
-        name = "Ubuntu Light";
-        package = pkgs.ubuntu_font_family;
+        name = "Ubuntu Nerd Font Medium";
+        package = inputs.self.packages."${pkgs.system}".ubuntu-fonts-google;
       };
       sizes = {
         applications = 10;
