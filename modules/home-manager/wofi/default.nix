@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -28,7 +27,7 @@ in
         line_wrap = "word_char";
         mode = "dmenu";
         no_actions = true;
-        term = pkgs.alacritty;
+        term = config.wrapped.alacritty;
         width = "40%";
       };
 
