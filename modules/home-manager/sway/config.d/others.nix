@@ -28,12 +28,6 @@
 
       #~~~ startup apps
       { command = "${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --daemonize"; }
-      # {
-      # command = "${config.home.homeDirectory}/bin/bash -c 'sleep 5 && for app in $(realpath ${config.home.homeDirectory}/.config/autostart/*); do ${pkgs.glib}/bin/gio launch $app; done'";
-      # }
-      {
-        command = if config.home.username != "nixos" then "/usr/bin/solaar -w hide" else "";
-      }
       {
         command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
       }
