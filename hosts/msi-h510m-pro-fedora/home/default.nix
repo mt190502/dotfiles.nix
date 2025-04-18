@@ -61,6 +61,8 @@
   #
   ########################################
   imports = lib.map (p: ./. + "/${p}") (
-    lib.remove "default.nix" (lib.attrNames (builtins.readDir ./.))
+    builtins.filter (p: !(p == "default.nix" || lib.hasSuffix ".txt" p)) (
+      lib.attrNames (builtins.readDir ./.)
+    )
   );
 }
