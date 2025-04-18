@@ -93,6 +93,7 @@
     pavucontrol
     playerctl
     postgresql_17
+    pulseaudio
     r2modman
     rnnoise-plugin
     rsync
@@ -102,6 +103,7 @@
     swappy
     swaybg
     swayidle
+    system-config-printer
     tesseract
     tmux
     traceroute
@@ -176,8 +178,7 @@
     ## SYSTEM
     ##############################
     LD_LIBRARY_PATH = "$HOME/.local/lib64:$HOME/.local/lib:$HOME/.nix-profile/lib64:$HOME/.nix-profile/lib:/usr/local/lib64:/usr/local/lib";
-    NIX_PATH = "$HOME/.local/state/nix/profiles/channels";
-    PATH = "$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/scripts:/usr/local/go/bin:$HOME/go/bin:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH";
+    PATH = "$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/scripts:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH";
     XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:$HOME/.nix-profile/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS";
     EDITOR = "vim";
     GTK_USE_PORTAL = "1";
