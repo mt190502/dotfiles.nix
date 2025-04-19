@@ -28,7 +28,6 @@ in
       package = config.wrapped.alacritty;
 
       settings = {
-        #~ Font
         font.size = config.stylix.fonts.sizes.terminal;
         font.normal = {
           family = config.stylix.fonts.monospace.name;

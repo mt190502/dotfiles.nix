@@ -102,11 +102,6 @@ in
           location = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
           args = "--user --prio=2";
         }
-        # {
-        #   name = "kdeapps";
-        #   location = "https://distribute.kde.org/kdeapps.flatpakrepo";
-        #   args = "--user --prio=1";
-        # }
       ];
     };
   };
