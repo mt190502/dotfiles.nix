@@ -7,6 +7,7 @@
 
 let
   cfg = config.moduleopts.waybar;
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.waybar = {
@@ -164,7 +165,7 @@ in
           cpu = {
             interval = 1;
             format = " {max_frequency:0.2f}GHz | {usage}%";
-            on-click = "${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
+            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
           };
 
           idle_inhibitor = {
@@ -178,7 +179,7 @@ in
           memory = {
             interval = 10;
             format = " {used:0.2f} / {total:0.0f} GB";
-            on-click = "${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
+            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
           };
 
           mpd = {
@@ -205,7 +206,7 @@ in
             tooltip-format = "{artist} - {album} - {title}";
             on-click = "${lib.getExe pkgs.mpc} toggle";
             on-click-middle = "${lib.getExe pkgs.mpc} stop";
-            on-click-right = "${config.home.homeDirectory}/.config/sway/scripts.d/ncmpcpp.sh";
+            on-click-right = "${home}/.config/sway/scripts.d/ncmpcpp.sh";
             on-scroll-up = "${lib.getExe pkgs.mpc} volume +5";
             on-scroll-down = "${lib.getExe pkgs.mpc} volume -5";
           };
@@ -217,7 +218,7 @@ in
             format-linked = " (No IP)";
             format-disconnected = "⚠ Disconnected";
             format-alt = "{essid} {ipaddr}/{cidr} ";
-            on-click-right = "${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T nmtui -e nmtui";
+            on-click-right = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T nmtui -e nmtui";
           };
 
           pulseaudio = {
@@ -241,7 +242,7 @@ in
             };
             scroll-step = 5;
             on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
-            on-click-middle = "${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${pkgs.pavucontrol}/bin/pavucontrol";
+            on-click-middle = "${home}/.config/sway/scripts.d/programtoggle.sh ${pkgs.pavucontrol}/bin/pavucontrol";
             on-click-right = "${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
             on-scroll-up = "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
             on-scroll-down = "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
@@ -258,8 +259,8 @@ in
           ###################################################
           "custom/dnd-mako" = {
             format = "{}";
-            exec = "${config.home.homeDirectory}/.config/sway/scripts.d/dnd.sh status";
-            on-click = "${config.home.homeDirectory}/.config/sway/scripts.d/dnd.sh";
+            exec = "${home}/.config/sway/scripts.d/dnd.sh status";
+            on-click = "${home}/.config/sway/scripts.d/dnd.sh";
             return-type = "json";
             signal = 9;
           };
@@ -282,13 +283,13 @@ in
           };
 
           "custom/powermenu" = {
-            on-click = "${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --lockmenu";
+            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${home}/.config/sway/scripts.d/powermenu.sh --lockmenu";
             format = "";
             tooltip = false;
           };
 
           "custom/screenshot" = {
-            on-click = "${config.home.homeDirectory}/.config/sway/scripts.d/screenshot.sh";
+            on-click = "${home}/.config/sway/scripts.d/screenshot.sh";
             format = "";
             tooltip = false;
           };
@@ -325,7 +326,7 @@ in
             interval = 3600;
             exec = "${lib.getExe pkgs.curl} -s 'https://wttr.in/${cfg.weather_location}?format=1' | sed 's/ //1'";
             exec-if = "ping wttr.in -c1";
-            on-click = "${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T wttr.in -e sh -c '${lib.getExe pkgs.curl} https://wttr.in/${cfg.weather_location}; read'";
+            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T wttr.in -e sh -c '${lib.getExe pkgs.curl} https://wttr.in/${cfg.weather_location}; read'";
           };
         };
       };

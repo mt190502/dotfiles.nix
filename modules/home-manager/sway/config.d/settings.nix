@@ -38,7 +38,7 @@ in
       for_window [app_id="Alacritty" title="nmtui"]               resize set 50ppt 50ppt, floating enable
 
       #~~~ other
-      include $HOME/.config/sway/config.d/*
+      include ${config.home.homeDirectory}/.config/sway/config.d/*
     '';
   };
 }

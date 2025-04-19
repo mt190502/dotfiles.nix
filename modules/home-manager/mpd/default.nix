@@ -8,6 +8,7 @@
 
 let
   cfg = config.moduleopts.mpd;
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.mpd = {
@@ -34,9 +35,9 @@ in
   config = lib.mkIf cfg.enable {
     services.mpd = {
       enable = cfg.bundle == "mpd";
-      dataDir = "${config.home.homeDirectory}/.cache/mpd";
-      musicDirectory = "${config.home.homeDirectory}/Music";
-      playlistDirectory = "${config.home.homeDirectory}/Music/Playlists";
+      dataDir = "${home}/.cache/mpd";
+      musicDirectory = "${home}/Music";
+      playlistDirectory = "${home}/Music/Playlists";
       network = {
         listenAddress = "any";
         port = 6600;
@@ -92,7 +93,7 @@ in
         };
       };
       #extraConfigFiles = [
-      #  "${config.home.homeDirectory}/.config/mopidy/jellyfin.conf"
+      #  "${home}/.config/mopidy/jellyfin.conf"
       #];
     };
 

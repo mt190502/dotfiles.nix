@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  home = config.home.homeDirectory;
+in
 {
   wayland.windowManager.sway = {
     systemd = {
@@ -27,9 +30,9 @@
       }
 
       #~~~ startup apps
-      { command = "${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --daemonize"; }
+      { command = "${home}/.config/sway/scripts.d/powermenu.sh --daemonize"; }
       {
-        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${config.home.homeDirectory}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
+        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${home}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
       }
       { command = "${lib.getExe pkgs.tmux} new-session -ds daemonmodetmux"; }
       {
@@ -37,16 +40,16 @@
       }
       { command = "${lib.getExe pkgs.wlsunset} -S '07:00' -s '19:00'"; }
       {
-        command = "${config.home.homeDirectory}/.config/sway/scripts.d/tmux_server.sh";
+        command = "${home}/.config/sway/scripts.d/tmux_server.sh";
         always = true;
       }
       {
-        command = "${config.home.homeDirectory}/.config/sway/scripts.d/workspace.sh init 1";
+        command = "${home}/.config/sway/scripts.d/workspace.sh init 1";
         always = true;
       }
 
       #~~~ others
-      { command = "${config.home.homeDirectory}/.config/sway/scripts.d/autostart.sh"; }
+      { command = "${home}/.config/sway/scripts.d/autostart.sh"; }
     ];
   };
 }

@@ -2,6 +2,7 @@
 
 let
   cfg = config.moduleopts.tmux;
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.tmux = {
@@ -75,13 +76,13 @@ in
           run '"$TMUX_PROGRAM" -S #{socket_path} set-environment -g TMUX_SOCKET "#{socket_path}"'
         %endif
         %if #{==:#{OMT_CONF},}
-          run '"$TMUX_PROGRAM" set-environment -g OMT_CONF "$HOME/.config/tmux/omt.conf"'
+          run '"$TMUX_PROGRAM" set-environment -g OMT_CONF "${home}/.config/tmux/omt.conf"'
         %endif
         %if #{==:#{OMT_CONF_LOCAL},}
-          run '"$TMUX_PROGRAM" set-environment -g OMT_CONF_LOCAL "$HOME/.config/tmux/omt.conf.local"'
+          run '"$TMUX_PROGRAM" set-environment -g OMT_CONF_LOCAL "${home}/.config/tmux/omt.conf.local"'
         %endif
         %if #{==:#{TMUX_CONF},}
-          run '"$TMUX_PROGRAM" set-environment -g TMUX_CONF "$HOME/.config/tmux/tmux.conf"'
+          run '"$TMUX_PROGRAM" set-environment -g TMUX_CONF "${home}/.config/tmux/tmux.conf"'
         %endif
 
         run '"$TMUX_PROGRAM" source "$OMT_CONF_LOCAL"'

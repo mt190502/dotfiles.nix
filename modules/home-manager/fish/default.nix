@@ -7,6 +7,7 @@
 
 let
   cfg = config.moduleopts.fish;
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.fish = {
@@ -80,8 +81,8 @@ in
         passgen = "cat /dev/urandom | tr -dc [:alnum:] | head -c";
         tldr = "${lib.getExe pkgs.cht-sh}";
         tmp = "cd ~/.tmp";
-        yt-album = "${lib.getExe pkgs.yt-dlp} -o \"${config.home.homeDirectory}/Music/Albums/%(album)s - %(artist)s/%(playlist_autonumber)02d - %(track)s.%(ext)s\"";
-        yt-music = "${lib.getExe pkgs.yt-dlp} -o \"${config.home.homeDirectory}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
+        yt-album = "${lib.getExe pkgs.yt-dlp} -o \"${home}/Music/Albums/%(album)s - %(artist)s/%(playlist_autonumber)02d - %(track)s.%(ext)s\"";
+        yt-music = "${lib.getExe pkgs.yt-dlp} -o \"${home}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
       };
 
       shellInit = ''
@@ -90,8 +91,8 @@ in
         #################################################
         set fish_greeting ""
         export TERM="xterm-256color"
-        export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
-        export PATH="$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/scripts:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+        export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:${home}/.local/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
+        export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/scripts:${home}/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
         #################################################
         #### Applications

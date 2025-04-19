@@ -19,7 +19,7 @@ in
         convert-thumbnails = "jpg";
         embed-metadata = true;
         embed-thumbnail = true;
-        exec = "$HOME/.config/yt-dlp/modify-and-trim-nonstandard-characters.sh";
+        exec = "${config.home.homeDirectory}/.config/yt-dlp/modify-and-trim-nonstandard-characters.sh";
         no-mtime = true;
         ppa = "\"ffmpeg: -c:v mjpeg -vf crop=\\\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\\\"\"";
         replace-in-metadata = "'artist' ',.+' ''";
@@ -43,7 +43,7 @@ in
         GREEN='\033[0;32m'
         NC='\033[0m'
 
-        for f in $(find $HOME/Music -depth -name '*[ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ⧸？&]*'); do
+        for f in $(find ${config.home.homeDirectory}/Music -depth -name '*[ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ⧸？&]*'); do
           new=$(echo "$f" | awk -F '/' '{print $NF}' | sed 's/&/feat./g; s/？//g; s/⧸/-/g')
           new=$(basename "$new" | sed 'y/ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ/gusiocGUSIOCaiueoAIUEO/')
           new_filename=$(echo "$f" | sed "s/$(basename "$f")/$new/")
