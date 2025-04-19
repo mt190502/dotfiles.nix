@@ -183,6 +183,7 @@ flatpak
 flatpak-libs
 flatpak-selinux
 flatpak-session-helper
+flat-remix-icon-theme
 flex
 flite
 fmt
@@ -337,6 +338,7 @@ igt-gpu-tools
 iio-sensor-proxy
 ilbc
 ima-evm-utils-libs
+imath
 inih
 initscripts-service
 intel-audio-firmware
@@ -356,6 +358,7 @@ iw
 iwlwifi-mvm-firmware
 jack-audio-connection-kit
 jansson
+jasper-libs
 javascriptcoregtk4.0
 javascriptcoregtk4.1
 javascriptcoregtk6.0
@@ -367,6 +370,7 @@ json-glib
 kbd
 kbd-legacy
 kbd-misc
+kcolorpicker-qt6
 kde-filesystem
 kernel
 kernel-cachyos
@@ -385,6 +389,12 @@ kernel-srpm-macros
 keyutils
 keyutils-libs
 keyutils-libs-devel
+kf5-filesystem
+kf6-filesystem
+kf6-karchive
+kf6-kimageformats
+kimageannotator-common
+kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
@@ -473,6 +483,7 @@ libdbusmenu-gtk2
 libdbusmenu-gtk3
 libde265
 libdecor
+libdeflate
 libdhash
 libdisplay-info
 libdnf
@@ -516,6 +527,7 @@ libgs
 libgudev
 libgusb
 libgweather
+libheif
 libi2c
 libibverbs
 libical
@@ -573,6 +585,7 @@ libnsl2
 libnvme
 liboeffis
 libogg
+libopenjph
 libopenmpt
 liboping
 libpaper
@@ -594,6 +607,7 @@ libppd
 libproxy
 libpsl
 libpwquality
+LibRaw
 libraw1394
 libref_array
 librepo
@@ -797,6 +811,7 @@ openal-soft
 openblas-srpm-macros
 OpenCL-ICD-Loader
 opencore-amr
+openexr-libs
 openh264
 openjpeg
 openldap
