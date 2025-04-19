@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  inputs,
   pkgs,
   ...
 }:
@@ -275,10 +276,10 @@ in
           "custom/pomobar" = {
             format = "{}";
             interval = 1;
-            exec = "${config.home.homeDirectory}/.local/bin/pomobar-client status";
-            on-click = "${config.home.homeDirectory}/.local/bin/pomobar-client pause";
-            on-click-middle = "${config.home.homeDirectory}/.local/bin/pomobar-client reset";
-            on-click-right = "${config.home.homeDirectory}/.local/bin/pomobar-client resume";
+            exec = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client status";
+            on-click = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client pause";
+            on-click-middle = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client reset";
+            on-click-right = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client resume";
             return-type = "json";
           };
 
