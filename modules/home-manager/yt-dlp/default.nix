@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.moduleopts.yt-dlp;
@@ -24,6 +29,7 @@ in
         ppa = "\"ffmpeg: -c:v mjpeg -vf crop=\\\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\\\"\"";
         replace-in-metadata = "'artist' ',.+' ''";
       };
+
       extraConfig = ''
         --parse-metadata "playlist_index:%(track_number)s"
         --parse-metadata "%(release_year|)s:%(meta_date)s"
@@ -34,6 +40,7 @@ in
         -N 8
       '';
     };
+
     xdg.configFile."yt-dlp/modify-and-trim-nonstandard-characters.sh" = {
       text = ''
         #!${lib.getExe pkgs.bash}

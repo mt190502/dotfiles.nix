@@ -12,6 +12,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
+      description = "qt5 and qt6";
     };
   };
   config = lib.mkIf cfg.enable {

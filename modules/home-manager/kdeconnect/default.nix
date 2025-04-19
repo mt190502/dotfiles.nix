@@ -12,7 +12,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "KDE Connect";
+      description = "kdeconnect";
     };
   };
   config = lib.mkIf cfg.enable {

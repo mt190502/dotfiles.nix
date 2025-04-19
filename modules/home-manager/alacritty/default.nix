@@ -14,12 +14,12 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Alacritty";
+      description = "alacritty";
     };
     theme = lib.mkOption {
       type = lib.types.str;
       default = "vibrant-ink";
-      description = "Alacritty theme";
+      description = "theme";
     };
   };
   config = lib.mkIf cfg.enable {

@@ -8,7 +8,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "EasyEffects";
+      description = "easyeffects";
     };
   };
   config = lib.mkIf cfg.enable {

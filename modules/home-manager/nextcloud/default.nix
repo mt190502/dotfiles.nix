@@ -12,7 +12,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Nextcloud Client";
+      description = "nextcloud";
     };
   };
   config = lib.mkIf cfg.enable {

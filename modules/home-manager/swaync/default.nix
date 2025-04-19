@@ -13,12 +13,13 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Swaync";
+      description = "swaync";
     };
   };
   config = lib.mkIf cfg.enable {
     services.swaync = {
       enable = true;
+
       settings = {
         "$schema" = "${pkgs.swaynotificationcenter}/etc/xdg/swaync/configSchema.json";
         control-center-height = 500;
@@ -77,6 +78,7 @@ in
           };
         };
       };
+
       style = ''
         @define-color activeColor     ${config.colors.activeColor};
         @define-color backgroundColor ${config.colors.backgroundColor};

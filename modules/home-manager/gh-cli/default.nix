@@ -13,7 +13,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "GitHub CLI";
+      description = "gh-cli";
     };
   };
   config = lib.mkIf cfg.enable {

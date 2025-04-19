@@ -14,12 +14,12 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Waybar";
+      description = "waybar";
     };
     weather_location = lib.mkOption {
       default = "Istanbul";
       type = lib.types.str;
-      description = "The location for the weather module.";
+      description = "location for weather";
     };
   };
   config = lib.mkIf cfg.enable {

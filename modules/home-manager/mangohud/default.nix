@@ -8,12 +8,13 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "MangoHud";
+      description = "mangohud";
     };
   };
   config = lib.mkIf cfg.enable {
     programs.mangohud = {
       enable = true;
+
       settings = {
         cpu_load_change = true;
         cpu_mhz = true;

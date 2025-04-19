@@ -13,13 +13,13 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Sway";
+      description = "sway";
     };
   };
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
       enable = true;
-      package = (config.wrapped.sway);
+      package = config.wrapped.sway;
       checkConfig = false;
       config = {
         modifier = "Mod4";

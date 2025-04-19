@@ -15,12 +15,12 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "MPD";
+      description = "mpd";
     };
     discordrpc = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Enable Discord RPC integration";
+      description = "discord-rpc";
     };
     bundle = lib.mkOption {
       type = lib.types.enum [
@@ -28,7 +28,7 @@ in
         "mopidy"
       ];
       default = "mpd";
-      description = "Music server to use (mpd or mopidy)";
+      description = "bundle to use";
     };
   };
 
@@ -57,7 +57,7 @@ in
 
       Service = {
         Restart = "on-failure";
-        ExecStart = "${inputs.self.packages."${pkgs.system}".mpdris2-rs}/bin/mpdris2-rs";
+        ExecStart = "${inputs.self.packages.${pkgs.system}.mpdris2-rs}/bin/mpdris2-rs";
         BusName = "org.mpris.MediaPlayer2.mpd";
       };
 

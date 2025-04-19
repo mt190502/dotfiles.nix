@@ -8,7 +8,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Swaynag";
+      description = "swaynag";
     };
   };
   config = lib.mkIf cfg.enable {

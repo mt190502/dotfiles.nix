@@ -13,7 +13,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Swaylock";
+      description = "swaylock";
     };
   };
   config = lib.mkIf cfg.enable {

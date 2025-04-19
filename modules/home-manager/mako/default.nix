@@ -9,12 +9,13 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Mako";
+      description = "mako";
     };
   };
   config = lib.mkIf cfg.enable {
     services.mako = {
       enable = true;
+
       backgroundColor = config.colors.backgroundColor + makoOpacity;
       borderColor = config.colors.activeColor;
       textColor = config.colors.textColor;

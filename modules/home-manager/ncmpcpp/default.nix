@@ -14,6 +14,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.ncmpcpp = {
       enable = true;
+
       settings = {
         allow_for_physical_item_deletion = true;
         ask_before_clearing_playlists = false;

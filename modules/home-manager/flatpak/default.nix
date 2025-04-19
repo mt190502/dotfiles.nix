@@ -15,11 +15,13 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
+      description = "flatpak";
     };
   };
   config = lib.mkIf cfg.enable {
     services.flatpak = {
       enable = true;
+
       packages = [
         "ca.desrt.dconf-editor"
         "ch.openboard.OpenBoard"
@@ -76,6 +78,7 @@ in
         "org.texstudio.TeXstudio"
         "org.upscayl.Upscayl"
       ];
+
       remotes = [
         {
           name = "flathub";

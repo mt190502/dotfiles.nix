@@ -18,8 +18,8 @@ in
         {
           name = libpipewire-module-filter-chain
           args = {
-            node.description =  "Noise Canceling Source"
-            media.name =  "Noise Canceling Source"
+            node.description = "Noise Canceling Source"
+            media.name = "Noise Canceling Source"
             filter.graph = {
               nodes = [
                 {
