@@ -47,7 +47,6 @@
     bc
     binwalk
     btop
-    bun
     cliphist
     delta
     direnv
