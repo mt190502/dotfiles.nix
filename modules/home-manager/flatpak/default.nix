@@ -83,27 +83,27 @@ in
         {
           name = "flathub";
           location = "https://flathub.org/repo/flathub.flatpakrepo";
-          args = "--user --prio=6";
+          args = "--user --prio=5";
         }
         {
           name = "fedora";
           location = "oci+https://registry.fedoraproject.org";
-          args = "--user --prio=5";
+          args = "--user --prio=4";
         }
         {
           name = "flathub-beta";
           location = "https://flathub.org/beta-repo/flathub-beta.flatpakrepo";
-          args = "--user --prio=4";
+          args = "--user --prio=3";
         }
         {
           name = "fedora-testing";
           location = "oci+https://registry.fedoraproject.org#testing";
-          args = "--user --prio=3";
+          args = "--user --prio=2";
         }
         {
           name = "gnome-nightly";
           location = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
-          args = "--user --prio=2";
+          args = "--user --prio=1";
         }
       ];
     };
