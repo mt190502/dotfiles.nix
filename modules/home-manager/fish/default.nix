@@ -25,6 +25,9 @@ in
         cd = "builtin cd $argv; ${lib.getExe pkgs.lsd}";
         nvim2 = "${lib.getExe pkgs.neovide} $argv &; disown";
         shell = "nix shell nixpkgs#$argv";
+        neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
+        nevalp = "nix eval nixpkgs#$argv.outPath";
+        nevalcd = "cd $(nix eval --raw nixpkgs#$argv.outPath)";
       };
 
       generateCompletions = false;
@@ -52,9 +55,9 @@ in
 
       shellAliases = {
         #~ Containers
-        a = "ansible";
-        ap = "clear; ansible-playbook";
-        k = "kubectl";
+        a = "${pkgs.ansible}/bin/ansible";
+        ap = "clear; ${pkgs.ansible}/bin/ansible-playbook";
+        k = "${lib.getExe pkgs.kubectl}";
 
         #~ System
         cp = "cp -i";
