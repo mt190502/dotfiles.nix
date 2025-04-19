@@ -36,7 +36,6 @@
         command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${lib.getExe pkgs.cliphist} store";
       }
       { command = "${lib.getExe pkgs.wlsunset} -S '07:00' -s '19:00'"; }
-      { command = if config.home.username == "fedora" then "/usr/libexec/xfce-polkit" else ""; }
       {
         command = "${config.home.homeDirectory}/.config/sway/scripts.d/tmux_server.sh";
         always = true;
@@ -44,14 +43,6 @@
       {
         command = "${config.home.homeDirectory}/.config/sway/scripts.d/workspace.sh init 1";
         always = true;
-      }
-      {
-        command =
-          if config.home.username != "nixos" then
-            "/opt/1Password/1password --silent --password-store=gnome"
-          else
-            "";
-        # command = "${config.wrapped.onepassword-gui}/bin/1password --silent";       #~ not work on home manager only setups
       }
 
       #~~~ others

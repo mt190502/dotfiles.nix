@@ -11,8 +11,7 @@ in
   options.moduleopts.gtk = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "GTK";
+      default = false;
     };
   };
   config = lib.mkIf cfg.enable {

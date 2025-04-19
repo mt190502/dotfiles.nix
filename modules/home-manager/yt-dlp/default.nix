@@ -36,7 +36,7 @@ in
     };
     xdg.configFile."yt-dlp/modify-and-trim-nonstandard-characters.sh" = {
       text = ''
-        #!/usr/bin/env bash
+        #!${lib.getExe pkgs.bash}
         OLDIFS=$IFS
         IFS=$'\n'
         YELLOW='\033[1;33m'

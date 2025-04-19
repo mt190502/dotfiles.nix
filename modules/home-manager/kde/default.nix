@@ -12,8 +12,7 @@ in
   options.moduleopts.kde = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "KDE Plasma";
+      default = false;
     };
   };
   config = lib.mkIf cfg.enable {

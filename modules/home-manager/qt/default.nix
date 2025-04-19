@@ -11,8 +11,7 @@ in
   options.moduleopts.qt = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "Qt5 and Qt6";
+      default = false;
     };
   };
   config = lib.mkIf cfg.enable {

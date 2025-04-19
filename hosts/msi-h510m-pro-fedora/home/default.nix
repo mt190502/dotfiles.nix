@@ -42,8 +42,12 @@
   ########################################
   #~ custom modules ~#
   moduleopts = {
-    onepassword-integration.enable = true;
+    flatpak.enable = true;
     fontconfig.enable = true;
+    gtk.enable = true;
+    kde.enable = true;
+    onepassword-integration.enable = true;
+    qt.enable = true;
     rnnoise-denoising.enable = true;
   };
 

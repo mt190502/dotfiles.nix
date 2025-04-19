@@ -124,7 +124,5 @@ in
       "${modifier}+shift+f" =
         "exec ${config.home.homeDirectory}/.config/sway/scripts.d/programtoggle.sh ${config.home.homeDirectory}/.config/sway/scripts.d/tesseract.sh -t";
       "ctrl+period" = "exec ${config.home.homeDirectory}/.config/sway/scripts.d/dropdown_term.sh";
-      "${modifier}+g" = "exec /opt/1Password/1password --quick-access";
-    };
   };
 }

@@ -14,8 +14,7 @@ in
   options.moduleopts.flatpak = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "Flatpak";
+      default = false;
     };
   };
   config = lib.mkIf cfg.enable {

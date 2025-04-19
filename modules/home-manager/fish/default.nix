@@ -28,16 +28,6 @@ in
 
       generateCompletions = false;
 
-      loginShellInit = ''
-        if [ $XDG_VTNR = 1 ]; and [ $SHLVL = 1 ]; and [ ! $container ]
-          export $(${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
-          export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
-          export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
-          ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-          XDG_CURRENT_DESKTOP=sway sway &>$HOME/.cache/swaywm.log
-        end
-      '';
-
       plugins = [
         {
           name = "nvm";
@@ -63,7 +53,6 @@ in
         #~ Containers
         a = "ansible";
         ap = "clear; ansible-playbook";
-        d = "docker";
         k = "kubectl";
 
         #~ System
@@ -73,9 +62,6 @@ in
         mv = "mv -i";
         rm = "rm -i";
         srm = "trash -i";
-        sysdup = lib.mkIf (
-          config.home.username == "fedora"
-        ) "sudo dnf --refresh upgrade && nix-channel --update && flatpak update";
 
         #~ Git
         gita = "${lib.getExe pkgs.git} add -A";
