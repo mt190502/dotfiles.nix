@@ -92,8 +92,8 @@ in
             format = "{icon} {count}";
             show-empty = false;
             format-icons = [
-              ""
-              "<U+F2D2>"
+              ""
+              ""
             ];
             tooltip = true;
             tooltip-format = "{app}: {title}";
