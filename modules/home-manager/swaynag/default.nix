@@ -32,7 +32,7 @@ in
           button-dismiss-gap = "10";
           button-margin-right = "10";
           button-padding = "5";
-          font = config.stylix.fonts.sansSerif.name + " " + (toString config.stylix.fonts.sizes.applications);
+          font = "${config.stylix.fonts.sansSerif.name} ${builtins.toString config.stylix.fonts.sizes.applications}";
         };
       };
     };

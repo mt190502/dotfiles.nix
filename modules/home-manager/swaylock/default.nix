@@ -30,9 +30,8 @@ in
         indicator-caps-lock = true;
 
         #~~~ #~~~ fonts ~~~# ~~~#
-        # font = "Ubuntu Medium";
         font = config.stylix.fonts.sansSerif.name;
-        font-size = 20;
+        font-size = config.stylix.fonts.sizes.applications + 10;
 
         #~~~ #~~~ indicator ~~~# ~~~#
         #~~~ settings
@@ -50,29 +49,29 @@ in
 
         layout-bg-color = config.colors.backgroundColor;
         layout-border-color = config.colors.activeColor;
-        #layout-text-color = "#FFFFFF";
+        #layout-text-color = config.colors.textColor;
 
         separator-color = config.colors.backgroundColor;
 
         inside-color = "${config.colors.backgroundColor}00";
         line-color = config.colors.backgroundColor;
         ring-color = config.colors.inactiveColor;
-        text-color = "#FFFFFF";
+        text-color = config.colors.textColor;
 
         inside-clear-color = "${config.colors.backgroundColor}00";
         line-clear-color = config.colors.backgroundColor;
         ring-clear-color = config.colors.inactiveColor;
-        text-clear-color = "#FFFFFF";
+        text-clear-color = config.colors.textColor;
 
         inside-caps-lock-color = "${config.colors.backgroundColor}00";
         line-caps-lock-color = config.colors.backgroundColor;
         ring-caps-lock-color = config.colors.inactiveColor;
-        text-caps-lock-color = "#FFFFFF";
+        text-caps-lock-color = config.colors.textColor;
 
         inside-ver-color = "${config.colors.backgroundColor}00";
         line-ver-color = config.colors.backgroundColor;
         ring-ver-color = config.colors.inactiveColor;
-        text-ver-color = "#FFFFFF";
+        text-ver-color = config.colors.textColor;
 
         inside-wrong-color = "${config.colors.backgroundColor}00";
         line-wrong-color = config.colors.backgroundColor;

@@ -23,7 +23,7 @@ in
       borderRadius = 0;
       borderSize = 5;
       defaultTimeout = 10000;
-      font = config.stylix.fonts.sansSerif.name + " " + (toString config.stylix.fonts.sizes.applications);
+      font = "${config.stylix.fonts.sansSerif.name} ${builtins.toString config.stylix.fonts.sizes.applications}";
       ignoreTimeout = true;
       layer = "overlay";
       margin = "16";
@@ -32,7 +32,7 @@ in
 
       extraConfig = ''
         [urgency=high]
-        border-color=#FF0000
+        border-color=${config.colors.urgentColor}
         default-timeout=0
 
         [mode=dnd]

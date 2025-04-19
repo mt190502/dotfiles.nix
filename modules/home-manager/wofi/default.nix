@@ -27,7 +27,7 @@ in
         line_wrap = "word_char";
         mode = "dmenu";
         no_actions = true;
-        term = config.wrapped.alacritty;
+        term = lib.getExe config.wrapped.alacritty;
         width = "40%";
       };
 
@@ -43,7 +43,7 @@ in
         #window {
         	border: 4px solid ${config.colors.activeColor};
         	border-radius: 5px;
-        	color: #eefdff;
+        	color: ${config.colors.textColor};
         }
 
         #input {
@@ -52,7 +52,7 @@ in
 
         #text {
         	color: ${config.colors.textColor};
-        	font-size: 16px;
+        	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 6)}px;
         }
 
         #entry:selected,
