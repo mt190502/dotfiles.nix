@@ -70,6 +70,7 @@
     k0sctl
     k9s
     kdePackages.dolphin-plugins
+    kdePackages.ffmpegthumbs
     kdePackages.kdegraphics-thumbnailers
     kdePackages.qtstyleplugin-kvantum
     kdePackages.qtsvg
