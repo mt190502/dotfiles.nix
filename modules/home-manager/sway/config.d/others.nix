@@ -40,9 +40,6 @@ in
         command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${home}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
       }
       { command = "${lib.getExe pkgs.tmux} new-session -ds daemonmodetmux"; }
-      {
-        command = "${pkgs.wl-clipboard}/bin/wl-paste -w ${lib.getExe pkgs.cliphist} store";
-      }
       { command = "${lib.getExe pkgs.wlsunset} -S '07:00' -s '19:00'"; }
       {
         command = "${home}/.config/sway/scripts.d/tmux_server.sh";
