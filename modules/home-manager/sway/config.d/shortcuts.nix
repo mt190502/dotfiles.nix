@@ -109,6 +109,8 @@ in
       "${modifier}+q" = "kill";
 
       #~~~ other
+      "${modifier}+Return" =
+        "exec ${config.wrapped.alacritty}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'";
       "${modifier}+d" = "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${menu}";
       "${modifier}+l" = "exec ${home}/.config/sway/scripts.d/powermenu.sh --lock";
       "${modifier}+period" =
