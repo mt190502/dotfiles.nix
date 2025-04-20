@@ -1,7 +1,7 @@
 #!/bin/bash
 [[ $# -eq 0 ]] && exit 1
 pushd "$HOME"/Projects/000_myprojects/dotfiles.nix || exit
-rpm -qa --queryformat '%{NAME}\n' | sort | uniq > assets/fedora-rpm-pkglist
+rpm -qa --queryformat '%{NAME}\n' | sort | uniq > hosts/msi-h510m-pro-fedora/fedora-rpm-pkglist.txt
 clear
 nix flake update
 home-manager switch --no-out-link --flake "$@"
