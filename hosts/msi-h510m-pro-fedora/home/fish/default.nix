@@ -14,7 +14,7 @@ in
       functions = {
         dnfnodep = ''
           for i in $argv
-            sudo rpm -Uvh --nodeps "$(repoquery --archlist="$(arch)" --location "$i" | head -n 1)"
+            sudo rpm -Uvh --nodeps $(dnf repoquery --location "$i" | head -n 1)
           end
         '';
       };
