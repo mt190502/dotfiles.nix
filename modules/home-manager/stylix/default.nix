@@ -68,7 +68,7 @@
       light = "Flat-Remix-Blue-Light";
       dark = "Flat-Remix-Blue-Dark";
     };
-    image = inputs.self + /assets/wallpaper;
+    image = ../../../assets/wallpaper;
     polarity = "dark";
     targets = {
       alacritty.enable = false;
