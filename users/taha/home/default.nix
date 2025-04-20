@@ -115,8 +115,6 @@
     universal-android-debloater
     unrar
     unzip
-    ventoy-full-gtk
-    waydroid-helper
     wl-clipboard
     wlr-randr
     wlroots_0_17
