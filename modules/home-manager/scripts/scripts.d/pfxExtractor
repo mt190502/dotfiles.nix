@@ -1,0 +1,54 @@
+#!@bash@/bin/bash
+###~ description: extracts pfx certificate bundle to .crt and .key
+
+#~ check parameters
+if [[ -n "$1" ]]; then
+	if [[ ! -f "$PWD/$1" ]]; then
+		echo "File \"$PWD/$1\" does not exist..."
+		exit 1
+	fi
+else
+	echo "No filename specified..."
+	exit 1
+fi
+
+[[ -z "$2" ]] && { echo "No password specified..."; exit 1; }
+
+
+tmpdir="$(mktemp -d)"
+currdir="$PWD"
+cp -r "$1" "$tmpdir"/
+cd "$tmpdir" || exit 1
+
+
+#~ extract certificate and key
+openssl pkcs12 -in "$1" -clcerts -nokeys -out "${1%.pfx}".crt -passin "pass:$2" || exit 1
+openssl pkcs12 -in "$1" -nocerts -nodes  -out "${1%.pfx}".key -passin "pass:$2" || exit 1
+
+
+
+#~ get issuer info
+#ISSUER_OU="$(openssl x509 -noout -text -in "${1%.pfx}".crt -issuer -nameopt sep_multiline | grep OU | tail -n 1 | cut -d '=' -f2-)"
+#ISSUER_CN="$(openssl x509 -noout -text -in "${1%.pfx}".crt -issuer -nameopt sep_multiline | grep CN | tail -n 1 | cut -d '=' -f2-)"
+ISSUER_CN_URL="$(openssl x509 -noout -text -in "${1%.pfx}".crt | grep "CA Issuers" | cut -d ':' -f2-)"
+
+
+
+#~ get CA certificate and compose certificates
+wget -qO RootCA.crt.bin "$ISSUER_CN_URL"
+openssl x509 -inform der -in RootCA.crt.bin -out RootCA.crt || exit 1
+cat RootCA.crt >> "${1%.pfx}".crt
+
+cp "${1%.pfx}".crt "${1%.pfx}".key "$currdir"/
+cd "$currdir" || exit 1
+
+
+
+#~ check modulus
+CRT_MODULUS=$(openssl x509 -noout -modulus -in "${1%.pfx}".crt)
+KEY_MODULUS=$(openssl rsa -noout -modulus -in "${1%.pfx}".key)
+[[ "$CRT_MODULUS" == "$KEY_MODULUS" ]] && echo "Certificate is OK" || echo "Certificate is FAILED"
+
+
+
+rm -rf "$tmpdir"

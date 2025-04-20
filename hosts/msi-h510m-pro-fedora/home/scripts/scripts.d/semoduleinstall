@@ -1,0 +1,14 @@
+#!/bin/bash
+[[ ! -d "$HOME/.semodules" ]] && mkdir -p "$HOME"/.semodules
+
+pushd "$HOME"/.semodules || exit
+
+n2="my-$(echo "$1" | tr -dc A-Za-z0-9)"
+
+rm -rf "${n2}"*
+
+sudo su -c "ausearch -c '$1' --raw | audit2allow -M $n2"
+sudo su -c "semodule -X 300 -i ${n2}.pp"
+
+popd || exit
+

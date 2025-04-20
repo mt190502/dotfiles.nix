@@ -89,7 +89,9 @@
     nvtopPackages.full
     nwg-look
     ocs-url
+    onefetch
     pavucontrol
+    pipes-rs
     playerctl
     postgresql_17
     pulseaudio
@@ -104,13 +106,17 @@
     swayidle
     system-config-printer
     tesseract
+    testssl
     tmux
     traceroute
     translate-shell
     trash-cli
     tree
+    universal-android-debloater
     unrar
     unzip
+    ventoy-full-gtk
+    waydroid-helper
     wl-clipboard
     wlr-randr
     wlroots_0_17

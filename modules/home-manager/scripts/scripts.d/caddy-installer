@@ -1,0 +1,34 @@
+#!@bash@/bin/bash
+CADDY_VER=$(curl -s https://api.github.com/repos/caddyserver/caddy/releases/latest | jq -r '.tag_name' | sed 's/v//g')
+
+wget https://github.com/caddyserver/caddy/releases/download/v"$CADDY_VER"/caddy_"${CADDY_VER}"_linux_amd64.tar.gz || exit 1
+tar zxvf caddy_*.tar.gz || exit 1
+rm -f LICENSE README.md
+chown root:root caddy
+chmod +x caddy
+mv caddy /usr/bin/caddy
+
+caddy upgrade
+caddy add-package github.com/caddy-dns/cloudflare
+caddy add-package github.com/porech/caddy-maxmind-geolocation
+
+groupadd --system caddy
+useradd --system \
+    --gid caddy \
+    --create-home \
+    --home-dir /var/lib/caddy \
+    --shell /usr/sbin/nologin \
+    --comment "Caddy web server" \
+    caddy
+
+usermod -a -G www-data caddy
+usermod -a -G caddy www-data
+usermod -a -G apache caddy
+usermod -a -G caddy apache
+
+curl https://raw.githubusercontent.com/caddyserver/dist/master/init/caddy.service --output /lib/systemd/system/caddy.service
+curl https://raw.githubusercontent.com/caddyserver/dist/master/init/caddy-api.service --output /lib/systemd/system/caddy-api.service
+
+systemctl daemon-reload
+systemctl enable caddy.service
+

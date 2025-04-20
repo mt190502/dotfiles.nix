@@ -1,0 +1,25 @@
+#!@bash@/bin/bash
+DIRECTORY="$HOME/.local/bin"
+FILENAME="$1"
+CUSTOMEDITOR="nvim"
+
+if [[ -n $(command -v $CUSTOMEDITOR) ]]; then
+    EDITOR=$CUSTOMEDITOR
+elif [[ -n $(command -v vim) ]]; then
+    EDITOR=vim
+else
+    EDITOR=nano
+fi
+
+if [[ -n $FILENAME ]] && [[ -e $DIRECTORY/$FILENAME ]]; then
+    echo 0
+    $EDITOR "$DIRECTORY"/"$FILENAME"
+elif [[ -n $FILENAME ]] && [[ ! -e $DIRECTORY/$FILENAME ]]; then
+    echo 1
+    echo '#!/usr/bin/env bash' > "$DIRECTORY"/"$FILENAME"
+    chmod +x "$DIRECTORY"/"$FILENAME"
+    $EDITOR "$DIRECTORY"/"$FILENAME"
+else
+    echo 2
+    exit 1
+fi

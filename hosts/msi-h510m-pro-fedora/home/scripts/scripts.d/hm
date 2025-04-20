@@ -1,0 +1,12 @@
+#!/bin/bash
+[[ $# -eq 0 ]] && exit 1
+pushd "$HOME"/Projects/000_myprojects/dotfiles.nix || exit
+rpm -qa --queryformat '%{NAME}\n' | sort | uniq > assets/fedora-rpm-pkglist
+clear
+nix flake update
+home-manager switch --no-out-link --flake "$@"
+read -r -p "Do you want to read news?: " choice
+[[ "$choice" =~ [yY] ]] && home-manager news --no-out-link --flake "$@"
+read -r -p "Do you want to clear unused files?: " choice
+[[ "$choice" =~ [yY] ]] && nix-collect-garbage -d
+popd || exit

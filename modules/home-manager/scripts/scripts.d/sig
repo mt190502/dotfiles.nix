@@ -1,0 +1,5 @@
+#!@bash@/bin/bash
+for a in ${@:2}; do
+	ps aux | grep -vE "grep|$0" | grep -iE "$a"
+	ps aux | grep -vE "grep|$0" | grep -iE "$a" | awk '{print $2}' | xargs sudo kill -$1
+done
