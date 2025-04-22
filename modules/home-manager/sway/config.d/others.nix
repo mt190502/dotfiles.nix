@@ -15,7 +15,9 @@ in
       variables = [
         "DISPLAY"
         "GNOME_KEYRING_CONTROL"
+        "LD_LIBRARY_PATH"
         "NIXOS_OZONE_WL"
+        "PATH"
         "SSH_AUTH_SOCK"
         "SWAYSOCK"
         "WAYLAND_DISPLAY"
@@ -23,6 +25,7 @@ in
         "XCURSOR_SIZE"
         "XCURSOR_THEME"
         "XDG_CURRENT_DESKTOP"
+        "XDG_DATA_DIRS"
         "XDG_SESSION_TYPE"
       ];
       xdgAutostart = true;
@@ -31,7 +34,7 @@ in
     config.startup = [
       #~~~ initial
       {
-        command = "systemctl --user import-environment DISPLAY GNOME_KEYRING_CONTROL NIXOS_OZONE_WL SSH_AUTH_SOCK SWAYSOCK WAYLAND_DISPLAY XAUTHORITY XCURSOR_SIZE XCURSOR_THEME XDG_CURRENT_DESKTOP XDG_SESSION_TYPE";
+        command = "systemctl --user import-environment DISPLAY GNOME_KEYRING_CONTROL LD_LIBRARY_PATH NIXOS_OZONE_WL PATH SSH_AUTH_SOCK SWAYSOCK WAYLAND_DISPLAY XAUTHORITY XCURSOR_SIZE XCURSOR_THEME XDG_CURRENT_DESKTOP XDG_DATA_DIRS XDG_SESSION_TYPE";
       }
 
       #~~~ startup apps

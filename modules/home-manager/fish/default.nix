@@ -95,8 +95,8 @@ in
         #################################################
         set fish_greeting ""
         export TERM="xterm-256color"
-        export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:${home}/.local/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS"
-        export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/scripts:${home}/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+        export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:${home}/.nix-profile/sbin:${home}/.nix-profile/bin:$PATH";
+        export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${home}/.local/share:/usr/local/share:/usr/share:${home}/.nix-profile/share:$XDG_DATA_DIRS";
 
         #################################################
         #### Applications

@@ -166,8 +166,7 @@
     ## FREETYPE
     ##############################
     FREETYPE_PROPERTIES = "truetype:interpreter-version=40";
-    #FREETYPE_PROPERTIES = "cff:darkening-parameters=500,550,1000,25,1667,0,2000,0";
-
+ 
     ##############################
     ## QT
     ##############################
@@ -181,9 +180,9 @@
     ##############################
     ## SYSTEM
     ##############################
-    LD_LIBRARY_PATH = "$HOME/.local/lib64:$HOME/.local/lib:$HOME/.nix-profile/lib64:$HOME/.nix-profile/lib:/usr/local/lib64:/usr/local/lib";
-    PATH = "$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/scripts:$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH";
-    XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:$HOME/.local/share:$HOME/.nix-profile/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:$XDG_DATA_DIRS";
+    LD_LIBRARY_PATH = "$HOME/.local/lib64:$HOME/.local/lib:/usr/local/lib64:/usr/local/lib:/usr/lib64:/usr/lib:$HOME/.nix-profile/lib64:$HOME/.nix-profile/lib:$LD_LIBRARY_PATH";
+    PATH = "$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:$HOME/.nix-profile/sbin:$HOME/.nix-profile/bin:$PATH";
+    XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$HOME/.local/share:/usr/local/share:/usr/share:$HOME/.nix-profile/share:$XDG_DATA_DIRS";
     EDITOR = "vim";
     GTK_USE_PORTAL = "1";
     SYSTEMD_EDITOR = "vim";
