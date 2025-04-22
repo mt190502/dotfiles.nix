@@ -22,6 +22,7 @@ annobin-plugin-gcc
 ansible-srpm-macros
 appstream
 appstream-data
+aquamarine
 aribb24
 atk
 atkmm
@@ -277,6 +278,7 @@ gnome-keyring-pam
 gnome-menus
 gnome-online-accounts
 gnome-online-accounts-gtk
+gnome-online-accounts-libs
 gnome-settings-daemon
 gnome-themes-extra
 gnupg2
@@ -365,6 +367,10 @@ hunspell-en-US
 hunspell-filesystem
 hwdata
 hyphen
+hyprcursor
+hyprland
+hyprlang
+hyprutils
 i2c-tools
 igt-gpu-tools
 iio-sensor-proxy
@@ -438,7 +444,7 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.14.2-300.fc42.x86_64
-kmod-v4l2loopback-6.14.2-cachyos1.fc42.x86_64
+kmod-v4l2loopback-6.14.3-cachyos1.fc42.x86_64
 krb5-devel
 krb5-libs
 lame-libs
@@ -843,6 +849,7 @@ libXxf86dga
 libXxf86vm
 libyaml
 libyuv
+libzip
 libzstd
 libzstd-devel
 lilv-libs
@@ -1318,6 +1325,7 @@ telnet
 tesseract-libs
 thrift
 time
+tomlplusplus
 tpm2-tools
 tpm2-tss
 tpm2-tss-fapi
@@ -1442,5 +1450,6 @@ zix
 zlib-ng-compat
 zlib-ng-compat-devel
 zram-generator
+zsh
 zstd
 zvbi

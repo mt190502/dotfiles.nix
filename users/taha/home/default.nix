@@ -102,6 +102,7 @@
     scrcpy
     shellcheck
     slurp
+    strace
     swappy
     swaybg
     swayidle
