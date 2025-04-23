@@ -171,9 +171,6 @@
     ##############################
     ## QT
     ##############################
-    QML_IMPORT_PATH = "$HOME/.local/lib64/qml:$HOME/.local/lib/qml:/usr/local/lib64/qml:/usr/local/lib/qml:$QML_IMPORT_PATH";
-    QML2_IMPORT_PATH = "$HOME/.local/lib64/qml:$HOME/.local/lib/qml:/usr/local/lib64/qml:/usr/local/lib/qml:$QML2_IMPORT_PATH";
-    QT_PLUGIN_PATH = "$HOME/.local/lib64/plugins:$HOME/.local/lib/plugins:/usr/local/lib64/plugins:/usr/local/lib/plugins:$HOME/.local/lib64/qt5/plugins:$HOME/.local/lib/qt5/plugins:/usr/local/lib64/qt5/plugins:/usr/local/lib/qt5/plugins:$QT_PLUGIN_PATH";
     QT_QPA_PLATFORM = "wayland";
     # QT_QPA_PLATFORMTHEME = "qt6ct";
     QT_STYLE_OVERRIDE = "kvantum";
@@ -181,9 +178,6 @@
     ##############################
     ## SYSTEM
     ##############################
-    LD_LIBRARY_PATH = "$HOME/.local/lib64:$HOME/.local/lib:/usr/local/lib64:/usr/local/lib:/usr/lib64:/usr/lib:$HOME/.nix-profile/lib64:$HOME/.nix-profile/lib:$LD_LIBRARY_PATH";
-    PATH = "$HOME/.local/share/JetBrains/Toolbox/scripts:$HOME/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:$HOME/.nix-profile/sbin:$HOME/.nix-profile/bin:$PATH";
-    XDG_DATA_DIRS = "$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:$HOME/.local/share:/usr/local/share:/usr/share:$HOME/.nix-profile/share:$XDG_DATA_DIRS";
     EDITOR = "vim";
     GTK_USE_PORTAL = "1";
     SYSTEMD_EDITOR = "vim";
