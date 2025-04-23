@@ -1,3 +1,33 @@
+❯ cat /etc/pam.d/login
+#%PAM-1.0
+auth       substack     system-auth
+auth       include      postlogin
+auth       optional     pam_gnome_keyring.so
+account    required     pam_nologin.so
+account    include      system-auth
+password   include      system-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open
+session    required     pam_namespace.so
+session    optional     pam_keyinit.so force revoke
+session    include      system-auth
+session    include      postlogin
+session    optional     pam_gnome_keyring.so auto_start
+-session   optional     pam_ck_connector.so
+❯ cat /etc/pam.d/passwd
+#%PAM-1.0
+# This tool only uses the password stack.
+password   substack     system-auth
+#-password   optional   pam_gnome_keyring.so use_authtok
+password   substack     postlogin
+password   optional     pam_gnome_keyring.so
+
+
+---
+
 ❯ cat /etc/udev/rules.d/99-disable-xhci-wakeup.rules
 SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:00:14.0/power/wakeup'"
 
