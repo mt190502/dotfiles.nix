@@ -7,6 +7,7 @@
 
 let
   cfg = config.moduleopts.fish;
+  home = config.home.homeDirectory;
 in
 {
   config = lib.mkIf cfg.enable {
@@ -18,6 +19,19 @@ in
           end
         '';
       };
+      shellInit = ''
+        #################################################
+        #### Home specific fish variables
+        #################################################
+        export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:${home}/.nix-profile/sbin:${home}/.nix-profile/bin:$PATH";
+        export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${home}/.local/share:/usr/local/share:/usr/share:${home}/.nix-profile/share:$XDG_DATA_DIRS";
+
+        #################################################
+        #### Applications
+        #################################################
+        #~ common ~#
+        docker completion fish | source
+      '';
       loginShellInit = ''
         if [ $XDG_VTNR = 1 ]; and [ $SHLVL = 1 ]; and [ ! $container ]
           export $(${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
