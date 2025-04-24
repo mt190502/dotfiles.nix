@@ -84,6 +84,7 @@ colord-gtk4
 colord-libs
 color-filesystem
 composefs-libs
+containerd.io
 container-selinux
 coreutils
 coreutils-common
@@ -144,6 +145,11 @@ dnf-data
 dnf-plugins-core
 dnf-utils
 dnsmasq
+docker-buildx-plugin
+docker-ce
+docker-ce-cli
+docker-ce-rootless-extras
+docker-compose-plugin
 dosfstools
 double-conversion
 dracut
@@ -514,6 +520,7 @@ libcap-ng
 libcbor
 libcdio
 libcdio-paranoia
+libcgroup
 libchromaprint
 libcloudproviders
 libcollection

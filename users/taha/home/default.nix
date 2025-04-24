@@ -51,6 +51,7 @@
     delta
     direnv
     fastfetch
+    fd
     ffmpegthumbnailer
     gcolor3
     gdb
@@ -97,6 +98,7 @@
     postgresql_17
     pulseaudio
     r2modman
+    ripgrep-all
     rnnoise-plugin
     rsync
     scrcpy
