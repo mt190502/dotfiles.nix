@@ -57,7 +57,8 @@ in
         bind-key -n C-S-Right  select-pane   -R
         bind-key -n C-S-Up     select-pane   -U
         bind-key -n C-S-Down   select-pane   -D
-
+        bind-key -n Home       send Escape   "OH"
+        bind-key -n End        send Escape   "OF"
         bind-key -n C-t        new-window
 
         bind s setw            synchronize-panes on
@@ -70,7 +71,7 @@ in
         #### oh-my-tmux engine
         #################################################
         %if #{==:#{TMUX_PROGRAM},}
-          run 'TMUX_PROGRAM="$(LSOF=$(PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" command -v lsof); $LSOF -b -w -a -d txt -p #{pid} -Fn 2>/dev/null | perl -n -e "if (s/^n((?:.(?!dylib$|so$))+)$/\1/g && s/(?:\s+\([^\s]+?\))?$//g) { print; exit } } exit 1; {" || readlink "/proc/#{pid}/exe" 2>/dev/null || printf tmux)"; "$TMUX_PROGRAM" -S #{socket_path} set-environment -g TMUX_PROGRAM "$TMUX_PROGRAM"'
+          run 'TMUX_PROGRAM="$($(command -v lsof) -b -w -a -d txt -p #{pid} -Fn 2>/dev/null | perl -n -e "if (s/^n((?:.(?!dylib$|so$))+)$/\1/g && s/(?:\s+\([^\s]+?\))?$//g) { print; exit } } exit 1; {" || readlink "/proc/#{pid}/exe" 2>/dev/null || printf tmux)"; "$TMUX_PROGRAM" -S #{socket_path} set-environment -g TMUX_PROGRAM "$TMUX_PROGRAM"'
         %endif
         %if #{==:#{TMUX_SOCKET},}
           run '"$TMUX_PROGRAM" -S #{socket_path} set-environment -g TMUX_SOCKET "#{socket_path}"'
