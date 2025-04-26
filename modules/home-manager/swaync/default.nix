@@ -79,30 +79,28 @@ in
         };
       };
 
-      style = ''
-        @define-color activeColor     ${config.colors.activeColor};
-        @define-color backgroundColor ${config.colors.backgroundColor};
-        @define-color inactiveColor   ${config.colors.inactiveColor};
-        @define-color inactiveColor2  ${config.colors.inactiveColor2};
-        @define-color urgentColor     ${config.colors.urgentColor};
-        @define-color textColor       ${config.colors.textColor};
-
+      style = with config.lib.stylix.colors.withHashtag; ''
         * {
           border-radius: 0;
-          font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
-        	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
-          color: @textColor;
+          font-family: "${config.stylix.fonts.sansSerif.name}";
+          font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
+          color: ${base05};
         }
 
         .close-button {
-          background: @backgroundColor;
+          background: ${base00}; 
+          color: ${base05};
           padding: 0;
           border: 0;
           min-width: 24px;
           min-height: 24px;
         }
 
-        .close-button:hover,
+        .close-button:hover {
+          background: ${base08};
+          color: ${base00};
+        }
+
         .control-center-list .notification:hover,
         .notification-action:hover,
         .notification-default-action:hover {
@@ -116,66 +114,67 @@ in
         .inline-reply-entry,
         .notification-group-close-all-button,
         .notification-group-collapse-button {
-          background: @backgroundColor;
-          border: 3px solid @activeColor;
+          background: ${base00};
+          border: 3px solid ${base0D};
         }
 
         .control-center-dnd:checked {
-          background: @activeColor;
+          background: ${base0D};
         }
 
         .control-center,
         .floating-notification {
-          background: @backgroundColor;
-          border: 5px solid @activeColor;
+          background: ${base00};
+          border: 5px solid ${base0D};
         }
 
         .inline-reply-button,
         .widget-dnd > switch:checked {
-          background: @activeColor;
-          border: 3px solid @activeColor;
+          background: ${base0D};
+          border: 3px solid ${base0D};
         }
 
         .linked > .text-button:first-child {
-          border-right: 2.5px solid @activeColor;
+          border-right: 2.5px solid ${base0D};
         }
 
         .linked > .text-button:last-child {
-          border-left: 2.5px solid @activeColor;
+          border-left: 2.5px solid ${base0D};
         }
 
         .linked > .text-button:not(:first-child):not(:last-child) {
-          border-left: 2.5px solid @activeColor;
-          border-right: 2.5px solid @activeColor;
+          border-left: 2.5px solid ${base0D};
+          border-right: 2.5px solid ${base0D};
         }
 
         .linked > .text-button:only-child {
-          border: 5px solid @activeColor;
+          border: 5px solid ${base0D};
           border-top: 0;
         }
 
         .notification-action {
-          background: @backgroundColor;
+          background: ${base00}; 
+          color: ${base05};
           padding: 0;
-          border: 5px solid @activeColor;
+          border: 5px solid ${base0D}; 
           border-top: 0;
         }
 
         .notification-background,
         .notification {
           padding: 0;
-          background: @activeColor;
+          background: ${base0D};
           border: 0;
         }
 
         .notification-content {
-          background: @backgroundColor;
-          border: 5px solid @activeColor;
+          background: ${base00};
+          border: 5px solid ${base0D};
         }
 
         .notification-default-action {
           padding: 0;
-          border: 2px solid @backgroundColor;
+          border: 2px solid ${base00};
         }
 
         .notification-row {
@@ -186,7 +185,7 @@ in
 
         .widget-mpris-player,
         .widget-mpris-album-art {
-          border: 3px solid @activeColor;
+          border: 3px solid ${base0D};
         }
       '';
     };

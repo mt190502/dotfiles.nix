@@ -1,40 +1,11 @@
 {
-  lib,
   pkgs,
   inputs,
-  config,
   ...
 }:
 
 {
   imports = [ inputs.stylix.homeManagerModules.stylix ];
-
-  options.colors = {
-    activeColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base02;
-      type = lib.types.str;
-    };
-    backgroundColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base00;
-      type = lib.types.str;
-    };
-    inactiveColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base00;
-      type = lib.types.str;
-    };
-    inactiveColor2 = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base01;
-      type = lib.types.str;
-    };
-    urgentColor = lib.mkOption {
-      default = "#FF0000";
-      type = lib.types.str;
-    };
-    textColor = lib.mkOption {
-      default = config.lib.stylix.colors.withHashtag.base05;
-      type = lib.types.str;
-    };
-  };
 
   config.stylix = {
     enable = true;
@@ -72,7 +43,6 @@
     polarity = "dark";
     targets = {
       alacritty.enable = false;
-      mako.enable = false;
       mangohud.enable = false;
       k9s.enable = false;
       kde.enable = false;

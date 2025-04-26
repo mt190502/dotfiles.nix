@@ -9,39 +9,39 @@
       ];
       size = config.stylix.fonts.sizes.applications + 0.0;
     };
-    colors = {
-      background = config.colors.activeColor;
+    colors = with config.lib.stylix.colors.withHashtag; {
+      background = base00;
 
       focused = {
-        background = config.colors.activeColor;
-        border = config.colors.activeColor;
-        text = config.colors.textColor;
-        indicator = config.colors.activeColor;
-        childBorder = config.colors.activeColor;
+        background = base0D;
+        border = base0D;
+        text = base00;
+        indicator = base0D;
+        childBorder = base0D;
       };
 
       focusedInactive = {
-        background = config.colors.inactiveColor2;
-        border = config.colors.inactiveColor2;
-        text = config.colors.textColor;
-        indicator = config.colors.inactiveColor2;
-        childBorder = config.colors.inactiveColor2;
+        background = base01;
+        border = base01;
+        text = base05;
+        indicator = base01;
+        childBorder = base01;
       };
 
       unfocused = {
-        background = config.colors.inactiveColor;
-        border = config.colors.inactiveColor;
-        text = config.colors.textColor;
-        indicator = config.colors.inactiveColor;
-        childBorder = config.colors.inactiveColor;
+        background = base00;
+        border = base00;
+        text = base05;
+        indicator = base00;
+        childBorder = base00;
       };
 
       urgent = {
-        background = config.colors.urgentColor;
-        border = config.colors.urgentColor;
-        text = "#FFFFFF";
-        indicator = config.colors.urgentColor;
-        childBorder = config.colors.urgentColor;
+        background = base08;
+        border = base08;
+        text = base00;
+        indicator = base08;
+        childBorder = base08;
       };
     };
   };

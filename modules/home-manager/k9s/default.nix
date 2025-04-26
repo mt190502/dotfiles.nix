@@ -87,109 +87,99 @@ in
       };
 
       skins = {
-        "stylix" =
-          let
-            foreground = config.colors.textColor;
-            background = config.colors.backgroundColor;
-            active = config.colors.activeColor;
-            inactive = config.colors.inactiveColor;
-            inactive2 = config.colors.inactiveColor2;
-            text = config.colors.textColor;
-            urgent = config.colors.urgentColor;
-          in
-          {
-            k9s = {
-              body = {
-                fgColor = text;
-                bgColor = background;
-                logoColor = active;
+        "stylix" = with config.lib.stylix.colors.withHashtag; {
+          k9s = {
+            body = {
+              fgColor = base05;
+              bgColor = base00;
+              logoColor = base0D;
+            };
+            info = {
+              fgColor = base0D;
+              sectionColor = base05;
+            };
+            help = {
+              fgColor = base05;
+              keyColor = base0D;
+              numKeyColor = base0A;
+              sectionColor = base0D;
+            };
+            dialog = {
+              fgColor = base0D;
+              bgColor = base00;
+              buttonFgColor = base05;
+              buttonBgColor = base00;
+              buttonFocusFgColor = base00;
+              buttonFocusBgColor = base0D;
+              labelFgColor = base0D;
+              fieldFgColor = base05;
+            };
+            frame = {
+              border = {
+                fgColor = base0D;
+                focusColor = base0D;
               };
-              info = {
-                fgColor = active;
-                sectionColor = foreground;
+              menu = {
+                fgColor = base05;
+                keyColor = base0D;
+                numKeyColor = base0A;
               };
-              help = {
-                fgColor = text;
-                keyColor = active;
-                numKeyColor = inactive2;
-                sectionColor = active;
+              crumbs = {
+                fgColor = base05;
+                bgColor = base02;
+                activeColor = base0D;
               };
-              dialog = {
-                fgColor = active;
-                bgColor = background;
-                buttonFgColor = text;
-                buttonBgColor = background;
-                buttonFocusFgColor = background;
-                buttonFocusBgColor = active;
-                labelFgColor = active;
-                fieldFgColor = text;
+              status = {
+                newColor = base0D;
+                modifyColor = base0D;
+                errorColor = base08;
+                highlightColor = base0D;
+                killColor = base08;
+                completedColor = base05;
               };
-              frame = {
-                border = {
-                  fgColor = active;
-                  focusColor = active;
-                };
-                menu = {
-                  fgColor = text;
-                  keyColor = active;
-                  numKeyColor = inactive2;
-                };
-                crumbs = {
-                  fgColor = text;
-                  bgColor = inactive;
-                  activeColor = active;
-                };
-                status = {
-                  newColor = active;
-                  modifyColor = active;
-                  errorColor = urgent;
-                  highlightColor = active;
-                  killColor = urgent;
-                  completedColor = text;
-                };
-                title = {
-                  fgColor = active;
-                  bgColor = background;
-                  highlightColor = inactive2;
-                  counterColor = active;
-                  filterColor = inactive2;
+              title = {
+                fgColor = base0D;
+                bgColor = base00;
+                highlightColor = base0A;
+                counterColor = base0D;
+                filterColor = base0A;
+              };
+            };
+            views = {
+              table = {
+                fgColor = base05;
+                bgColor = base00;
+                cursorFgColor = base00;
+                cursorBgColor = base05;
+                header = {
+                  fgColor = base05;
+                  bgColor = base00;
+                  sorterColor = base02;
                 };
               };
-              views = {
-                table = {
-                  fgColor = foreground;
-                  bgColor = background;
-                  cursorFgColor = text;
-                  cursorBgColor = background;
-                  header = {
-                    fgColor = foreground;
-                    bgColor = background;
-                    sorterColor = inactive;
-                  };
-                };
-                xray = {
-                  fgColor = foreground;
-                  bgColor = background;
-                  cursorColor = background;
-                  graphicColor = active;
-                  showIcons = false;
-                };
-                yaml = {
-                  keyColor = active;
-                  colonColor = active;
-                  valueColor = text;
-                };
-                logs = {
-                  fgColor = foreground;
-                  bgColor = background;
-                  indicator = {
-                    fgColor = foreground;
-                    bgColor = background;
-                  };
+              xray = {
+                fgColor = base05;
+                bgColor = base00;
+                cursorColor = base00;
+                graphicColor = base0D;
+                showIcons = false;
+              };
+              yaml = {
+                keyColor = base0D;
+                colonColor = base0D;
+                valueColor = base05;
+              };
+              logs = {
+                fgColor = base05;
+                bgColor = base00;
+                indicator = {
+                  fgColor = base05;
+                  bgColor = base00;
                 };
               };
             };
           };
+        };
       };
     };
   };

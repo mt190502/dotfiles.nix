@@ -31,34 +31,34 @@ in
         width = "40%";
       };
 
-      style = ''
+      style = with config.lib.stylix.colors.withHashtag; ''
         #inner-box,
         #outer-box,
         #input,
         #text {
         	margin: 5px;
-        	background-color: ${config.colors.backgroundColor};
+        	background-color: ${base00};
         }
 
         #window {
-        	border: 4px solid ${config.colors.activeColor};
+        	border: 4px solid ${base0D};
         	border-radius: 5px;
-        	color: ${config.colors.textColor};
+        	color: ${base05};
         }
 
         #input {
-        	border: 2px solid ${config.colors.activeColor};
+        	border: 2px solid ${base0D};
         }
 
         #text {
-        	color: ${config.colors.textColor};
+        	color: ${base05};
         	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 6)}px;
         }
 
         #entry:selected,
         #img:selected,
         #text:selected {
-        	background-color: ${config.colors.activeColor};
+        	background-color: ${base0D};
         }
       '';
     };

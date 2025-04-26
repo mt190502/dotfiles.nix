@@ -15,17 +15,17 @@ in
     wayland.windowManager.sway.swaynag = {
       enable = true;
 
-      settings = {
+      settings = with config.lib.stylix.colors.withHashtag; {
         "theme" = {
-          background = "${config.colors.backgroundColor}00";
-          border = "${config.colors.backgroundColor}00";
-          border-bottom = "${config.colors.textColor}00";
-          button-background = config.colors.activeColor;
-          text = config.colors.textColor;
-          button-text = config.colors.textColor;
+          background = "${base00}00";
+          border = "${base00}";
+          border-bottom = "${base05}00";
+          button-background = "${base00}";
+          text = "${base00}";
+          button-text = "${base05}";
           border-bottom-size = "0";
           message-padding = "5";
-          details-background = "${config.colors.backgroundColor}00";
+          details-background = "${base00}00";
           details-border-size = "0";
           button-border-size = "3";
           button-gap = "5";

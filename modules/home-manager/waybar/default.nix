@@ -332,13 +332,7 @@ in
         };
       };
 
-      style = ''
-        @define-color activeColor    ${config.colors.activeColor};
-        @define-color inactiveColor  ${config.colors.inactiveColor};
-        @define-color inactiveColor2 ${config.colors.inactiveColor2};
-        @define-color urgentColor    ${config.colors.urgentColor};
-        @define-color textColor      ${config.colors.textColor};
-
+      style = with config.lib.stylix.colors.withHashtag; ''
 
         * {
         	border-radius: 5px;
@@ -356,16 +350,16 @@ in
         #tray,
         #workspaces,
         widget label:not(#custom-space) {
-        	background-color: @activeColor;
-        	color: @textColor;
+        	background-color: ${base00};
+        	color: ${base05};
         	margin: 6px 0px 2px 0px;
         	padding: 0px 10px 0px 10px;
         }
 
         #workspaces button,
         #workspaces button label {
-        	background-color: @activeColor;
-        	color: @textColor;
+        	background-color: ${base00};
+        	color: ${base05};
         	margin: 0px 0px 0px 0px;
         	padding: 0px 1px 0px 1px;
         }
