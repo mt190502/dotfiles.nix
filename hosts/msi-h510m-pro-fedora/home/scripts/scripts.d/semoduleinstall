@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@bash@
 [[ ! -d "$HOME/.semodules" ]] && mkdir -p "$HOME"/.semodules
 
 pushd "$HOME"/.semodules || exit

@@ -1,4 +1,4 @@
-#!@bash@/bin/bash
+#!@bash@
 
 GPU_ID="0000:01:00.0"
 AUDIO_ID="0000:01:00.1"

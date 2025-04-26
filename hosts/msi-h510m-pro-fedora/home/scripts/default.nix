@@ -19,7 +19,7 @@ in
               src = ./scripts.d + "/${path}";
               env = {
                 alacritty = lib.getExe config.wrapped.alacritty;
-                bash = pkgs.bash;
+                bash = lib.getExe pkgs.bash;
                 cliphist = lib.getExe pkgs.cliphist;
                 coreutils = pkgs.coreutils;
                 grim = lib.getExe pkgs.grim;
