@@ -488,11 +488,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1745391562,
-        "narHash": "sha256-sPwcCYuiEopaafePqlG826tBhctuJsLx/mhKKM5Fmjo=",
+        "lastModified": 1745526057,
+        "narHash": "sha256-ITSpPDwvLBZBnPRS2bUcHY3gZSwis/uTe255QgMtTLA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8a2f738d9d1f1d986b5a4cd2fd2061a7127237d7",
+        "rev": "f771eb401a46846c1aebd20552521b233dd7e18b",
         "type": "github"
       },
       "original": {
@@ -542,11 +542,11 @@
         "nuschtosSearch": "nuschtosSearch"
       },
       "locked": {
-        "lastModified": 1745496969,
-        "narHash": "sha256-04ZWtuPFXc/aRklrWs9FY+Gcb9Ct5lmv84Livgafd84=",
+        "lastModified": 1745593478,
+        "narHash": "sha256-GV0YnG6ZLW+BDsEKS2rjTtKcfTcTbdlVaf0ESQDBsK8=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "62ecd39b40bf8a61fa428d026bb7061e1350f456",
+        "rev": "b72ba2e4e2af53269a19b99bf684480f3ad4a78f",
         "type": "github"
       },
       "original": {
@@ -738,39 +738,11 @@
         "tinted-zed": "tinted-zed"
       },
       "locked": {
-<<<<<<< HEAD
         "lastModified": 1745618823,
         "narHash": "sha256-WGKSI0+CY3Ep2YnRASmBRU8oMIvTW4ngFyjA0dVcKgQ=",
-||||||| parent of 77c82c0 (update(package): update flake.lock and package list)
-        "lastModified": 1745541960,
-        "narHash": "sha256-CnkPq3sjuxB2HC93JVSotfMCF3dDrdKo3e4JOImKiLs=",
-=======
-<<<<<<< HEAD
-        "lastModified": 1745541960,
-        "narHash": "sha256-CnkPq3sjuxB2HC93JVSotfMCF3dDrdKo3e4JOImKiLs=",
-||||||| parent of b5b1b3a (update(package): update flake.lock and package list)
-        "lastModified": 1745366676,
-        "narHash": "sha256-PM5GUWR6O4b4cETjkbtLdzGI9IUOM/sP+AUz7rf6lHo=",
-=======
-        "lastModified": 1745511266,
-        "narHash": "sha256-W68rSRTGhRF22nDzJgq2ffQwI/4k+4jMs84Mpj38aOI=",
->>>>>>> b5b1b3a (update(package): update flake.lock and package list)
->>>>>>> 77c82c0 (update(package): update flake.lock and package list)
         "owner": "danth",
         "repo": "stylix",
-<<<<<<< HEAD
         "rev": "11ceb2fde1901dc227421bbbef2d0800339f5126",
-||||||| parent of 77c82c0 (update(package): update flake.lock and package list)
-        "rev": "4846adbc2a0334687c024aed0ca77ecd93ccdb0d",
-=======
-<<<<<<< HEAD
-        "rev": "4846adbc2a0334687c024aed0ca77ecd93ccdb0d",
-||||||| parent of b5b1b3a (update(package): update flake.lock and package list)
-        "rev": "f46d58be39a7822a88f29b1650ec14c961c81414",
-=======
-        "rev": "3194470d07d2885da178a6baca10a91ea1068e1b",
->>>>>>> b5b1b3a (update(package): update flake.lock and package list)
->>>>>>> 77c82c0 (update(package): update flake.lock and package list)
         "type": "github"
       },
       "original": {
