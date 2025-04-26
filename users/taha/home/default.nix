@@ -98,6 +98,7 @@
     postgresql_17
     pulseaudio
     r2modman
+    rclone
     ripgrep-all
     rnnoise-plugin
     rsync
