@@ -55,6 +55,7 @@
   xdg.configFile."user-tmpfiles.d/home-manager.conf" = {
     text = ''
       L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0
+      L %t/app/com.discordapp.Discord/discord-ipc-0 - - - - %t/.flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0
     '';
     onChange = "${pkgs.systemd}/bin/systemd-tmpfiles --user --create";
   };
