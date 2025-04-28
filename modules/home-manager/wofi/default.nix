@@ -59,6 +59,7 @@ in
         #img:selected,
         #text:selected {
         	background-color: ${base0D};
+          color: ${base00};
         }
       '';
     };

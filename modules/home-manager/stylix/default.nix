@@ -9,8 +9,9 @@
 
   config.stylix = {
     enable = true;
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
     # autoEnable = false;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/apathy.yaml";
+
     cursor = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
@@ -43,7 +44,6 @@
     image = ../../../assets/wallpaper;
     polarity = "dark";
     targets = {
-      alacritty.enable = false;
       mangohud.enable = false;
       k9s.enable = false;
       kde.enable = false;

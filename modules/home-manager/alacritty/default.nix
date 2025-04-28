@@ -31,7 +31,7 @@ in
         font.size = config.stylix.fonts.sizes.terminal;
         font.normal = {
           family = config.stylix.fonts.monospace.name;
-          style = "Bold";
+          style = lib.mkForce "Bold";
         };
         font.bold = {
           family = "Hack";
