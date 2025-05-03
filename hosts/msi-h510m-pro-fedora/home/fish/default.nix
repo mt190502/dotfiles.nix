@@ -33,7 +33,7 @@ in
         docker completion fish | source
       '';
       loginShellInit = ''
-        if [ $XDG_VTNR = 1 ]; and [ $SHLVL = 1 ]; and [ ! $container ]
+        if [ "$(tty)" = "/dev/tty1" ]
           export $(${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
           export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
           export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
