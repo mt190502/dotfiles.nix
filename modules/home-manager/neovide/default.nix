@@ -48,25 +48,6 @@ in
         dashboard.enable = true;
         web-devicons.enable = true;
 
-        avante = {
-          enable = true;
-          settings = {
-            auto_suggestions_provider = "copilot";
-            cursor_applying_provider = "copilot";
-            behaviour = {
-              auto_suggestions = true;
-              auto_apply_diff_after_generation = true;
-              enable_cursor_planning_mode = true;
-            };
-            provider = "copilot";
-            copilot = {
-              model = "o3-mini";
-            };
-            suggestion = {
-              debounce = 800;
-            };
-          };
-        };
 
         cmp = {
           enable = true;
