@@ -38,7 +38,11 @@ in
           export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
           export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
           ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-          XDG_CURRENT_DESKTOP=sway sway &>${config.home.homeDirectory}/.cache/swaywm.log
+          if [ "${config.moduleopts.home-manager.preffered-wm}" = "hyprland" ]
+            Hyprland &>${config.home.homeDirectory}/.cache/hyprland.log
+          else
+            XDG_CURRENT_DESKTOP=sway sway &>${config.home.homeDirectory}/.cache/swaywm.log
+          end
         end
       '';
       shellAliases = {

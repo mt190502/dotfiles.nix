@@ -45,6 +45,7 @@
     flatpak.enable = true;
     fontconfig.enable = true;
     gtk.enable = true;
+    home-manager.preffered-wm = "sway";
     kde.enable = true;
     onepassword-integration.enable = true;
     qt.enable = true;

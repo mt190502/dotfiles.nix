@@ -18,7 +18,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
-      enable = true;
+      enable = lib.mkIf (config.moduleopts.home-manager.preffered-wm == "sway") true;
       package = config.wrapped.sway;
       checkConfig = false;
       config = {
