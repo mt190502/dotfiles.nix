@@ -13,7 +13,7 @@ in
     config = {
       bars = [
         {
-          command = "${lib.getExe config.wrapped.waybar}";
+          command = "true";
           position = "top";
           workspaceButtons = true;
         }

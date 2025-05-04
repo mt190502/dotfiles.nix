@@ -27,6 +27,7 @@ in
     programs.waybar = {
       enable = true;
       package = config.wrapped.waybar;
+      systemd.enable = true;
 
       settings = {
         mainBar = {
