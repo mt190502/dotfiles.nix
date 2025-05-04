@@ -24,6 +24,10 @@ in
       default = pkgs.flameshot;
       type = package;
     };
+    hyprland = lib.mkOption {
+      default = pkgs.hyprland;
+      type = package;
+    };
     imagemagick = lib.mkOption {
       default = pkgs.imagemagick;
       type = package;
