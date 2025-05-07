@@ -28,6 +28,7 @@ in
         "com.belmoussaoui.ashpd.demo"
         "com.github.libresprite.LibreSprite"
         "com.github.tchx84.Flatseal"
+        "com.jgraph.drawio.desktop"
         "com.mattjakeman.ExtensionManager"
         "com.obsproject.Studio"
         "com.stremio.Stremio"

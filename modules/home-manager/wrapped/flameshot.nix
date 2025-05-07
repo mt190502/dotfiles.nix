@@ -13,8 +13,8 @@
     #     src = pkgs.fetchFromGitHub {
     #       owner = "flameshot-org";
     #       repo = "flameshot";
-    #       rev = "10d12e0";
-    #       sha256 = "sha256-3ujqwiQrv/H1HzkpD/Q+hoqyrUdO65gA0kKqtRV0vmw=";
+    #       rev = "f4cde19";
+    #       sha256 = "sha256-B/piB8hcZR11vnzvue/1eR+SFviTSGJoek1w4abqsek=";
     #     };
     #     cmakeFlags = [
     #       "-DUSE_WAYLAND_CLIPBOARD=1"
