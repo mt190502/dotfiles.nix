@@ -75,7 +75,7 @@ in
         purl=$(${pkgs.ffmpeg}/bin/ffprobe -v quiet -show_entries stream_tags=purl -of default=noprint_wrappers=1:nokey=1 "$current_song_file_path")
         if [ -n "$purl" ]; then
           echo "$purl" | ${pkgs.wl-clipboard}/bin/wl-copy
-          notify-send "ncmpcpp: PURL copied to clipboard" "$purl"
+          ${lib.getExe pkgs.libnotify} "ncmpcpp: PURL copied to clipboard" "$purl"
         fi
       '';
       executable = true;
