@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.moduleopts.ncmpcpp;
@@ -55,6 +60,25 @@ in
         store_lyrics_in_song_dir = true;
         volume_change_step = 5;
       };
+
+      bindings = [
+        {
+          key = ",";
+          command = "run_external_command \"$XDG_CONFIG_HOME/ncmpcpp/get_and_copy_purl_from_current_song.sh\"";
+        }
+      ];
+    };
+    xdg.configFile."ncmpcpp/get_and_copy_purl_from_current_song.sh" = {
+      text = ''
+        #!${pkgs.bash}/bin/bash
+        current_song_file_path="${config.services.mpd.musicDirectory}/$(${lib.getExe pkgs.mpc} current -f %file%)"
+        purl=$(${pkgs.ffmpeg}/bin/ffprobe -v quiet -show_entries stream_tags=purl -of default=noprint_wrappers=1:nokey=1 "$current_song_file_path")
+        if [ -n "$purl" ]; then
+          echo "$purl" | ${pkgs.wl-clipboard}/bin/wl-copy
+          notify-send "ncmpcpp: PURL copied to clipboard" "$purl"
+        fi
+      '';
+      executable = true;
     };
   };
 }
