@@ -4,4 +4,9 @@
   ...
 }:
 
-(config.lib.nixGL.wrap pkgs.jetbrains-toolbox)
+with pkgs;
+rec {
+  name = "jetbrains-toolbox";
+  original = jetbrains-toolbox;
+  wrap = config.lib.nixGL.wrap original;
+}

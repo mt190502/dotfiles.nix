@@ -3,4 +3,10 @@
   pkgs,
   ...
 }:
-(config.lib.nixGL.wrap pkgs.alacritty)
+
+with pkgs;
+rec {
+  name = "alacritty";
+  original = alacritty;
+  wrap = config.lib.nixGL.wrap original;
+}

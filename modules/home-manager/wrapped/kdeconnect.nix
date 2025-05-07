@@ -1,7 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
-(config.lib.nixGL.wrap pkgs.kdePackages.kdeconnect-kde)
+with pkgs;
+rec {
+  name = "kdeconnect";
+  original = kdePackages.kdeconnect-kde;
+  wrap = config.lib.nixGL.wrap original;
+}

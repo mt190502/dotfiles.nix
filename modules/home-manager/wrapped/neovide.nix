@@ -4,4 +4,9 @@
   ...
 }:
 
-(config.lib.nixGL.wrap pkgs.neovide)
+with pkgs;
+rec {
+  name = "neovide";
+  original = neovide;
+  wrap = config.lib.nixGL.wrap original;
+}

@@ -1,7 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
-(config.lib.nixGL.wrap pkgs.nwg-displays)
+with pkgs;
+rec {
+  name = "nwg-displays";
+  original = nwg-displays;
+  wrap = config.lib.nixGL.wrap original;
+}

@@ -1,7 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
-(config.lib.nixGL.wrap pkgs.mpv)
+with pkgs;
+rec {
+  name = "mpv";
+  original = mpv;
+  wrap = config.lib.nixGL.wrap original;
+}
