@@ -220,7 +220,7 @@ in
             format-linked = " (No IP)";
             format-disconnected = "⚠ Disconnected";
             format-alt = "{essid} {ipaddr}/{cidr} ";
-            on-click-right = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T nmtui -e nmtui";
+            on-click-right = "${home}/.config/sway/scripts.d/programtoggle.sh ${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
           };
 
           pulseaudio = {
