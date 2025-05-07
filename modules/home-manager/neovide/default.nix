@@ -48,7 +48,6 @@ in
         dashboard.enable = true;
         web-devicons.enable = true;
 
-
         cmp = {
           enable = true;
           settings.sources = [
