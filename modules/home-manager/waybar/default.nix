@@ -26,7 +26,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.waybar = {
       enable = true;
-      package = config.wrapped.waybar;
       systemd.enable = true;
 
       settings = {
