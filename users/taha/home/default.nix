@@ -117,7 +117,6 @@
     translate-shell
     trash-cli
     tree
-    universal-android-debloater
     unrar
     unzip
     wl-clipboard

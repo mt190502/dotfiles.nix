@@ -32,6 +32,7 @@
     config.wrapped.nwg-displays
     config.wrapped.qt5ct
     config.wrapped.qt6ct
+    config.wrapped.universal-android-debloater
     config.wrapped.vscode
   ];
 
