@@ -5,15 +5,15 @@
 
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "zmem";
-  version = "master";
+  version = "c3cd777";
   src = pkgs.fetchFromGitHub {
     owner = "xeome";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yVi9kTkFM5z1F+3S9Wvl90wdvgsI9ZhH3zfQC7PzUBs=";
+    sha256 = "sha256-/+qtmXUl8MR34NsW7CLoc5MGBTkkcmHlyG0PTCNJ4TY=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-AYcyOCnxSTkRLIb4zuIiTiYFyIN9JIzA2rTDBqyx8Pg=";
+  cargoHash = "sha256-qKH+LUntScUX67+lpW3+88wiVSc99Tw7QkFEvs5WuVg=";
   meta = {
     description = "Advanced linux memory monitoring";
     homepage = "https://github.com/xeome/zmem";
