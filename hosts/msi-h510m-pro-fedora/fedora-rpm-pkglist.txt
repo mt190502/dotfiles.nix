@@ -418,6 +418,7 @@ jose
 jq
 json-c
 json-glib
+jxrlib
 kbd
 kbd-legacy
 kbd-misc
@@ -449,7 +450,8 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.14.5-cachyos1.fc42.x86_64
+kmod-v4l2loopback-6.14.6-cachyos1.fc42.x86_64
+kpartx
 krb5-devel
 krb5-libs
 lame-libs
@@ -823,6 +825,7 @@ libxcb
 libxcb-devel
 libXcomposite
 libxcrypt
+libxcrypt-compat
 libxcrypt-devel
 libXcursor
 libxcvt
@@ -1094,6 +1097,8 @@ pulseaudio-libs
 pulseaudio-libs-glib2
 pyproject-srpm-macros
 python3
+python3.10
+python3.10-libs
 python3-argcomplete
 python3-audit
 python3-cairo
@@ -1146,6 +1151,7 @@ python3-urllib3
 python3-utils
 python3-xlib
 python-pip-wheel
+python-setuptools-wheel
 python-srpm-macros
 qatlib
 qatzip-libs
@@ -1388,6 +1394,7 @@ vte291
 vte-profile
 vulkan-loader
 vulkan-tools
+vvenc-libs
 wavpack
 waydroid
 waydroid-selinux
