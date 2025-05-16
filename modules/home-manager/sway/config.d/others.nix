@@ -38,7 +38,6 @@ in
       }
 
       #~~~ startup apps
-      { command = "${home}/.config/sway/scripts.d/powermenu.sh --daemonize"; }
       {
         command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${home}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
       }
