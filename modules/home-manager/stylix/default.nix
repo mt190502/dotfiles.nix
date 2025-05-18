@@ -5,7 +5,7 @@
 }:
 
 {
-  imports = [ inputs.stylix.homeManagerModules.stylix ];
+  imports = [ inputs.stylix.homeModules.stylix ];
 
   config.stylix = {
     enable = true;
