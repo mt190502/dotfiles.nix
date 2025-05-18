@@ -23,6 +23,7 @@ in
 
       functions = {
         cd = "builtin cd $argv; ${lib.getExe pkgs.lsd}";
+        mapscii = "${pkgs.inetutils}/bin/telnet mapscii.me";
         nvim2 = "${lib.getExe config.wrapped.neovide} $argv &; disown";
         scrcpy-camera = "${lib.getExe pkgs.scrcpy} --camera-size=2560x1440 --video-codec=h265 --video-encoder=OMX.qcom.video.encoder.hevc --video-source=camera --no-audio --camera-id=1 --v4l2-sink=/dev/video0 --no-video-playback $argv";
         shell = "nix shell nixpkgs#$argv";
