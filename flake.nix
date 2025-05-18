@@ -2,21 +2,21 @@
   description = "M.Taha's Ultimate Nix Configuration Flake";
 
   inputs = {
-    nixpkgs = {
+    nixpkgs-unstable = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
       flake = true;
     };
-    nixpkgs-stable = {
-      url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-25.05";
       flake = true;
     };
-    home-manager = {
+    home-manager-unstable = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    home-manager-stable = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";

@@ -58,6 +58,7 @@
     gef
     gnome-icon-theme
     gnome-tweaks
+    gping
     grc
     grim
     heimdall
@@ -103,6 +104,7 @@
     rnnoise-plugin
     rsync
     scrcpy
+    siege
     shellcheck
     slurp
     strace
