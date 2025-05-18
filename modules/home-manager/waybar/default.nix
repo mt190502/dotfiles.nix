@@ -26,7 +26,16 @@ in
   config = lib.mkIf cfg.enable {
     programs.waybar = {
       enable = true;
-      systemd.enable = true;
+      systemd = {
+        enable = true;
+        target =
+          if config.moduleopts.home-manager.preffered-wm == "sway" then
+            "sway-session.target"
+          else if config.moduleopts.home-manager.preffered-wm == "hyprland" then
+            "hyprland-session.target"
+          else
+            "graphical.target";
+      };
 
       settings = {
         mainBar = {
