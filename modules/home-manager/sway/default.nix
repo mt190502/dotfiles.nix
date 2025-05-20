@@ -70,7 +70,7 @@ in
                 src = ./scripts.d + "/${path}";
                 inherit substitutions;
               };
-           };
+          };
         }) (builtins.attrNames (builtins.readDir ./scripts.d))
       )
     );

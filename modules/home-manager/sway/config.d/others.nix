@@ -7,6 +7,13 @@
 
 let
   home = config.home.homeDirectory;
+  lock =
+    if config.moduleopts.home-manager.preffered-lock-app == "gtklock" then
+      "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
+    else if config.moduleopts.home-manager.preffered-lock-app == "swaylock" then
+      "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
+    else
+      throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
 in
 {
   wayland.windowManager.sway = {
@@ -39,7 +46,7 @@ in
 
       #~~~ startup apps
       {
-        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${home}/.config/sway/scripts.d/powermenu.sh --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
+        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${lock} --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
       }
       { command = "${lib.getExe pkgs.tmux} new-session -ds daemonmodetmux"; }
       { command = "${lib.getExe pkgs.wlsunset} -S '07:00' -s '19:00'"; }

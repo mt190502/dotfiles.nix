@@ -64,8 +64,8 @@
       ];
 
       flake = {
-        nixosModules.mt190502 = import ./modules/hosts/nixos.nix;
-        darwinModules.mt190502 = import ./modules/hosts/darwin.nix;
+        nixosModules.mt190502 = import ./modules/nixos;
+        darwinModules.mt190502 = import ./modules/darwin;
         homeManagerModules.mt190502 = import ./modules/home-manager;
       };
     };

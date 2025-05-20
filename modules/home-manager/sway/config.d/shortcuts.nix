@@ -9,6 +9,13 @@ let
   modifier = config.wayland.windowManager.sway.config.modifier;
   menu = config.wayland.windowManager.sway.config.menu;
   home = config.home.homeDirectory;
+  lock =
+    if config.moduleopts.home-manager.preffered-lock-app == "gtklock" then
+      "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
+    else if config.moduleopts.home-manager.preffered-lock-app == "swaylock" then
+      "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
+    else
+      throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
 in
 {
   wayland.windowManager.sway.config = {
@@ -112,7 +119,7 @@ in
       "${modifier}+Return" =
         "exec ${config.wrapped.alacritty}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'";
       "${modifier}+d" = "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${menu}";
-      "${modifier}+l" = "exec ${home}/.config/sway/scripts.d/powermenu.sh --lock";
+      "${modifier}+l" = "exec ${lock} --lock";
       "${modifier}+period" =
         "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${home}/.config/sway/scripts.d/wofimoji.sh";
       "${modifier}+shift+d" =

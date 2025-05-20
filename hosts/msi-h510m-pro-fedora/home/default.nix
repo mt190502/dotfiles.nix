@@ -14,8 +14,9 @@
   ########################################
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
+  nixpkgs.config.allowUnfree = true;
   nixGL.packages = inputs.nixgl.packages;
-  wrapped.enable = true;
+  wrapped.mode = "nixGL";
 
   ########################################
   #
@@ -47,6 +48,7 @@
     fontconfig.enable = true;
     gtk.enable = true;
     home-manager.preffered-wm = "sway";
+    home-manager.preffered-lock-app = "swaylock";
     kde.enable = true;
     onepassword-integration.enable = true;
     qt.enable = true;

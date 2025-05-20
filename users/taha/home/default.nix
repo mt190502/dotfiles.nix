@@ -12,7 +12,6 @@
   #
   ########################################
   home.stateVersion = "25.05";
-  nixpkgs.config.allowUnfree = true;
   programs.home-manager.enable = true;
 
   ########################################
@@ -56,6 +55,7 @@
     gcolor3
     gdb
     gef
+    git
     gnome-icon-theme
     gnome-tweaks
     gping
@@ -194,12 +194,7 @@
   ## Other Configurations
   #
   ########################################
-  home.activation = {
-    postInstall = ''
-      $SHELL -c "fisher install ilancosman/tide" &>/dev/null
-      $SHELL -c "tide configure --auto --style=Lean --prompt_colors='True color' --show_time='24-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Lightest --prompt_spacing=Sparse --icons='Many icons' --transient=Yes" &>/dev/null
-    '';
-  };
+  home.activation = { };
   imports =
     lib.map (p: ./. + "/${p}") (lib.remove "default.nix" (lib.attrNames (builtins.readDir ./.)))
     ++ [ inputs.self.homeManagerModules.mt190502 ];

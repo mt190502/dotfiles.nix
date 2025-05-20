@@ -9,6 +9,13 @@
 let
   cfg = config.moduleopts.waybar;
   home = config.home.homeDirectory;
+  lock =
+    if config.moduleopts.home-manager.preffered-lock-app == "gtklock" then
+      "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
+    else if config.moduleopts.home-manager.preffered-lock-app == "swaylock" then
+      "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
+    else
+      throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
 in
 {
   options.moduleopts.waybar = {
@@ -293,7 +300,7 @@ in
           };
 
           "custom/powermenu" = {
-            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${home}/.config/sway/scripts.d/powermenu.sh --lockmenu";
+            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lock} --lockmenu";
             format = "";
             tooltip = false;
           };

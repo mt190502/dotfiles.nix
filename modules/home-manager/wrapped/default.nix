@@ -30,10 +30,20 @@ let
 in
 {
   options.wrapped = {
-    enable = lib.mkEnableOption "Enable nixGL and custom wrapped packages";
+    mode = lib.mkOption {
+      type = lib.types.enum [
+        "nixGL"
+        "standard"
+        "none"
+      ];
+      default = "standard";
+      description = ''
+        The mode to use for wrapping packages. If set to "nixGL", it will use
+        the nixGL wrapper. If set to "standard", it will use the wrap without
+        the nixGL wrapper.
+      '';
+    };
   } // opts;
 
-  config = lib.mkIf cfg.enable {
-    wrapped = lib.mapAttrs (_: pkg: pkg.wrap) packages;
-  };
+  config.wrapped = lib.mapAttrs (_: pkg: pkg.wrap) packages;
 }
