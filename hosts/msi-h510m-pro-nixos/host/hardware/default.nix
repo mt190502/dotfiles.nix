@@ -23,4 +23,7 @@
       enableGraphical = true;
     };
   };
+  powerManagement = {
+    cpuFreqGovernor = "performance";
+  };
 }
