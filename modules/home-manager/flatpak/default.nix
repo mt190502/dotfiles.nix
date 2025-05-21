@@ -21,7 +21,6 @@ in
   config = lib.mkIf cfg.enable {
     services.flatpak = {
       enable = true;
-
       packages = [
         "ca.desrt.dconf-editor"
         "ch.openboard.OpenBoard"
@@ -42,7 +41,7 @@ in
         "io.github._0xzer0x.qurancompanion"
         "io.github.mrvladus.List"
         "io.github.ungoogled_software.ungoogled_chromium"
-        "io.gitlab.librewolf-community"
+#       "io.gitlab.librewolf-community"
         "md.obsidian.Obsidian"
         "net.ankiweb.Anki"
         "net.davidotek.pupgui2"
