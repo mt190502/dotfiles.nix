@@ -25,14 +25,20 @@
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
 
     #~ fonts ~#
+    cantarell-fonts
     cascadia-code
-    nerd-fonts.droid-sans-mono
+    dejavu_fonts
     fira-code
     hack-font
     jetbrains-mono
     nerd-fonts.droid-sans-mono
     nerd-fonts.iosevka
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-cjk-serif
     noto-fonts-color-emoji
+    noto-fonts-emoji
+    noto-fonts-extra
 
     #~ standard packages ~#
     _1password-cli
