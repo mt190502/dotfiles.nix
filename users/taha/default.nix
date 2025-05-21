@@ -6,12 +6,13 @@
     users.taha = {
       isNormalUser = true;
       extraGroups = [
-        "wheel"
-        "networkmanager"
-        "video"
         "audio"
+        "kvm"
         "libvirtd"
-        "podman"
+        "networkmanager"
+        "qemu"
+        "video"
+        "wheel"
       ];
       shell = pkgs.fish;
     };
