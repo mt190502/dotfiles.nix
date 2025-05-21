@@ -17,6 +17,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 | Name                                                 | Description                                                                     |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------- |
 | [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora) | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB |
+| [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)   | Same as above but running NixOS instead of Fedora                               |
 
 ## Installation (for home-manager only setups)
 
@@ -31,7 +32,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - Set up Nix Package Manager on your system (if you haven't already or you don't have NixOS installed)
 
     ```sh
-    NIX_VERSION="unstable" #~ or latest stable version e.g "24.11"
+    NIX_VERSION="unstable" #~ or latest stable version e.g "25.05"
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
     nix-channel --add https://nixos.org/channels/nixos-${NIX_VERSION} nixpkgs
     nix-channel --update
@@ -56,7 +57,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
   - For stable nixpkgs:
 
     ```sh
-    nix-channel --add https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz home-manager
+    nix-channel --add https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz home-manager
     nix-channel --update
     nix-shell '<home-manager>' -A install
     ```
