@@ -2,10 +2,10 @@
 
 let
   makoOpacity = lib.toHexString (((builtins.ceil (config.stylix.opacity.popups * 100)) * 255) / 100);
-  cfg = config.moduleopts.mako;
+  cfg = config.moduleopts.home-manager.mako;
 in
 {
-  options.moduleopts.mako = {
+  options.moduleopts.home-manager.mako = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

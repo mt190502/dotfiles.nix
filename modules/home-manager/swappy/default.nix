@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.swappy;
+  cfg = config.moduleopts.home-manager.swappy;
 in
 {
-  options.moduleopts.swappy = {
+  options.moduleopts.home-manager.swappy = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

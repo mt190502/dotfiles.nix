@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.swaync;
+  cfg = config.moduleopts.home-manager.swaync;
 in
 {
-  options.moduleopts.swaync = {
+  options.moduleopts.home-manager.swaync = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

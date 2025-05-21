@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.gh-cli;
+  cfg = config.moduleopts.home-manager.gh-cli;
 in
 {
-  options.moduleopts.gh-cli = {
+  options.moduleopts.home-manager.gh-cli = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

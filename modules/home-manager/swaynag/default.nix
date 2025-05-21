@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.swaynag;
+  cfg = config.moduleopts.home-manager.swaynag;
 in
 {
-  options.moduleopts.swaynag = {
+  options.moduleopts.home-manager.swaynag = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

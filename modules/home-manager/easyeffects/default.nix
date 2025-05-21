@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.easyeffects;
+  cfg = config.moduleopts.home-manager.easyeffects;
 in
 {
-  options.moduleopts.easyeffects = {
+  options.moduleopts.home-manager.easyeffects = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

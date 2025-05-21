@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.fontconfig;
+  cfg = config.moduleopts.home-manager.fontconfig;
 in
 {
-  options.moduleopts.fontconfig = {
+  options.moduleopts.home-manager.fontconfig = {
     enable = lib.mkEnableOption "fontconfig";
   };
   config = lib.mkIf cfg.enable {

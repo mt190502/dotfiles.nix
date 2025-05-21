@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.wofi;
+  cfg = config.moduleopts.home-manager.wofi;
 in
 {
-  options.moduleopts.wofi = {
+  options.moduleopts.home-manager.wofi = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

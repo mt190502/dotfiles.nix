@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.nextcloud-client;
+  cfg = config.moduleopts.home-manager.nextcloud-client;
 in
 {
-  options.moduleopts.nextcloud-client = {
+  options.moduleopts.home-manager.nextcloud-client = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

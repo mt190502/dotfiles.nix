@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.kde;
+  cfg = config.moduleopts.home-manager.kde;
 in
 {
-  options.moduleopts.kde = {
+  options.moduleopts.home-manager.kde = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

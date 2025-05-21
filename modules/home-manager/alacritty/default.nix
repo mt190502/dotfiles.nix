@@ -7,10 +7,10 @@
 }:
 
 let
-  cfg = config.moduleopts.alacritty;
+  cfg = config.moduleopts.home-manager.alacritty;
 in
 {
-  options.moduleopts.alacritty = {
+  options.moduleopts.home-manager.alacritty = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

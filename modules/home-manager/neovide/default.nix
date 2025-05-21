@@ -6,12 +6,12 @@
 }:
 
 let
-  cfg = config.moduleopts.neovide;
+  cfg = config.moduleopts.home-manager.neovide;
 in
 {
   imports = [ inputs.nixvim.homeManagerModules.nixvim ];
 
-  options.moduleopts.neovide = {
+  options.moduleopts.home-manager.neovide = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

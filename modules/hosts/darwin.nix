@@ -4,7 +4,7 @@
 let
   getDir =
     dir:
-    lib.mapAttrs (file: type: if type == "directory" then getDir "${dir}/${file}" else null) (
+    lib.mapAttrs (file: type: if type == "directory" then getDir "${dir}/${file}" else type) (
       builtins.readDir dir
     );
   files =
@@ -17,14 +17,13 @@ let
     map (file: ./. + "/${file}") (
       lib.filter (
         file:
-        lib.hasSuffix "default.nix" file
-        # Exclude this file
+        lib.hasSuffix ".nix" file
         && file != "default.nix"
-        && file != "nixos.nix"
+        && file != "darwin.nix"
         # how to exclude a path
         # && ! lib.hasPrefix "exclude/path/" file
-        # how to exclude a group of files) (files dir)
-        && !lib.hasSuffix "darwin.nix" file
+        # how to exclude a group of files
+        && !lib.hasSuffix "nixos.nix" file
       ) (files dir)
     );
 in

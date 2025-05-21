@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.k9s;
+  cfg = config.moduleopts.home-manager.k9s;
 in
 {
-  options.moduleopts.k9s = {
+  options.moduleopts.home-manager.k9s = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

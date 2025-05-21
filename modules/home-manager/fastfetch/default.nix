@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.fastfetch;
+  cfg = config.moduleopts.home-manager.fastfetch;
 in
 {
-  options.moduleopts.fastfetch = {
+  options.moduleopts.home-manager.fastfetch = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

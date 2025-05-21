@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.syncthing;
+  cfg = config.moduleopts.home-manager.syncthing;
 in
 {
-  options.moduleopts.syncthing = {
+  options.moduleopts.home-manager.syncthing = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

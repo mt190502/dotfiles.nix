@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.scripts;
+  cfg = config.moduleopts.home-manager.scripts;
 in
 {
-  options.moduleopts.scripts = {
+  options.moduleopts.home-manager.scripts = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

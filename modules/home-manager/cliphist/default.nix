@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.cliphist;
+  cfg = config.moduleopts.home-manager.cliphist;
 in
 {
-  options.moduleopts.cliphist = {
+  options.moduleopts.home-manager.cliphist = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

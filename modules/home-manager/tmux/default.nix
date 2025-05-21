@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.tmux;
+  cfg = config.moduleopts.home-manager.tmux;
   home = config.home.homeDirectory;
 in
 {
-  options.moduleopts.tmux = {
+  options.moduleopts.home-manager.tmux = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

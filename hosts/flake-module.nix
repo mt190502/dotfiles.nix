@@ -20,6 +20,7 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./msi-h510m-pro-nixos
+        (inputs.self + "/users/taha")
         inputs.home-manager.nixosModules.home-manager
       ];
     };

@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.rnnoise-denoising;
+  cfg = config.moduleopts.home-manager.rnnoise-denoising;
 in
 {
-  options.moduleopts.rnnoise-denoising = {
+  options.moduleopts.home-manager.rnnoise-denoising = {
     enable = lib.mkEnableOption "rnnoise-denoising";
   };
   config = lib.mkIf cfg.enable {

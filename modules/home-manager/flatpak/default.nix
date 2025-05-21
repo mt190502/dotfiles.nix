@@ -6,12 +6,12 @@
 }:
 
 let
-  cfg = config.moduleopts.flatpak;
+  cfg = config.moduleopts.home-manager.flatpak;
 in
 {
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
 
-  options.moduleopts.flatpak = {
+  options.moduleopts.home-manager.flatpak = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

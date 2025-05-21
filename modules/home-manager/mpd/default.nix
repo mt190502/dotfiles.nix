@@ -7,11 +7,11 @@
 }:
 
 let
-  cfg = config.moduleopts.mpd;
+  cfg = config.moduleopts.home-manager.mpd;
   home = config.home.homeDirectory;
 in
 {
-  options.moduleopts.mpd = {
+  options.moduleopts.home-manager.mpd = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

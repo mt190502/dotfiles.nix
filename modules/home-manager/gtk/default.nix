@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.gtk;
+  cfg = config.moduleopts.home-manager.gtk;
 in
 {
-  options.moduleopts.gtk = {
+  options.moduleopts.home-manager.gtk = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

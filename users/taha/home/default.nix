@@ -138,7 +138,7 @@
   #
   ########################################
   #~ custom modules ~#
-  moduleopts = {
+  moduleopts.home-manager = {
     alacritty.theme = "hyper";
     easyeffects.enable = false;
     mako.enable = false;

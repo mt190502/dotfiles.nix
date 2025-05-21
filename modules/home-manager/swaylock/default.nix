@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.swaylock;
+  cfg = config.moduleopts.home-manager.swaylock;
 in
 {
-  options.moduleopts.swaylock = {
+  options.moduleopts.home-manager.swaylock = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

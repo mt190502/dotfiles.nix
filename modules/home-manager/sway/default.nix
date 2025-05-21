@@ -6,19 +6,19 @@
 }:
 
 let
-  cfg = config.moduleopts.sway;
+  cfg = config.moduleopts.home-manager;
 in
 {
-  options.moduleopts.sway = {
+  options.moduleopts.home-manager.sway = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "sway";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.sway.enable {
     wayland.windowManager.sway = {
-      enable = lib.mkIf (config.moduleopts.home-manager.preffered-wm == "sway") true;
+      enable = lib.mkIf (cfg.prefered-wm == "sway") true;
       package = config.wrapped.sway;
       checkConfig = false;
       config = {

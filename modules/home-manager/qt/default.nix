@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.qt;
+  cfg = config.moduleopts.home-manager.qt;
 in
 {
-  options.moduleopts.qt = {
+  options.moduleopts.home-manager.qt = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

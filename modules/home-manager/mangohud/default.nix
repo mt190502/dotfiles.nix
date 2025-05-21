@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.mangohud;
+  cfg = config.moduleopts.home-manager.mangohud;
 in
 {
-  options.moduleopts.mangohud = {
+  options.moduleopts.home-manager.mangohud = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.sway;
+  cfg = config.moduleopts.home-manager.sway;
   modifier = config.wayland.windowManager.sway.config.modifier;
 in
 {

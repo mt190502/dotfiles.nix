@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.moduleopts.kdeconnect;
+  cfg = config.moduleopts.home-manager.kdeconnect;
 in
 {
-  options.moduleopts.kdeconnect = {
+  options.moduleopts.home-manager.kdeconnect = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

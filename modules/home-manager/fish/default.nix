@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.moduleopts.fish;
+  cfg = config.moduleopts.home-manager.fish;
   home = config.home.homeDirectory;
 in
 {
-  options.moduleopts.fish = {
+  options.moduleopts.home-manager.fish = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

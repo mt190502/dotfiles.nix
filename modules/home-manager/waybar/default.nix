@@ -7,18 +7,18 @@
 }:
 
 let
-  cfg = config.moduleopts.waybar;
+  cfg = config.moduleopts.home-manager;
   home = config.home.homeDirectory;
   lock =
-    if config.moduleopts.home-manager.preffered-lock-app == "gtklock" then
+    if cfg.prefered-lock-app == "gtklock" then
       "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
-    else if config.moduleopts.home-manager.preffered-lock-app == "swaylock" then
+    else if cfg.prefered-lock-app == "swaylock" then
       "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
     else
       throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
 in
 {
-  options.moduleopts.waybar = {
+  options.moduleopts.home-manager.waybar = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -30,15 +30,15 @@ in
       description = "location for weather";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.waybar.enable {
     programs.waybar = {
       enable = true;
       systemd = {
         enable = true;
         target =
-          if config.moduleopts.home-manager.preffered-wm == "sway" then
+          if cfg.prefered-wm == "sway" then
             "sway-session.target"
-          else if config.moduleopts.home-manager.preffered-wm == "hyprland" then
+          else if cfg.prefered-wm == "hyprland" then
             "hyprland-session.target"
           else
             "graphical.target";
@@ -341,9 +341,9 @@ in
           "custom/weather" = {
             format = "{}";
             interval = 3600;
-            exec = "${lib.getExe pkgs.curl} -s 'https://wttr.in/${cfg.weather_location}?format=1' | sed 's/ //1'";
+            exec = "${lib.getExe pkgs.curl} -s 'https://wttr.in/${cfg.waybar.weather_location}?format=1' | sed 's/ //1'";
             exec-if = "ping wttr.in -c1";
-            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T wttr.in -e sh -c '${lib.getExe pkgs.curl} https://wttr.in/${cfg.weather_location}; read'";
+            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T wttr.in -e sh -c '${lib.getExe pkgs.curl} https://wttr.in/${cfg.waybar.weather_location}; read'";
           };
         };
       };

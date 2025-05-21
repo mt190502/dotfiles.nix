@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.ncmpcpp;
+  cfg = config.moduleopts.home-manager.ncmpcpp;
 in
 {
-  options.moduleopts.ncmpcpp = {
+  options.moduleopts.home-manager.ncmpcpp = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

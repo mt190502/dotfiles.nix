@@ -2,7 +2,7 @@
 
 {
   options.moduleopts.home-manager = {
-    preffered-wm = lib.mkOption {
+    prefered-wm = lib.mkOption {
       type = lib.types.enum [
         "sway"
         "hyprland"
@@ -11,7 +11,7 @@
       default = "none";
       description = "Preferred window manager";
     };
-    preffered-lock-app = lib.mkOption {
+    prefered-lock-app = lib.mkOption {
       type = lib.types.enum [
         "swaylock"
         "gtklock"

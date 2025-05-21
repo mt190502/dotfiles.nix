@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.yt-dlp;
+  cfg = config.moduleopts.home-manager.yt-dlp;
 in
 {
-  options.moduleopts.yt-dlp = {
+  options.moduleopts.home-manager.yt-dlp = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

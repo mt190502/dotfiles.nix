@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.moduleopts.fish;
+  cfg = config.moduleopts.home-manager;
   home = config.home.homeDirectory;
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.fish.enable {
     programs.fish = {
       functions = {
         dnfnodep = ''
@@ -38,10 +38,10 @@ in
           export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
           export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
           ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-          if [ "${config.moduleopts.home-manager.preffered-wm}" = "hyprland" ]
-            Hyprland &>${config.home.homeDirectory}/.cache/hyprland.log
+          if [ "${cfg.prefered-wm}" = "hyprland" ]
+            Hyprland &>${home}/.cache/hyprland.log
           else
-            XDG_CURRENT_DESKTOP=sway sway &>${config.home.homeDirectory}/.cache/swaywm.log
+            XDG_CURRENT_DESKTOP=sway sway &>${home}/.cache/swaywm.log
           end
         end
       '';

@@ -43,12 +43,13 @@
   #
   ########################################
   #~ custom modules ~#
-  moduleopts = {
+  moduleopts.home-manager = {
     flatpak.enable = true;
     fontconfig.enable = true;
+    gnome-keyring.enable = false; # I'm using keyring in system because of pam issues
     gtk.enable = true;
-    home-manager.preffered-wm = "sway";
-    home-manager.preffered-lock-app = "swaylock";
+    prefered-wm = "sway";
+    prefered-lock-app = "swaylock";
     kde.enable = true;
     onepassword-integration.enable = true;
     qt.enable = true;

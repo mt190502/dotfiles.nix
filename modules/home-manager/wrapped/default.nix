@@ -6,8 +6,6 @@
 }:
 
 let
-  cfg = config.wrapped;
-
   packages = lib.pipe ./. [
     builtins.readDir
     (lib.filterAttrs (n: v: v == "regular" && n != "default.nix"))

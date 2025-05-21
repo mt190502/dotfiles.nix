@@ -10,9 +10,9 @@ let
   menu = config.wayland.windowManager.sway.config.menu;
   home = config.home.homeDirectory;
   lock =
-    if config.moduleopts.home-manager.preffered-lock-app == "gtklock" then
+    if config.moduleopts.home-manager.prefered-lock-app == "gtklock" then
       "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
-    else if config.moduleopts.home-manager.preffered-lock-app == "swaylock" then
+    else if config.moduleopts.home-manager.prefered-lock-app == "swaylock" then
       "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
     else
       throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";

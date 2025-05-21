@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.moduleopts.scripts;
+  cfg = config.moduleopts.home-manager.scripts;
 in
 {
   config = lib.mkIf cfg.enable {

@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.mpv;
+  cfg = config.moduleopts.home-manager.mpv;
 in
 {
-  options.moduleopts.mpv = {
+  options.moduleopts.home-manager.mpv = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;

@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.onepassword-integration;
+  cfg = config.moduleopts.home-manager.onepassword-integration;
   home = config.home.homeDirectory;
 in
 {
-  options.moduleopts.onepassword-integration = {
+  options.moduleopts.home-manager.onepassword-integration = {
     enable = lib.mkEnableOption "onepassword-integration";
   };
   config = lib.mkIf cfg.enable {
