@@ -37,8 +37,12 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix = {
-      url = "github:danth/stylix";
+      url = "github:nix-community/stylix/release-25.05";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
@@ -61,11 +65,32 @@
       imports = [
         ./packages/flake-module.nix
         ./hosts/flake-module.nix
+        inputs.pre-commit-hooks.flakeModule
       ];
 
+      perSystem =
+        {
+          system,
+          inputs',
+          ...
+        }:
+        {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+
+          pre-commit.settings.hooks = {
+            nixfmt-rfc-style.enable = true;
+            nil.enable = true;
+            deadnix.enable = true;
+            statix.enable = true;
+          };
+        };
+
       flake = {
-        nixosModules.mt190502 = import ./modules/nixos;
-        darwinModules.mt190502 = import ./modules/darwin;
+        nixosModules.mt190502 = import ./modules/hosts/nixos.nix;
+        darwinModules.mt190502 = import ./modules/hosts/darwin.nix;
         homeManagerModules.mt190502 = import ./modules/home-manager;
       };
     };
