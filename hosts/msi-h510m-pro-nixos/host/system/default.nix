@@ -23,7 +23,6 @@
     xdg-user-dirs-gtk
     xdg-utils
   ];
-  networking.hostName = "190502";
   programs.dconf.enable = true;
   programs.system-config-printer.enable = true;
   services = {
