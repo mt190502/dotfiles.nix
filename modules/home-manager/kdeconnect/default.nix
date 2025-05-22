@@ -1,11 +1,13 @@
 {
   config,
+  osConfig,
   lib,
   ...
 }:
 
 let
   cfg = config.moduleopts.home-manager.kdeconnect;
+  nixcfg = osConfig.moduleopts.nixos.kdeconnect;
 in
 {
   options.moduleopts.home-manager.kdeconnect = {
@@ -16,12 +18,10 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    services = {
-      kdeconnect = {
-        enable = true;
-        package = config.wrapped.kdeconnect;
-        indicator = true;
-      };
+    services.kdeconnect = {
+      enable = !nixcfg.enable;
+      package = lib.mkIf (!nixcfg.enable) config.wrapped.kdeconnect;
+      indicator = true;
     };
   };
 }
