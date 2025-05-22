@@ -2,17 +2,11 @@
 
 {
   environment.systemPackages = with pkgs; [
-    ayatana-ido
     btrfs-assistant
     flat-remix-icon-theme
     flatpak
     gparted
     gtklock
-    libayatana-appindicator
-    libayatana-appindicator-gtk3
-    libayatana-common
-    libayatana-indicator
-    libayatana-indicator-gtk3
     librewolf
     libva-utils
     lm_sensors

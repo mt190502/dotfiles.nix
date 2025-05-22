@@ -1,11 +1,21 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.moduleopts.nixos.fontconfig;
 in
 {
   config = lib.mkIf cfg.enable {
-    programs.virt-manager.enable = true;
+    programs.virt-manager = {
+      enable = true;
+      package = pkgs.virt-manager.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ pkgs.libayatana-appindicator-gtk3 ];
+      });
+    };
     virtualisation.libvirtd.enable = true;
     virtualisation.spiceUSBRedirection.enable = true;
   };
