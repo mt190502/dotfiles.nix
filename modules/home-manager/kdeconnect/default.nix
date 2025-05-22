@@ -7,7 +7,7 @@
 
 let
   cfg = config.moduleopts.home-manager.kdeconnect;
-  nixcfg = osConfig.moduleopts.nixos.kdeconnect;
+  nixcfg = if (osConfig == null) then { enable = false; } else osConfig.moduleopts.nixos.kdeconnect;
 in
 {
   options.moduleopts.home-manager.kdeconnect = {
@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     services.kdeconnect = {
       enable = !nixcfg.enable;
-      package = lib.mkIf (!nixcfg.enable) config.wrapped.kdeconnect;
+      package = config.wrapped.kdeconnect;
       indicator = true;
     };
   };
