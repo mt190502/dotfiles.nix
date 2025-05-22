@@ -45,6 +45,7 @@ bind-libs
 bind-utils
 binutils
 bison
+blueman
 bluez
 bluez-libs
 bluez-obexd
@@ -308,6 +309,7 @@ gpgme
 gpgmepp
 gpg-pubkey
 gpm-libs
+granite
 graphene
 graphite2
 grep
@@ -451,7 +453,7 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.14.6-300.fc42.x86_64
-kmod-v4l2loopback-6.14.6-cachyos1.fc42.x86_64
+kmod-v4l2loopback-6.14.7-cachyos1.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -574,6 +576,7 @@ libgbinder
 libgcc
 libgcrypt
 libgdata
+libgee
 libgfapi0
 libgfrpc0
 libgfxdr0
@@ -594,6 +597,7 @@ libguestfs
 libguestfs-appliance
 libgusb
 libgweather
+libhandy
 libheif
 libi2c
 libibverbs
@@ -1309,6 +1313,7 @@ swaybg
 swayfx
 swayfx-config-upstream
 swaylock
+SwayNotificationCenter
 sway-wallpapers
 switcheroo-control
 swtpm
