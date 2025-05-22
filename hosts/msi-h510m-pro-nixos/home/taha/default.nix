@@ -43,12 +43,12 @@
   moduleopts.home-manager = {
     flatpak.enable = true;
     gtk.enable = true;
-    prefered-wm = "sway";
-    prefered-lock-app = "gtklock";
     kde.enable = true;
+    prefered-lock-app = "gtklock";
+    prefered-wm = "sway";
     qt.enable = true;
-    swaylock.enable = false;
     rnnoise-denoising.enable = true;
+    swaylock.enable = false;
   };
 
   #~ systemd ~#

@@ -14,7 +14,7 @@ in
       antialias = true;
       cache32Bit = true;
       hinting.autohint = true;
-      hinting.enable = true ;
+      hinting.enable = true;
       hinting.style = "slight";
       includeUserConf = true;
       subpixel.lcdfilter = "default";
