@@ -61,7 +61,6 @@
     gcolor3
     gdb
     gef
-    git
     gnome-icon-theme
     gnome-tweaks
     gping
