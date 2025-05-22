@@ -1,2 +1,2 @@
-#!@bash@
+#!@bash@/bin/bash
 flatpak run com.valvesoftware.Steam "$@"
