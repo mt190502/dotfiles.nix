@@ -453,7 +453,7 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.14.6-300.fc42.x86_64
-kmod-v4l2loopback-6.14.7-cachyos1.fc42.x86_64
+kmod-v4l2loopback-6.14.8-cachyos1.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -1349,6 +1349,7 @@ tomlplusplus
 tpm2-tools
 tpm2-tss
 tpm2-tss-fapi
+tree
 tree-sitter-srpm-macros
 tslib
 tuned
