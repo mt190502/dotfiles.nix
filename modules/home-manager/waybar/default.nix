@@ -8,14 +8,14 @@
 
 let
   cfg = config.moduleopts.home-manager;
-  home = config.home.homeDirectory;
-  lock =
-    if cfg.prefered-lock-app == "gtklock" then
-      "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
-    else if cfg.prefered-lock-app == "swaylock" then
-      "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
+  wm =
+    if cfg.prefered-wm == "sway" then
+      "sway"
+    else if cfg.prefered-wm == "hyprland" then
+      "hypr"
     else
-      throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
+      throw "Unsupported window manager: ${cfg.prefered-wm}";
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.home-manager.waybar = {
@@ -35,13 +35,7 @@ in
       enable = true;
       systemd = {
         enable = true;
-        target =
-          if cfg.prefered-wm == "sway" then
-            "sway-session.target"
-          else if cfg.prefered-wm == "hyprland" then
-            "hyprland-session.target"
-          else
-            "graphical.target";
+        target = "${cfg.prefered-wm}-session.target";
       };
 
       settings = {
@@ -96,7 +90,7 @@ in
           #################################################
           "sway/language" = {
             format = "{short} {variant}";
-            on-click = ''${config.wrapped.sway}/bin/swaymsg input "type:keyboard" xkb_switch_layout next'';
+            on-click = ''${lib.getExe' config.wrapped.sway "swaymsg"} input "type:keyboard" xkb_switch_layout next'';
           };
 
           "sway/mode" = {
@@ -182,7 +176,7 @@ in
           cpu = {
             interval = 1;
             format = " {max_frequency:0.2f}GHz | {usage}%";
-            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
+            on-click = "${home}/.local/bin/program-toggler ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
           };
 
           idle_inhibitor = {
@@ -196,7 +190,7 @@ in
           memory = {
             interval = 10;
             format = " {used:0.2f} / {total:0.0f} GB";
-            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
+            on-click = "${home}/.local/bin/program-toggler ${lib.getExe config.wrapped.alacritty} -T BTOP -e btop";
           };
 
           mpd = {
@@ -223,7 +217,7 @@ in
             tooltip-format = "{artist} - {album} - {title}";
             on-click = "${lib.getExe pkgs.mpc} toggle";
             on-click-middle = "${lib.getExe pkgs.mpc} stop";
-            on-click-right = "${home}/.config/sway/scripts.d/ncmpcpp.sh";
+            on-click-right = "${home}/.config/${wm}/scripts.d/ncmpcpp.sh";
             on-scroll-up = "${lib.getExe pkgs.mpc} volume +5";
             on-scroll-down = "${lib.getExe pkgs.mpc} volume -5";
           };
@@ -235,7 +229,7 @@ in
             format-linked = " (No IP)";
             format-disconnected = "⚠ Disconnected";
             format-alt = "{essid} {ipaddr}/{cidr} ";
-            on-click-right = "${home}/.config/sway/scripts.d/programtoggle.sh ${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
+            on-click-right = "${home}/.local/bin/program-toggler ${lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor"}";
           };
 
           pulseaudio = {
@@ -258,11 +252,11 @@ in
               ];
             };
             scroll-step = 5;
-            on-click = "${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
-            on-click-middle = "${home}/.config/sway/scripts.d/programtoggle.sh ${pkgs.pavucontrol}/bin/pavucontrol";
-            on-click-right = "${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
-            on-scroll-up = "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
-            on-scroll-down = "${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
+            on-click = "${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-mute @DEFAULT_SINK@ toggle";
+            on-click-middle = "${home}/.local/bin/program-toggler ${lib.getExe pkgs.pavucontrol}";
+            on-click-right = "${lib.getExe' pkgs.pulseaudio "pactl"} set-source-mute @DEFAULT_SOURCE@ toggle";
+            on-scroll-up = "${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ +5%";
+            on-scroll-down = "${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ -5%";
             ignored-sinks = [ "Easy Effects Sink" ];
           };
 
@@ -276,8 +270,8 @@ in
           ###################################################
           "custom/dnd-mako" = {
             format = "{}";
-            exec = "${home}/.config/sway/scripts.d/dnd.sh status";
-            on-click = "${home}/.config/sway/scripts.d/dnd.sh";
+            exec = "${home}/.local/bin/mako-dnd-toggle status";
+            on-click = "${home}/.local/bin/mako-dnd-toggle toggle";
             return-type = "json";
             signal = 9;
           };
@@ -292,21 +286,21 @@ in
           "custom/pomobar" = {
             format = "{}";
             interval = 1;
-            exec = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client status";
-            on-click = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client pause";
-            on-click-middle = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client reset";
-            on-click-right = "${inputs.self.packages.${pkgs.system}.pomobar}/bin/pomobar-client resume";
+            exec = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} status";
+            on-click = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} pause";
+            on-click-middle = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} reset";
+            on-click-right = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} resume";
             return-type = "json";
           };
 
           "custom/powermenu" = {
-            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lock} --lockmenu";
+            on-click = "${home}/.local/bin/program-toggler ${home}/.local/bin/powermenu";
             format = "";
             tooltip = false;
           };
 
           "custom/screenshot" = {
-            on-click = "${home}/.config/sway/scripts.d/screenshot.sh";
+            on-click = "${home}/.local/bin/program-toggler ${home}/.local/bin/grimshot";
             format = "";
             tooltip = false;
           };
@@ -330,11 +324,11 @@ in
               dnd-inhibited-none = "";
             };
             return-type = "json";
-            exec-if = "${pkgs.swaynotificationcenter}/bin/swaync-client";
-            exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
-            on-click = "${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
-            on-click-middle = "${pkgs.systemd}/bin/systemctl --user restart swaync"; # temporarily fix for swaync bug
-            on-click-right = "${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
+            exec-if = "${lib.getExe' pkgs.swaynotificationcenter "swaync-client"}";
+            exec = "${lib.getExe' pkgs.swaynotificationcenter "swaync-client"} -swb";
+            on-click = "${lib.getExe' pkgs.swaynotificationcenter "swaync-client"} -t -sw";
+            on-click-middle = "${lib.getExe' pkgs.systemd "systemctl"} --user restart swaync"; # temporarily fix for swaync bug
+            on-click-right = "${lib.getExe' pkgs.swaynotificationcenter "swaync-client"} -d -sw";
             escape = true;
           };
 
@@ -343,7 +337,7 @@ in
             interval = 3600;
             exec = "${lib.getExe pkgs.curl} -s 'https://wttr.in/${cfg.waybar.weather_location}?format=1' | sed 's/ //1'";
             exec-if = "ping wttr.in -c1";
-            on-click = "${home}/.config/sway/scripts.d/programtoggle.sh ${lib.getExe config.wrapped.alacritty} -T wttr.in -e sh -c '${lib.getExe pkgs.curl} https://wttr.in/${cfg.waybar.weather_location}; read'";
+            on-click = "${home}/.local/bin/program-toggler ${lib.getExe config.wrapped.alacritty} -T wttr.in -e sh -c '${lib.getExe pkgs.curl} https://wttr.in/${cfg.waybar.weather_location}; read'";
           };
         };
       };

@@ -1,4 +1,4 @@
-#!@bash@/bin/bash
+#!@bash@
 
 #for d in $(find /sys/kernel/iommu_groups/ -type l | sort -n -k5 -t/); do 
 #    n=${d#*/iommu_groups/*}; n=${n%%/*}

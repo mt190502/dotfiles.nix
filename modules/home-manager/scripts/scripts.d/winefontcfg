@@ -1,4 +1,4 @@
-#!@bash@/bin/sh
+#!@sh@
 
 WINE=${WINE:-wine}
 WINEPREFIX=${WINEPREFIX:-$HOME/.wine}

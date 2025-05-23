@@ -1,4 +1,4 @@
-#!@bash@/bin/bash
+#!@bash@
 CADDY_VER=$(curl -s https://api.github.com/repos/caddyserver/caddy/releases/latest | jq -r '.tag_name' | sed 's/v//g')
 
 wget https://github.com/caddyserver/caddy/releases/download/v"$CADDY_VER"/caddy_"${CADDY_VER}"_linux_amd64.tar.gz || exit 1

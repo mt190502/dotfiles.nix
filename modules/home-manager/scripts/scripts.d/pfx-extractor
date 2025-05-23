@@ -1,4 +1,4 @@
-#!@bash@/bin/bash
+#!@bash@
 ###~ description: extracts pfx certificate bundle to .crt and .key
 
 #~ check parameters

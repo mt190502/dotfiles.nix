@@ -6,7 +6,8 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.scripts;
+  cfg = config.moduleopts.home-manager;
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.home-manager.scripts = {
@@ -16,7 +17,7 @@ in
       description = "scripts";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.scripts.enable {
     home.file = (
       builtins.listToAttrs (
         lib.map (path: {
@@ -34,17 +35,25 @@ in
                     ])
                     {
                       alacritty = lib.getExe config.wrapped.alacritty;
-                      bash = pkgs.bash;
+                      bash = lib.getExe' pkgs.bash "bash";
                       cliphist = lib.getExe pkgs.cliphist;
                       coreutils = pkgs.coreutils;
                       grim = lib.getExe pkgs.grim;
                       imagemagick = config.wrapped.imagemagick;
                       imv = config.wrapped.imv;
                       jq = lib.getExe pkgs.jq;
+                      lock-screen-function =
+                        if cfg.${cfg.prefered-lock-app}.systemd.enable then
+                          "${lib.getExe' pkgs.systemd "systemctl"} --user start session-lock"
+                        else if cfg.prefered-lock-app == "swaylock" then
+                          "${home}/.local/bin/blurlock"
+                        else
+                          cfg.prefered-lock-app;
                       mako = pkgs.mako;
                       ncmpcpp = lib.getExe pkgs.ncmpcpp;
                       newt = pkgs.newt;
                       notify-send = lib.getExe pkgs.libnotify;
+                      sh = lib.getExe' pkgs.bash "sh";
                       slurp = lib.getExe pkgs.slurp;
                       swappy = lib.getExe pkgs.swappy;
                       sway = config.wrapped.sway;

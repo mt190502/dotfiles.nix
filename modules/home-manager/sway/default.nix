@@ -44,25 +44,12 @@ in
                     {
                       alacritty = lib.getExe config.wrapped.alacritty;
                       bash = lib.getExe pkgs.bash;
-                      cliphist = lib.getExe pkgs.cliphist;
-                      grim = lib.getExe pkgs.grim;
-                      imagemagick = config.wrapped.imagemagick;
-                      imv = config.wrapped.imv;
                       jq = lib.getExe pkgs.jq;
-                      mako = pkgs.mako;
                       ncmpcpp = lib.getExe pkgs.ncmpcpp;
                       notify-send = lib.getExe pkgs.libnotify;
                       slurp = lib.getExe pkgs.slurp;
-                      # swaylock = lib.getExe pkgs.swaylock;     # not available in non nixos systems
-                      swappy = lib.getExe pkgs.swappy;
-                      sway = config.wrapped.sway;
-                      swaync = lib.getExe pkgs.swaynotificationcenter;
-                      tesseract = lib.getExe pkgs.tesseract;
+                      swaymsg = lib.getExe' config.wrapped.sway "swaymsg";
                       tmux = lib.getExe pkgs.tmux;
-                      trans = lib.getExe pkgs.translate-shell;
-                      wl_clipboard = pkgs.wl-clipboard;
-                      wofi = lib.getExe pkgs.wofi;
-                      wtype = lib.getExe pkgs.wtype;
                     }
                 );
               in

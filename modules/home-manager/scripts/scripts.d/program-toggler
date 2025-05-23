@@ -10,10 +10,10 @@ if [[ "$1" =~ "/nix" ]]; then
 	program=$(echo "$1" | awk -F '/' '{print $NF}')
 	[[ -n "${*:2}" ]] && program+=" ${*:2}"
 # shellcheck disable=SC2009
-	mapfile -t PID_LIST < <(ps aux | grep -vE "grep|programtoggle" | grep -i "$program" | awk '{print $2}')
+	mapfile -t PID_LIST < <(ps aux | grep -vE "grep|program-toggler" | grep -i "$program" | awk '{print $2}')
 else
 # shellcheck disable=SC2009
-	mapfile -t PID_LIST < <(ps aux | grep -vE "grep|programtoggle" | grep -i "$*" | awk '{print $2}')
+	mapfile -t PID_LIST < <(ps aux | grep -vE "grep|program-toggler" | grep -i "$*" | awk '{print $2}')
 fi
 
 if [[ -n "${PID_LIST[*]}" ]]; then

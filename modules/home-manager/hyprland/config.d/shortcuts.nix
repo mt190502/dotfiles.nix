@@ -47,11 +47,11 @@ in
 
       #~~~ other
       "${modifier}, Return, exec, ${config.wrapped.alacritty}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'"
-      "${modifier}, d, exec, ${home}/.config/hypr/scripts.d/programtoggle.sh $menu"
-      "${modifier}, l, exec, ${home}/.config/hypr/scripts.d/powermenu.sh --lock"
-      "${modifier}, period, exec, ${home}/.config/hypr/scripts.d/programtoggle.sh ${home}/.config/hypr/scripts.d/wofimoji.sh"
-      "${modifier} SHIFT, d, exec, ${home}/.config/hypr/scripts.d/programtoggle.sh ${home}/.config/hypr/scripts.d/tesseract.sh -e"
-      "${modifier} SHIFT, f, exec, ${home}/.config/hypr/scripts.d/programtoggle.sh ${home}/.config/hypr/scripts.d/tesseract.sh -t"
+      "${modifier}, d, exec, ${home}/.local/bin/program-toggler $menu"
+      "${modifier}, l, exec, ${home}/.local/bin/powermenu --lock"
+      "${modifier}, period, exec, ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji"
+      "${modifier} SHIFT, d, exec, ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e"
+      "${modifier} SHIFT, f, exec, ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -t"
     ];
   };
 }

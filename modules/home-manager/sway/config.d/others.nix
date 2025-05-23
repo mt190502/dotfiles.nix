@@ -7,13 +7,7 @@
 
 let
   home = config.home.homeDirectory;
-  lock =
-    if config.moduleopts.home-manager.prefered-lock-app == "gtklock" then
-      "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
-    else if config.moduleopts.home-manager.prefered-lock-app == "swaylock" then
-      "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
-    else
-      throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
+  swaymsg = lib.getExe' config.wrapped.sway "swaymsg";
 in
 {
   wayland.windowManager.sway = {
@@ -46,12 +40,12 @@ in
 
       #~~~ startup apps
       {
-        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${lock} --lock' timeout 140 '${config.wrapped.sway}/bin/swaymsg output * dpms off' resume '${config.wrapped.sway}/bin/swaymsg output * dpms on'";
+        command = "${lib.getExe pkgs.swayidle} -w timeout 120 '${home}/.local/bin/powermenu --lock' timeout 140 '${swaymsg} output * dpms off' resume '${swaymsg} output * dpms on'";
       }
       { command = "${lib.getExe pkgs.tmux} new-session -ds daemonmodetmux"; }
       { command = "${lib.getExe pkgs.wlsunset} -S '07:00' -s '19:00'"; }
       {
-        command = "${home}/.config/sway/scripts.d/tmux_server.sh";
+        command = "${home}/.local/bin/tmux-server";
         always = true;
       }
       {
@@ -60,7 +54,7 @@ in
       }
 
       #~~~ others
-      { command = "${home}/.config/sway/scripts.d/autostart.sh"; }
+      { command = "${home}/.local/bin/autostart"; }
     ];
   };
 }

@@ -12,19 +12,19 @@
 	@notify-send@ "No workspace specified..."
 	exit
 }
-active_monitor=$(@sway@/bin/swaymsg -t get_outputs | @jq@ -r '.[] | select (.focused) | .name')
+active_monitor=$(@swaymsg@ -t get_outputs | @jq@ -r '.[] | select (.focused) | .name')
 case $1 in
 init)
-	for monitor in $(@sway@/bin/swaymsg -t get_workspaces | @jq@ -r ".[].output"); do
-		@sway@/bin/swaymsg workspace "1-$monitor" output "$monitor"
-		@sway@/bin/swaymsg workspace "1-$monitor"
+	for monitor in $(@swaymsg@ -t get_workspaces | @jq@ -r ".[].output"); do
+		@swaymsg@ workspace "1-$monitor" output "$monitor"
+		@swaymsg@ workspace "1-$monitor"
 	done
 	;;
 switch)
-	@sway@/bin/swaymsg workspace "$2-$active_monitor" output "$active_monitor"
-	@sway@/bin/swaymsg workspace "$2-$active_monitor"
+	@swaymsg@ workspace "$2-$active_monitor" output "$active_monitor"
+	@swaymsg@ workspace "$2-$active_monitor"
 	;;
 move-container)
-	@sway@/bin/swaymsg move container to workspace "$2-$active_monitor"
+	@swaymsg@ move container to workspace "$2-$active_monitor"
 	;;
 esac

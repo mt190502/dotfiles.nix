@@ -6,16 +6,10 @@
 }:
 
 let
+  cfg = config.moduleopts.home-manager;
   modifier = config.wayland.windowManager.sway.config.modifier;
   menu = config.wayland.windowManager.sway.config.menu;
   home = config.home.homeDirectory;
-  lock =
-    if config.moduleopts.home-manager.prefered-lock-app == "gtklock" then
-      "${home}/.config/sway/scripts.d/powermenu-gtklock.sh"
-    else if config.moduleopts.home-manager.prefered-lock-app == "swaylock" then
-      "${home}/.config/sway/scripts.d/powermenu-swaylock.sh"
-    else
-      throw "Invalid lock app specified. Please use either 'gtklock' or 'swaylock'.";
 in
 {
   wayland.windowManager.sway.config = {
@@ -38,9 +32,9 @@ in
         "${modifier}+r" = "mode 'default'";
       };
       screenshot = {
-        "${modifier}+shift+s" = "exec ${home}/.config/sway/scripts.d/screenshot.sh -r; mode 'default'";
-        "a" = " exec ${home}/.config/sway/scripts.d/screenshot.sh -a; mode 'default'";
-        "f" = " exec ${home}/.config/sway/scripts.d/screenshot.sh -f; mode 'default'";
+        "${modifier}+shift+s" = "exec ${home}/.local/bin/grimshot -r; mode 'default'";
+        "a" = " exec ${home}/.local/bin/grimshot -a; mode 'default'";
+        "f" = " exec ${home}/.local/bin/grimshot -f; mode 'default'";
         "Return" = "mode 'default'";
         "Escape" = "mode 'default'";
       };
@@ -66,7 +60,7 @@ in
       #~~~ window
       "${modifier}+f" = "fullscreen";
       "${modifier}+Shift+space" =
-        "exec ${config.wrapped.sway}/bin/swaymsg input 'type:keyboard' xkb_switch_layout next && ${config.wrapped.sway}/bin/swaymsg floating toggle"; # ~ https://github.com/swaywm/sway/issues/8403
+        "exec ${lib.getExe' config.wrapped.sway "swaymsg"} input 'type:keyboard' xkb_switch_layout next && ${lib.getExe' config.wrapped.sway "swaymsg"} floating toggle"; # ~ https://github.com/swaywm/sway/issues/8403
       "${modifier}+shift+1" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 1";
       "${modifier}+shift+2" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 2";
       "${modifier}+shift+3" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 3";
@@ -90,9 +84,9 @@ in
       "${modifier}+8" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 8";
 
       #~~~ sound
-      "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
-      "XF86AudioLowerVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
-      "XF86AudioMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+      "XF86AudioRaiseVolume" = "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ +5%";
+      "XF86AudioLowerVolume" = "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ -5%";
+      "XF86AudioMute" = "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-mute @DEFAULT_SINK@ toggle";
 
       #~~~ brightness (for Laptops)
       "XF86MonBrightnessUp" = "exec ${lib.getExe pkgs.brightnessctl} set +5%";
@@ -100,8 +94,8 @@ in
 
       #~~~ clipboard
       "${modifier}+v" =
-        "exec ${lib.getExe pkgs.cliphist} list | ${lib.getExe pkgs.wofi} --show dmenu | ${lib.getExe pkgs.cliphist} decode | ${pkgs.wl-clipboard}/bin/wl-copy";
-      "${modifier}+shift+v" = "exec ${pkgs.cliphist}/bin/cliphist wipe";
+        "exec ${lib.getExe pkgs.cliphist} list | ${lib.getExe pkgs.wofi} --show dmenu | ${lib.getExe pkgs.cliphist} decode | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}";
+      "${modifier}+shift+v" = "exec ${lib.getExe pkgs.cliphist} wipe";
 
       #~~~ playerctl
       "XF86AudioPlay" = "exec ${lib.getExe pkgs.playerctl} play-pause";
@@ -117,16 +111,20 @@ in
 
       #~~~ other
       "${modifier}+Return" =
-        "exec ${config.wrapped.alacritty}/bin/alacritty -e bash -c '${pkgs.tmux}/bin/tmux attach -t daemonmodetmux'";
-      "${modifier}+d" = "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${menu}";
-      "${modifier}+l" = "exec ${lock} --lock";
+        "exec ${lib.getExe config.wrapped.alacritty} -e bash -c '${lib.getExe pkgs.tmux} attach -t daemonmodetmux'";
+      "${modifier}+d" = "exec ${home}/.local/bin/program-toggler ${menu}";
+      "${modifier}+l" =
+        if cfg.prefered-lock-app == "swaylock" then
+          "exec ${home}/.local/bin/blurlock"
+        else 
+          "exec ${cfg.prefered-lock-app}";
       "${modifier}+period" =
-        "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${home}/.config/sway/scripts.d/wofimoji.sh";
+        "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
       "${modifier}+shift+d" =
-        "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${home}/.config/sway/scripts.d/tesseract.sh -e";
+        "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e";
       "${modifier}+shift+f" =
-        "exec ${home}/.config/sway/scripts.d/programtoggle.sh ${home}/.config/sway/scripts.d/tesseract.sh -t";
-      "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown_term.sh";
+        "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -t";
+      "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown.sh";
     };
   };
 }
