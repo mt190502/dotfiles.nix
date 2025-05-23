@@ -6,7 +6,8 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.swaylock;
+  cfg = config.moduleopts.home-manager;
+  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.home-manager.swaylock = {
@@ -15,8 +16,13 @@ in
       default = true;
       description = "swaylock";
     };
+    systemd.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable systemd service for swaylock";
+    };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.swaylock.enable {
     programs.swaylock = {
       enable = true;
       package = pkgs.swaylock;
@@ -81,6 +87,34 @@ in
         #~~~ keyboard layout config
         #show-keyboard-layout = true;
         hide-keyboard-layout = true;
+      };
+    };
+    systemd.user.services = lib.mkIf cfg.swaylock.systemd.enable {
+      session-lock = {
+        Unit = {
+          Description = "Session Lock";
+          Before = [
+            "suspend.target"
+            "sleep.target"
+            "hibernate.target"
+          ];
+          Wants = [
+            "suspend.target"
+            "sleep.target"
+            "hibernate.target"
+          ];
+        };
+        Service = {
+          Type = "forking";
+          ExecStart = "${home}/.local/bin/blurlock";
+        };
+        Install = {
+          WantedBy = [
+            "sleep.target"
+            "suspend.target"
+            "hibernate.target"
+          ];
+        };
       };
     };
   };
