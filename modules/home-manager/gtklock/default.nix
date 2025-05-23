@@ -7,26 +7,20 @@
 
 let
   cfg = config.moduleopts.home-manager;
-  home = config.home.homeDirectory;
 in
 {
   options.moduleopts.home-manager.gtklock = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "gtklock";
-    };
     systemd.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable systemd service for gtklock";
     };
   };
-  config = lib.mkIf cfg.gtklock.enable {
+  config = lib.mkIf (cfg.prefered-lock-app == "gtklock") {
     xdg.configFile."gtklock/config.ini".text = ''
       [main]
       modules=${pkgs.gtklock-playerctl-module}/lib/gtklock/playerctl-module.so
-      time-format=   %I:%M %p
+      time-format=  %I:%M %p
 
       [playerctl]
       art-size=64
@@ -129,28 +123,30 @@ in
     '';
     systemd.user.services = lib.mkIf cfg.gtklock.systemd.enable {
       session-lock = {
-        description = "Session Lock";
-        Before = [
-          "suspend.target"
-          "sleep.target"
-          "hibernate.target"
-        ];
-        Wants = [
-          "suspend.target"
-          "sleep.target"
-          "hibernate.target"
-        ];
-      };
-      Service = {
-        Type = "forking";
-        ExecStart = "gtklock";
-      };
-      Install = {
-        WantedBy = [
-          "suspend.target"
-          "sleep.target"
-          "hibernate.target"
-        ];
+        Unit = {
+          Description = "Session Lock";
+          Before = [
+            "suspend.target"
+            "sleep.target"
+            "hibernate.target"
+          ];
+          Wants = [
+            "suspend.target"
+            "sleep.target"
+            "hibernate.target"
+          ];
+        };
+        Service = {
+          Type = "forking";
+          ExecStart = "gtklock";
+        };
+        Install = {
+          WantedBy = [
+            "sleep.target"
+            "suspend.target"
+            "hibernate.target"
+          ];
+        };
       };
     };
   };

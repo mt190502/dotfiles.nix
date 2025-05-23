@@ -11,18 +11,13 @@ let
 in
 {
   options.moduleopts.home-manager.swaylock = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "swaylock";
-    };
     systemd.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable systemd service for swaylock";
     };
   };
-  config = lib.mkIf cfg.swaylock.enable {
+  config = lib.mkIf (cfg.prefered-lock-app == "swaylock") {
     programs.swaylock = {
       enable = true;
       package = pkgs.swaylock;
