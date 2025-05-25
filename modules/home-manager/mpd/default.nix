@@ -43,6 +43,12 @@ in
         port = 6600;
         startWhenNeeded = true;
       };
+      extraConfig = ''
+        audio_output {
+          type        "pipewire"
+          name        "PipeWire Audio Server"
+        }
+      '';
     };
 
     home.packages = lib.mkIf (cfg.bundle == "mpd") [
