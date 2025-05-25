@@ -1,13 +1,13 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
   ...
 }:
 
 let
   cfg = config.moduleopts.home-manager;
+  pomobar-client = lib.getExe' config.services.pomobar.package "pomobar-client";
   wm =
     if cfg.prefered-wm == "sway" then
       "sway"
@@ -286,10 +286,10 @@ in
           "custom/pomobar" = {
             format = "{}";
             interval = 1;
-            exec = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} status";
-            on-click = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} pause";
-            on-click-middle = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} reset";
-            on-click-right = "${lib.getExe' inputs.self.packages.${pkgs.system}.pomobar "pomobar-client"} resume";
+            exec = "${pomobar-client} status";
+            on-click = "${pomobar-client} pause";
+            on-click-middle = "${pomobar-client} reset";
+            on-click-right = "${pomobar-client} resume";
             return-type = "json";
           };
 
