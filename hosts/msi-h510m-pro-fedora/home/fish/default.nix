@@ -47,7 +47,7 @@ in
       '';
       shellAliases = {
         d = "docker";
-        sysdup = "sudo dnf --refresh upgrade && nix-channel --update && flatpak update && hm .#msi-h510m-pro-fedora --update-flake";
+        sysdup = "sudo dnf --refresh upgrade && nix-channel --update && flatpak update && hm msi-h510m-pro-fedora --update-flake";
       };
     };
   };
