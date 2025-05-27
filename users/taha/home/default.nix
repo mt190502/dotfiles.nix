@@ -98,6 +98,7 @@
     nwg-look
     ocs-url
     onefetch
+    opentofu
     pavucontrol
     pipes-rs
     playerctl
