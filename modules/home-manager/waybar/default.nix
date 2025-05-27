@@ -50,7 +50,7 @@ in
           #### Modules
           #################################################
           modules-left = [
-            "custom/space"
+            "custom/space2"
             "sway/workspaces"
             "custom/space"
             "sway/window"
@@ -82,7 +82,7 @@ in
             "custom/swaync"
             "custom/space"
             "custom/powermenu"
-            "custom/space"
+            "custom/space2"
           ];
 
           #################################################
@@ -306,6 +306,11 @@ in
           };
 
           "custom/space" = {
+            format = " ";
+            tooltip = false;
+          };
+
+          "custom/space2" = {
             format = "  ";
             tooltip = false;
           };
@@ -343,36 +348,38 @@ in
       };
 
       style = with config.lib.stylix.colors.withHashtag; ''
-
-        * {
-        	border-radius: 5px;
-        	font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
-        	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
-        	min-height: 0;
-        }
-
-        box.horizontal #tray widget window menu menuitem *,
-        window#waybar,
-        window#waybar.empty #window label {
-        	background-color: transparent;
-        }
-
-        #tray,
-        #workspaces,
-        widget label:not(#custom-space) {
-        	background-color: ${base00};
-        	color: ${base05};
-        	margin: 6px 0px 2px 0px;
-        	padding: 0px 10px 0px 10px;
-        }
-
-        #workspaces button,
-        #workspaces button label {
-        	background-color: ${base00};
-        	color: ${base05};
-        	margin: 0px 0px 0px 0px;
-        	padding: 0px 1px 0px 1px;
-        }
+      * {
+          border-radius: 5px;
+          font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
+          font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 2)}px;
+          min-height: 0;
+      }
+      
+      #tray,
+      #workspaces,
+      widget label {
+          background-color: ${base00};
+          color: ${base05};
+          margin: 6px 0px 0px 0px;
+          padding: 0px 7px 0px 7px;
+      }
+      
+      #custom-space,
+      #custom-space2,
+      #workspaces button,
+      #workspaces button label,
+      window#waybar,
+      window#waybar.empty #window label {
+          background-color: transparent;
+          margin: 0px 0px 0px 0px;
+          padding: 0px 1px 0px 1px;
+      }
+      
+      #custom-space,
+      #custom-space2 {
+          background-color: transparent;
+          padding: 0px 0px 0px 0px;
+      }
       '';
     };
   };
