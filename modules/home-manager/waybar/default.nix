@@ -379,6 +379,11 @@ in
           padding: 0px 0px 0px 0px;
       }
 
+      #workspaces button,
+      #workspaces button label {
+	        margin: 0px -2px 0px -2px;
+      }
+
       box#tray window.popup * {
           background-color: ${base00};
           color: ${base05};
