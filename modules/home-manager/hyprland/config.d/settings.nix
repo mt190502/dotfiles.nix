@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}:
+{ config, ... }:
 
 {
   wayland.windowManager.hyprland.settings = {
@@ -12,7 +9,6 @@
         font_size = config.stylix.fonts.sizes.applications;
       };
     };
-
     decoration = {
       rounding = 12;
       # rounding_power = 2.0;
@@ -29,16 +25,13 @@
         enabled = false;
       };
     };
-
     general = {
       border_size = 0;
       gaps_in = 5;
       gaps_out = 0;
     };
-
     animations = {
       enabled = "yes, please :)";
-
       bezier = [
         "easeOutQuint,0.23,1,0.32,1"
         "easeInOutCubic,0.65,0.05,0.36,1"

@@ -17,7 +17,6 @@ let
       lib.nameValuePair pkg.name pkg
     ))
   ];
-
   opts = lib.mapAttrs (
     _: pkg:
     lib.mkOption {
@@ -42,6 +41,5 @@ in
       '';
     };
   } // opts;
-
   config.wrapped = lib.mapAttrs (_: pkg: pkg.wrap) packages;
 }

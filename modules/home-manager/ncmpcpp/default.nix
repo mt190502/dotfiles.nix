@@ -19,7 +19,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.ncmpcpp = {
       enable = true;
-
       settings = {
         allow_for_physical_item_deletion = true;
         ask_before_clearing_playlists = false;
@@ -60,7 +59,6 @@ in
         store_lyrics_in_song_dir = true;
         volume_change_step = 5;
       };
-
       bindings = [
         {
           key = ",";
@@ -70,11 +68,11 @@ in
     };
     xdg.configFile."ncmpcpp/get_and_copy_purl_from_current_song.sh" = {
       text = ''
-        #!${pkgs.bash}/bin/bash
+        #!${lib.getExe' pkgs.bash "bash"}
         current_song_file_path="${config.services.mpd.musicDirectory}/$(${lib.getExe pkgs.mpc} current -f %file%)"
-        purl=$(${pkgs.ffmpeg}/bin/ffprobe -v quiet -show_entries stream_tags=purl -of default=noprint_wrappers=1:nokey=1 "$current_song_file_path")
+        purl=$(${lib.getExe' pkgs.ffmpeg "ffprobe"} -v quiet -show_entries stream_tags=purl -of default=noprint_wrappers=1:nokey=1 "$current_song_file_path")
         if [ -n "$purl" ]; then
-          echo "$purl" | ${pkgs.wl-clipboard}/bin/wl-copy
+          echo "$purl" | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}
           ${lib.getExe pkgs.libnotify} "ncmpcpp: PURL copied to clipboard" "$purl"
         fi
       '';

@@ -13,7 +13,6 @@
       ];
     };
   };
-
   flake.nixosConfigurations = {
     msi-h510m-pro-nixos = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";

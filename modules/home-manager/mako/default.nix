@@ -15,7 +15,6 @@ in
   config = lib.mkIf cfg.enable {
     services.mako = {
       enable = true;
-
       backgroundColor = config.colors.backgroundColor + makoOpacity;
       borderColor = config.colors.activeColor;
       textColor = config.colors.textColor;
@@ -29,7 +28,6 @@ in
       margin = "16";
       maxIconSize = 64;
       sort = "-time";
-
       extraConfig = ''
         [urgency=high]
         border-color=${config.colors.urgentColor}

@@ -1,4 +1,5 @@
 { lib, ... }:
+
 {
   console = {
     font = "eurlatgr";

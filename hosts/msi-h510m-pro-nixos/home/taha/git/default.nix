@@ -1,9 +1,4 @@
-{
-  config,
-  osConfig,
-  lib,
-  ...
-}:
+{ config, lib, osConfig, ... }:
 
 let
   cfg = config.moduleopts.home-manager.git;

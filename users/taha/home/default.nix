@@ -1,7 +1,8 @@
 {
+  config,
+  inputs,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 
@@ -20,6 +21,18 @@
   #
   ########################################
   home.packages = with pkgs; [
+    #~ wrapped ~#
+    config.wrapped.alacritty
+    config.wrapped.dolphin
+    config.wrapped.flameshot
+    config.wrapped.imagemagick
+    config.wrapped.jetbrains-toolbox
+    config.wrapped.nwg-displays
+    config.wrapped.qt5ct
+    config.wrapped.qt6ct
+    config.wrapped.universal-android-debloater
+    config.wrapped.vscode
+
     #~ custom ~#
     inputs.self.packages."${pkgs.system}".zmem
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
@@ -153,6 +166,15 @@
     waybar.weather_location = "Istanbul";
   };
 
+  #~ systemd ~#
+  xdg.configFile."user-tmpfiles.d/home-manager.conf" = {
+    text = ''
+      L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0
+      L %t/app/com.discordapp.Discord/discord-ipc-0 - - - - %t/.flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0
+    '';
+    onChange = "${pkgs.systemd}/bin/systemd-tmpfiles --user --create";
+  };
+
   #~ xdg ~#
   xdg.mime.enable = true;
 
@@ -163,10 +185,8 @@
   ########################################
   home.sessionVariables = {
     ##############################
-    ## LIBVA/VDPAU
-    ##############################
-    #DRI_PRIME = "1"
-    LIBVA_DRIVER_NAME = "iHD";
+     ##############################
+      LIBVA_DRIVER_NAME = "iHD";
     VDPAU_DRIVER = "radeonsi";
 
     ##############################

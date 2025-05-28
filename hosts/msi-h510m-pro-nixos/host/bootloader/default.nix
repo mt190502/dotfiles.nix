@@ -1,4 +1,5 @@
 { config, pkgs, ... }:
+
 {
   boot = {
     extraModprobeConfig = ''
@@ -22,7 +23,14 @@
       v4l2loopback
     ];
     initrd = {
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usbhid"
+      ];
       kernelModules = [
+        "kvm-intel"
         "nct6683"
         "v4l2loopback"
       ];

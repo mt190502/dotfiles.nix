@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.fish;
+  cfg = config.moduleopts.home-manager;
   home = config.home.homeDirectory;
 in
 {
@@ -17,10 +17,9 @@ in
       description = "fish";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.fish.enable {
     programs.fish = {
       enable = true;
-
       functions = {
         cd = "builtin cd $argv; ${lib.getExe pkgs.lsd}";
         mapscii = "${pkgs.inetutils}/bin/telnet mapscii.me";
@@ -31,9 +30,7 @@ in
         nevalp = "nix eval nixpkgs#$argv.outPath";
         nevalcd = "cd $(nix eval --raw nixpkgs#$argv.outPath)";
       };
-
       generateCompletions = false;
-
       plugins = [
         {
           name = "nvm";
@@ -54,13 +51,12 @@ in
           };
         }
       ];
-
       shellAliases = {
         #~ Containers
         a = "${pkgs.ansible}/bin/ansible";
         ap = "clear; ${pkgs.ansible}/bin/ansible-playbook";
         k = "${lib.getExe pkgs.kubectl}";
-
+        
         #~ System
         cp = "cp -i";
         crontab = "crontab -i";
@@ -89,13 +85,18 @@ in
         yt-album = "${lib.getExe pkgs.yt-dlp} -o \"${home}/Music/Albums/%(album)s - %(artist)s/%(playlist_autonumber)02d - %(track)s.%(ext)s\"";
         yt-music = "${lib.getExe pkgs.yt-dlp} -o \"${home}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
       };
-
       shellInit = ''
         #################################################
         #### Fish Variables
         #################################################
         set fish_greeting ""
         export TERM="xterm-256color"
+
+        #################################################
+        #### Home specific fish variables
+        #################################################
+        export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:${home}/.nix-profile/sbin:${home}/.nix-profile/bin:$PATH";
+        export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${home}/.local/share:/usr/local/share:/usr/share:${home}/.nix-profile/share:$XDG_DATA_DIRS";
 
         #################################################
         #### Applications
@@ -111,6 +112,19 @@ in
           set cmd "$(echo $cmd | sed 's/conf\.//g')"
           type "$cmd" >/dev/null 2>&1 && alias "$cmd"="${lib.getExe pkgs.grc} --colour=auto $cmd"
         end 
+      '';
+      loginShellInit = ''
+        if [ "$(tty)" = "/dev/tty1" ]
+          export $(${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
+          export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
+          export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
+          ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+          if [ "${cfg.prefered-wm}" = "hyprland" ]
+            XDG_CURRENT_DESKTOP=Hyprland Hyprland &>${home}/.cache/hyprland.log
+          else
+            XDG_CURRENT_DESKTOP=sway sway &>${home}/.cache/swaywm.log
+          end
+        end
       '';
     };
   };

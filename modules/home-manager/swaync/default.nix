@@ -19,7 +19,6 @@ in
   config = lib.mkIf cfg.enable {
     services.swaync = {
       enable = true;
-
       settings = {
         "$schema" = "${pkgs.swaynotificationcenter}/etc/xdg/swaync/configSchema.json";
         control-center-height = 500;
@@ -78,7 +77,6 @@ in
           };
         };
       };
-
       style = with config.lib.stylix.colors.withHashtag; ''
         * {
           border-radius: 0;

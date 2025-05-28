@@ -1,7 +1,7 @@
 {
   config,
-  lib,
   inputs,
+  lib,
   ...
 }:
 
@@ -10,7 +10,6 @@ let
 in
 {
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
-
   options.moduleopts.home-manager.flatpak = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -82,7 +81,6 @@ in
         "org.texstudio.TeXstudio"
         "org.upscayl.Upscayl"
       ];
-
       remotes = [
         {
           name = "flathub";

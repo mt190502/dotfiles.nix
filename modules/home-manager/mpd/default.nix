@@ -30,7 +30,6 @@ in
       description = "bundle to use";
     };
   };
-
   config = lib.mkIf cfg.enable {
     services =
       if (cfg.bundle == "mpd") then

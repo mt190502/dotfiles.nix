@@ -1,6 +1,4 @@
-{
-  pkgs,
-}:
+{ pkgs, ... }:
 
 pkgs.stdenv.mkDerivation {
   pname = "ubuntu-fonts-google";
@@ -42,9 +40,7 @@ pkgs.stdenv.mkDerivation {
       sha256 = "sha256-MSjfhqMYBWGENtCuVlG6QoXQyd4KOQV9Al9k7jO862Q=";
     })
   ];
-
   dontUnpack = true;
-
   installPhase = ''
     mkdir -p $out/share/fonts/truetype/{ubuntu-fonts-google,ubuntu-fonts-google-nerd}
     for src in $srcs; do
@@ -52,7 +48,6 @@ pkgs.stdenv.mkDerivation {
       nerd-font-patcher --complete --outputdir $out/share/fonts/truetype/ubuntu-fonts-google-nerd/ $src
     done
   '';
-
   meta = {
     description = "Ubuntu font family with Nerd Variants";
     homepage = "https://github.com/google/fonts/tree/main/ufl/ubuntu";

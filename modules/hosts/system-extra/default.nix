@@ -1,11 +1,11 @@
 { lib, ... }:
 
 {
-  options.moduleopts.nixos.kdeconnect = {
+  options.moduleopts.nixos.system-extra = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "kdeconnect";
+      description = "system-extra";
     };
   };
 }

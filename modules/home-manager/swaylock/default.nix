@@ -21,7 +21,6 @@ in
     programs.swaylock = {
       enable = true;
       package = pkgs.swaylock;
-
       settings = with config.lib.stylix.colors; {
         #################################################
         #### SwayLock

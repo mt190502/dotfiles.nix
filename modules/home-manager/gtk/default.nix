@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   cfg = config.moduleopts.home-manager.gtk;
@@ -18,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     gtk = {
       enable = true;
-
       cursorTheme = {
         name = config.stylix.cursor.name;
         size = config.stylix.cursor.size;
@@ -32,7 +27,6 @@ in
         name = config.stylix.iconTheme.dark;
         package = lib.mkForce config.stylix.iconTheme.package;
       };
-
       gtk4.extraConfig = {
         gtk-xft-antialias = 1;
         gtk-xft-hinting = 1;
@@ -41,7 +35,6 @@ in
         gtk-enable-event-sounds = 0;
         gtk-enable-input-feedback-sounds = 0;
       };
-
       gtk3.extraConfig = {
         gtk-xft-antialias = 1;
         gtk-xft-hinting = 1;
@@ -50,7 +43,6 @@ in
         gtk-enable-event-sounds = 0;
         gtk-enable-input-feedback-sounds = 0;
       };
-
       gtk2.extraConfig = ''
         gtk-xft-antialias=1
         gtk-xft-hinting=1

@@ -1,7 +1,7 @@
 {
   config,
-  lib,
   inputs,
+  lib,
   ...
 }:
 
@@ -10,7 +10,6 @@ let
 in
 {
   imports = [ inputs.nixvim.homeManagerModules.nixvim ];
-
   options.moduleopts.home-manager.neovide = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -18,7 +17,6 @@ in
       description = "neovide";
     };
   };
-
   config = lib.mkIf cfg.enable {
     programs.neovide = {
       enable = true;
@@ -31,23 +29,19 @@ in
         wsl = false;
       };
     };
-
     programs.nixvim = {
       enable = true;
-
       colorschemes.catppuccin = {
         enable = true;
         settings = {
           flavour = "mocha";
         };
       };
-
       plugins = {
         colorizer.enable = true;
         copilot-lua.enable = true;
         dashboard.enable = true;
         web-devicons.enable = true;
-
         cmp = {
           enable = true;
           settings.sources = [
@@ -57,7 +51,6 @@ in
           ];
           autoEnableSources = true;
         };
-
         lualine = {
           enable = true;
           settings = {
@@ -70,13 +63,11 @@ in
             };
           };
         };
-
         nvim-tree = {
           enable = true;
           openOnSetup = true;
           respectBufCwd = true;
         };
-
         treesitter = {
           enable = true;
           settings = {
@@ -86,7 +77,6 @@ in
           };
         };
       };
-
       opts = {
         expandtab = true;
         incsearch = false;

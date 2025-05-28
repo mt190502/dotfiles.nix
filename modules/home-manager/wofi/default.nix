@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   cfg = config.moduleopts.home-manager.wofi;
@@ -18,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.wofi = {
       enable = true;
-
       settings = {
         allow_images = true;
         height = "40%";
@@ -30,7 +25,6 @@ in
         term = lib.getExe config.wrapped.alacritty;
         width = "40%";
       };
-
       style = with config.lib.stylix.colors.withHashtag; ''
         #inner-box,
         #outer-box,

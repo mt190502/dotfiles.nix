@@ -24,7 +24,6 @@ in
             buildInputs = buildInputs ++ [
               makeWrapper
             ];
-
             postFixup =
               postFixup
               + ''

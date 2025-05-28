@@ -37,7 +37,6 @@ in
         enable = true;
         target = "${cfg.prefered-wm}-session.target";
       };
-
       settings = {
         mainBar = {
           #################################################
@@ -346,7 +345,6 @@ in
           };
         };
       };
-
       style = with config.lib.stylix.colors.withHashtag; ''
       * {
           border-radius: 5px;

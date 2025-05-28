@@ -1,4 +1,5 @@
-{ pkgs, inputs, ... }:
+{ inputs, pkgs, ... }:
+
 {
   imports = [ inputs.home-manager.nixosModules.default ];
   users = {
@@ -17,8 +18,6 @@
       shell = pkgs.fish;
     };
   };
-  programs.fish.enable = true;
-
   home-manager = {
     useGlobalPkgs = true;
     extraSpecialArgs = {

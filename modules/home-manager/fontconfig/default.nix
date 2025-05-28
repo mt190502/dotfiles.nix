@@ -1,13 +1,17 @@
-{ config, lib, ... }:
+{ config, lib, osConfig, ... }:
 
 let
   cfg = config.moduleopts.home-manager.fontconfig;
 in
 {
   options.moduleopts.home-manager.fontconfig = {
-    enable = lib.mkEnableOption "fontconfig";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable fontconfig configuration for Home Manager.";
+    };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && osConfig == null) {
     xdg.configFile."fontconfig/fonts.conf".text = ''
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fontconfig SYSTEM "fonts.dtd">

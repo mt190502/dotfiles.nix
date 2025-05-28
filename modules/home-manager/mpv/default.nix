@@ -15,13 +15,11 @@ in
     programs.mpv = {
       enable = true;
       package = config.wrapped.mpv;
-
       bindings = {
         "Shift+s" = "cycle secondary-sid";
         "Shift+z" = "add secondary-sub-delay -0.1";
         "Shift+x" = "add secondary-sub-delay +0.1";
       };
-
       config = {
         #################################################
         #### Video settings

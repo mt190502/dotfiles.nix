@@ -1,17 +1,11 @@
-{
-  pkgs,
-  inputs,
-  ...
-}:
+{ inputs, pkgs, ... }:
 
 {
   imports = [ inputs.stylix.homeModules.stylix ];
-
   config.stylix = {
     enable = true;
     # autoEnable = false;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/apathy.yaml";
-
     cursor = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";

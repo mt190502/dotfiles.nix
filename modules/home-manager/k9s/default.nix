@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   cfg = config.moduleopts.home-manager.k9s;
@@ -18,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.k9s = {
       enable = true;
-
       aliases = {
         dp = "deployments";
         sec = "v1/secrets";
@@ -29,7 +24,6 @@ in
         rb = "rolebindings";
         np = "networkpolicies";
       };
-
       settings = {
         k9s = {
           liveViewAutoRefresh = false;
@@ -85,102 +79,6 @@ in
           };
         };
       };
-
-      # skins = {
-      #   "stylix" = with config.lib.stylix.colors.withHashtag; {
-      #     k9s = {
-      #       body = {
-      #         fgColor = base05;
-      #         bgColor = base00;
-      #         logoColor = base0D;
-      #       };
-      #       info = {
-      #         fgColor = base0D;
-      #         sectionColor = base05;
-      #       };
-      #       help = {
-      #         fgColor = base05;
-      #         keyColor = base0D;
-      #         numKeyColor = base0A;
-      #         sectionColor = base0D;
-      #       };
-      #       dialog = {
-      #         fgColor = base0D;
-      #         bgColor = base00;
-      #         buttonFgColor = base05;
-      #         buttonBgColor = base00;
-      #         buttonFocusFgColor = base00;
-      #         buttonFocusBgColor = base0D;
-      #         labelFgColor = base0D;
-      #         fieldFgColor = base05;
-      #       };
-      #       frame = {
-      #         border = {
-      #           fgColor = base0D;
-      #           focusColor = base0D;
-      #         };
-      #         menu = {
-      #           fgColor = base05;
-      #           keyColor = base0D;
-      #           numKeyColor = base0A;
-      #         };
-      #         crumbs = {
-      #           fgColor = base05;
-      #           bgColor = base02;
-      #           activeColor = base0D;
-      #         };
-      #         status = {
-      #           newColor = base0D;
-      #           modifyColor = base0D;
-      #           errorColor = base08;
-      #           highlightColor = base0D;
-      #           killColor = base08;
-      #           completedColor = base05;
-      #         };
-      #         title = {
-      #           fgColor = base0D;
-      #           bgColor = base00;
-      #           highlightColor = base0A;
-      #           counterColor = base0D;
-      #           filterColor = base0A;
-      #         };
-      #       };
-      #       views = {
-      #         table = {
-      #           fgColor = base05;
-      #           bgColor = base00;
-      #           cursorFgColor = base00;
-      #           cursorBgColor = base05;
-      #           header = {
-      #             fgColor = base05;
-      #             bgColor = base00;
-      #             sorterColor = base02;
-      #           };
-      #         };
-      #         xray = {
-      #           fgColor = base05;
-      #           bgColor = base00;
-      #           cursorColor = base00;
-      #           graphicColor = base0D;
-      #           showIcons = false;
-      #         };
-      #         yaml = {
-      #           keyColor = base0D;
-      #           colonColor = base0D;
-      #           valueColor = base05;
-      #         };
-      #         logs = {
-      #           fgColor = base05;
-      #           bgColor = base00;
-      #           indicator = {
-      #             fgColor = base05;
-      #             bgColor = base00;
-      #           };
-      #         };
-      #       };
-      #     };
-      #   };
-      # };
     };
   };
 }

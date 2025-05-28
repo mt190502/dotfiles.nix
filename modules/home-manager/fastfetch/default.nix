@@ -14,13 +14,11 @@ in
   config = lib.mkIf cfg.enable {
     programs.fastfetch = {
       enable = true;
-
       settings = {
         display = {
           separator = ": ";
           constants = [ "──────────────────────────────" ];
         };
-
         modules = [
           { type = "title"; }
           { type = "separator"; }

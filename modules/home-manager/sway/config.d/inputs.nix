@@ -1,5 +1,3 @@
-{ ... }:
-
 {
   wayland.windowManager.sway.config.input = {
     "type:keyboard" = {

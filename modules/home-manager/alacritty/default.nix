@@ -1,8 +1,8 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 
@@ -26,7 +26,6 @@ in
     programs.alacritty = {
       enable = true;
       package = config.wrapped.alacritty;
-
       settings = {
         font.size = config.stylix.fonts.sizes.terminal;
         font.normal = {
@@ -45,11 +44,8 @@ in
           family = "Hack";
           style = "Bold Italic";
         };
-
-        #~ Settings
         terminal.shell.program = lib.getExe pkgs.tmux;
         window.dynamic_title = true;
-
         general.import = [
           inputs.alacritty-theme.packages."${pkgs.system}"."${cfg.theme}"
         ];

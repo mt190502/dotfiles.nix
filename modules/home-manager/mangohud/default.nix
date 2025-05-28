@@ -14,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.mangohud = {
       enable = true;
-
       settings = {
         cpu_load_change = true;
         cpu_mhz = true;

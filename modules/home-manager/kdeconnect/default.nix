@@ -1,7 +1,7 @@
 {
   config,
-  osConfig,
   lib,
+  osConfig,
   ...
 }:
 

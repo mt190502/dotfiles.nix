@@ -1,7 +1,4 @@
-{
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 
 {
   imports = [
@@ -10,11 +7,9 @@
     ./host
     ./home
   ];
-
   moduleopts.nixos = {
     # onepassword.enable = false;
     # tailscale.enable = false;
   };
-
   system.stateVersion = "25.05";
 }

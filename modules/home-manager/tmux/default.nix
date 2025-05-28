@@ -15,7 +15,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = true;
-
       baseIndex = 1;
       clock24 = true;
       escapeTime = 30;
@@ -25,7 +24,6 @@ in
       prefix = "C-b";
       sensibleOnTop = false;
       terminal = "xterm";
-
       extraConfig = ''
         #################################################
         #### General 
@@ -90,7 +88,6 @@ in
         run 'cut -c3- "$OMT_CONF" | sh -s _apply_configuration'
       '';
     };
-
     xdg.configFile = {
       "tmux/omt.conf".source = ./config/omt.conf;
       "tmux/omt.conf.local".source = ./config/omt.conf.local;

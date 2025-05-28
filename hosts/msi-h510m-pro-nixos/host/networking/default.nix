@@ -1,5 +1,9 @@
-{ ... }:
-
+let 
+  kdeconnect = {
+    from = "1714";
+    to = "1764";
+  };
+in
 {
   networking = {
     hostName = "190502";
@@ -8,9 +12,15 @@
       allowedTCPPorts = [
         22000
       ];
+      allowedTCPPortRanges = [
+        kdeconnect
+      ];
       allowedUDPPorts = [
         21027
         22000
+      ];
+      allowedUDPPortRanges = [
+        kdeconnect
       ];
     };
   };

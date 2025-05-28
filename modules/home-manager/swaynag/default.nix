@@ -14,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway.swaynag = {
       enable = true;
-
       settings = with config.lib.stylix.colors.withHashtag; {
         "theme" = {
           background = "${base00}00";

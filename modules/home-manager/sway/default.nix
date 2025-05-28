@@ -25,7 +25,6 @@ in
         modifier = "Mod4";
       };
     };
-
     xdg.configFile = (
       builtins.listToAttrs (
         lib.map (path: {

@@ -11,7 +11,6 @@
     };
     colors = with config.lib.stylix.colors.withHashtag; {
       background = base00;
-
       focused = {
         background = base0D;
         border = base0D;
@@ -19,7 +18,6 @@
         indicator = base0D;
         childBorder = base0D;
       };
-
       focusedInactive = {
         background = base01;
         border = base01;
@@ -27,7 +25,6 @@
         indicator = base01;
         childBorder = base01;
       };
-
       unfocused = {
         background = base00;
         border = base00;
@@ -35,7 +32,6 @@
         indicator = base00;
         childBorder = base00;
       };
-
       urgent = {
         background = base08;
         border = base08;

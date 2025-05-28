@@ -10,7 +10,11 @@ let
 in
 {
   options.moduleopts.home-manager.rnnoise-denoising = {
-    enable = lib.mkEnableOption "rnnoise-denoising";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "rnnoise denoising for PipeWire";
+    };
   };
   config = lib.mkIf cfg.enable {
     xdg.configFile."pipewire/pipewire.conf.d/99-input-denoising.conf".text = ''
