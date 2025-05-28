@@ -74,6 +74,7 @@
     imagemagick
     iperf
     jq
+    just
     k0sctl
     k9s
     kdePackages.dolphin-plugins
