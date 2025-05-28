@@ -909,9 +909,9 @@ mesa-libEGL-devel
 mesa-libgbm
 mesa-libGL
 mesa-libGLU
-mesa-va-drivers
-mesa-vdpau-drivers
-mesa-vulkan-drivers
+mesa-va-drivers-freeworld
+mesa-vdpau-drivers-freeworld
+mesa-vulkan-drivers-freeworld
 mjpegtools-libs
 ModemManager-glib
 mpdecimal
