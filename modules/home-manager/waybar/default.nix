@@ -380,6 +380,11 @@ in
           background-color: transparent;
           padding: 0px 0px 0px 0px;
       }
+
+      box#tray window.popup * {
+          background-color: ${base00};
+          color: ${base05};
+      }
       '';
     };
   };
