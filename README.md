@@ -19,7 +19,33 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 | [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora) | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB |
 | [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)   | Same as above but running NixOS instead of Fedora                               |
 
-## Installation (for home-manager only setups)
+## Installation
+
+<details>
+  <summary>NixOS Setups</summary>
+
+- First, clone this repository to your system
+
+  ```bash
+  git clone <this-repo>
+  cd dotfiles.nix
+  ```
+
+- Then, set up user and system configurations
+
+  - For user configuration, change the username in the [users/](./users/) directory
+  - For system configuration, change the [hosts/](./hosts/) directory
+
+- After that, you can switch the configuration with the following command
+
+  ```bash
+  sudo nixos-rebuild switch --flake .#msi-h510m-pro-nixos
+  ```
+
+</details>
+
+<details>
+  <summary>Home Manager only Setups</summary>
 
 - First, set up some packages on your system. (I'm using Fedora, so you can use this command to install them)
 
@@ -69,6 +95,8 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
     ```
 
     Note: In this example, you must change username into the [hosts/msi-h510m-pro-fedora/home/default.nix](./hosts/msi-h510m-pro-fedora/home/default.nix) file.
+
+</details>
 
 ## Screenshot
 
