@@ -138,7 +138,7 @@ in
         };
         Service = {
           Type = "forking";
-          ExecStart = "gtklock";
+          ExecStart = "gtklock -d";
         };
         Install = {
           WantedBy = [
