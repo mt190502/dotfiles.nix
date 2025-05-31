@@ -17,6 +17,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 | Name                                                 | Description                                                                     |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------- |
 | [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora) | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB |
+| [msi-h510m-pro-arch](./hosts/msi-h510m-pro-arch)     | Same as above but running Arch Linux instead of Fedora                          |
 | [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)   | Same as above but running NixOS instead of Fedora                               |
 
 ## Installation
