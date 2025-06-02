@@ -32,7 +32,6 @@ in
       text = ''
         #!/bin/sh
         exec flatpak-spawn --host /opt/1Password/1Password-BrowserSupport "$@"
-        #exec flatpak-spawn --host ${home}/.nix-profile/share/1password/1Password-BrowserSupport "$@"      #~ not work on home manager only setups
       '';
       executable = true;
     };
