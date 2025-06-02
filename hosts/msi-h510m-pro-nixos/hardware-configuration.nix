@@ -1,4 +1,9 @@
-{ config, lib, modulesPath, ... }:
+{
+  config,
+  lib,
+  modulesPath,
+  ...
+}:
 
 let
   btrfsopts = [
@@ -8,81 +13,76 @@ let
     "ssd"
     "space_cache=v2"
   ];
+  mkBtrfsSysMount = subvol: {
+    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
+    fsType = "btrfs";
+    options = (if subvol != null then [ "subvol=/nixos-2025-06-02/${subvol}" ] else [ ]) ++ btrfsopts;
+  };
+  mkBtrfsHomeMount = subvol: {
+    device = "/dev/disk/by-uuid/48cff87f-003c-4358-a4f7-81705e1025d1";
+    fsType = "btrfs";
+    options = (if subvol != null then [ "subvol=/${subvol}" ] else [ ]) ++ btrfsopts;
+  };
+  mkNFSMount = dev: {
+    device = dev;
+    fsType = "nfs";
+    options = [
+      "rw"
+      "relatime"
+    ];
+  };
 in
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
-  
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = [ "subvol=nixos-2025-05-18/@" ] ++ btrfsopts;
-  };
-  fileSystems."/var" = {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = [ "subvol=nixos-2025-05-18/@var" ] ++ btrfsopts;
-  };
-  fileSystems."/opt" = {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = [ "subvol=nixos-2025-05-18/@opt" ] ++ btrfsopts;
-  };
-  fileSystems."/root" = {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = [ "subvol=nixos-2025-05-18/@root" ] ++ btrfsopts;
-  };
-  fileSystems."/srv" = {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = [ "subvol=nixos-2025-05-18/@srv" ] ++ btrfsopts;
-  };
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/6C94-2412";
-    fsType = "vfat";
-    options = [
-      "rw"
-      "relatime"
-      "fmask=0077"
-      "dmask=0077"
-      "codepage=437"
-      "iocharset=ascii"
-      "shortname=mixed"
-      "errors=remount-ro"
-    ];
-  };
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/48cff87f-003c-4358-a4f7-81705e1025d1";
-    fsType = "btrfs";
-    options = [ "subvol=users" ] ++ btrfsopts;
-  };
-  fileSystems."/var/btrfs" = {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = btrfsopts;
-  };
-  fileSystems."/mnt/ssd" = {
-    device = "/dev/disk/by-uuid/6ef5c4c9-6566-4814-81b7-c9b0f6c582ca";
-    fsType = "btrfs";
-    options = btrfsopts;
-  };
-  fileSystems."/home/taha/Projects" = {
-    device = "192.168.1.200:/mnt/ssd/data/projects";
-    fsType = "nfs";
-    options = [
-      "rw"
-      "relatime"
-    ];
-  };
-  fileSystems."/mnt/iso" = {
-    device = "192.168.1.200:/mnt/ssd/iso";
-    fsType = "nfs";
-    options = [
-      "rw"
-      "relatime"
-    ];
+
+  fileSystems = {
+    #~ System mounts
+    "/" = mkBtrfsSysMount "@";
+    "/opt" = mkBtrfsSysMount "@opt";
+    "/root" = mkBtrfsSysMount "@root";
+    "/srv" = mkBtrfsSysMount "@srv";
+    "/usr/local" = mkBtrfsSysMount "@usr/local";
+    "/var" = mkBtrfsSysMount "@var";
+    "/var/btrfs" = mkBtrfsSysMount null;
+
+    #~ User mounts
+    "/home" = mkBtrfsHomeMount "users";
+    "/home/taha/Android" = mkBtrfsHomeMount "folders/Android";
+    "/home/taha/Desktop" = mkBtrfsHomeMount "folders/Desktop";
+    "/home/taha/Documents" = mkBtrfsHomeMount "folders/Documents";
+    "/home/taha/Downloads" = mkBtrfsHomeMount "folders/Downloads";
+    "/home/taha/Music" = mkBtrfsHomeMount "folders/Music";
+    "/home/taha/Pictures" = mkBtrfsHomeMount "folders/Pictures";
+    "/home/taha/Public" = mkBtrfsHomeMount "folders/Public";
+    "/home/taha/Templates" = mkBtrfsHomeMount "folders/Templates";
+    "/home/taha/Videos" = mkBtrfsHomeMount "folders/Videos";
+
+    #~ NFS mounts
+    "/home/taha/Projects" = mkNFSMount "192.168.1.200:/mnt/ssd/data/projects";
+    "/mnt/iso" = mkNFSMount "192.168.1.200:/mnt/ssd/iso";
+
+    #~ Other mounts
+    "/mnt/ssd" = {
+      device = "/dev/disk/by-uuid/6ef5c4c9-6566-4814-81b7-c9b0f6c582ca";
+      fsType = "btrfs";
+      options = btrfsopts;
+    };
+    "/boot/efi" = {
+      device = "/dev/disk/by-uuid/6C94-2412";
+      fsType = "vfat";
+      options = [
+        "rw"
+        "relatime"
+        "fmask=0077"
+        "dmask=0077"
+        "codepage=437"
+        "iocharset=ascii"
+        "shortname=mixed"
+        "errors=remount-ro"
+      ];
+    };
   };
 
   swapDevices = [ ];
