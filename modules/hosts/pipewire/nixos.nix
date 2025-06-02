@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.nixos.zram;
+  cfg = config.moduleopts.nixos.pipewire;
 in
 {
   config = lib.mkIf cfg.enable {
-    pipewire = {
+    services.pipewire = {
       enable = true;
       pulse.enable = true;
       wireplumber.enable = true;
