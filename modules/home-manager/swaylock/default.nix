@@ -21,7 +21,7 @@ in
     programs.swaylock = {
       enable = true;
       package = pkgs.swaylock;
-      settings = with config.lib.stylix.colors; {
+      settings = with config.stylix.customColors.withHex; {
         #################################################
         #### SwayLock
         #################################################
@@ -42,41 +42,41 @@ in
         #line-uses-ring = true;
         #no-unlock-indicator = true;       #~~~ hide indicator
 
-        bs-hl-color = base0B-hex;
-        caps-lock-bs-hl-color = base0B-hex;
-        caps-lock-key-hl-color = base0B-hex;
-        key-hl-color = base0B-hex;
+        bs-hl-color = active;
+        caps-lock-bs-hl-color = active;
+        caps-lock-key-hl-color = active;
+        key-hl-color = active;
 
-        layout-bg-color = base00-hex;
-        layout-border-color = base01-hex;
-        #layout-text-color = base05-hex;
+        layout-bg-color = background;
+        layout-border-color = inactive;
+        #layout-text-color = text;
 
-        separator-color = base00-hex;
+        separator-color = background;
 
-        inside-color = base00-hex;
-        line-color = base00-hex;
-        ring-color = base01-hex;
-        text-color = base05-hex;
+        inside-color = background;
+        line-color = background;
+        ring-color = inactive;
+        text-color = text;
 
-        inside-clear-color = base00-hex;
-        line-clear-color = base00-hex;
-        ring-clear-color = base08-hex;
-        text-clear-color = base05-hex;
+        inside-clear-color = background;
+        line-clear-color = background;
+        ring-clear-color = urgent;
+        text-clear-color = text;
 
-        inside-caps-lock-color = base00-hex;
-        line-caps-lock-color = base00-hex;
-        ring-caps-lock-color = base01-hex;
-        text-caps-lock-color = base05-hex;
+        inside-caps-lock-color = background;
+        line-caps-lock-color = background;
+        ring-caps-lock-color = inactive;
+        text-caps-lock-color = text;
 
-        inside-ver-color = base00-hex;
-        line-ver-color = base00-hex;
-        ring-ver-color = base0B-hex;
-        text-ver-color = base05-hex;
+        inside-ver-color = background;
+        line-ver-color = background;
+        ring-ver-color = active;
+        text-ver-color = text;
 
-        inside-wrong-color = base00-hex;
-        line-wrong-color = base00-hex;
-        ring-wrong-color = base08-hex;
-        text-wrong-color = base05-hex;
+        inside-wrong-color = background;
+        line-wrong-color = background;
+        ring-wrong-color = urgent;
+        text-wrong-color = text;
 
         #~~~ keyboard layout config
         #show-keyboard-layout = true;

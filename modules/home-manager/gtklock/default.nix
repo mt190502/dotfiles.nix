@@ -26,7 +26,7 @@ in
       art-size=64
       position=bottom-center
     '';
-    xdg.configFile."gtklock/style.css".text = with config.lib.stylix.colors.withHashtag; ''
+    xdg.configFile."gtklock/style.css".text = with config.stylix.customColors.withHashtag; ''
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -43,16 +43,16 @@ in
       }
 
       window {
-        background-color: ${base00};
+        background-color: ${background};
         animation: fadeIn 400ms ease;
       }
 
       #window-box,
       #playerctl-revealer>box,
       #powerbar-revealer>box {
-        color: ${base05};
-        background-color: ${base00};     
-        border: 2px solid ${base0D};
+        color: ${text};
+        background-color: ${background};     
+        border: 2px solid ${border};
         border-radius: 12px;
         padding: 2em 3em;     
       }
@@ -61,12 +61,12 @@ in
       #powerbar-revealer>box {
         padding: 0.7em;
         margin: 0.8em 0;
-        background-color: ${base00};
+        background-color: ${background};
       }
 
       #clock-label {
         min-width: 320px;
-        color: ${base0D};
+        color: ${border};
         font-weight: 500;
         font-size: 28pt;
         padding: 8px 16px;
@@ -80,7 +80,7 @@ in
       }
 
       .image-button:hover {
-        background-color: alpha(${base05}, 0.05);
+        background-color: alpha(${text}, 0.05);
       }
 
       #user-name {
@@ -89,14 +89,14 @@ in
 
       #input-field {     
         padding: 10px 12px;
-        background-color: ${base00};
-        border: 2px solid ${base0D};
+        background-color: ${background};
+        border: 2px solid ${border};
         border-radius: 16px;
         margin: 10px 0;
       }
 
       #input-field:focus {
-        box-shadow: 0 0 0 2px alpha(${base05}, 0.9);
+        box-shadow: 0 0 0 2px alpha(${text}, 0.9);
       }
 
       #warning-label,
@@ -107,18 +107,18 @@ in
       }
 
       #unlock-button {
-        background-color: ${base0D};
+        background-color: ${border};
         border-radius: 12px;
-        color: ${base00};
+        color: ${background};
         font-weight: 500;
       }
 
       #unlock-button:hover {
-        background-color: alpha(${base05}, 0.9);
+        background-color: alpha(${text}, 0.9);
       }
 
       #error-label {
-        color: ${base0C};
+        color: ${active};
       }
     '';
     systemd.user.services = lib.mkIf cfg.gtklock.systemd.enable {

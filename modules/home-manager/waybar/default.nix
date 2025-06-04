@@ -345,7 +345,7 @@ in
           };
         };
       };
-      style = with config.lib.stylix.colors.withHashtag; ''
+      style = with config.stylix.customColors.withHashtag; ''
       * {
           border-radius: 5px;
           font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
@@ -356,8 +356,8 @@ in
       #tray,
       #workspaces,
       widget label {
-          background-color: ${base00};
-          color: ${base05};
+          background-color: ${background};
+          color: ${text};
           margin: 6px 0px 0px 0px;
           padding: 0px 7px 0px 7px;
       }
@@ -385,8 +385,8 @@ in
       }
 
       box#tray window.popup * {
-          background-color: ${base00};
-          color: ${base05};
+          background-color: ${background};
+          color: ${text};
       }
       '';
     };

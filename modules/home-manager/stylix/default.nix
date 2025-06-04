@@ -1,11 +1,48 @@
-{ inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [ inputs.stylix.homeModules.stylix ];
+  options.stylix = {
+    customColors = lib.mkOption {
+      type = with lib.types; attrsOf (attrsOf str);
+      default = with config.lib.stylix.colors; {
+        withHashtag = rec {
+          active = withHashtag.base03;
+          background = withHashtag.base00;
+          border = active;
+          inactive = withHashtag.base01;
+          text = if builtins.isAttrs config.stylix.base16Scheme then withHashtag.base05 else "#FFFFFF";
+          urgent = withHashtag.base08;
+        };
+        withHex = rec {
+          active = base03-hex;
+          background = base00-hex;
+          border = active;
+          inactive = base01-hex;
+          text = if builtins.isAttrs config.stylix.base16Scheme then base05-hex else "FFFFFF";
+          urgent = base08-hex;
+        };
+        raw = rec {
+          active = base03;
+          background = base00;
+          border = active;
+          inactive = base01;
+          text = if builtins.isAttrs config.stylix.base16Scheme then base05 else "FFFFFF";
+          urgent = base08;
+        };
+        description = "Custom colors to be used in stylix.";
+      };
+    };
+  };
   config.stylix = {
     enable = true;
     # autoEnable = false;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/apathy.yaml";
     cursor = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
@@ -35,7 +72,6 @@
       light = "Flat-Remix-Blue-Light";
       dark = "Flat-Remix-Blue-Dark";
     };
-    image = ../../../assets/wallpaper;
     polarity = "dark";
     targets = {
       hyprland.enable = false;

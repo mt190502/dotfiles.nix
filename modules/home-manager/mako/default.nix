@@ -13,12 +13,12 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    services.mako = {
+    services.mako = with config.stylix.customColors.withHashtag; {
       enable = true;
-      backgroundColor = config.colors.backgroundColor + makoOpacity;
-      borderColor = config.colors.activeColor;
-      textColor = config.colors.textColor;
-      progressColor = "over ${config.colors.activeColor}";
+      backgroundColor = background + makoOpacity;
+      borderColor = active;
+      textColor = text;
+      progressColor = "over ${active}";
       borderRadius = 0;
       borderSize = 5;
       defaultTimeout = 10000;
@@ -30,7 +30,7 @@ in
       sort = "-time";
       extraConfig = ''
         [urgency=high]
-        border-color=${config.colors.urgentColor}
+        border-color=${urgent}
         default-timeout=0
 
         [mode=dnd]

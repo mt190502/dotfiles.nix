@@ -77,17 +77,17 @@ in
           };
         };
       };
-      style = with config.lib.stylix.colors.withHashtag; ''
+      style = with config.stylix.customColors.withHashtag; ''
         * {
           border-radius: 0;
           font-family: "${config.stylix.fonts.sansSerif.name}";
           font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 3)}px;
-          color: ${base05};
+          color: ${text};
         }
 
         .close-button {
-          background: ${base00}; 
-          color: ${base05};
+          background: ${background}; 
+          color: ${text};
           padding: 0;
           border: 0;
           min-width: 24px;
@@ -95,8 +95,8 @@ in
         }
 
         .close-button:hover {
-          background: ${base08};
-          color: ${base00};
+          background: ${urgent};
+          color: ${background};
         }
 
         .control-center-list .notification:hover,
@@ -112,67 +112,67 @@ in
         .inline-reply-entry,
         .notification-group-close-all-button,
         .notification-group-collapse-button {
-          background: ${base00};
-          border: 3px solid ${base0D};
+          background: ${background};
+          border: 3px solid ${border};
         }
 
         .control-center-dnd:checked {
-          background: ${base0D};
+          background: ${border};
         }
 
         .control-center,
         .floating-notification {
-          background: ${base00};
-          border: 5px solid ${base0D};
+          background: ${background};
+          border: 5px solid ${border};
         }
 
         .inline-reply-button,
         .widget-dnd > switch:checked {
-          background: ${base0D};
-          border: 3px solid ${base0D};
+          background: ${border};
+          border: 3px solid ${border};
         }
 
         .linked > .text-button:first-child {
-          border-right: 2.5px solid ${base0D};
+          border-right: 2.5px solid ${border};
         }
 
         .linked > .text-button:last-child {
-          border-left: 2.5px solid ${base0D};
+          border-left: 2.5px solid ${border};
         }
 
         .linked > .text-button:not(:first-child):not(:last-child) {
-          border-left: 2.5px solid ${base0D};
-          border-right: 2.5px solid ${base0D};
+          border-left: 2.5px solid ${border};
+          border-right: 2.5px solid ${border};
         }
 
         .linked > .text-button:only-child {
-          border: 5px solid ${base0D};
+          border: 5px solid ${border};
           border-top: 0;
         }
 
         .notification-action {
-          background: ${base00}; 
-          color: ${base05};
+          background: ${background}; 
+          color: ${text};
           padding: 0;
-          border: 5px solid ${base0D}; 
+          border: 5px solid ${border}; 
           border-top: 0;
         }
 
         .notification-background,
         .notification {
           padding: 0;
-          background: ${base0D};
+          background: ${border};
           border: 0;
         }
 
         .notification-content {
-          background: ${base00};
-          border: 5px solid ${base0D};
+          background: ${background};
+          border: 5px solid ${border};
         }
 
         .notification-default-action {
           padding: 0;
-          border: 2px solid ${base00};
+          border: 2px solid ${background};
         }
 
         .notification-row {
@@ -183,7 +183,7 @@ in
 
         .widget-mpris-player,
         .widget-mpris-album-art {
-          border: 3px solid ${base0D};
+          border: 3px solid ${border};
         }
       '';
     };

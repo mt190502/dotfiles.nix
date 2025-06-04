@@ -25,35 +25,35 @@ in
         term = lib.getExe config.wrapped.alacritty;
         width = "40%";
       };
-      style = with config.lib.stylix.colors.withHashtag; ''
+      style = with config.stylix.customColors.withHashtag; ''
         #inner-box,
         #outer-box,
         #input,
         #text {
         	margin: 5px;
-        	background-color: ${base00};
+        	background-color: ${background};
         }
 
         #window {
-        	border: 4px solid ${base0D};
+        	border: 4px solid ${border};
         	border-radius: 5px;
-        	color: ${base05};
+        	color: ${text};
         }
 
         #input {
-        	border: 2px solid ${base0D};
+        	border: 2px solid ${border};
         }
 
         #text {
-        	color: ${base05};
+        	color: ${text};
         	font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 6)}px;
         }
 
         #entry:selected,
         #img:selected,
         #text:selected {
-        	background-color: ${base0D};
-          color: ${base00};
+        	background-color: ${border};
+          color: ${background};
         }
       '';
     };
