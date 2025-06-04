@@ -12,6 +12,7 @@ let
     "compress=zstd:1"
     "ssd"
     "space_cache=v2"
+    "X-mount.mkdir"
   ];
   mkBtrfsSysMount = subvol: {
     device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
