@@ -24,16 +24,20 @@ in
   config = lib.mkIf cfg.enable {
     xdg.configFile = lib.mkMerge [
       {
-        "qt5ct/qt5ct.conf".text = ''
-          [Appearance]
-          color_scheme_path=${config.wrapped.qt5ct}/share/qt5ct/colors/airy.conf
-        '' + shared;
+        "qt5ct/qt5ct.conf".text =
+          ''
+            [Appearance]
+            color_scheme_path=${config.wrapped.qt5ct}/share/qt5ct/colors/airy.conf
+          ''
+          + shared;
       }
       {
-        "qt6ct/qt6ct.conf".text = ''
-          [Appearance]
-          color_scheme_path=${config.wrapped.qt6ct}/share/qt6ct/colors/airy.conf
-        '' + shared;
+        "qt6ct/qt6ct.conf".text =
+          ''
+            [Appearance]
+            color_scheme_path=${config.wrapped.qt6ct}/share/qt6ct/colors/airy.conf
+          ''
+          + shared;
       }
     ];
   };

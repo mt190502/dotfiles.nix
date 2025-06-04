@@ -56,7 +56,7 @@ in
         a = "${pkgs.ansible}/bin/ansible";
         ap = "clear; ${pkgs.ansible}/bin/ansible-playbook";
         k = "${lib.getExe pkgs.kubectl}";
-        
+
         #~ System
         cp = "cp -i";
         crontab = "crontab -i";

@@ -84,8 +84,10 @@ in
       "${modifier}+8" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 8";
 
       #~~~ sound
-      "XF86AudioRaiseVolume" = "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ +5%";
-      "XF86AudioLowerVolume" = "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ -5%";
+      "XF86AudioRaiseVolume" =
+        "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ +5%";
+      "XF86AudioLowerVolume" =
+        "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-volume @DEFAULT_SINK@ -5%";
       "XF86AudioMute" = "exec ${lib.getExe' pkgs.pulseaudio "pactl"} set-sink-mute @DEFAULT_SINK@ toggle";
 
       #~~~ brightness (for Laptops)
@@ -116,10 +118,9 @@ in
       "${modifier}+l" =
         if cfg.prefered-lock-app == "swaylock" then
           "exec ${home}/.local/bin/blurlock"
-        else 
+        else
           "exec ${cfg.prefered-lock-app}";
-      "${modifier}+period" =
-        "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
+      "${modifier}+period" = "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
       "${modifier}+shift+d" =
         "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e";
       "${modifier}+shift+f" =

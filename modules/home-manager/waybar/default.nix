@@ -346,48 +346,48 @@ in
         };
       };
       style = with config.stylix.customColors.withHashtag; ''
-      * {
-          border-radius: 5px;
-          font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
-          font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 2)}px;
-          min-height: 0;
-      }
-      
-      #tray,
-      #workspaces,
-      widget label {
-          background-color: ${background};
-          color: ${text};
-          margin: 6px 0px 0px 0px;
-          padding: 0px 7px 0px 7px;
-      }
-      
-      #custom-space,
-      #custom-space2,
-      #workspaces button,
-      #workspaces button label,
-      window#waybar,
-      window#waybar.empty #window label {
-          background-color: transparent;
-          margin: 0px 0px 0px 0px;
-          padding: 0px 1px 0px 1px;
-      }
-      
-      #custom-space,
-      #custom-space2 {
-          background-color: transparent;
-          padding: 0px 0px 0px 0px;
-      }
+              * {
+                border-radius: 5px;
+                font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
+                font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 2)}px;
+                min-height: 0;
+              }
 
-      #workspaces button,
-      #workspaces button label {
-	        margin: 0px -2px 0px -2px;
-      }
+              #tray,
+              #workspaces,
+              widget label {
+                background-color: ${background};
+                color: ${text};
+                margin: 6px 0px 0px 0px;
+                padding: 0px 7px 0px 7px;
+              }
 
-      box#tray window.popup * {
-          background-color: ${background};
-          color: ${text};
-      }
+              #custom-space,
+              #custom-space2,
+              #workspaces button,
+              #workspaces button label,
+              window#waybar,
+              window#waybar.empty #window label {
+                background-color: transparent;
+                margin: 0px 0px 0px 0px;
+                padding: 0px 1px 0px 1px;
+              }
+
+              #custom-space,
+              #custom-space2 {
+                background-color: transparent;
+                padding: 0px 0px 0px 0px;
+              }
+
+              #workspaces button,
+              #workspaces button label {
+        	      margin: 0px -2px 0px -2px;
+              }
+
+              box#tray window.popup * {
+                background-color: ${background};
+                color: ${text};
+              }
       '';
     };
   };
