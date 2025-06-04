@@ -61,22 +61,42 @@ in
       };
       bindings = [
         {
+          key = "d";
+          command = "run_external_command \"$XDG_CONFIG_HOME/ncmpcpp/delete_current_song.sh\"";
+        }
+        {
           key = ",";
           command = "run_external_command \"$XDG_CONFIG_HOME/ncmpcpp/get_and_copy_purl_from_current_song.sh\"";
         }
       ];
     };
-    xdg.configFile."ncmpcpp/get_and_copy_purl_from_current_song.sh" = {
-      text = ''
-        #!${lib.getExe' pkgs.bash "bash"}
-        current_song_file_path="${config.services.mpd.musicDirectory}/$(${lib.getExe pkgs.mpc} current -f %file%)"
-        purl=$(${lib.getExe' pkgs.ffmpeg "ffprobe"} -v quiet -show_entries stream_tags=purl -of default=noprint_wrappers=1:nokey=1 "$current_song_file_path")
-        if [ -n "$purl" ]; then
-          echo "$purl" | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}
-          ${lib.getExe pkgs.libnotify} "ncmpcpp: PURL copied to clipboard" "$purl"
-        fi
-      '';
-      executable = true;
+    xdg.configFile = {
+      "ncmpcpp/get_and_copy_purl_from_current_song.sh" = {
+        text = ''
+          #!${lib.getExe' pkgs.bash "bash"}
+          current_song_file_path="${config.services.mpd.musicDirectory}/$(${lib.getExe pkgs.mpc} current -f %file%)"
+          purl=$(${lib.getExe' pkgs.ffmpeg "ffprobe"} -v quiet -show_entries stream_tags=purl -of default=noprint_wrappers=1:nokey=1 "$current_song_file_path")
+          if [ -n "$purl" ]; then
+            echo "$purl" | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}
+            ${lib.getExe pkgs.libnotify} "ncmpcpp: PURL copied to clipboard" "$purl"
+          fi
+        '';
+        executable = true;
+      };
+      "ncmpcpp/delete_current_song.sh" = {
+        text = ''
+          #!${lib.getExe' pkgs.bash "bash"}
+          current_song_file_path="${config.services.mpd.musicDirectory}/$(${lib.getExe pkgs.mpc} current -f %file%)"
+          ${lib.getExe' pkgs.trash-cli "trash"} -f "$current_song_file_path" && {
+            ${lib.getExe pkgs.libnotify} "ncmpcpp: Song moved to trash" "Moved $current_song_file_path to trash"
+          } || {
+            ${lib.getExe pkgs.libnotify} "ncmpcpp: Failed to delete current song" "Could not delete $current_song_file_path"
+          }
+          ${lib.getExe pkgs.mpc} update >/dev/null 2>&1
+          ${lib.getExe pkgs.mpc} next >/dev/null 2>&1
+        '';
+        executable = true;
+      };
     };
   };
 }
