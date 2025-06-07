@@ -53,70 +53,43 @@
     noto-fonts-emoji
     noto-fonts-extra
 
-    #~ standard packages ~#
+    #~ packages ~#
     _1password-cli
     adw-gtk3
     alacritty-theme
     android-tools
-    ansible
     aria2
     bat
     bat-extras.batman
     bc
-    binwalk
     btop
     cliphist
-    delta
-    direnv
     fastfetch
     fd
     ffmpegthumbnailer
     gcolor3
-    gdb
-    gef
     gnome-icon-theme
     gnome-tweaks
-    gping
     grc
     grim
     heimdall
     hicolor-icon-theme
-    hugo
-    hyperfine
-    iftop
     imagemagick
-    iperf
-    jq
-    just
-    k0sctl
-    k9s
     kdePackages.dolphin-plugins
     kdePackages.ffmpegthumbs
     kdePackages.kdegraphics-thumbnailers
     kdePackages.qtstyleplugin-kvantum
     kdePackages.qtsvg
     kdePackages.qtwayland
-    kubectl
-    kubernetes-helm
-    kubetail
     libsForQt5.qtstyleplugin-kvantum
     lsd
-    minikube
-    minio-client
     mpc
-    netcat
-    nixd
-    nixfmt-rfc-style
-    nmap
     nvtopPackages.full
     nwg-look
     ocs-url
-    onefetch
-    opentofu
     pavucontrol
     pipes-rs
     playerctl
-    postgresql_17
     pulseaudio
     r2modman
     rclone
@@ -124,18 +97,13 @@
     rnnoise-plugin
     rsync
     scrcpy
-    siege
-    shellcheck
     slurp
-    strace
     swappy
     swaybg
     swayidle
     system-config-printer
     tesseract
-    testssl
     tmux
-    traceroute
     translate-shell
     trash-cli
     tree
@@ -147,9 +115,7 @@
     wlsunset
     wtype
     ydotool
-    yq
     yt-dlp
-    zola
   ];
 
   ########################################
