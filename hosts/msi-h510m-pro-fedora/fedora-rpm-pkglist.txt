@@ -74,6 +74,8 @@ c-ares
 cdparanoia-libs
 checkpolicy
 chkconfig
+chromium
+chromium-common
 clevis
 clevis-luks
 clevis-pin-tpm2
@@ -295,6 +297,7 @@ gnutls-dane
 gnutls-devel
 gnutls-utils
 gobject-introspection
+google-crc32c
 google-droid-sans-fonts
 google-noto-color-emoji-fonts
 google-noto-fonts-common
@@ -852,6 +855,7 @@ libxml++
 libxml2
 libxmlb
 libXmu
+libXNVCtrl
 libXrandr
 libXrender
 libxshmfence
@@ -938,6 +942,7 @@ nftables
 npth
 nspr
 nss
+nss-mdns
 nss-softokn
 nss-softokn-freebl
 nss-sysinit
@@ -1276,6 +1281,7 @@ setroubleshoot-server
 setup
 shadow-utils
 shared-mime-info
+simdutf
 slang
 slirp4netns
 smartmontools
