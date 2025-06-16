@@ -24,6 +24,15 @@
     };
   };
   flake.nixosConfigurations = {
+    lenovo-thinkpad-e14-nixos = inputs.nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        ./lenovo-thinkpad-e14-nixos
+        (inputs.self + "/users/taha")
+        inputs.home-manager.nixosModules.home-manager
+      ];
+    };
     msi-h510m-pro-nixos = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
