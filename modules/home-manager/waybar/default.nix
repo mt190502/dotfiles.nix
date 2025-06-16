@@ -24,6 +24,7 @@ in
       default = true;
       description = "waybar";
     };
+    enableLaptopOpts = lib.mkEnableOption "laptop";
     weather_location = lib.mkOption {
       default = "Istanbul";
       type = lib.types.str;
@@ -63,26 +64,39 @@ in
             "custom/space"
             "custom/weather"
           ];
-          modules-right = [
-            "tray"
-            "custom/space"
-            "memory"
-            "custom/space"
-            "idle_inhibitor"
-            "custom/space"
-            "sway/language"
-            "custom/space"
-            "network"
-            "custom/space"
-            "bluetooth"
-            "custom/space"
-            "pulseaudio"
-            "custom/space"
-            "custom/swaync"
-            "custom/space"
-            "custom/powermenu"
-            "custom/space2"
-          ];
+          modules-right =
+            lib.lists.concatMap
+              (
+                x:
+                if cfg.waybar.enableLaptopOpts && x == "bluetooth" then
+                  [
+                    "battery"
+                    "custom/space"
+                    x
+                  ]
+                else
+                  [ x ]
+              )
+              [
+                "tray"
+                "custom/space"
+                "memory"
+                "custom/space"
+                "idle_inhibitor"
+                "custom/space"
+                "sway/language"
+                "custom/space"
+                "network"
+                "custom/space"
+                "bluetooth"
+                "custom/space"
+                "pulseaudio"
+                "custom/space"
+                "custom/swaync"
+                "custom/space"
+                "custom/powermenu"
+                "custom/space2"
+              ];
 
           #################################################
           #### Module(s) configuration
@@ -124,7 +138,7 @@ in
 
           battery = {
             bat = "BAT0";
-            interval = 60;
+            interval = 30;
             states = {
               warning = 30;
               critical = 1;
@@ -137,7 +151,6 @@ in
               ""
               ""
             ];
-            max-length = 2;
           };
 
           bluetooth = {
