@@ -15,6 +15,7 @@ in
       gnome.gnome-keyring.enable = true;
       gvfs.enable = true;
       logrotate.checkConfig = false;
+      openssh.enable = true;
       smartd.enable = true;
       zram-generator = {
         enable = true;
