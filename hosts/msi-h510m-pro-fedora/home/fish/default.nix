@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager;
@@ -12,6 +17,7 @@ in
             sudo rpm -Uvh --nodeps $(dnf repoquery --location "$i" | head -n 1)
           end
         '';
+        scrcpy-camera = "${lib.getExe pkgs.scrcpy} --camera-size=2560x1440 --video-codec=h265 --video-encoder=OMX.qcom.video.encoder.hevc --video-source=camera --no-audio --camera-id=1 --v4l2-sink=/dev/video0 --no-video-playback $argv";
       };
       shellInit = ''
         #################################################
