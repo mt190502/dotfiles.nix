@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.home-manager.cliphist;
+  cfg = config.moduleopts.home-manager;
 in
 {
   options.moduleopts.home-manager.cliphist = {
@@ -11,12 +11,12 @@ in
       description = "cliphist";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.cliphist.enable {
     services.cliphist = {
       enable = true;
       allowImages = true;
       systemdTargets = [
-        "sway-session.target"
+        "${cfg.prefered-wm}-session.target"
       ];
     };
   };
