@@ -9,11 +9,18 @@
 if [[ "$1" =~ "/nix" ]]; then
 	program=$(echo "$1" | awk -F '/' '{print $NF}')
 	[[ -n "${*:2}" ]] && program+=" ${*:2}"
-# shellcheck disable=SC2009
-	mapfile -t PID_LIST < <(ps aux | grep -vE "grep|program-toggler" | grep -i "$program" | awk '{print $2}')
 else
-# shellcheck disable=SC2009
-	mapfile -t PID_LIST < <(ps aux | grep -vE "grep|program-toggler" | grep -i "$*" | awk '{print $2}')
+	program="$*"
+fi
+
+argc=$(echo "$program" | awk '{print NF}')
+
+if [[ "$argc" -ge "2" ]]; then
+	# shellcheck disable=SC2009
+	mapfile -t PID_LIST < <(ps -eo pid,args --no-headers | grep -vE 'grep|program-toggler' | grep "$program" | awk '{print $1}')
+else
+	# shellcheck disable=SC2009
+	mapfile -t PID_LIST < <(ps -eo pid,args --no-headers | grep -vE 'grep|program-toggler' | awk -v prog="$program" '(($2 ~ /(bash|sh)$/ && $3 == prog) || ($2 == prog)) { print $1 }' )
 fi
 
 if [[ -n "${PID_LIST[*]}" ]]; then
