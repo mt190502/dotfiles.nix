@@ -17,6 +17,7 @@ in
       logrotate.checkConfig = false;
       openssh.enable = true;
       smartd.enable = true;
+      upower.enable = true;
       zram-generator = {
         enable = true;
         settings = {
