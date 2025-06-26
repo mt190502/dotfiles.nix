@@ -29,7 +29,7 @@ in
               + ''
                 wrapProgram $out/bin/1password \
                   --set XDG_CURRENT_DESKTOP GNOME \
-                 --append-flags "--password-store=gnome"
+                  --append-flags "--password-store=gnome"
               '';
           }
         )
@@ -40,6 +40,7 @@ in
   config = lib.mkIf cfg.enable {
     programs._1password-gui = {
       enable = true;
+      polkitPolicyOwners = [ "taha" ];
       package = cfg.package;
     };
     environment.etc."1password/custom_allowed_browsers" = {
