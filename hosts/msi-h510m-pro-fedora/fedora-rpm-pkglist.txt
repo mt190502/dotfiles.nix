@@ -254,7 +254,7 @@ gettext-libs
 gettext-runtime
 ghc-srpm-macros
 ghostscript
-ghostscript-tools-fonts
+ghostscript-tools-fontutils
 ghostscript-tools-printing
 giflib
 git
@@ -455,9 +455,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.32-200.fc42.x86_64
-kmod-v4l2loopback-6.12.34-200.fc42.x86_64
-kmod-v4l2loopback-6.14.11-300.fc42.x86_64
+kmod-v4l2loopback-6.12.35-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
