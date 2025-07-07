@@ -56,7 +56,12 @@ in
             </match>
         </fontconfig>
       '';
-      "fontconfig/conf.d/52-hm-default-fonts.conf".text = lib.mkForce '''';
+      "fontconfig/conf.d/52-hm-default-fonts.conf".text = lib.mkForce ''
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+        <fontconfig>
+        </fontconfig>
+      '';
     };
   };
 }
