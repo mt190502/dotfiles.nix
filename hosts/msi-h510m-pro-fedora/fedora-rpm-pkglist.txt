@@ -455,7 +455,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.35-200.fc42.x86_64
+kmod-v4l2loopback-6.12.37-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -1262,6 +1262,7 @@ scenefx
 scrub
 scx-scheds
 sdbus-cpp
+sdl12-compat
 sdl2-compat
 SDL2_image
 SDL3
