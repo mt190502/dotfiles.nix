@@ -18,9 +18,8 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | [lenovo-thinkpad-e14-nixos](./hosts/lenovo-thinkpad-e14-nixos)   | Laptop running a AMD Ryzen 5 7530U, 16GB of RAM and a AMD Barcelo Graphics      |
 | [lenovo-thinkpad-e14-fedora](./hosts/lenovo-thinkpad-e14-fedora) | Same as lenovo-thinkpad-e14-nixos but running Fedora instead of NixOS           |
-| [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora)             | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB |
-| [msi-h510m-pro-arch](./hosts/msi-h510m-pro-arch)                 | Same as above but running Arch Linux instead of Fedora                          |
-| [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)               | Same as above but running NixOS instead of Fedora                               |
+| [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)               | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB |
+| [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora)             | Same as msi-h510m-pro-nixos but running Fedora instead of NixOS                 |
 
 ## Installation
 
