@@ -1504,6 +1504,7 @@ telnet
 tesseract-libs
 thrift
 time
+tlp
 tomlplusplus
 tpm2-tools
 tpm2-tss
