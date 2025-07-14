@@ -3,10 +3,9 @@
     polkit.enable = true;
     pam.services = {
       "gtklock".enable = true;
-      "soteria".enable = true;
+      "mate-polkit".enable = true;
       "swaylock".enable = true;
       "passwd".enableGnomeKeyring = true;
     };
-    soteria.enable = true;
   };
 }
