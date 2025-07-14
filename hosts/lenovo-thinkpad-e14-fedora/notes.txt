@@ -1,0 +1,98 @@
+❯ cat /etc/pam.d/login
+#%PAM-1.0
+auth       substack     system-auth
+auth       include      postlogin
+auth       optional     pam_gnome_keyring.so
+account    required     pam_nologin.so
+account    include      system-auth
+password   include      system-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open
+session    required     pam_namespace.so
+session    optional     pam_keyinit.so force revoke
+session    include      system-auth
+session    include      postlogin
+session    optional     pam_gnome_keyring.so auto_start
+-session   optional     pam_ck_connector.so
+❯ cat /etc/pam.d/passwd
+#%PAM-1.0
+# This tool only uses the password stack.
+password   substack     system-auth
+#-password   optional   pam_gnome_keyring.so use_authtok
+password   substack     postlogin
+password   optional     pam_gnome_keyring.so
+
+
+---
+
+❯ cat /etc/udev/rules.d/99-disable-xhci-wakeup.rules
+SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:00:14.0/power/wakeup'"
+
+---
+
+❯ cat /etc/modules-load.d/nct6683.conf
+nct6683
+❯ cat /etc/modules-load.d/v4l2loopback.conf
+v4l2loopback
+❯ cat /etc/modprobe.d/v4l2loopback.conf
+options v4l2loopback devices=1
+options v4l2loopback video_nr=0,1
+options v4l2loopback card_label="Dummy Output,OBS Virtual Camera"
+options v4l2loopback exclusive_caps=1
+❯ cat /etc/modprobe.d/iwlwifi.conf
+options iwlwifi power_save=0
+options iwlwifi bt_coex_active=0
+
+---
+
+❯ cat .config/mimeapps.list
+[Added Associations]
+application/json=org.gnome.TextEditor.desktop;
+application/octet-stream=org.gnome.TextEditor.desktop;
+application/pdf=org.kde.okular.desktop;
+application/vnd.oasis.opendocument.text=org.libreoffice.LibreOffice.writer.desktop;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=org.libreoffice.LibreOffice.calc.desktop;
+application/x-shellscript=org.gnome.TextEditor.desktop;
+application/x-trash=org.gnome.TextEditor.desktop;
+application/xml=org.gnome.TextEditor.desktop;
+font/ttf=org.gnome.FontManager.desktop;
+image/jpeg=org.gnome.Loupe.desktop;
+image/png=org.gnome.Loupe.desktop;
+text/csv=org.libreoffice.LibreOffice.calc.desktop;
+video/mp4=mpv.desktop;
+video/x-matroska=mpv.desktop;
+
+[Default Applications]
+application/json=org.gnome.TextEditor.desktop;
+application/octet-stream=org.gnome.TextEditor.desktop;
+application/pdf=org.kde.okular.desktop;
+application/vnd.oasis.opendocument.text=org.libreoffice.LibreOffice.writer.desktop;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=org.libreoffice.LibreOffice.calc.desktop;
+application/x-shellscript=org.gnome.TextEditor.desktop;
+application/x-trash=org.gnome.TextEditor.desktop;
+application/xml=org.gnome.TextEditor.desktop;
+font/ttf=org.gnome.FontManager.desktop;
+image/jpeg=org.gnome.Loupe.desktop;
+image/png=org.gnome.Loupe.desktop;
+inode/directory=org.kde.dolphin.desktop
+text/csv=org.libreoffice.LibreOffice.calc.desktop;
+text/html=io.gitlab.librewolf-community.desktop
+video/mp4=mpv.desktop;
+video/x-matroska=mpv.desktop;
+x-scheme-handler/about=io.gitlab.librewolf-community.desktop
+x-scheme-handler/http=io.gitlab.librewolf-community.desktop
+x-scheme-handler/https=io.gitlab.librewolf-community.desktop
+x-scheme-handler/jetbrains=jetbrains-toolbox.desktop
+x-scheme-handler/ror2mm=r2modman.desktop
+x-scheme-handler/unknown=io.gitlab.librewolf-community.desktop
+
+---
+
+❯ cat /etc/udev/hwdb.d/99-thinkpad.hwdb
+evdev:name:ThinkPad Extra Buttons:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:*
+ KEYBOARD_KEY_4c=previoussong                     # Answer Voip call key
+ KEYBOARD_KEY_4d=nextsong                         # Hang Voip call key
+ KEYBOARD_KEY_45=playpause                        # Favorites
