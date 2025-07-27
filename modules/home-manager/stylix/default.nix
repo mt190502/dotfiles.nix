@@ -52,6 +52,17 @@
       monospace = {
         name = "MesloLGS NF";
         package = pkgs.meslo-lgs-nf;
+        # name = "Scientifica Nerd Font";
+        # package = pkgs.scientifica.overrideAttrs (o: {
+        #   nativeBuildInputs = [ pkgs.nerd-font-patcher ];
+        #   postInstall = ''
+        #     mkdir -p $out/share/fonts/truetype/{scientifica,scientifica-nerd}
+        #     mv $out/share/fonts/truetype/*.ttf $out/share/fonts/truetype/scientifica/
+        #     for f in $out/share/fonts/truetype/scientifica/*.ttf; do
+        #       nerd-font-patcher --complete --outputdir $out/share/fonts/truetype/scientifica-nerd/ $f
+        #     done
+        #   '';
+        # });
       };
       sansSerif = {
         name = "Ubuntu Nerd Font Medium";
