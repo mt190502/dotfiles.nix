@@ -30,7 +30,7 @@ in
         helm = lib.getExe pkgs.kubernetes-helm;
         hugo = lib.getExe pkgs.hugo;
         lsd = lib.getExe pkgs.lsd;
-        kubectl = lib.getExe pkgs.kubectl;
+        kubectl = lib.getExe pkgs.kubecolor;
         neovide = lib.getExe config.wrapped.neovide;
         telnet = lib.getExe' pkgs.inetutils "telnet";
         trash = lib.getExe pkgs.trash-cli;
