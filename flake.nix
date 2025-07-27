@@ -47,10 +47,7 @@
     };
     stylix = {
       url = "github:nix-community/stylix/release-25.05";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     apple-fonts = {
       url = "github:Lyndeno/apple-fonts.nix";
