@@ -306,7 +306,6 @@ google-noto-sans-vf-fonts
 google-noto-serif-vf-fonts
 go-srpm-macros
 gpac-libs
-gparted
 gperftools-libs
 gpgme
 gpgmepp
@@ -455,7 +454,8 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.37-200.fc42.x86_64
+kmod-v4l2loopback-6.12.41-200.fc42.x86_64
+kmod-v4l2loopback-6.15.9-201.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -838,8 +838,6 @@ libXdamage
 libXdmcp
 libxdp
 libXext
-libxfce4ui
-libxfce4util
 libXfixes
 libXfont2
 libXft
@@ -900,6 +898,7 @@ m4
 make
 malcontent-libs
 man-db
+mate-polkit
 mdadm
 mdevctl
 mesa-demos
@@ -1307,7 +1306,6 @@ sssd-common
 sssd-kcm
 sssd-krb5-common
 sssd-nfs-idmap
-startup-notification
 steam-devices
 sudo
 supermin
@@ -1445,8 +1443,6 @@ xdp-tools
 xdpyinfo
 xen-libs
 xen-licenses
-xfce-polkit
-xfconf
 xhost
 xkbcomp
 xkeyboard-config
