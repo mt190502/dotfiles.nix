@@ -13,16 +13,6 @@
         (inputs.self + "/users/taha/home")
       ];
     };
-    msi-h510m-pro-arch = inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
-      extraSpecialArgs = {
-        inherit inputs;
-      };
-      modules = [
-        ./msi-h510m-pro-arch/home
-        (inputs.self + "/users/taha/home")
-      ];
-    };
     lenovo-thinkpad-e14-fedora = inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
       extraSpecialArgs = {
