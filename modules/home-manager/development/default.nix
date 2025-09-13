@@ -45,7 +45,6 @@ in
         jq
         just
         k0sctl
-        k9s
         kubectl
         kubernetes-helm
         kubetail

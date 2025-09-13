@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs-unstable, ... }:
 
 let
   cfg = config.moduleopts.home-manager.k9s;
@@ -14,6 +14,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.k9s = {
       enable = true;
+      package = pkgs-unstable.k9s;
       aliases = {
         dp = "deployments";
         sec = "v1/secrets";
