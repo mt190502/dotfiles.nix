@@ -35,6 +35,7 @@
     prefered-lock-app = "swaylock";
     prefered-wm = "sway";
     qt.enable = true;
+    vicinae.enable = false;
   };
 
   ########################################

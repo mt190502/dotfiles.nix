@@ -26,6 +26,11 @@
       url = "github:alexghr/alacritty-theme.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    apple-fonts = {
+      url = "github:Lyndeno/apple-fonts.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      flake = true;
+    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,10 +54,9 @@
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    apple-fonts = {
-      url = "github:Lyndeno/apple-fonts.nix";
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
-      flake = true;
     };
   };
 
