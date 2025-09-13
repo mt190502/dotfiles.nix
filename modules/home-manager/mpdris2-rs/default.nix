@@ -12,15 +12,14 @@ let
   cfg = config.services.mpdris2-rs;
   package = rustPlatform.buildRustPackage rec {
     pname = "mpdris2-rs";
-    version = "1.0.0";
+    version = "v1.0.2";
     src = fetchFromGitHub {
       owner = "szclsya";
       repo = pname;
       rev = version;
-      sha256 = "sha256-Bx/mc2wFki0GX9ej8ZIfeXybX5zek/bA5+D0k7XlNnQ=";
+      sha256 = "sha256-E9H6bjmWZx35fZo/ZPvJL1w/YQ34pJ7z81YbB5fUZSU=";
     };
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-AhzSA26KgFCL03W0+TOTSy0e5t4owA3TUM/+mbI6dmg=";
+    cargoHash = "sha256-rA/za8fc2RiURaiijc49y+2QBcS6cDavZQFjVh+7Iow=";
     meta = {
       description = "MPRIS2 client for MPD written in Rust";
       homepage = "https://github.com/szclsya/mpdris2-rs";
