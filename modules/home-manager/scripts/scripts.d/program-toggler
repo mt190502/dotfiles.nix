@@ -25,8 +25,8 @@ fi
 
 if [[ -n "${PID_LIST[*]}" ]]; then
 	for PID in "${PID_LIST[@]}"; do
-		pgrep -P "$PID" | xargs kill -9
-		kill -9 "$PID"
+		pgrep -P "$PID" | xargs kill -15
+		kill -15 "$PID"
 	done
 else
 	"$@" &
