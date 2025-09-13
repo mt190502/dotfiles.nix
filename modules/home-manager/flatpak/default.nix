@@ -42,6 +42,7 @@ in
         "net.ankiweb.Anki"
         "net.davidotek.pupgui2"
         "org.audacityteam.Audacity"
+        "org.filezillaproject.Filezilla"
         "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
         "org.gimp.GIMP"
         "org.gnome.Calculator"
