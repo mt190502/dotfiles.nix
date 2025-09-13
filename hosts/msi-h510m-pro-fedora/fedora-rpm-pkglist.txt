@@ -1,4 +1,5 @@
 1password
+1password-cli
 abattis-cantarell-vf-fonts
 abseil-cpp
 acl
@@ -306,6 +307,7 @@ google-noto-sans-vf-fonts
 google-noto-serif-vf-fonts
 go-srpm-macros
 gpac-libs
+gparted
 gperftools-libs
 gpgme
 gpgmepp
@@ -449,16 +451,19 @@ kf5-filesystem
 kf6-filesystem
 kf6-karchive
 kf6-kimageformats
+kf6-kwindowsystem
 kimageannotator-common
 kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.41-200.fc42.x86_64
-kmod-v4l2loopback-6.15.9-201.fc42.x86_64
+kmod-v4l2loopback-6.12.44-200.fc42.x86_64
+kmod-v4l2loopback-6.16.4-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
+kvantum
+kvantum-data
 lame-libs
 langpacks-core-en
 langpacks-core-en_GB
@@ -919,6 +924,7 @@ mpg123-libs
 msgraph
 mtdev
 mtools
+ncdu
 ncurses
 ncurses-base
 ncurses-libs
@@ -971,6 +977,7 @@ osinfo-db
 osinfo-db-tools
 ostree-libs
 p11-kit
+p11-kit-client
 p11-kit-devel
 p11-kit-server
 p11-kit-trust
@@ -1160,6 +1167,7 @@ python-setuptools-wheel
 python-srpm-macros
 qatlib
 qatzip-libs
+qcom-wwan-firmware
 qemu-audio-alsa
 qemu-audio-dbus
 qemu-audio-jack
@@ -1301,6 +1309,7 @@ sqlite-libs
 squashfs-tools
 sratom
 srt-libs
+sshpass
 sssd-client
 sssd-common
 sssd-kcm
