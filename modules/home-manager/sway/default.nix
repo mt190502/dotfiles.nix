@@ -7,18 +7,19 @@
 
 let
   cfg = config.moduleopts.home-manager;
+  is_enabled = if cfg.preferred-wm == "sway" then true else false;
 in
 {
   options.moduleopts.home-manager.sway = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = is_enabled;
       description = "sway";
     };
   };
   config = lib.mkIf cfg.sway.enable {
     wayland.windowManager.sway = {
-      enable = lib.mkIf (cfg.prefered-wm == "sway") true;
+      enable = is_enabled;
       package = config.wrapped.sway;
       checkConfig = false;
       config = {

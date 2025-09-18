@@ -136,7 +136,7 @@ in
             export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
             export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
             ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-            if [ "${cfg.prefered-wm}" = "hyprland" ]
+            if [ "${cfg.preferred-wm}" = "hyprland" ]
               XDG_CURRENT_DESKTOP=Hyprland Hyprland &>${home}/.cache/hyprland.log
             else
               XDG_CURRENT_DESKTOP=sway sway &>${home}/.cache/swaywm.log

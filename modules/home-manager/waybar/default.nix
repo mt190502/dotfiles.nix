@@ -9,12 +9,12 @@ let
   cfg = config.moduleopts.home-manager;
   pomobar-client = lib.getExe' config.services.pomobar.package "pomobar-client";
   wm =
-    if cfg.prefered-wm == "sway" then
+    if cfg.preferred-wm == "sway" then
       "sway"
-    else if cfg.prefered-wm == "hyprland" then
+    else if cfg.preferred-wm == "hyprland" then
       "hypr"
     else
-      throw "Unsupported window manager: ${cfg.prefered-wm}";
+      throw "Unsupported window manager: ${cfg.preferred-wm}";
   home = config.home.homeDirectory;
 in
 {
@@ -36,7 +36,7 @@ in
       enable = true;
       systemd = {
         enable = true;
-        target = "${cfg.prefered-wm}-session.target";
+        target = "${cfg.preferred-wm}-session.target";
       };
       settings =
         let

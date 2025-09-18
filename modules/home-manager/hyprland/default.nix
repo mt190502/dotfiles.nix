@@ -2,18 +2,19 @@
 
 let
   cfg = config.moduleopts.home-manager;
+  is_enabled = if cfg.preferred-wm == "hyprland" then true else false;
 in
 {
   options.moduleopts.home-manager.hyprland = {
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = is_enabled;
       description = "hyprland";
     };
   };
   config = lib.mkIf cfg.hyprland.enable {
     wayland.windowManager.hyprland = {
-      enable = lib.mkIf (cfg.prefered-wm == "hyprland") true;
+      enable = is_enabled;
       package = config.wrapped.hyprland;
       settings = {
         "$mod" = "SUPER_L";

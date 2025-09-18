@@ -32,8 +32,8 @@
     gtk.enable = true;
     kde.enable = true;
     onepassword-integration.enable = true;
-    prefered-lock-app = "swaylock";
-    prefered-wm = "sway";
+    preferred-lock-app = "swaylock";
+    preferred-wm = "sway";
     qt.enable = true;
     vicinae.enable = false;
   };

@@ -16,7 +16,7 @@ in
       enable = true;
       allowImages = true;
       systemdTargets = [
-        "${cfg.prefered-wm}-session.target"
+        "${cfg.preferred-wm}-session.target"
       ];
     };
   };

@@ -17,7 +17,7 @@ in
       description = "Enable systemd service for swaylock";
     };
   };
-  config = lib.mkIf (cfg.prefered-lock-app == "swaylock") {
+  config = lib.mkIf (cfg.preferred-lock-app == "swaylock") {
     programs.swaylock = {
       enable = true;
       package = pkgs.swaylock;

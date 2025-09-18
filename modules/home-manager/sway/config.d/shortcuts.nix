@@ -129,10 +129,10 @@ in
         "${modifier}+d" = "exec ${home}/.local/bin/program-toggler ${menu}";
         # "${modifier}+d" = "exec ${vicinae}";
         "${modifier}+l" =
-          if cfg.prefered-lock-app == "swaylock" then
+          if cfg.preferred-lock-app == "swaylock" then
             "exec ${home}/.local/bin/blurlock"
           else
-            "exec ${cfg.prefered-lock-app}";
+            "exec ${cfg.preferred-lock-app}";
         "${modifier}+period" = "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
         "${modifier}+shift+d" =
           "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e";

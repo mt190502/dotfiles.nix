@@ -16,7 +16,7 @@ in
       description = "Enable systemd service for gtklock";
     };
   };
-  config = lib.mkIf (cfg.prefered-lock-app == "gtklock") {
+  config = lib.mkIf (cfg.preferred-lock-app == "gtklock") {
     xdg.configFile."gtklock/config.ini".text = ''
       [main]
       modules=${pkgs.gtklock-playerctl-module}/lib/gtklock/playerctl-module.so
