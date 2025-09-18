@@ -1,12 +1,15 @@
 { inputs, ... }:
 
+let 
+  nixpkgs_opts = { config.allowUnfree = true; };
+in
 {
   flake.homeConfigurations = {
     msi-h510m-pro-fedora = inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+      pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux" // nixpkgs_opts;
       extraSpecialArgs = {
         inherit inputs;
-        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux";
+        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux" // nixpkgs_opts;
       };
       modules = [
         ./msi-h510m-pro-fedora/home
@@ -14,10 +17,10 @@
       ];
     };
     lenovo-thinkpad-e14-fedora = inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux";
+      pkgs = inputs.nixpkgs.legacyPackages."x86_64-linux" // nixpkgs_opts;
       extraSpecialArgs = {
         inherit inputs;
-        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux";
+        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux" // nixpkgs_opts;
       };
       modules = [
         ./lenovo-thinkpad-e14-fedora/home
@@ -30,7 +33,7 @@
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs;
-        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."${system}";
+        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."${system}" // nixpkgs_opts;
       };
       modules = [
         ./lenovo-thinkpad-e14-nixos
@@ -42,7 +45,7 @@
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs;
-        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."${system}";
+        pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages."${system}" // nixpkgs_opts;
       };
       modules = [
         ./msi-h510m-pro-nixos

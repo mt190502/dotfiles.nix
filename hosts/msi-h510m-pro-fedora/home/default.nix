@@ -8,7 +8,6 @@
   ########################################
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
-  nixpkgs.config.allowUnfree = true;
   nixGL.packages = inputs.nixgl.packages;
   wrapped.mode = "nixGL";
 
