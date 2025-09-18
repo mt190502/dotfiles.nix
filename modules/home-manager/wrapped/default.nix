@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  pkgs-unstable,
   ...
 }:
 
@@ -12,7 +13,7 @@ let
     (lib.mapAttrs' (
       n: _:
       let
-        pkg = import (./. + "/${n}") { inherit config pkgs; };
+        pkg = import (./. + "/${n}") { inherit config pkgs pkgs-unstable; };
       in
       lib.nameValuePair pkg.name pkg
     ))

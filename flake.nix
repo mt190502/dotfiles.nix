@@ -67,6 +67,7 @@
         "x86_64-linux"
         "aarch64-darwin"
       ];
+
       imports = [
         ./packages/flake-module.nix
         ./hosts/flake-module.nix
@@ -80,11 +81,6 @@
           ...
         }:
         {
-          _module.args.pkgs = import inputs.nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
-
           pre-commit.settings.hooks = {
             nixfmt-rfc-style.enable = true;
             nil.enable = true;

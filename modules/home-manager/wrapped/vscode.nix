@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 
 let
-  originalPackage = pkgs.vscode;
+  originalPackage = pkgs-unstable.vscode;
   override = pkgs.symlinkJoin {
     name = "vscode-wrapped";
     paths = [ originalPackage ];
