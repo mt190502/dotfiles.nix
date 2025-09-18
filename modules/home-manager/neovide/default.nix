@@ -9,7 +9,7 @@ let
   cfg = config.moduleopts.home-manager.neovide;
 in
 {
-  imports = [ inputs.nixvim.homeManagerModules.nixvim ];
+  imports = [ inputs.nixvim.homeModules.nixvim ];
   options.moduleopts.home-manager.neovide = {
     enable = lib.mkOption {
       type = lib.types.bool;
