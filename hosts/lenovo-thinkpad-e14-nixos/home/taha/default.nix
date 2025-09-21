@@ -34,6 +34,7 @@
     preferred-lock-app = "gtklock";
     preferred-wm = "sway";
     qt.enable = true;
+    vicinae.enable = false;
     waybar.enableLaptopOpts = true;
   };
 

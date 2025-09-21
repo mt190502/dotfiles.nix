@@ -34,6 +34,7 @@
     preferred-lock-app = "swaylock";
     preferred-wm = "sway";
     qt.enable = true;
+    vicinae.enable = false;
     waybar.enableLaptopOpts = true;
   };
 
