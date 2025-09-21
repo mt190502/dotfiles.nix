@@ -36,6 +36,7 @@ in
   flake.nixosConfigurations = {
     lenovo-thinkpad-e14-nixos = inputs.nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
+      pkgs = repo "nixpkgs" system;
       specialArgs = {
         pkgs-unstable = repo "nixpkgs-unstable" system;
         inherit inputs;
@@ -48,6 +49,7 @@ in
     };
     msi-h510m-pro-nixos = inputs.nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
+      pkgs = repo "nixpkgs" system;
       specialArgs = {
         pkgs-unstable = repo "nixpkgs-unstable" system;
         inherit inputs;

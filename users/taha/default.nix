@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, pkgs-unstable, ... }:
 
 {
   imports = [ inputs.home-manager.nixosModules.default ];
@@ -21,7 +21,7 @@
   home-manager = {
     useGlobalPkgs = true;
     extraSpecialArgs = {
-      inherit inputs;
+      inherit inputs pkgs-unstable;
     };
     users.taha = import ./home;
   };
