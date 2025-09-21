@@ -15,6 +15,9 @@ in
     boot.lanzaboote = {
       enable = true;
       pkiBundle = "/var/lib/sbctl";
+      settings = {
+        default = "@saved";
+      };
     };
     boot.loader.systemd-boot.enable = lib.mkForce false;
     environment.systemPackages = [
