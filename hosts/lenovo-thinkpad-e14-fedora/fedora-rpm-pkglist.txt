@@ -1018,6 +1018,7 @@ mesa-libEGL-devel
 mesa-libgbm
 mesa-libGL
 mesa-libGLU
+mesa-va-drivers-freeworld
 microcode_ctl
 mkpasswd
 ModemManager-glib

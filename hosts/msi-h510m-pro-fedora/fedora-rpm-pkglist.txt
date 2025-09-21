@@ -452,7 +452,8 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.47-200.fc42.x86_64
+kmod-v4l2loopback-6.12.48-200.fc42.x86_64
+kmod-v4l2loopback-6.16.7-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
