@@ -10,7 +10,6 @@
     librewolf
     libva-utils
     lm_sensors
-    mate.mate-polkit
     psmisc
     v4l-utils
     vim
