@@ -41,6 +41,7 @@ in
         the nixGL wrapper.
       '';
     };
-  } // opts;
+  }
+  // opts;
   config.wrapped = lib.mapAttrs (_: pkg: pkg.wrap) packages;
 }

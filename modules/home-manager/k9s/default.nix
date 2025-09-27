@@ -1,4 +1,9 @@
-{ config, lib, pkgs-unstable, ... }:
+{
+  config,
+  lib,
+  pkgs-unstable,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.k9s;

@@ -1,4 +1,9 @@
-{ inputs, pkgs, pkgs-unstable, ... }:
+{
+  inputs,
+  pkgs,
+  pkgs-unstable,
+  ...
+}:
 
 {
   imports = [ inputs.home-manager.nixosModules.default ];

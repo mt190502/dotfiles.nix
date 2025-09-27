@@ -24,13 +24,11 @@ in
             buildInputs = buildInputs ++ [
               makeWrapper
             ];
-            postFixup =
-              postFixup
-              + ''
-                wrapProgram $out/bin/1password \
-                  --set XDG_CURRENT_DESKTOP GNOME \
-                  --append-flags "--password-store=gnome"
-              '';
+            postFixup = postFixup + ''
+              wrapProgram $out/bin/1password \
+                --set XDG_CURRENT_DESKTOP GNOME \
+                --append-flags "--password-store=gnome"
+            '';
           }
         )
       );
