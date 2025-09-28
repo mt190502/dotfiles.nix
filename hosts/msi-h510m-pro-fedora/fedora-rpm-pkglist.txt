@@ -435,6 +435,7 @@ kernel-longterm-devel-matched
 kernel-longterm-headers
 kernel-longterm-modules
 kernel-longterm-modules-core
+kernel-longterm-modules-extra
 kernel-modules
 kernel-modules-core
 kernel-modules-extra
@@ -452,7 +453,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.48-200.fc42.x86_64
+kmod-v4l2loopback-6.12.49-200.fc42.x86_64
 kmod-v4l2loopback-6.16.7-200.fc42.x86_64
 kpartx
 krb5-devel
@@ -1243,7 +1244,9 @@ rpm
 rpm-build
 rpm-build-libs
 rpmdevtools
+rpmfusion-free-appstream-data
 rpmfusion-free-release
+rpmfusion-nonfree-appstream-data
 rpmfusion-nonfree-release
 rpm-libs
 rpm-plugin-selinux
