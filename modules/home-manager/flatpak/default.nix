@@ -65,6 +65,7 @@ in
         "org.kde.KStyle.Kvantum/x86_64/5.15"
         "org.kde.okular"
         "org.libreoffice.LibreOffice"
+        "org.mozilla.Thunderbird"
         "org.musicbrainz.Picard"
         "org.onlyoffice.desktopeditors"
         "org.prismlauncher.PrismLauncher"
