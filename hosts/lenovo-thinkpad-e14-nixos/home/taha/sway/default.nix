@@ -20,13 +20,9 @@ in
       "*" = {
         bg = "${config.stylix.image} fill";
       };
-      "HDMI-A-4" = {
-        mode = "1920x1080";
+      "eDP-1" = {
+        mode = "1920x1200";
         position = "0,0";
-      };
-      "DP-2" = {
-        mode = "1920x1080";
-        position = "1920,0";
       };
     };
     startup = [
