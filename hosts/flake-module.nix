@@ -1,6 +1,14 @@
 { inputs, ... }:
 
 let
+  homeConfigs = [
+    "lenovo-thinkpad-e14-fedora"
+    "msi-h510m-pro-fedora"
+  ];
+  nixosConfigs = [
+    "lenovo-thinkpad-e14-nixos"
+    "msi-h510m-pro-nixos"
+  ];
   repo =
     name: arch:
     (import inputs.${name} {
@@ -9,56 +17,40 @@ let
     });
 in
 {
-  flake.homeConfigurations = {
-    msi-h510m-pro-fedora = inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = repo "nixpkgs" "x86_64-linux";
-      extraSpecialArgs = {
-        inherit inputs;
-        pkgs-unstable = repo "nixpkgs-unstable" "x86_64-linux";
+  flake.homeConfigurations = builtins.listToAttrs (
+    map (name: {
+      name = name;
+      value = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = repo "nixpkgs" "x86_64-linux";
+        extraSpecialArgs = {
+          inherit inputs;
+          pkgs-unstable = repo "nixpkgs-unstable" "x86_64-linux";
+          flakeName = name;
+        };
+        modules = [
+          ./${name}/home
+          (inputs.self + "/users/taha/home")
+        ];
       };
-      modules = [
-        ./msi-h510m-pro-fedora/home
-        (inputs.self + "/users/taha/home")
-      ];
-    };
-    lenovo-thinkpad-e14-fedora = inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = repo "nixpkgs" "x86_64-linux";
-      extraSpecialArgs = {
-        inherit inputs;
-        pkgs-unstable = repo "nixpkgs-unstable" "x86_64-linux";
+    }) homeConfigs
+  );
+  flake.nixosConfigurations = builtins.listToAttrs (
+    map (name: {
+      name = name;
+      value = inputs.nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        pkgs = repo "nixpkgs" system;
+        specialArgs = {
+          inherit inputs;
+          pkgs-unstable = repo "nixpkgs-unstable" system;
+          flakeName = name;
+        };
+        modules = [
+          ./${name}
+          (inputs.self + "/users/taha")
+          inputs.home-manager.nixosModules.home-manager
+        ];
       };
-      modules = [
-        ./lenovo-thinkpad-e14-fedora/home
-        (inputs.self + "/users/taha/home")
-      ];
-    };
-  };
-  flake.nixosConfigurations = {
-    lenovo-thinkpad-e14-nixos = inputs.nixpkgs.lib.nixosSystem rec {
-      system = "x86_64-linux";
-      pkgs = repo "nixpkgs" system;
-      specialArgs = {
-        pkgs-unstable = repo "nixpkgs-unstable" system;
-        inherit inputs;
-      };
-      modules = [
-        ./lenovo-thinkpad-e14-nixos
-        (inputs.self + "/users/taha")
-        inputs.home-manager.nixosModules.home-manager
-      ];
-    };
-    msi-h510m-pro-nixos = inputs.nixpkgs.lib.nixosSystem rec {
-      system = "x86_64-linux";
-      pkgs = repo "nixpkgs" system;
-      specialArgs = {
-        pkgs-unstable = repo "nixpkgs-unstable" system;
-        inherit inputs;
-      };
-      modules = [
-        ./msi-h510m-pro-nixos
-        (inputs.self + "/users/taha")
-        inputs.home-manager.nixosModules.home-manager
-      ];
-    };
-  };
+    }) nixosConfigs
+  );
 }

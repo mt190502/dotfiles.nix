@@ -28,7 +28,8 @@ in
       '';
       shellAliases = {
         d = "docker";
-        sysdup = "sudo dnf --refresh upgrade && nix-channel --update && flatpak update && hm lenovo-thinkpad-e14-fedora --update-flake";
+        sysdup = lib.mkForce "sudo dnf --refresh upgrade && nix-channel --update && flatpak update && hm lenovo-thinkpad-e14-fedora --update-flake";
+        sysclean = lib.mkForce "flatpak remove --unused && nix-collect-garbage -d && sudo dnf remove $(dnf rq --installed --latest-limit=-1 -q)";
       };
     };
   };

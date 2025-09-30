@@ -1,5 +1,6 @@
 {
   inputs,
+  flakeName,
   pkgs,
   pkgs-unstable,
   ...
@@ -26,7 +27,7 @@
   home-manager = {
     useGlobalPkgs = true;
     extraSpecialArgs = {
-      inherit inputs pkgs-unstable;
+      inherit inputs flakeName pkgs-unstable;
     };
     users.taha = import ./home;
   };

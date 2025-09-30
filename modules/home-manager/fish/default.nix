@@ -1,5 +1,6 @@
 {
   config,
+  flakeName,
   lib,
   pkgs,
   ...
@@ -81,6 +82,8 @@ in
           mv = "mv -i";
           rm = "rm -i";
           srm = "${trash} -i";
+          sysclean = "flatpak remove --unused && nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+          sysdup = "nix-channel --update && sudo nix-channel --update && flatpak update && sudo nixos-rebuild switch --flake ${home}/Projects/000_myprojects/dotfiles.nix#${flakeName} --upgrade";
 
           #~ Git
           gita = "${git} add -A";
