@@ -14,12 +14,12 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 
 ## Hosts
 
-| Name                                                             | Description                                                                     |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| [lenovo-thinkpad-e14-nixos](./hosts/lenovo-thinkpad-e14-nixos)   | Laptop running a AMD Ryzen 5 7530U, 16GB of RAM and a AMD Barcelo Graphics      |
-| [lenovo-thinkpad-e14-fedora](./hosts/lenovo-thinkpad-e14-fedora) | Same as lenovo-thinkpad-e14-nixos but running Fedora instead of NixOS           |
-| [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)               | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB |
-| [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora)             | Same as msi-h510m-pro-nixos but running Fedora instead of NixOS                 |
+| Name                                                             | Description                                                                     | Screenshot                                        |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [lenovo-thinkpad-e14-nixos](./hosts/lenovo-thinkpad-e14-nixos)   | Laptop running a AMD Ryzen 5 7530U, 16GB of RAM and a AMD Barcelo Graphics      | ![image](./assets/lenovo-thinkpad-e14-nixos.png)  |
+| [lenovo-thinkpad-e14-fedora](./hosts/lenovo-thinkpad-e14-fedora) | Same as lenovo-thinkpad-e14-nixos but running Fedora instead of NixOS           | ![image](./assets/lenovo-thinkpad-e14-fedora.png) |
+| [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)               | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-nixos.png)        |
+| [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora)             | Same as msi-h510m-pro-nixos but running Fedora instead of NixOS                 | ![image](./assets/msi-h510m-pro-fedora.png)       |
 
 ## Installation
 
@@ -99,10 +99,6 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
     Note: In this example, you must change username into the [hosts/msi-h510m-pro-fedora/home/default.nix](./hosts/msi-h510m-pro-fedora/home/default.nix) file.
 
 </details>
-
-## Screenshot
-
-![image](https://github.com/user-attachments/assets/07a3f209-b253-475a-a681-2f6c03eaa512)
 
 ## Credits & Big Thanks
 
