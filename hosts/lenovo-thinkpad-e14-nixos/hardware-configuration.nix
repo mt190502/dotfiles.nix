@@ -18,6 +18,12 @@ let
     fsType = "btrfs";
     options = (if subvol != null then [ "subvol=/nixos-2025-06-15/${subvol}" ] else [ ]) ++ btrfsopts;
   };
+  mkBtrfsHomeMount = subvol: {
+    device = "/dev/disk/by-uuid/1c2a3dfb-8628-4a52-8bc0-c9d59ba3a825";
+    fsType = "btrfs";
+    options =
+      (if subvol != null then [ "subvol=/folders/${subvol}" ] else [ "subvol=/users" ]) ++ btrfsopts;
+  };
 in
 {
   imports = [
@@ -35,10 +41,17 @@ in
     "/var/btrfs" = mkBtrfsSysMount null;
 
     #~ User mounts
-    "/home" = {
-      device = "/dev/disk/by-uuid/a436a5aa-fce4-4d45-a324-48c68882d8b3";
-      fsType = "ext4";
-    };
+    "/home" = mkBtrfsHomeMount null;
+    "/home/taha/Android" = mkBtrfsHomeMount "Android";
+    "/home/taha/Desktop" = mkBtrfsHomeMount "Desktop";
+    "/home/taha/Documents" = mkBtrfsHomeMount "Documents";
+    "/home/taha/Downloads" = mkBtrfsHomeMount "Downloads";
+    "/home/taha/Music" = mkBtrfsHomeMount "Music";
+    "/home/taha/Pictures" = mkBtrfsHomeMount "Pictures";
+    "/home/taha/Projects" = mkBtrfsHomeMount "Projects";
+    "/home/taha/Public" = mkBtrfsHomeMount "Public";
+    "/home/taha/Templates" = mkBtrfsHomeMount "Templates";
+    "/home/taha/Videos" = mkBtrfsHomeMount "Videos";
 
     #~ Other mounts
     "/boot/efi" = {
