@@ -24,9 +24,6 @@ in
     };
     startup = [
       {
-        command = "/usr/libexec/xfce-polkit";
-      }
-      {
         command = "/opt/1Password/1password --silent --password-store=gnome";
       }
     ];
