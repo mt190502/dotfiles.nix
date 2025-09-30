@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   boot = {
@@ -48,7 +53,12 @@
       "amdgpu.ppfeaturemask=0xfffd3fff"
     ];
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        extraInstallCommands = ''
+          ${lib.getExe pkgs.gnused} -i 's|default.*|default @saved|g' /boot/efi/loader/loader.conf
+        '';
+      };
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";

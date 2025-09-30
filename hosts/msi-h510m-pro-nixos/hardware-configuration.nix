@@ -12,7 +12,6 @@ let
     "compress=zstd:1"
     "ssd"
     "space_cache=v2"
-    "X-mount.mkdir"
   ];
   mkBtrfsSysMount = subvol: {
     device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
@@ -22,7 +21,8 @@ let
   mkBtrfsHomeMount = subvol: {
     device = "/dev/disk/by-uuid/48cff87f-003c-4358-a4f7-81705e1025d1";
     fsType = "btrfs";
-    options = (if subvol != null then [ "subvol=/${subvol}" ] else [ ]) ++ btrfsopts;
+    options =
+      (if subvol != null then [ "subvol=/folders/${subvol}" ] else [ "subvol=/users" ]) ++ btrfsopts;
   };
   mkNFSMount = dev: {
     device = dev;
@@ -49,16 +49,16 @@ in
     "/var/btrfs" = mkBtrfsSysMount null;
 
     #~ User mounts
-    "/home" = mkBtrfsHomeMount "users";
-    "/home/taha/Android" = mkBtrfsHomeMount "folders/Android";
-    "/home/taha/Desktop" = mkBtrfsHomeMount "folders/Desktop";
-    "/home/taha/Documents" = mkBtrfsHomeMount "folders/Documents";
-    "/home/taha/Downloads" = mkBtrfsHomeMount "folders/Downloads";
-    "/home/taha/Music" = mkBtrfsHomeMount "folders/Music";
-    "/home/taha/Pictures" = mkBtrfsHomeMount "folders/Pictures";
-    "/home/taha/Public" = mkBtrfsHomeMount "folders/Public";
-    "/home/taha/Templates" = mkBtrfsHomeMount "folders/Templates";
-    "/home/taha/Videos" = mkBtrfsHomeMount "folders/Videos";
+    "/home" = mkBtrfsHomeMount null;
+    "/home/taha/Android" = mkBtrfsHomeMount "Android";
+    "/home/taha/Desktop" = mkBtrfsHomeMount "Desktop";
+    "/home/taha/Documents" = mkBtrfsHomeMount "Documents";
+    "/home/taha/Downloads" = mkBtrfsHomeMount "Downloads";
+    "/home/taha/Music" = mkBtrfsHomeMount "Music";
+    "/home/taha/Pictures" = mkBtrfsHomeMount "Pictures";
+    "/home/taha/Public" = mkBtrfsHomeMount "Public";
+    "/home/taha/Templates" = mkBtrfsHomeMount "Templates";
+    "/home/taha/Videos" = mkBtrfsHomeMount "Videos";
 
     #~ NFS mounts
     "/home/taha/Projects" = mkNFSMount "192.168.1.200:/mnt/ssd/data/projects";

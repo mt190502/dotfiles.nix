@@ -31,9 +31,10 @@
     flatpak.enable = true;
     gtk.enable = true;
     kde.enable = true;
-    preferred-lock-app = "gtklock";
+    preferred-lock-app = "swaylock";
     preferred-wm = "sway";
     qt.enable = true;
+    vicinae.enable = false;
   };
 
   ########################################

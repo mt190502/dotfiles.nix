@@ -23,5 +23,6 @@ in
         kdeconnect
       ];
     };
+    networkmanager.enable = true;
   };
 }
