@@ -516,8 +516,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-VirtualBox-6.12.44-200.fc42.x86_64
-kmod-VirtualBox-6.12.47-200.fc42.x86_64
+kmod-VirtualBox-6.12.49-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -654,6 +653,7 @@ libfontenc
 libfprint-tod
 libfsverity
 libftdi
+libfyaml
 libgbinder
 libgcc
 libgcrypt
@@ -1019,6 +1019,8 @@ mesa-libgbm
 mesa-libGL
 mesa-libGLU
 mesa-va-drivers-freeworld
+mesa-vdpau-drivers-freeworld
+mesa-vulkan-drivers-freeworld
 microcode_ctl
 mkpasswd
 ModemManager-glib
