@@ -90,7 +90,7 @@ in
                     [ x ]
                 )
                 [
-                  "tray"
+                  "group/tray-expander"
                   "custom/space"
                   "memory"
                   "custom/space"
@@ -113,6 +113,17 @@ in
             #################################################
             #### Module(s) configuration
             #################################################
+            "group/tray-expander" = {
+              orientation = "inherit";
+              drawer = {
+                transition-duration = 600;
+              };
+              modules = [
+                "custom/tray-expand-icon"
+                "tray"
+              ];
+            };
+
             "sway/language" = {
               format = "{short} {variant}";
               on-click = ''${swaymsg} input "type:keyboard" xkb_switch_layout next'';
@@ -361,6 +372,11 @@ in
               escape = true;
             };
 
+            "custom/tray-expand-icon" = {
+              format = "";
+              tooltip = false;
+            };
+
             "custom/weather" = {
               format = "{}";
               interval = 3600;
@@ -376,6 +392,11 @@ in
                 font-family: ${config.stylix.fonts.sansSerif.name}, Arial, sans-serif;
                 font-size: ${builtins.toString (config.stylix.fonts.sizes.applications + 2)}px;
                 min-height: 0;
+              }
+
+              #tray-expander:hover #custom-tray-expand-icon {
+                background-color: transparent;
+                color: transparent;
               }
 
               #tray,
