@@ -2,19 +2,6 @@
 
 let
   originalPackage = pkgs.flameshot;
-  # pkgs.flameshot.overrideAttrs (oldAttrs: {
-  #   src = fetchFromGitHub {
-  #     owner = "flameshot-org";
-  #     repo = "flameshot";
-  #     rev = "f4cde19";
-  #     sha256 = "sha256-B/piB8hcZR11vnzvue/1eR+SFviTSGJoek1w4abqsek=";
-  #   };
-  #   cmakeFlags = [
-  #     "-DUSE_WAYLAND_CLIPBOARD=1"
-  #     "-DUSE_WAYLAND_GRIM=1"
-  #   ];
-  #   buildInputs = oldAttrs.buildInputs ++ [ libsForQt5.kguiaddons ];
-  # })
   override = pkgs.symlinkJoin {
     name = "flameshot-wrapped";
     paths = [ originalPackage ];
