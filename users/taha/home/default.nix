@@ -20,103 +20,109 @@
   ## Packages
   #
   ########################################
-  home.packages = with pkgs; [
-    #~ wrapped ~#
-    config.wrapped.alacritty
-    config.wrapped.dolphin
-    config.wrapped.flameshot
-    config.wrapped.imagemagick
-    config.wrapped.jetbrains-toolbox
-    config.wrapped.nwg-displays
-    config.wrapped.qt5ct
-    config.wrapped.qt6ct
-    config.wrapped.universal-android-debloater
-    config.wrapped.vscode
+  home.packages =
+    with pkgs;
+    [
+      #~ custom ~#
+      inputs.self.packages."${pkgs.system}".zmem
+      inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
 
-    #~ custom ~#
-    inputs.self.packages."${pkgs.system}".zmem
-    inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
+      #~ fonts ~#
+      cantarell-fonts
+      cascadia-code
+      dejavu_fonts
+      fira-code
+      hack-font
+      jetbrains-mono
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.iosevka
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+      noto-fonts-emoji
+      noto-fonts-extra
 
-    #~ fonts ~#
-    cantarell-fonts
-    cascadia-code
-    dejavu_fonts
-    fira-code
-    hack-font
-    jetbrains-mono
-    nerd-fonts.droid-sans-mono
-    nerd-fonts.iosevka
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-cjk-serif
-    noto-fonts-color-emoji
-    noto-fonts-emoji
-    noto-fonts-extra
-
-    #~ packages ~#
-    _1password-cli
-    adw-gtk3
-    alacritty-theme
-    android-tools
-    aria2
-    bat
-    bat-extras.batman
-    bc
-    btop
-    cliphist
-    fastfetch
-    fd
-    ffmpegthumbnailer
-    gcolor3
-    gnome-icon-theme
-    gnome-tweaks
-    grc
-    grim
-    heimdall
-    hicolor-icon-theme
-    imagemagick
-    kdePackages.dolphin-plugins
-    kdePackages.ffmpegthumbs
-    kdePackages.kdegraphics-thumbnailers
-    kdePackages.qtstyleplugin-kvantum
-    kdePackages.qtsvg
-    kdePackages.qtwayland
-    libsForQt5.qtstyleplugin-kvantum
-    lsd
-    mpc
-    nvtopPackages.full
-    nwg-look
-    ocs-url
-    pavucontrol
-    pipes-rs
-    playerctl
-    pulseaudio
-    r2modman
-    rclone
-    ripgrep-all
-    rnnoise-plugin
-    rsync
-    scrcpy
-    slurp
-    swappy
-    swaybg
-    swayidle
-    system-config-printer
-    tesseract
-    tmux
-    translate-shell
-    trash-cli
-    tree
-    unrar
-    unzip
-    wl-clipboard
-    wlr-randr
-    wlroots_0_17
-    wlsunset
-    wtype
-    ydotool
-    yt-dlp
-  ];
+      #~ packages ~#
+      _1password-cli
+      adw-gtk3
+      alacritty-theme
+      android-tools
+      aria2
+      bat
+      bat-extras.batman
+      bc
+      btop
+      cliphist
+      fastfetch
+      fd
+      ffmpegthumbnailer
+      gcolor3
+      gnome-icon-theme
+      gnome-tweaks
+      grc
+      grim
+      heimdall
+      hicolor-icon-theme
+      imagemagick
+      kdePackages.dolphin-plugins
+      kdePackages.ffmpegthumbs
+      kdePackages.kdegraphics-thumbnailers
+      kdePackages.qtstyleplugin-kvantum
+      kdePackages.qtsvg
+      kdePackages.qtwayland
+      libsForQt5.qtstyleplugin-kvantum
+      lsd
+      mpc
+      nvtopPackages.full
+      nwg-look
+      ocs-url
+      pavucontrol
+      pipes-rs
+      playerctl
+      pulseaudio
+      r2modman
+      rclone
+      ripgrep-all
+      rnnoise-plugin
+      rsync
+      scrcpy
+      slurp
+      swappy
+      swaybg
+      swayidle
+      system-config-printer
+      tesseract
+      tmux
+      translate-shell
+      trash-cli
+      tree
+      unrar
+      unzip
+      wl-clipboard
+      wlr-randr
+      wlroots_0_17
+      wlsunset
+      wtype
+      ydotool
+      yt-dlp
+    ]
+    ++ (lib.mapAttrsToList
+      (
+        file: _:
+        let
+          name = builtins.match ''(.*)[[:space:]]*name[[:space:]]*=[[:space:]]*"([a-zA-Z0-9-]+)"(.*)'' (
+            builtins.readFile (inputs.self + "/modules/home-manager/wrapped/${file}")
+          );
+        in
+        (if name == null then name else config.wrapped.${builtins.elemAt name 1})
+      )
+      (
+        lib.filterAttrs (n: _: n != "default.nix") (
+          builtins.readDir (inputs.self + "/modules/home-manager/wrapped")
+        )
+      )
+    );
 
   ########################################
   #
