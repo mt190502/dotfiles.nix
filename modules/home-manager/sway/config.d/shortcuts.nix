@@ -78,10 +78,10 @@ in
         "${modifier}+shift+2" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 2";
         "${modifier}+shift+3" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 3";
         "${modifier}+shift+4" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 4";
-        "${modifier}+shift+5" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 5";
-        "${modifier}+shift+6" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 6";
-        "${modifier}+shift+7" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 7";
-        "${modifier}+shift+8" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 8";
+        "${modifier}+$altMod+shift+1" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 5";
+        "${modifier}+$altMod+shift+2" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 6";
+        "${modifier}+$altMod+shift+3" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 7";
+        "${modifier}+$altMod+shift+4" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 8";
 
         #~~~ workspace
         "${modifier}+s" = "layout stacking";
@@ -91,10 +91,10 @@ in
         "${modifier}+2" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 2";
         "${modifier}+3" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 3";
         "${modifier}+4" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 4";
-        "${modifier}+5" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 5";
-        "${modifier}+6" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 6";
-        "${modifier}+7" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 7";
-        "${modifier}+8" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 8";
+        "${modifier}+$altMod+1" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 5";
+        "${modifier}+$altMod+2" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 6";
+        "${modifier}+$altMod+3" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 7";
+        "${modifier}+$altMod+4" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 8";
 
         #~~~ sound
         "XF86AudioRaiseVolume" = "exec ${pactl} set-sink-volume @DEFAULT_SINK@ +5%";
