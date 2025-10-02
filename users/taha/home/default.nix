@@ -125,6 +125,14 @@
   ########################################
   #~ custom modules ~#
   moduleopts.home-manager = {
+    preferred = {
+      file-manager = "dolphin";
+      lock-app = "swaylock";
+      menu = "wofi";
+      notifier = "swaync";
+      terminal = "alacritty";
+      wm = "sway";
+    };
     alacritty.theme = "hyper";
     easyeffects.enable = false;
     mako.enable = false;

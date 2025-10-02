@@ -7,15 +7,23 @@
 
 let
   cfg = config.moduleopts.home-manager;
+  home = config.home.homeDirectory;
   pomobar-client = lib.getExe' config.services.pomobar.package "pomobar-client";
+  term =
+    title: command:
+    (
+      if cfg.preferred.terminal == "alacritty" then
+        lib.getExe config.wrapped.alacritty + " -T " + title + " -e " + command
+      else
+        throw "Unsupported terminal: ${cfg.preferred.terminal}"
+    );
   wm =
-    if cfg.preferred-wm == "sway" then
+    if cfg.preferred.wm == "sway" then
       "sway"
-    else if cfg.preferred-wm == "hyprland" then
+    else if cfg.preferred.wm == "hyprland" then
       "hypr"
     else
-      throw "Unsupported window manager: ${cfg.preferred-wm}";
-  home = config.home.homeDirectory;
+      throw "Unsupported window manager: ${cfg.preferred.wm}";
 in
 {
   options.moduleopts.home-manager.waybar = {
@@ -36,7 +44,7 @@ in
       enable = true;
       systemd = {
         enable = true;
-        target = "${cfg.preferred-wm}-session.target";
+        target = "${cfg.preferred.wm}-session.target";
       };
       settings =
         let

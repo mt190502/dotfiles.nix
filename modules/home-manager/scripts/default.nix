@@ -43,12 +43,12 @@ in
                       imv = config.wrapped.imv;
                       jq = lib.getExe pkgs.jq;
                       lock-screen-function =
-                        if cfg.${cfg.preferred-lock-app}.systemd.enable then
+                        if cfg.${cfg.preferred.lock-app}.systemd.enable then
                           "${lib.getExe' pkgs.systemd "systemctl"} --user start session-lock"
-                        else if cfg.preferred-lock-app == "swaylock" then
+                        else if cfg.preferred.lock-app == "swaylock" then
                           "${home}/.local/bin/blurlock"
                         else
-                          cfg.preferred-lock-app;
+                          cfg.preferred.lock-app;
                       mako = pkgs.mako;
                       ncmpcpp = lib.getExe pkgs.ncmpcpp;
                       newt = pkgs.newt;

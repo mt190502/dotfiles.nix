@@ -2,17 +2,10 @@
 
 let
   makoOpacity = lib.toHexString (((builtins.ceil (config.stylix.opacity.popups * 100)) * 255) / 100);
-  cfg = config.moduleopts.home-manager.mako;
+  cfg = config.moduleopts.home-manager;
 in
 {
-  options.moduleopts.home-manager.mako = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "mako";
-    };
-  };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.preferred.notifier == "mako") {
     services.mako = with config.stylix.customColors.withHashtag; {
       enable = true;
       backgroundColor = background + makoOpacity;

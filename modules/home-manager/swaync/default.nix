@@ -6,17 +6,10 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.swaync;
+  cfg = config.moduleopts.home-manager;
 in
 {
-  options.moduleopts.home-manager.swaync = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "swaync";
-    };
-  };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.preferred.notifier == "swaync") {
     services.swaync = {
       enable = true;
       settings = {

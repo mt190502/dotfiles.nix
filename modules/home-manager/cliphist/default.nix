@@ -11,12 +11,12 @@ in
       description = "cliphist";
     };
   };
-  config = lib.mkIf cfg.cliphist.enable {
+  config = lib.mkIf (cfg.cliphist.enable && cfg.preferred.menu != "vicinae") {
     services.cliphist = {
       enable = true;
       allowImages = true;
       systemdTargets = [
-        "${cfg.preferred-wm}-session.target"
+        "${cfg.preferred.wm}-session.target"
       ];
     };
   };

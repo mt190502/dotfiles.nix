@@ -1,17 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.home-manager.wofi;
+  cfg = config.moduleopts.home-manager;
 in
 {
-  options.moduleopts.home-manager.wofi = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "wofi";
-    };
-  };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.preferred.menu == "wofi") {
     programs.wofi = {
       enable = true;
       settings = {
@@ -22,7 +15,7 @@ in
         line_wrap = "word_char";
         mode = "dmenu";
         no_actions = true;
-        term = lib.getExe config.wrapped.alacritty;
+        term = lib.getExe config.wrapped."${cfg.preferred.terminal}";
         width = "40%";
       };
       style = with config.stylix.customColors.withHashtag; ''

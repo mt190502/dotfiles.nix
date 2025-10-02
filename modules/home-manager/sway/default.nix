@@ -7,22 +7,24 @@
 
 let
   cfg = config.moduleopts.home-manager;
-  is_enabled = if cfg.preferred-wm == "sway" then true else false;
+  wofi = lib.getExe pkgs.wofi;
+  vicinae = lib.getExe config.services.vicinae.package;
 in
 {
-  options.moduleopts.home-manager.sway = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = is_enabled;
-      description = "sway";
-    };
-  };
-  config = lib.mkIf cfg.sway.enable {
+  config = lib.mkIf (cfg.preferred.wm == "sway") {
     wayland.windowManager.sway = {
-      enable = is_enabled;
+      enable = true;
       package = config.wrapped.sway;
       checkConfig = false;
       config = {
+        menu =
+          if cfg.preferred.menu == "wofi" then
+            "${wofi} --prompt 'Search Apps' --show drun"
+          else if cfg.preferred.menu == "vicinae" then
+            "${vicinae}"
+          else
+            throw "No preferred menu selected";
+        terminal = "${lib.getExe config.wrapped.${cfg.preferred.terminal}}";
         modifier = "Mod4";
       };
     };

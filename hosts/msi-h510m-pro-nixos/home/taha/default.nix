@@ -27,15 +27,7 @@
   #
   ########################################
   #~ custom modules ~#
-  moduleopts.home-manager = {
-    flatpak.enable = true;
-    gtk.enable = true;
-    kde.enable = true;
-    preferred-lock-app = "swaylock";
-    preferred-wm = "sway";
-    qt.enable = true;
-    vicinae.enable = false;
-  };
+  moduleopts.home-manager = { };
 
   ########################################
   #

@@ -2,23 +2,60 @@
 
 {
   options.moduleopts.home-manager = {
-    preferred-wm = lib.mkOption {
-      type = lib.types.enum [
-        "sway"
-        "hyprland"
-        "none"
-      ];
-      default = "none";
-      description = "Preferred window manager";
-    };
-    preferred-lock-app = lib.mkOption {
-      type = lib.types.enum [
-        "swaylock"
-        "gtklock"
-        "none"
-      ];
-      default = "none";
-      description = "Preferred lock application";
+    preferred = {
+      file-manager = lib.mkOption {
+        type = lib.types.enum [
+          "dolphin"
+          "pcmanfm"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred file manager";
+      };
+      lock-app = lib.mkOption {
+        type = lib.types.enum [
+          "swaylock"
+          "gtklock"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred lock application";
+      };
+      menu = lib.mkOption {
+        type = lib.types.enum [
+          "wofi"
+          "vicinae"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred application menu";
+      };
+      notifier = lib.mkOption {
+        type = lib.types.enum [
+          "mako"
+          "swaync"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred notification daemon";
+      };
+      terminal = lib.mkOption {
+        type = lib.types.enum [
+          "alacritty"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred terminal emulator";
+      };
+      wm = lib.mkOption {
+        type = lib.types.enum [
+          "sway"
+          "hyprland"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred window manager";
+      };
     };
   };
 }

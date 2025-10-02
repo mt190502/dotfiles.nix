@@ -6,18 +6,11 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.vicinae;
+  cfg = config.moduleopts.home-manager;
 in
 {
   imports = [ inputs.vicinae.homeManagerModules.default ];
-  options.moduleopts.home-manager.vicinae = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "vicinae";
-    };
-  };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.preferred.menu == "vicinae") {
     services.vicinae = {
       enable = true;
       autoStart = true;

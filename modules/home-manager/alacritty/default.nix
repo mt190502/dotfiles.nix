@@ -7,22 +7,17 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.alacritty;
+  cfg = config.moduleopts.home-manager;
 in
 {
   options.moduleopts.home-manager.alacritty = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "alacritty";
-    };
     theme = lib.mkOption {
       type = lib.types.str;
       default = "vibrant-ink";
       description = "theme";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.preferred.terminal == "alacritty") {
     programs.alacritty = {
       enable = true;
       package = config.wrapped.alacritty;
@@ -47,7 +42,7 @@ in
         terminal.shell.program = lib.getExe pkgs.tmux;
         window.dynamic_title = true;
         general.import = [
-          inputs.alacritty-theme.packages."${pkgs.system}"."${cfg.theme}"
+          inputs.alacritty-theme.packages."${pkgs.system}"."${cfg.alacritty.theme}"
         ];
       };
     };

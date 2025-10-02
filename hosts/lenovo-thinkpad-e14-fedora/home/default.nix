@@ -26,15 +26,8 @@
   ########################################
   #~ custom modules ~#
   moduleopts.home-manager = {
-    flatpak.enable = true;
     gnome-keyring.enable = false; # I'm using keyring in system because of pam issues
-    gtk.enable = true;
-    kde.enable = true;
     onepassword-integration.enable = true;
-    preferred-lock-app = "swaylock";
-    preferred-wm = "sway";
-    qt.enable = true;
-    vicinae.enable = false;
     waybar.enableLaptopOpts = true;
   };
 

@@ -7,10 +7,10 @@
 
 let
   cfg = config.moduleopts.home-manager;
-  modifier = config.wayland.windowManager.sway.config.modifier;
-  menu = config.wayland.windowManager.sway.config.menu;
-  # vicinae = lib.getExe' config.services.vicinae.package "vicinae";
   home = config.home.homeDirectory;
+  menu = config.wayland.windowManager.sway.config.menu;
+  modifier = config.wayland.windowManager.sway.config.modifier;
+  lock = if cfg.preferred.lock-app == "swaylock" then "blurlock" else cfg.preferred.lock-app;
 in
 {
   wayland.windowManager.sway.config = {
@@ -106,12 +106,6 @@ in
         "XF86MonBrightnessUp" = "exec ${brightnessctl} set +5%";
         "XF86MonBrightnessDown" = "exec ${brightnessctl} set 5%-";
 
-        #~~~ clipboard
-        "${modifier}+v" = "exec ${cliphist} list | ${wofi} --show dmenu | ${cliphist} decode | ${wl-copy}";
-        # "${modifier}+v" = "exec ${vicinae} 'vicinae://extensions/vicinae/clipboard/history'";
-        "${modifier}+shift+v" = "exec ${cliphist} wipe";
-        # "${modifier}+shift+v" = "exec ${vicinae} 'vicinae://extensions/vicinae/clipboard/'";
-
         #~~~ playerctl
         "XF86AudioPlay" = "exec ${playerctl} play-pause";
         "XF86AudioPause" = "exec ${playerctl} play-pause";
@@ -126,19 +120,34 @@ in
 
         #~~~ other
         "${modifier}+Return" = "exec ${alacritty} -e bash -c '${tmux} attach -t daemonmodetmux'";
-        "${modifier}+d" = "exec ${home}/.local/bin/program-toggler ${menu}";
-        # "${modifier}+d" = "exec ${vicinae}";
-        "${modifier}+l" =
-          if cfg.preferred-lock-app == "swaylock" then
-            "exec ${home}/.local/bin/blurlock"
-          else
-            "exec ${cfg.preferred-lock-app}";
-        "${modifier}+period" = "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
-        "${modifier}+shift+d" =
-          "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e";
-        "${modifier}+shift+f" =
-          "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -t";
+        "${modifier}+l" = "exec ${lock}";
         "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown.sh";
-      };
+      }
+      // (
+        if cfg.preferred.menu == "wofi" then
+          {
+            #~~~ clipboard (wofi)
+            "${modifier}+v" = "exec ${cliphist} list | ${wofi} --show dmenu | ${cliphist} decode | ${wl-copy}";
+            "${modifier}+shift+v" = "exec ${cliphist} wipe";
+
+            #~~~ others
+            "${modifier}+d" = "exec ${home}/.local/bin/program-toggler ${menu}";
+            "${modifier}+period" = "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
+            "${modifier}+shift+d" =
+              "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e";
+            "${modifier}+shift+f" =
+              "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -t";
+          }
+        else if cfg.preferred.menu == "vicinae" then
+          {
+            #~~~ clipboard (vicinae)
+            "${modifier}+v" = "exec ${menu} 'vicinae://extensions/vicinae/clipboard/history'";
+
+            #~~~ others
+            "${modifier}+d" = "exec ${menu}";
+          }
+        else
+          { }
+      );
   };
 }
