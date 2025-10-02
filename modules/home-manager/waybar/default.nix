@@ -48,7 +48,6 @@ in
       };
       settings =
         let
-          alacritty = lib.getExe config.wrapped.alacritty;
           curl = lib.getExe pkgs.curl;
           mpc = lib.getExe' pkgs.mpc "mpc";
           nmeditor = lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor";
@@ -110,13 +109,38 @@ in
                   "custom/space"
                   "bluetooth"
                   "custom/space"
-                  "pulseaudio"
-                  "custom/space"
-                  "custom/swaync"
-                  "custom/space"
-                  "custom/powermenu"
-                  "custom/space2"
-                ];
+                ]
+              ++ (
+                if cfg.waybar.enableLaptopOpts then
+                  [
+                    "battery"
+                    "custom/space"
+                  ]
+                else
+                  [ ]
+              )
+              ++ [
+                "pulseaudio"
+                "custom/space"
+              ]
+              ++ (
+                if (cfg.preferred.notifier == "mako") then
+                  [
+                    "custom/dnd-mako"
+                    "custom/space"
+                  ]
+                else if (cfg.preferred.notifier == "swaync") then
+                  [
+                    "custom/swaync"
+                    "custom/space"
+                  ]
+                else
+                  [ ]
+              )
+              ++ [
+                "custom/powermenu"
+                "custom/space2"
+              ];
 
             #################################################
             #### Module(s) configuration
@@ -219,7 +243,7 @@ in
             cpu = {
               interval = 1;
               format = " {max_frequency:0.2f}GHz | {usage}%";
-              on-click = "${home}/.local/bin/program-toggler ${alacritty} -T BTOP -e btop";
+              on-click = "${home}/.local/bin/program-toggler ${term "BTOP" "btop"}";
             };
 
             idle_inhibitor = {
@@ -233,7 +257,7 @@ in
             memory = {
               interval = 10;
               format = " {used:0.2f} / {total:0.0f} GB";
-              on-click = "${home}/.local/bin/program-toggler ${alacritty} -T BTOP -e btop";
+              on-click = "${home}/.local/bin/program-toggler ${term "BTOP" "btop"}";
             };
 
             mpd = {
@@ -390,7 +414,7 @@ in
               interval = 3600;
               exec = "${curl} -s 'https://wttr.in/${cfg.waybar.weather_location}?format=1' | sed 's/ //1'";
               exec-if = "ping wttr.in -c1";
-              on-click = "${home}/.local/bin/program-toggler ${alacritty} -T wttr.in -e sh -c '${curl} https://wttr.in/${cfg.waybar.weather_location}; read'";
+              on-click = "${home}/.local/bin/program-toggler ${term "wttr.in" "sh -c '${curl} https://wttr.in/${cfg.waybar.weather_location}; read'"}";
             };
           };
         };
