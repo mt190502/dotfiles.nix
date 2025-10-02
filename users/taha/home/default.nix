@@ -135,8 +135,11 @@
     };
     alacritty.theme = "hyper";
     easyeffects.enable = false;
-    mako.enable = false;
+    flatpak.enable = true;
+    gtk.enable = true;
+    kde.enable = true;
     nextcloud-client.enable = false;
+    qt.enable = true;
     waybar.weather_location = "Istanbul";
   };
 
