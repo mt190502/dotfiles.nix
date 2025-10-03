@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.home-manager.sway;
+  cfg = config.moduleopts.home-manager;
   modifier = config.wayland.windowManager.sway.config.modifier;
 in
 {
-  wayland.windowManager.sway.config = lib.mkIf cfg.enable {
+  wayland.windowManager.sway.config = lib.mkIf (cfg.preferred.wm == "sway") {
     keybindings = {
       "${modifier}+g" = "exec /opt/1Password/1password --quick-access";
     };

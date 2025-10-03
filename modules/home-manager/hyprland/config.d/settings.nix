@@ -10,8 +10,7 @@
       };
     };
     decoration = {
-      rounding = 12;
-      # rounding_power = 2.0;
+      rounding = 4;
       blur = {
         enabled = true;
         size = 10;
@@ -26,9 +25,9 @@
       };
     };
     general = {
-      border_size = 0;
-      gaps_in = 5;
-      gaps_out = 0;
+      border_size = 5;
+      gaps_in = 3;
+      gaps_out = 5;
     };
     animations = {
       enabled = "yes, please :)";

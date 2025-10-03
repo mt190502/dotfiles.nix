@@ -46,7 +46,7 @@ in
                         if cfg.${cfg.preferred.lock-app}.systemd.enable then
                           "${lib.getExe' pkgs.systemd "systemctl"} --user start session-lock"
                         else if cfg.preferred.lock-app == "swaylock" then
-                          "${home}/.local/bin/blurlock"
+                          "${home}/.config/sway/scripts.d/blurlock"
                         else
                           cfg.preferred.lock-app;
                       mako = pkgs.mako;

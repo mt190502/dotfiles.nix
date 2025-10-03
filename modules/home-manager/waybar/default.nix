@@ -70,12 +70,12 @@ in
             #################################################
             modules-left = [
               "custom/space2"
-              "sway/workspaces"
+              "${cfg.preferred.wm}/workspaces"
               "custom/space"
-              "sway/window"
+              "${cfg.preferred.wm}/window"
             ];
-            modules-center = [
-              "sway/mode"
+
+            modules-center = (if wm == "sway" then [ "sway/mode" ] else [ ]) ++ [
               "custom/space"
               "mpd"
               "custom/space"
@@ -83,64 +83,44 @@ in
               "custom/space"
               "custom/weather"
             ];
-            modules-right =
-              lib.lists.concatMap
-                (
-                  x:
-                  if cfg.waybar.enableLaptopOpts && x == "bluetooth" then
-                    [
-                      "battery"
-                      "custom/space"
-                      x
-                    ]
-                  else
-                    [ x ]
-                )
+
+            modules-right = [
+              "group/tray-expander"
+              "custom/space"
+              "memory"
+              "custom/space"
+              "idle_inhibitor"
+              "custom/space"
+              "${cfg.preferred.wm}/language"
+              "custom/space"
+              "network"
+              "custom/space"
+              "bluetooth"
+            ]
+            ++ (lib.optional cfg.waybar.enableLaptopOpts "custom/space")
+            ++ (lib.optional cfg.waybar.enableLaptopOpts "battery")
+            ++ [
+              "custom/space"
+              "pulseaudio"
+              "custom/space"
+            ]
+            ++ (
+              if cfg.preferred.notifier == "mako" then
                 [
-                  "group/tray-expander"
-                  "custom/space"
-                  "memory"
-                  "custom/space"
-                  "idle_inhibitor"
-                  "custom/space"
-                  "sway/language"
-                  "custom/space"
-                  "network"
-                  "custom/space"
-                  "bluetooth"
-                  "custom/space"
+                  "custom/dnd-mako"
                 ]
-              ++ (
-                if cfg.waybar.enableLaptopOpts then
-                  [
-                    "battery"
-                    "custom/space"
-                  ]
-                else
-                  [ ]
-              )
-              ++ [
-                "pulseaudio"
-                "custom/space"
-              ]
-              ++ (
-                if (cfg.preferred.notifier == "mako") then
-                  [
-                    "custom/dnd-mako"
-                    "custom/space"
-                  ]
-                else if (cfg.preferred.notifier == "swaync") then
-                  [
-                    "custom/swaync"
-                    "custom/space"
-                  ]
-                else
-                  [ ]
-              )
-              ++ [
-                "custom/powermenu"
-                "custom/space2"
-              ];
+              else if cfg.preferred.notifier == "swaync" then
+                [
+                  "custom/swaync"
+                ]
+              else
+                throw "Unsupported notifier: ${cfg.preferred.notifier}"
+            )
+            ++ [
+              "custom/space"
+              "custom/powermenu"
+              "custom/space2"
+            ];
 
             #################################################
             #### Module(s) configuration
@@ -154,6 +134,25 @@ in
                 "custom/tray-expand-icon"
                 "tray"
               ];
+            };
+
+            "hyprland/language" = {
+              format = "{short} {variant}";
+              on-click = ''${swaymsg} input "type:keyboard" xkb_switch_layout next'';
+            };
+
+            "hyprland/window" = {
+              format = "{}";
+              max-length = 50;
+              tooltip = false;
+            };
+
+            "hyprland/workspaces" = {
+              format = "{icon}";
+              format-icons = {
+                active = "";
+                default = "";
+              };
             };
 
             "sway/language" = {
@@ -363,12 +362,6 @@ in
             "custom/powermenu" = {
               on-click = "${home}/.local/bin/program-toggler ${home}/.local/bin/powermenu";
               format = "";
-              tooltip = false;
-            };
-
-            "custom/screenshot" = {
-              on-click = "${home}/.local/bin/program-toggler ${home}/.local/bin/grimshot";
-              format = "";
               tooltip = false;
             };
 

@@ -100,7 +100,7 @@ in
         };
         Service = {
           Type = "forking";
-          ExecStart = "${home}/.local/bin/blurlock";
+          ExecStart = "${home}/.config/sway/scripts.d/blurlock";
         };
         Install = {
           WantedBy = [

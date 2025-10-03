@@ -7,12 +7,12 @@
 }:
 
 let
-  cfg = config.moduleopts.home-manager.sway;
+  cfg = config.moduleopts.home-manager;
   onepass = osConfig.moduleopts.nixos.onepassword.package;
   modifier = config.wayland.windowManager.sway.config.modifier;
 in
 {
-  wayland.windowManager.sway.config = lib.mkIf cfg.enable {
+  wayland.windowManager.sway.config = lib.mkIf (cfg.preferred.wm == "sway") {
     keybindings = {
       "${modifier}+g" = "exec ${onepass}/bin/1password --quick-access";
     };

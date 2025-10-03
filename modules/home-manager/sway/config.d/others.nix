@@ -54,7 +54,7 @@ in
       }
 
       #~~~ others
-      { command = "${home}/.local/bin/autostart"; }
+      { command = "${home}/.config/sway/scripts.d/autostart"; }
     ];
   };
 }

@@ -10,7 +10,7 @@ let
   home = config.home.homeDirectory;
   menu = config.wayland.windowManager.sway.config.menu;
   modifier = config.wayland.windowManager.sway.config.modifier;
-  lock = if cfg.preferred.lock-app == "swaylock" then "blurlock" else cfg.preferred.lock-app;
+  lock = if cfg.preferred.lock-app == "swaylock" then "${home}/.config/sway/scripts.d/blurlock" else cfg.preferred.lock-app;
 in
 {
   wayland.windowManager.sway.config = {
@@ -33,9 +33,9 @@ in
         "${modifier}+r" = "mode 'default'";
       };
       screenshot = {
-        "${modifier}+shift+s" = "exec ${home}/.local/bin/grimshot -r; mode 'default'";
-        "a" = " exec ${home}/.local/bin/grimshot -a; mode 'default'";
-        "f" = " exec ${home}/.local/bin/grimshot -f; mode 'default'";
+        "${modifier}+shift+s" = "exec ${home}/.config/sway/scripts.d/grimshot -r; mode 'default'";
+        "a" = " exec ${home}/.config/sway/scripts.d/grimshot -a; mode 'default'";
+        "f" = " exec ${home}/.config/sway/scripts.d/grimshot -f; mode 'default'";
         "Return" = "mode 'default'";
         "Escape" = "mode 'default'";
       };

@@ -12,17 +12,17 @@ sleep 3
 
 [[ -e "$XDG_RUNTIME_DIR/.autostart" ]] && exit
 while IFS= read -r line; do
-	[[ -z "$line" || "$line" =~ ^# ]] && continue
+    [[ -z "$line" || "$line" =~ ^# ]] && continue
 
-	IFS='|' read -r ws option app <<<"$line"
+    IFS='|' read -r ws option app <<<"$line"
     IFS=':' read -r workspace monitor <<<"$ws"
-    IFS=':' read -r kind value <<<"$option"
+    read -r value <<<"$option"
 
-    [[ "$workspace" != "none" ]] && @sway@/bin/swaymsg "workspace $workspace-$monitor output $monitor"
-    [[ "$kind" != "none" ]] && @sway@/bin/swaymsg "for_window [$kind=\"$value\"] move container workspace $workspace-$monitor"
+    [[ "$workspace" != "none" ]] && @hyprctl@ keyword workspace "$workspace,monitor:$monitor,name:$workspace-$monitor"
+    [[ "$value" != "none" ]] && @hyprctl@ keyword windowrulev2 "workspace silent name:$workspace-$monitor,class:^($value)$"
     eval "$app" &
     disown
     sleep 1
-done <"$HOME/.autostart"
+done <"$HOME/.autostart.hyprland"
 touch "$XDG_RUNTIME_DIR/.autostart"
 

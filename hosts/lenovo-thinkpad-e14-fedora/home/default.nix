@@ -28,6 +28,7 @@
   moduleopts.home-manager = {
     gnome-keyring.enable = false; # I'm using keyring in system because of pam issues
     onepassword-integration.enable = true;
+    preferred.wm = lib.mkForce "hyprland";
     waybar.enableLaptopOpts = true;
   };
 
