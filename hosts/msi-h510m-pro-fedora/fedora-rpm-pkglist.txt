@@ -290,6 +290,7 @@ gnome-online-accounts-gtk
 gnome-online-accounts-libs
 gnome-settings-daemon
 gnome-themes-extra
+gnulib-l10n
 gnupg2
 gnutls
 gnutls-c++
@@ -405,6 +406,7 @@ iscsi-initiator-utils-iscsiuio
 isns-utils-libs
 iso-codes
 iw
+iwlwifi-mld-firmware
 iwlwifi-mvm-firmware
 jack-audio-connection-kit
 jansson
@@ -453,8 +455,8 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.49-200.fc42.x86_64
-kmod-v4l2loopback-6.16.8-200.fc42.x86_64
+kmod-v4l2loopback-6.12.50-200.fc42.x86_64
+kmod-v4l2loopback-6.16.9-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
