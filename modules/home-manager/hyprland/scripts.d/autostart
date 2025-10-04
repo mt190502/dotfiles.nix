@@ -16,7 +16,7 @@ while IFS= read -r line; do
 
     IFS='|' read -r ws option app <<<"$line"
     IFS=':' read -r workspace monitor <<<"$ws"
-    read -r value <<<"$option"
+    IFS='|' read -r value <<<"$option"
 
     [[ "$workspace" != "none" ]] && @hyprctl@ keyword workspace "$workspace,monitor:$monitor,name:$workspace-$monitor"
     [[ "$value" != "none" ]] && @hyprctl@ keyword windowrulev2 "workspace silent name:$workspace-$monitor,class:^($value)$"

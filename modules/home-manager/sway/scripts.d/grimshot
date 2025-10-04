@@ -16,18 +16,18 @@ _date=$(date +%Y%m%d_%H%M%S)
 takeInitialSS() {
     [[ -n $1 ]] && sleep "$1"
 
-    for a in $(@sway@/bin/swaymsg -t get_outputs | @jq@ -r ".[].name"); do
+    for a in $(@swaymsg@ -t get_outputs | @jq@ -r ".[].name"); do
         [[ -e "/tmp/$a.png" ]] && rm /tmp/"$a".png && rm /tmp/ss.png &>/dev/null
         @grim@ -l 1 ${cursor:+-c} -o "$a" "/tmp/$a.png"
-        @sway@/bin/swaymsg for_window "[title=\"imv(.*)$a.png\"]" move to output "$a"
-        @sway@/bin/swaymsg for_window "[title=\"imv(.*)$a.png\"]" fullscreen true
-        @imv@/bin/imv-wayland "/tmp/$a.png" &
+        @swaymsg@ for_window "[title=\"imv(.*)$a.png\"]" move to output "$a"
+        @swaymsg@ for_window "[title=\"imv(.*)$a.png\"]" fullscreen true
+        @imv-wayland@ "/tmp/$a.png" &
     done
 }
 
 #~~~ merge multiple screenshots
 mergePhotos() {
-    for a in $(@sway@/bin/swaymsg -t get_outputs | @jq@ -r ".[].name"); do
+    for a in $(@swaymsg@ -t get_outputs | @jq@ -r ".[].name"); do
         files="$files /tmp/$a.png"
     done
 
@@ -50,11 +50,11 @@ main() {
         elif [[ $1 == "Full" ]]; then
             takeInitialSS ${3:+$3}
             killall imv-wayland
-            FOCUSED=$(@sway@/bin/swaymsg -t get_outputs | @jq@ -r '.[] | select(.focused) | .name')
+            FOCUSED=$(@swaymsg@ -t get_outputs | @jq@ -r '.[] | select(.focused) | .name')
             [[ "$showEditor" == "yes" ]] && @swappy@ -f "/tmp/$FOCUSED.png" | @wl_clipboard@/bin/wl-copy
         elif [[ $1 == "Active" ]]; then
             ${3:+sleep $3}
-            @grim@ -g "$(@sway@/bin/swaymsg -t get_tree | @jq@ -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - >"$tempfile"
+            @grim@ -g "$(@swaymsg@ -t get_tree | @jq@ -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - >"$tempfile"
             [[ "$showEditor" == "yes" ]] && @swappy@ -f "$tempfile" | @wl_clipboard@/bin/wl-copy
             rm "$tempfile"
         fi
@@ -69,11 +69,11 @@ main() {
         elif [[ $1 == "Full" ]]; then
             takeInitialSS ${3:+$3}
             killall imv-wayland
-            FOCUSED=$(@sway@/bin/swaymsg -t get_outputs | @jq@ -r '.[] | select(.focused) | .name')
+            FOCUSED=$(@swaymsg@ -t get_outputs | @jq@ -r '.[] | select(.focused) | .name')
             [[ "$showEditor" == "yes" ]] && @swappy@ -f /tmp/"$FOCUSED".png -o "${savedFile}-edited.png"
         elif [[ $1 == "Active" ]]; then
             ${3:+sleep $3}
-            @grim@ -g "$(@sway@/bin/swaymsg -t get_tree | @jq@ -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - >"${savedFile}.png"
+            @grim@ -g "$(@swaymsg@ -t get_tree | @jq@ -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - >"${savedFile}.png"
             [[ "$showEditor" == "yes" ]] && @swappy@ -f "${savedFile}.png" -o "${savedFile}-edited.png"
         fi
         ;;
