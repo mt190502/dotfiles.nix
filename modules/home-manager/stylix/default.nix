@@ -17,7 +17,7 @@
           background = withHashtag.base00;
           border = active;
           inactive = withHashtag.base01;
-          text = if builtins.isAttrs config.stylix.base16Scheme then withHashtag.base05 else "#FFFFFF";
+          text = withHashtag.base05;
           urgent = withHashtag.base08;
         };
         withHex = rec {
@@ -25,7 +25,7 @@
           background = base00-hex;
           border = active;
           inactive = base01-hex;
-          text = if builtins.isAttrs config.stylix.base16Scheme then base05-hex else "FFFFFF";
+          text = base05-hex;
           urgent = base08-hex;
         };
         raw = rec {
@@ -33,7 +33,7 @@
           background = base00;
           border = active;
           inactive = base01;
-          text = if builtins.isAttrs config.stylix.base16Scheme then base05 else "FFFFFF";
+          text = base05;
           urgent = base08;
         };
         description = "Custom colors to be used in stylix.";
