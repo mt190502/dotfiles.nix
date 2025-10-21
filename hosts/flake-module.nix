@@ -2,12 +2,24 @@
 
 let
   homeConfigs = [
-    "lenovo-thinkpad-e14-fedora"
-    "msi-h510m-pro-fedora"
+    {
+      name = "lenovo-thinkpad-e14-fedora";
+      arch = "x86_64-linux";
+    }
+    {
+      name = "msi-h510m-pro-fedora";
+      arch = "x86_64-linux";
+    }
   ];
   nixosConfigs = [
-    "lenovo-thinkpad-e14-nixos"
-    "msi-h510m-pro-nixos"
+    {
+      name = "lenovo-thinkpad-e14-nixos";
+      arch = "x86_64-linux";
+    }
+    {
+      name = "msi-h510m-pro-nixos";
+      arch = "x86_64-linux";
+    }
   ];
   repo =
     name: arch:
@@ -18,37 +30,37 @@ let
 in
 {
   flake.homeConfigurations = builtins.listToAttrs (
-    map (name: {
-      name = name;
+    map (cfg: {
+      name = cfg.name;
       value = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = repo "nixpkgs" "x86_64-linux";
+        pkgs = repo "nixpkgs" cfg.arch;
         extraSpecialArgs = {
           inherit inputs;
-          pkgs-unstable = repo "nixpkgs-unstable" "x86_64-linux";
-          flakeName = name;
+          pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
+          flakeName = cfg.name;
         };
         modules = [
-          ./${name}/home
           (inputs.self + "/users/taha/home")
+          ./${cfg.name}/home
         ];
       };
     }) homeConfigs
   );
   flake.nixosConfigurations = builtins.listToAttrs (
-    map (name: {
-      name = name;
+    map (cfg: {
+      name = cfg.name;
       value = inputs.nixpkgs.lib.nixosSystem rec {
-        system = "x86_64-linux";
+        system = cfg.arch;
         pkgs = repo "nixpkgs" system;
         specialArgs = {
           inherit inputs;
           pkgs-unstable = repo "nixpkgs-unstable" system;
-          flakeName = name;
+          flakeName = cfg.name;
         };
         modules = [
-          ./${name}
-          (inputs.self + "/users/taha")
           inputs.home-manager.nixosModules.home-manager
+          (inputs.self + "/users/taha")
+          ./${cfg.name}
         ];
       };
     }) nixosConfigs
