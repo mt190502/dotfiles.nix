@@ -211,8 +211,6 @@ elfutils-libs
 emacs-filesystem
 enchant2
 ethtool
-evolution-data-server
-evolution-data-server-langpacks
 exfatprogs
 expat
 f2fs-tools
@@ -337,6 +335,7 @@ gnome-online-accounts-gtk
 gnome-online-accounts-libs
 gnome-settings-daemon
 gnome-themes-extra
+gnulib-l10n
 gnupg2
 gnupg2-smime
 gnutls
@@ -466,6 +465,7 @@ iscsi-initiator-utils-iscsiuio
 isns-utils-libs
 iso-codes
 iw
+iwlwifi-mld-firmware
 iwlwifi-mvm-firmware
 jack-audio-connection-kit
 jansson
@@ -516,7 +516,8 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-VirtualBox-6.12.49-200.fc42.x86_64
+kmod-VirtualBox-6.12.53-200.fc42.x86_64
+kmod-VirtualBox-6.12.54-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -1045,6 +1046,7 @@ nettle-devel
 net-tools
 NetworkManager
 NetworkManager-libnm
+NetworkManager-openvpn
 NetworkManager-tui
 NetworkManager-wifi
 newt
@@ -1088,6 +1090,7 @@ openssh-server
 openssl
 openssl-devel
 openssl-libs
+openvpn
 opus
 orc
 osinfo-db
@@ -1213,6 +1216,7 @@ pipewire-gstreamer
 pipewire-libs
 pipewire-pulseaudio
 pixman
+pkcs11-helper
 pkcs11-provider
 pkgconf
 pkgconf-m4
