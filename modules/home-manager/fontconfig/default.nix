@@ -15,7 +15,7 @@ in
       description = "Enable fontconfig configuration for Home Manager.";
     };
   };
-  config = lib.mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     fonts.fontconfig.enable = true;
     xdg.configFile = {
       "fontconfig/fonts.conf".text = ''

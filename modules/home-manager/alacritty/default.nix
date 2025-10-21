@@ -22,22 +22,24 @@ in
       enable = true;
       package = config.wrapped.alacritty;
       settings = {
-        font.size = config.stylix.fonts.sizes.terminal;
-        font.normal = {
-          family = config.stylix.fonts.monospace.name;
-          style = lib.mkForce "Bold";
-        };
-        font.bold = {
-          family = "Hack";
-          style = "Bold";
-        };
-        font.italic = {
-          family = "Hack";
-          style = "Italic";
-        };
-        font.bold_italic = {
-          family = "Hack";
-          style = "Bold Italic";
+        font = {
+          size = config.stylix.fonts.sizes.terminal;
+          normal = {
+            family = config.stylix.fonts.monospace.name;
+            style = lib.mkForce "Bold";
+          };
+          bold = {
+            family = "Hack";
+            style = "Bold";
+          };
+          italic = {
+            family = "Hack";
+            style = "Italic";
+          };
+          bold_italic = {
+            family = "Hack";
+            style = "Bold Italic";
+          };
         };
         terminal.shell.program = lib.getExe pkgs.tmux;
         window.dynamic_title = true;

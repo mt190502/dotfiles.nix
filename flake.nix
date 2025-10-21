@@ -76,11 +76,6 @@
 
       perSystem =
         {
-          system,
-          inputs',
-          ...
-        }:
-        {
           pre-commit.settings.hooks = {
             nixfmt-rfc-style.enable = true;
             nil.enable = true;

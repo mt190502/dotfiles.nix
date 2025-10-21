@@ -12,7 +12,7 @@ in
   options.moduleopts.nixos.onepassword = {
     package = lib.mkOption {
       type = lib.types.package;
-      default = (
+      default =
         with pkgs;
         _1password-gui.overrideAttrs (
           {
@@ -30,8 +30,7 @@ in
                 --append-flags "--password-store=gnome"
             '';
           }
-        )
-      );
+        );
       description = "1Password GUI package";
     };
   };

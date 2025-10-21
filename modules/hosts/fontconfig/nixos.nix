@@ -9,12 +9,16 @@ in
       enable = true;
       antialias = true;
       cache32Bit = true;
-      hinting.autohint = true;
-      hinting.enable = true;
-      hinting.style = "slight";
+      hinting = {
+        enable = true;
+        autohint = true;
+        style = "slight";
+      };
       includeUserConf = true;
-      subpixel.lcdfilter = "default";
-      subpixel.rgba = "rgb";
+      subpixel = {
+        lcdfilter = "default";
+        rgba = "rgb";
+      };
       useEmbeddedBitmaps = true;
     };
   };
