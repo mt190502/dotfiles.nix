@@ -2,9 +2,6 @@
   wayland.windowManager.sway.config = {
     floating.criteria = [
       {
-        app_id = "1Password";
-      }
-      {
         app_id = "(firefox|LibreWolf)";
         title = "^(.*)Sharing Indicator(.*)";
       }
@@ -20,6 +17,7 @@
         app_id = "(firefox|LibreWolf)";
         title = "^Picture-in-Picture(.*)$";
       }
+      { app_id = "1Password"; }
       {
         app_id = "Alacritty";
         title = "ncmpcpp";
@@ -32,8 +30,9 @@
         app_id = "Alacritty";
         title = "wttr.in";
       }
-      { app_id = "com.usebottles.bottles"; }
       { app_id = "com.nextcloud.desktopclient.nextcloud"; }
+      { app_id = "com.usebottles.bottles"; }
+      { app_id = "evolution-alarm-notify"; }
       {
         app_id = "flameshot";
         title = "flameshot";
