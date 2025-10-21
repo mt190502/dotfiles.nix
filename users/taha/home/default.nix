@@ -24,6 +24,7 @@
     with pkgs;
     [
       #~ custom ~#
+      inputs.self.packages."${pkgs.system}".recidia-audio-visualizer
       inputs.self.packages."${pkgs.system}".zmem
       inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
 
