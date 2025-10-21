@@ -7,7 +7,7 @@
 
 let
   cfg = config.moduleopts.home-manager;
-in 
+in
 {
   wayland.windowManager.hyprland.settings.env = [
     "$browser,${lib.getExe pkgs.flatpak} run io.gitlab.librewolf-community"

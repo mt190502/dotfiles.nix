@@ -10,7 +10,11 @@ let
   home = config.home.homeDirectory;
   menu = config.wayland.windowManager.sway.config.menu;
   modifier = config.wayland.windowManager.sway.config.modifier;
-  lock = if cfg.preferred.lock-app == "swaylock" then "${home}/.config/sway/scripts.d/blurlock" else cfg.preferred.lock-app;
+  lock =
+    if cfg.preferred.lock-app == "swaylock" then
+      "${home}/.config/sway/scripts.d/blurlock"
+    else
+      cfg.preferred.lock-app;
 in
 {
   wayland.windowManager.sway.config = {
