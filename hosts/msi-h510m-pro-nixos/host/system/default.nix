@@ -2,7 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    btrfs-assistant
     flat-remix-icon-theme
     flatpak
     gparted

@@ -41,8 +41,11 @@
       ];
       services.udev.rules = ''SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:00:14.0/power/wakeup'"'';
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_12;
     kernelParams = [
+      "root=ZFS=rootpool/nixos-2025-10-27"
+      "rootfstype=zfs"
+      "rootflags=rw,nodev,xattr,posixacl,casesensitive"
       "rw"
       "loglevel=3"
       "intel_iommu=on"
@@ -68,7 +71,9 @@
       "btrfs"
       "ext4"
       "vfat"
+      "zfs"
     ];
     tmp.cleanOnBoot = true;
+    zfs.package = pkgs.zfs_2_3;
   };
 }

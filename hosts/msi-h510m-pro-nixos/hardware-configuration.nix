@@ -13,16 +13,27 @@ let
     "ssd"
     "space_cache=v2"
   ];
-  mkBtrfsSysMount = subvol: {
-    device = "/dev/disk/by-uuid/11f051d8-af89-493d-920a-4539ed69ead6";
-    fsType = "btrfs";
-    options = (if subvol != null then [ "subvol=/nixos-2025-06-02/${subvol}" ] else [ ]) ++ btrfsopts;
+  zfsopts = [
+    "rw"
+    "nodev"
+    "xattr"
+    "posixacl"
+    "casesensitive"
+  ];
+  rootpool = {
+    device = "rootpool/nixos-2025-10-27";
+    fsType = "zfs";
+    options = zfsopts;
   };
-  mkBtrfsHomeMount = subvol: {
-    device = "/dev/disk/by-uuid/48cff87f-003c-4358-a4f7-81705e1025d1";
-    fsType = "btrfs";
-    options =
-      (if subvol != null then [ "subvol=/folders/${subvol}" ] else [ "subvol=/users" ]) ++ btrfsopts;
+  homepool = {
+    device = "homepool/nixos-2025-10-27";
+    fsType = "zfs";
+    options = zfsopts;
+  };
+  mkZfsHomeSubfolderMount = s: {
+    device = "homepool/shared/${s}";
+    fsType = "zfs";
+    options = zfsopts;
   };
   mkNFSMount = dev: {
     device = dev;
@@ -40,35 +51,39 @@ in
 
   fileSystems = {
     #~ System mounts
-    "/" = mkBtrfsSysMount "@";
-    "/opt" = mkBtrfsSysMount "@opt";
-    "/root" = mkBtrfsSysMount "@root";
-    "/srv" = mkBtrfsSysMount "@srv";
-    "/usr/local" = mkBtrfsSysMount "@usr/local";
-    "/var" = mkBtrfsSysMount "@var";
-    "/var/btrfs" = mkBtrfsSysMount null;
+    "/" = rootpool;
 
     #~ User mounts
-    "/home" = mkBtrfsHomeMount null;
-    "/home/taha/Android" = mkBtrfsHomeMount "Android";
-    "/home/taha/Desktop" = mkBtrfsHomeMount "Desktop";
-    "/home/taha/Documents" = mkBtrfsHomeMount "Documents";
-    "/home/taha/Downloads" = mkBtrfsHomeMount "Downloads";
-    "/home/taha/Music" = mkBtrfsHomeMount "Music";
-    "/home/taha/Pictures" = mkBtrfsHomeMount "Pictures";
-    "/home/taha/Public" = mkBtrfsHomeMount "Public";
-    "/home/taha/Templates" = mkBtrfsHomeMount "Templates";
-    "/home/taha/Videos" = mkBtrfsHomeMount "Videos";
+    "/home" = homepool;
+    "/home/taha/Android" = mkZfsHomeSubfolderMount "Android";
+    "/home/taha/Desktop" = mkZfsHomeSubfolderMount "Desktop";
+    "/home/taha/Documents" = mkZfsHomeSubfolderMount "Documents";
+    "/home/taha/Downloads" = mkZfsHomeSubfolderMount "Downloads";
+    "/home/taha/Music" = mkZfsHomeSubfolderMount "Music";
+    "/home/taha/Pictures" = mkZfsHomeSubfolderMount "Pictures";
+    "/home/taha/Public" = mkZfsHomeSubfolderMount "Public";
+    "/home/taha/Templates" = mkZfsHomeSubfolderMount "Templates";
+    "/home/taha/Videos" = mkZfsHomeSubfolderMount "Videos";
 
     #~ NFS mounts
     "/home/taha/Projects" = mkNFSMount "192.168.1.200:/mnt/ssd/data/projects";
-    "/mnt/iso" = mkNFSMount "192.168.1.200:/mnt/ssd/iso";
+    "/mnt/nfs/iso" = mkNFSMount "192.168.1.200:/mnt/ssd/iso";
+    "/mnt/nfs/backup" = mkNFSMount "192.168.1.200:/mnt/ssd/backup";
+    "/mnt/nfs/depo2" = mkNFSMount "192.168.1.200:/mnt/ssd/data/depo2";
 
     #~ Other mounts
     "/mnt/ssd" = {
       device = "/dev/disk/by-uuid/6ef5c4c9-6566-4814-81b7-c9b0f6c582ca";
       fsType = "btrfs";
       options = btrfsopts;
+    };
+    "/mnt/hdd" = {
+      device = "/dev/disk/by-uuid/45bd2cb5-83af-4270-88ec-86be45037b7a";
+      fsType = "ext4";
+      options = [
+        "rw"
+        "relatime"
+      ];
     };
     "/boot/efi" = {
       device = "/dev/disk/by-uuid/6C94-2412";
@@ -87,7 +102,6 @@ in
   };
 
   swapDevices = [ ];
-  networking.useDHCP = lib.mkDefault true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

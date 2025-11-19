@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 let
   kdeconnect = {
     from = 1714;
@@ -7,6 +9,7 @@ in
 {
   networking = {
     hostName = "190502";
+    hostId = "477180ba";
     firewall = {
       enable = true;
       allowedTCPPorts = [
@@ -24,5 +27,6 @@ in
       ];
     };
     networkmanager.enable = true;
+    useDHCP = lib.mkDefault true;
   };
 }
