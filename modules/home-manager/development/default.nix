@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  pkgs-unstable,
   ...
 }:
 
@@ -23,54 +24,56 @@ in
         CXX = "clang++";
         GOPATH = "${config.home.homeDirectory}/.go";
       };
-      packages = with pkgs; [
-        air
-        ansible
-        binwalk
-        bun
-        cargo
-        delta
-        delve
-        direnv
-        gdb
-        gef
-        gnumake
-        go
-        gopls
-        gping
-        hugo
-        hyperfine
-        iftop
-        iperf
-        jq
-        just
-        k0sctl
-        kubectl
-        kubernetes-helm
-        kubetail
-        llvm
-        llvmPackages.clang
-        llvmPackages.clang-tools
-        minikube
-        minio-client
-        netcat
-        nixd
-        nixfmt-rfc-style
-        nmap
-        nodejs
-        onefetch
-        opentofu
-        pkg-config
-        pnpm
-        postgresql_17
-        shellcheck
-        siege
-        strace
-        testssl
-        traceroute
-        yq
-        zola
-      ];
+      packages =
+        (with pkgs-unstable; [
+          bun
+          postgresql_18
+        ])
+        ++ (with pkgs; [
+          air
+          ansible
+          binwalk
+          cargo
+          delta
+          delve
+          direnv
+          gdb
+          gef
+          gnumake
+          go
+          gopls
+          gping
+          hugo
+          hyperfine
+          iftop
+          iperf
+          jq
+          just
+          k0sctl
+          kubectl
+          kubernetes-helm
+          kubetail
+          llvm
+          llvmPackages.clang
+          llvmPackages.clang-tools
+          minikube
+          netcat
+          nixd
+          nixfmt-rfc-style
+          nmap
+          nodejs
+          onefetch
+          opentofu
+          pkg-config
+          pnpm
+          shellcheck
+          siege
+          strace
+          testssl
+          traceroute
+          yq
+          zola
+        ]);
     };
   };
 }

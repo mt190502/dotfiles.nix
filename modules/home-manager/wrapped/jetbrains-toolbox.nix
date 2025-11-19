@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs-unstable, ... }:
 
-with pkgs;
+with pkgs-unstable;
 rec {
   name = "jetbrains-toolbox";
   original = jetbrains-toolbox;
