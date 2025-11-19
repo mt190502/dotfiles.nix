@@ -74,15 +74,14 @@
         inputs.pre-commit-hooks.flakeModule
       ];
 
-      perSystem =
-        {
-          pre-commit.settings.hooks = {
-            nixfmt-rfc-style.enable = true;
-            nil.enable = true;
-            deadnix.enable = true;
-            statix.enable = true;
-          };
+      perSystem = {
+        pre-commit.settings.hooks = {
+          nixfmt-rfc-style.enable = true;
+          nil.enable = true;
+          deadnix.enable = true;
+          statix.enable = true;
         };
+      };
 
       flake = {
         nixosModules.mt190502 = import ./modules/hosts/nixos.nix;

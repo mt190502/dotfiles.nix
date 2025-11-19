@@ -116,7 +116,7 @@
             builtins.readFile (inputs.self + "/modules/home-manager/wrapped/${file}")
           );
         in
-        (if name == null then name else config.wrapped.${builtins.elemAt name 1})
+        if name == null then name else config.wrapped.${builtins.elemAt name 1}
       )
       (
         lib.filterAttrs (n: _: n != "default.nix") (

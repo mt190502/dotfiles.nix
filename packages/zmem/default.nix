@@ -1,9 +1,10 @@
 { pkgs, ... }:
 
-pkgs.rustPlatform.buildRustPackage rec {
+with pkgs;
+rustPlatform.buildRustPackage rec {
   pname = "zmem";
   version = "c3cd777";
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "xeome";
     repo = pname;
     rev = version;
