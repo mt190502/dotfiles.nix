@@ -487,10 +487,6 @@ kbd-misc
 kcolorpicker-qt6
 kde-filesystem
 kdump-utils
-kernel
-kernel-core
-kernel-devel
-kernel-devel-matched
 kernel-longterm
 kernel-longterm-core
 kernel-longterm-devel
@@ -498,9 +494,6 @@ kernel-longterm-devel-matched
 kernel-longterm-headers
 kernel-longterm-modules
 kernel-longterm-modules-core
-kernel-modules
-kernel-modules-core
-kernel-modules-extra
 kernel-srpm-macros
 kexec-tools
 keyutils
@@ -516,7 +509,6 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-VirtualBox-6.12.53-200.fc42.x86_64
 kmod-VirtualBox-6.12.54-200.fc42.x86_64
 kpartx
 krb5-devel

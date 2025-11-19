@@ -397,6 +397,7 @@ iproute
 iproute-tc
 iptables-libs
 iptables-nft
+iptraf-ng
 iputils
 ipxe-roms-qemu
 irqbalance
@@ -449,6 +450,8 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.12.54-200.fc42.x86_64
+kmod-v4l2loopback-6.12.56-200.fc42.x86_64
+kmod-v4l2loopback-6.12.57-200.fc42.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -966,6 +969,7 @@ openssh-server
 openssl
 openssl-devel
 openssl-libs
+openvpn
 opus
 orc
 osinfo-db
@@ -1234,6 +1238,7 @@ pipewire-gstreamer
 pipewire-libs
 pipewire-pulseaudio
 pixman
+pkcs11-helper
 pkgconf
 pkgconf-m4
 pkgconf-pkg-config
@@ -1554,6 +1559,7 @@ vim-minimal
 virglrenderer
 virt-install
 virtiofsd
+virtio-win
 virt-manager
 virt-manager-common
 virt-top
