@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 let
   kdeconnect = {
     from = 1714;
@@ -24,5 +26,6 @@ in
       ];
     };
     networkmanager.enable = true;
+    useDHCP = lib.mkDefault true;
   };
 }

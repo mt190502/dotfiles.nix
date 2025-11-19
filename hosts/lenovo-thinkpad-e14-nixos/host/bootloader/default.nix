@@ -43,7 +43,7 @@
         "crypthome".device = "/dev/disk/by-uuid/e07c5ce6-810c-43a2-a97d-c0eb4994f7dc";
       };
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_12;
     kernelParams = [
       "rw"
       "loglevel=3"
