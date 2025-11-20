@@ -27,6 +27,7 @@ in
       packages =
         (with pkgs-unstable; [
           bun
+          dive
           postgresql_18
         ])
         ++ (with pkgs; [
