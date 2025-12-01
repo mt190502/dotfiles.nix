@@ -14,19 +14,22 @@ in
   config = lib.mkIf cfg.git.enable {
     programs.git = {
       enable = true;
-      userName = "Taha";
-      userEmail = "mt190502@mtaha.dev";
-      signing = {
-        key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVyQNBWyCGvlRlqEh/3Ga6CDF01MZo6Jj15mjqHzPFD";
-        format = "ssh";
-      };
-      delta = {
-        enable = true;
-        options = {
-          navigate = true;
+      settings = {
+        user = {
+          name = "Taha";
+          email = "mt190502@mtaha.dev";
+        };
+        signing = {
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVyQNBWyCGvlRlqEh/3Ga6CDF01MZo6Jj15mjqHzPFD";
+          format = "ssh";
         };
       };
-      extraConfig = {
+    };
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options = {
+        navigate = true;
         color.ui = "auto";
         merge.conflictstyle = "diff3";
         diff.colorMoved = "default";

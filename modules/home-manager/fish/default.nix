@@ -32,7 +32,7 @@ in
         hugo = lib.getExe pkgs.hugo;
         lsd = lib.getExe pkgs.lsd;
         kubectl = lib.getExe pkgs.kubectl;
-        neovide = lib.getExe config.wrapped.neovide;
+        neovide = lib.getExe pkgs.neovide;
         telnet = lib.getExe' pkgs.inetutils "telnet";
         trash = lib.getExe pkgs.trash-cli;
         yt_dlp = lib.getExe pkgs.yt-dlp;

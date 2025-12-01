@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 {
   wayland.windowManager.sway = {
@@ -13,10 +8,8 @@
 
       #~~~ apps
       set $browser       ${lib.getExe pkgs.flatpak} run io.gitlab.librewolf-community
-      set $filemanager   ${
-        lib.getExe config.wrapped.${config.moduleopts.home-manager.preferred.file-manager}
-      }
-      set $mediaplayer   ${lib.getExe config.wrapped.mpv}
+      set $filemanager   ${lib.getExe config.wrapped.dolphin}
+      set $mediaplayer   ${lib.getExe pkgs.mpv}
     '';
   };
 }

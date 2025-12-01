@@ -20,7 +20,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.neovide = {
       enable = true;
-      package = config.wrapped.neovide;
       settings = {
         font = {
           normal = [ config.stylix.fonts.monospace.name ];

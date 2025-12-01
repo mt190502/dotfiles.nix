@@ -3,15 +3,6 @@
 {
   options.moduleopts.home-manager = {
     preferred = {
-      file-manager = lib.mkOption {
-        type = lib.types.enum [
-          "dolphin"
-          "pcmanfm"
-          "none"
-        ];
-        default = "none";
-        description = "Preferred file manager";
-      };
       lock-app = lib.mkOption {
         type = lib.types.enum [
           "swaylock"

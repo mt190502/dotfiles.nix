@@ -14,7 +14,6 @@ in
   config = lib.mkIf (cfg.preferred.wm == "sway") {
     wayland.windowManager.sway = {
       enable = true;
-      package = config.wrapped.sway;
       checkConfig = false;
       config = {
         menu =
@@ -24,7 +23,7 @@ in
             "${vicinae}"
           else
             throw "No preferred menu selected";
-        terminal = "${lib.getExe config.wrapped.${cfg.preferred.terminal}}";
+        terminal = "${lib.getExe pkgs.${cfg.preferred.terminal}}";
         modifier = "Mod4";
       };
     };
@@ -42,23 +41,26 @@ in
                     "@${k}@"
                     "${v}"
                   ])
-                  {
-                    alacritty = lib.getExe config.wrapped.alacritty;
-                    bash = lib.getExe pkgs.bash;
-                    grim = lib.getExe pkgs.grim;
-                    imagemagick = config.wrapped.imagemagick;
-                    imv-wayland = lib.getExe' config.wrapped.imv "imv-wayland";
-                    jq = lib.getExe pkgs.jq;
-                    ncmpcpp = lib.getExe pkgs.ncmpcpp;
-                    notify-send = lib.getExe pkgs.libnotify;
-                    slurp = lib.getExe pkgs.slurp;
-                    swappy = lib.getExe pkgs.swappy;
-                    swaymsg = lib.getExe' config.wrapped.sway "swaymsg";
-                    swaynag = lib.getExe' config.wrapped.sway "swaynag";
-                    tesseract = lib.getExe pkgs.tesseract;
-                    tmux = lib.getExe pkgs.tmux;
-                    wl_clipboard = pkgs.wl-clipboard;
-                  }
+                  (
+                    with pkgs;
+                    {
+                      alacritty = lib.getExe alacritty;
+                      bash = lib.getExe bash;
+                      grim = lib.getExe grim;
+                      imagemagick = imagemagick;
+                      imv-wayland = lib.getExe' imv "imv-wayland";
+                      jq = lib.getExe jq;
+                      ncmpcpp = lib.getExe ncmpcpp;
+                      notify-send = lib.getExe libnotify;
+                      slurp = lib.getExe slurp;
+                      swappy = lib.getExe swappy;
+                      swaymsg = lib.getExe' sway "swaymsg";
+                      swaynag = lib.getExe' sway "swaynag";
+                      tesseract = lib.getExe tesseract;
+                      tmux = lib.getExe tmux;
+                      wl_clipboard = wl-clipboard;
+                    }
+                  )
               );
             in
             pkgs.substitute {

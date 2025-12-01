@@ -13,7 +13,7 @@ in
     programs.virt-manager = {
       enable = true;
       package = pkgs.virt-manager.overrideAttrs (old: {
-        buildInputs = old.buildInputs ++ [ pkgs.libayatana-appindicator-gtk3 ];
+        buildInputs = old.buildInputs ++ [ pkgs.libayatana-appindicator ];
       });
     };
     virtualisation.libvirtd.enable = true;

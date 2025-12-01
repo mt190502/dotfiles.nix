@@ -66,11 +66,11 @@
       };
       sansSerif = {
         name = "Ubuntu Nerd Font Medium";
-        package = inputs.self.packages."${pkgs.system}".ubuntu-fonts-google;
+        package = inputs.self.packages."${pkgs.stdenv.hostPlatform.system}".ubuntu-fonts-google;
       };
       serif = {
         name = "Ubuntu Nerd Font Medium";
-        package = inputs.self.packages."${pkgs.system}".ubuntu-fonts-google;
+        package = inputs.self.packages."${pkgs.stdenv.hostPlatform.system}".ubuntu-fonts-google;
       };
       sizes = {
         applications = 10;

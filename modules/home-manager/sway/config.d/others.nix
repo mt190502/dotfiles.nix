@@ -8,7 +8,7 @@
 let
   cfg = config.wayland.windowManager.sway;
   home = config.home.homeDirectory;
-  swaymsg = lib.getExe' config.wrapped.sway "swaymsg";
+  swaymsg = lib.getExe' pkgs.sway "swaymsg";
 in
 {
   wayland.windowManager.sway = {

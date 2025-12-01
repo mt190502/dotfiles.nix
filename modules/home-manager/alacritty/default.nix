@@ -8,6 +8,7 @@
 
 let
   cfg = config.moduleopts.home-manager;
+  arch = pkgs.stdenv.hostPlatform.system;
 in
 {
   options.moduleopts.home-manager.alacritty = {
@@ -20,7 +21,6 @@ in
   config = lib.mkIf (cfg.preferred.terminal == "alacritty") {
     programs.alacritty = {
       enable = true;
-      package = config.wrapped.alacritty;
       settings = {
         font = {
           size = config.stylix.fonts.sizes.terminal;
@@ -44,7 +44,7 @@ in
         terminal.shell.program = lib.getExe pkgs.tmux;
         window.dynamic_title = true;
         general.import = [
-          inputs.alacritty-theme.packages."${pkgs.system}"."${cfg.alacritty.theme}"
+          inputs.alacritty-theme.packages."${arch}"."${cfg.alacritty.theme}"
         ];
       };
     };

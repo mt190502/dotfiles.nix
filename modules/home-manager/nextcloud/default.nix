@@ -14,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     services.nextcloud-client = {
       enable = true;
-      package = config.wrapped.nextcloud-client;
       startInBackground = true;
     };
   };

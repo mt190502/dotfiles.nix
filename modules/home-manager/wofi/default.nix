@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager;
@@ -15,7 +20,7 @@ in
         line_wrap = "word_char";
         mode = "dmenu";
         no_actions = true;
-        term = lib.getExe config.wrapped."${cfg.preferred.terminal}";
+        term = lib.getExe pkgs."${cfg.preferred.terminal}";
         width = "40%";
       };
       style = with config.stylix.customColors.withHashtag; ''

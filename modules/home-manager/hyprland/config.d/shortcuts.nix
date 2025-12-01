@@ -15,7 +15,7 @@ let
     title: command:
     (
       if cfg.preferred.terminal == "alacritty" then
-        lib.getExe config.wrapped.alacritty + " -T " + title + " -e " + command
+        lib.getExe pkgs.alacritty + " -T " + title + " -e " + command
       else
         throw "Unsupported terminal: ${cfg.preferred.terminal}"
     );
@@ -29,7 +29,7 @@ in
       let
         brightnessctl = lib.getExe pkgs.brightnessctl;
         cliphist = lib.getExe pkgs.cliphist;
-        hyprctl = lib.getExe' config.wrapped.hyprland "hyprctl";
+        hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
         pactl = lib.getExe' pkgs.pulseaudio "pactl";
         playerctl = lib.getExe pkgs.playerctl;
         tmux = lib.getExe pkgs.tmux;

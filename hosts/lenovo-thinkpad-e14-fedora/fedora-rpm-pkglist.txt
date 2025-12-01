@@ -37,7 +37,6 @@ annobin-plugin-gcc
 ansible-srpm-macros
 appstream
 appstream-data
-aquamarine
 aribb24
 asciidoc
 at
@@ -56,7 +55,6 @@ avahi
 avahi-devel
 avahi-glib
 avahi-libs
-basesystem
 bash
 bash-color-prompt
 bash-completion
@@ -178,6 +176,7 @@ dnf-data
 dnf-plugins-core
 dnf-utils
 dnsmasq
+dns-root-data
 docbook-dtds
 docbook-style-xsl
 docker-buildx-plugin
@@ -274,6 +273,7 @@ fwupd-plugin-flashrom
 fwupd-plugin-modem-manager
 fwupd-plugin-uefi-capsule-data
 game-music-emu
+gap-srpm-macros
 gawk
 gawk-all-langpacks
 gcc
@@ -288,7 +288,6 @@ gdb-minimal
 gdbm-libs
 gdisk
 gdk-pixbuf2
-gdk-pixbuf2-modules
 geoclue2
 geoclue2-libs
 geocode-glib
@@ -320,6 +319,8 @@ glusterfs-cli
 glusterfs-client-xlators
 glusterfs-fuse
 glx-utils
+glycin-libs
+glycin-loaders
 gmp
 gmp-c++
 gmp-devel
@@ -337,7 +338,16 @@ gnome-settings-daemon
 gnome-themes-extra
 gnulib-l10n
 gnupg2
+gnupg2-dirmngr
+gnupg2-g13
+gnupg2-gpg-agent
+gnupg2-gpgconf
+gnupg2-keyboxd
+gnupg2-scdaemon
 gnupg2-smime
+gnupg2-utils
+gnupg2-verify
+gnupg2-wks
 gnutls
 gnutls-c++
 gnutls-dane
@@ -358,6 +368,7 @@ gperftools-libs
 gpgme
 gpgmepp
 gpg-pubkey
+gpgverify
 gpm-libs
 granite
 graphene
@@ -430,11 +441,11 @@ hunspell-tr
 hwdata
 hyphen
 hyprcursor
-hyprland
 hyprlang
 hyprutils
 i2c-tools
 igt-gpu-tools
+igvm-libs
 iio-sensor-proxy
 ilbc
 ima-evm-utils-libs
@@ -473,6 +484,7 @@ jasper-libs
 javascriptcoregtk4.0
 javascriptcoregtk4.1
 javascriptcoregtk6.0
+java-srpm-macros
 jbig2dec-libs
 jbigkit-libs
 jemalloc
@@ -509,8 +521,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-VirtualBox-6.12.54-200.fc42.x86_64
-kmod-VirtualBox-6.12.57-200.fc42.x86_64
+kmod-VirtualBox-6.12.59-200.fc43.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -587,6 +598,7 @@ libcacard
 libcanberra
 libcanberra-gtk3
 libcap
+libcap-devel
 libcap-ng
 libcap-ng-python3
 libcbor
@@ -681,6 +693,7 @@ libical
 libical-glib
 libICE
 libicu
+libicu76
 libidn2
 libidn2-devel
 libiec61883
@@ -709,6 +722,7 @@ libkcapi
 libkcapi-hasher
 libkcapi-hmaccalc
 libksba
+liblastlog2
 liblc3
 libldac
 libldb
@@ -893,7 +907,6 @@ libvirt-daemon-driver-storage-logical
 libvirt-daemon-driver-storage-mpath
 libvirt-daemon-driver-storage-rbd
 libvirt-daemon-driver-storage-scsi
-libvirt-daemon-driver-storage-zfs
 libvirt-daemon-driver-vbox
 libvirt-daemon-lock
 libvirt-daemon-log
@@ -967,6 +980,8 @@ linux-firmware
 linux-firmware-whence
 llvm19-filesystem
 llvm19-libs
+llvm20-filesystem
+llvm20-libs
 llvm-filesystem
 llvm-libs
 lmdb-libs
@@ -1045,6 +1060,10 @@ NetworkManager-wifi
 newt
 nfs-utils
 nftables
+nftables-services
+ngtcp2
+ngtcp2-crypto-gnutls
+ngtcp2-crypto-ossl
 nilfs-utils
 nmap-ncat
 npth
@@ -1111,6 +1130,8 @@ pangomm
 parted
 passim
 passim-libs
+passt
+passt-selinux
 passwdqc
 passwdqc-utils
 patch
@@ -1346,6 +1367,7 @@ qemu-device-display-virtio-gpu-rutabaga
 qemu-device-display-virtio-vga
 qemu-device-display-virtio-vga-gl
 qemu-device-display-virtio-vga-rutabaga
+qemu-device-uefi-vars
 qemu-device-usb-host
 qemu-device-usb-redirect
 qemu-device-usb-smartcard
@@ -1401,7 +1423,9 @@ rpm
 rpm-build
 rpm-build-libs
 rpmdevtools
+rpmfusion-free-appstream-data
 rpmfusion-free-release
+rpmfusion-nonfree-appstream-data
 rpmfusion-nonfree-release
 rpm-libs
 rpm-plugin-audit
@@ -1409,7 +1433,6 @@ rpm-plugin-selinux
 rpm-plugin-systemd-inhibit
 rpm-sequoia
 rpm-sign-libs
-rsvg-pixbuf-loader
 rsync
 rsyslog
 rtkit
@@ -1624,6 +1647,8 @@ xdp-tools
 xdpyinfo
 xen-libs
 xen-licenses
+xevd-libs
+xeve-libs
 xfsprogs
 xhost
 xkbcomp

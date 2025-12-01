@@ -7,7 +7,7 @@
 
 let
   cfg = config.moduleopts.home-manager;
-  terminal = lib.getExe config.wrapped.${cfg.preferred.terminal};
+  terminal = lib.getExe pkgs.${cfg.preferred.terminal};
   wofi = lib.getExe pkgs.wofi;
   vicinae = lib.getExe config.services.vicinae.package;
 in
@@ -24,7 +24,6 @@ in
     };
     wayland.windowManager.hyprland = {
       enable = true;
-      package = config.wrapped.hyprland;
       settings = {
         "$mod" = "SUPER_L";
         "$alt" = "ALT";
@@ -53,11 +52,11 @@ in
                     "${v}"
                   ])
                   {
-                    alacritty = lib.getExe config.wrapped.alacritty;
+                    alacritty = lib.getExe pkgs.alacritty;
                     bash = lib.getExe pkgs.bash;
                     grim = lib.getExe pkgs.grim;
-                    hyprctl = lib.getExe' config.wrapped.hyprland "hyprctl";
-                    imagemagick = config.wrapped.imagemagick;
+                    hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
+                    imagemagick = pkgs.imagemagick;
                     imv-wayland = lib.getExe' pkgs.imv "imv-wayland";
                     jq = lib.getExe pkgs.jq;
                     ncmpcpp = lib.getExe pkgs.ncmpcpp;

@@ -46,12 +46,12 @@ in
     };
     keybindings =
       let
-        alacritty = lib.getExe config.wrapped.alacritty;
+        alacritty = lib.getExe pkgs.alacritty;
         brightnessctl = lib.getExe pkgs.brightnessctl;
         cliphist = lib.getExe pkgs.cliphist;
         pactl = lib.getExe' pkgs.pulseaudio "pactl";
         playerctl = lib.getExe pkgs.playerctl;
-        swaymsg = lib.getExe' config.wrapped.sway "swaymsg";
+        swaymsg = lib.getExe' pkgs.sway "swaymsg";
         tmux = lib.getExe pkgs.tmux;
         wl-copy = lib.getExe' pkgs.wl-clipboard "wl-copy";
         wofi = lib.getExe pkgs.wofi;

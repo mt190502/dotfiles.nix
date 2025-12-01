@@ -3,9 +3,13 @@
   inputs,
   lib,
   pkgs,
+  pkgs-unstable,
   ...
 }:
 
+let
+  arch = pkgs.stdenv.hostPlatform.system;
+in
 {
   ########################################
   #
@@ -24,9 +28,9 @@
     with pkgs;
     [
       #~ custom ~#
-      inputs.self.packages."${pkgs.system}".recidia-audio-visualizer
-      inputs.self.packages."${pkgs.system}".zmem
-      inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
+      inputs.self.packages."${arch}".recidia-audio-visualizer
+      inputs.self.packages."${arch}".zmem
+      inputs.apple-fonts.packages.${arch}.sf-pro-nerd
 
       #~ fonts ~#
       cantarell-fonts
@@ -41,8 +45,7 @@
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
       noto-fonts-color-emoji
-      noto-fonts-emoji
-      noto-fonts-extra
+      noto-fonts
 
       #~ packages ~#
       _1password-cli
@@ -69,9 +72,11 @@
       kdePackages.dolphin-plugins
       kdePackages.ffmpegthumbs
       kdePackages.kdegraphics-thumbnailers
+      kdePackages.qt6ct
       kdePackages.qtstyleplugin-kvantum
       kdePackages.qtsvg
       kdePackages.qtwayland
+      libsForQt5.qt5ct
       libsForQt5.qtstyleplugin-kvantum
       lsd
       mpc
@@ -108,19 +113,16 @@
       ydotool
       yt-dlp
     ]
-    ++ (lib.mapAttrsToList
+    ++ (lib.map
       (
-        file: _:
-        let
-          name = builtins.match ''(.*)[[:space:]]*name[[:space:]]*=[[:space:]]*"([a-zA-Z0-9-]+)"(.*)'' (
-            builtins.readFile (inputs.self + "/modules/home-manager/wrapped/${file}")
-          );
-        in
-        if name == null then name else config.wrapped.${builtins.elemAt name 1}
+        p:
+        pkgs.callPackage (inputs.self + "/modules/home-manager/wrapped/${p}") {
+          inherit config pkgs pkgs-unstable;
+        }
       )
       (
-        lib.filterAttrs (n: _: n != "default.nix") (
-          builtins.readDir (inputs.self + "/modules/home-manager/wrapped")
+        lib.remove "default.nix" (
+          lib.attrNames (builtins.readDir (inputs.self + "/modules/home-manager/wrapped"))
         )
       )
     );
@@ -133,7 +135,6 @@
   #~ custom modules ~#
   moduleopts.home-manager = {
     preferred = {
-      file-manager = "dolphin";
       lock-app = "swaylock";
       menu = "wofi";
       notifier = "swaync";

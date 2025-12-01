@@ -18,7 +18,6 @@ in
   config = lib.mkIf cfg.enable {
     services.kdeconnect = {
       enable = true;
-      package = config.wrapped.kdeconnect;
       indicator = true;
     };
   };

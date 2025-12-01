@@ -25,13 +25,13 @@ in
                     "${v}"
                   ])
                   {
-                    alacritty = lib.getExe config.wrapped.alacritty;
+                    alacritty = lib.getExe pkgs.alacritty;
                     bash = lib.getExe pkgs.bash;
                     cliphist = lib.getExe pkgs.cliphist;
                     coreutils = pkgs.coreutils;
                     grim = lib.getExe pkgs.grim;
-                    imagemagick = config.wrapped.imagemagick;
-                    imv = config.wrapped.imv;
+                    imagemagick = pkgs.imagemagick;
+                    imv = pkgs.imv;
                     jq = lib.getExe pkgs.jq;
                     mako = pkgs.mako;
                     ncmpcpp = lib.getExe pkgs.ncmpcpp;
@@ -39,7 +39,7 @@ in
                     notify-send = lib.getExe pkgs.libnotify;
                     slurp = lib.getExe pkgs.slurp;
                     swappy = lib.getExe pkgs.swappy;
-                    sway = config.wrapped.sway;
+                    sway = pkgs.sway;
                     swaync = lib.getExe pkgs.swaynotificationcenter;
                     tesseract = lib.getExe pkgs.tesseract;
                     tmux = lib.getExe pkgs.tmux;

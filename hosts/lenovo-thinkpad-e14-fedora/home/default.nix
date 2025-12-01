@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ lib, ... }:
 
 {
   ########################################
@@ -8,8 +8,7 @@
   ########################################
   home.username = "fedora";
   home.homeDirectory = "/home/fedora";
-  nixGL.packages = inputs.nixgl.packages;
-  wrapped.mode = "nixGL";
+  targets.genericLinux.enable = true;
 
   ########################################
   #

@@ -13,7 +13,7 @@ let
     title: command:
     (
       if cfg.preferred.terminal == "alacritty" then
-        lib.getExe config.wrapped.alacritty + " -T " + title + " -e " + command
+        lib.getExe pkgs.alacritty + " -T " + title + " -e " + command
       else
         throw "Unsupported terminal: ${cfg.preferred.terminal}"
     );
@@ -53,7 +53,7 @@ in
           nmeditor = lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor";
           pactl = lib.getExe' pkgs.pulseaudio "pactl";
           pavucontrol = lib.getExe pkgs.pavucontrol;
-          swaymsg = lib.getExe' config.wrapped.sway "swaymsg";
+          swaymsg = lib.getExe' pkgs.sway "swaymsg";
           swaync = lib.getExe' pkgs.swaynotificationcenter "swaync-client";
           systemctl = lib.getExe' pkgs.systemd "systemctl";
         in
@@ -377,7 +377,7 @@ in
 
             "custom/swaync" = {
               tooltip = false;
-              format = "{icon} {}";
+              format = "{icon} {text}";
               format-icons = {
                 notification = "";
                 none = "";
