@@ -148,7 +148,7 @@ in
             "${modifier}+v" = "exec ${menu} 'vicinae://extensions/vicinae/clipboard/history'";
 
             #~~~ others
-            "${modifier}+d" = "exec ${menu}";
+            "${modifier}+d" = "exec ${menu} toggle";
           }
         else
           { }

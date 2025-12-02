@@ -8,7 +8,7 @@
 let
   cfg = config.moduleopts.home-manager;
   wofi = lib.getExe pkgs.wofi;
-  vicinae = lib.getExe config.services.vicinae.package;
+  vicinae = lib.getExe pkgs.vicinae;
 in
 {
   config = lib.mkIf (cfg.preferred.wm == "sway") {

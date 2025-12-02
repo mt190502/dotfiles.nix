@@ -136,7 +136,7 @@ in
   moduleopts.home-manager = {
     preferred = {
       lock-app = "swaylock";
-      menu = "wofi";
+      menu = "vicinae";
       notifier = "swaync";
       terminal = "alacritty";
       wm = "sway";

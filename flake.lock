@@ -740,7 +740,7 @@
         "pre-commit-hooks": "pre-commit-hooks",
         "rust-overlay": "rust-overlay",
         "stylix": "stylix",
-        "vicinae": "vicinae"
+        "vicinae-extensions": "vicinae-extensions"
       }
     },
     "rust-overlay": {
@@ -1041,21 +1041,47 @@
     "vicinae": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "vicinae-extensions",
+          "nixpkgs"
         ],
-        "systems": "systems_5"
+        "systems": [
+          "vicinae-extensions",
+          "systems"
+        ]
       },
       "locked": {
-        "lastModified": 1764638374,
-        "narHash": "sha256-Vo4syWY/2RcLoZvgLtALBeN9O5oGA/aAujAJVdqp8rw=",
+        "lastModified": 1763768455,
+        "narHash": "sha256-ZwqW2uH36vPUKrlbzDyz7NoFXKjJOT1Ijvlaz4sIp8E=",
         "owner": "vicinaehq",
         "repo": "vicinae",
-        "rev": "e70d096317da218ae15a84b868fa8c8e7aa7d355",
+        "rev": "5c965e0777dc4bcb01808c7f214dc56f997bd9c7",
         "type": "github"
       },
       "original": {
         "owner": "vicinaehq",
         "repo": "vicinae",
+        "type": "github"
+      }
+    },
+    "vicinae-extensions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_5",
+        "vicinae": "vicinae"
+      },
+      "locked": {
+        "lastModified": 1764644239,
+        "narHash": "sha256-vkcO1qA11FmBg4JXD5VzpcZ7yZmczuBEzSYj112N7+o=",
+        "owner": "vicinaehq",
+        "repo": "extensions",
+        "rev": "1991d5454eb8bd5d265fd1daf006701656036a8b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vicinaehq",
+        "repo": "extensions",
         "type": "github"
       }
     }
