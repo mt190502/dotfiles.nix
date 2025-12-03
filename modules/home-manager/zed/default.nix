@@ -272,12 +272,6 @@ in
           };
         }
         {
-          context = "Editor";
-          bindings = {
-            ctrl-shift-up = null;
-          };
-        }
-        {
           context = "showing_completions";
           bindings = {
             "ctrl-d" = null;
