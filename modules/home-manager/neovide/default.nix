@@ -65,7 +65,6 @@ in
         nvim-tree = {
           enable = true;
           openOnSetup = true;
-          settings.respectBufCwd = true;
         };
         treesitter = {
           enable = true;
