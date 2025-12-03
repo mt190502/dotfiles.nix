@@ -101,6 +101,7 @@
       swaync.enable = false;
       waybar.enable = false;
       wofi.enable = false;
+      zed.enable = false;
     };
   };
 }
