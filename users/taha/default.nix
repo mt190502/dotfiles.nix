@@ -28,6 +28,7 @@ let
   entry =
     if lib.hasSuffix "darwin" system then
       {
+        programs.fish.enable = true;
         users.users.taha = user // {
           home = "/Users/taha";
           uid = 502;
