@@ -43,13 +43,9 @@
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak/?ref=latest";
     };
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-community/nixvim/nixos-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
