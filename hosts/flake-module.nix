@@ -1,6 +1,12 @@
 { inputs, ... }:
 
 let
+  darwinConfigs = [
+    {
+      name = "macbook-m3-air-work";
+      arch = "aarch64-darwin";
+    }
+  ];
   homeConfigs = [
     {
       name = "lenovo-thinkpad-e14-fedora";
