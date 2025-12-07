@@ -78,6 +78,7 @@ clevis
 clevis-luks
 clevis-pin-tpm2
 cmake-filesystem
+cnrdrvcups-ufr2-uk
 codec2
 colord
 colord-gtk4
