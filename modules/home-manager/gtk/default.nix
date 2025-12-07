@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.gtk;
@@ -11,7 +16,7 @@ in
       description = "gtk";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     gtk = {
       enable = true;
       cursorTheme = {

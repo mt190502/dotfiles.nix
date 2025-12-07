@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -26,7 +27,7 @@ in
       description = "qt5 and qt6";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     xdg.configFile = lib.mkMerge [
       {
         "qt5ct/qt5ct.conf".text = ''

@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  system,
   ...
 }:
 
@@ -17,7 +18,7 @@ in
       description = "flatpak";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     services.flatpak = {
       enable = true;
       packages = [
@@ -28,6 +29,7 @@ in
         "com.github.libresprite.LibreSprite"
         "com.github.tchx84.Flatseal"
         "com.obsproject.Studio"
+        "com.slack.Slack"
         "com.stremio.Stremio"
         "com.usebottles.bottles"
         "com.valvesoftware.Steam"

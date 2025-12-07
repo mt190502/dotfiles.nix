@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -52,7 +53,7 @@ in
             '';
           };
           mpd-discord-rpc = {
-            enable = cfg.discordrpc && cfg.enable;
+            enable = cfg.discordrpc && cfg.enable && (lib.hasSuffix "linux" system);
             settings = {
               hosts = [ "localhost:6600" ];
               format = {

@@ -3,6 +3,7 @@
   flakeName,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -115,7 +116,7 @@ in
           #################################################
           #### Home specific fish variables
           #################################################
-          export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/share/flatpak/exports/bin:/var/lib/flatpak/exports/bin:${home}/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:${home}/.nix-profile/sbin:${home}/.nix-profile/bin:$PATH";
+          export PATH="${home}/.nix-profile/sbin:${home}/.nix-profile/bin:${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:${home}/.local/share/flatpak/exports/bin:/var/lib/flatpak/exports/bin:$PATH";
           export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${home}/.local/share:/usr/local/share:/usr/share:${home}/.nix-profile/share:$XDG_DATA_DIRS";
 
           #################################################
@@ -131,9 +132,9 @@ in
           for cmd in g++ gas head make ld ping6 tail traceroute6 $( ls ${grc}/share/grc/ | grep -vE 'jobs|systemctl' )
             set cmd "$(echo $cmd | sed 's/conf\.//g')"
             type "$cmd" >/dev/null 2>&1 && alias "$cmd"="${lib.getExe grc} --colour=auto $cmd"
-          end 
+          end
         '';
-        loginShellInit = ''
+        loginShellInit = lib.mkIf (lib.hasSuffix "linux" system) ''
           if [ "$(tty)" = "/dev/tty1" ]
             export $(${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
             export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring

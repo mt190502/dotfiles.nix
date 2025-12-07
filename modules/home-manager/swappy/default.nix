@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.swappy;
@@ -11,7 +16,7 @@ in
       description = "swappy";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     xdg.configFile."swappy/config".text = ''
       [Default]
       save_dir = ${config.home.homeDirectory}/Pictures/Screenshots/

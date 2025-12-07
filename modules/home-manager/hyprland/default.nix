@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -12,7 +13,7 @@ let
   vicinae = lib.getExe config.services.vicinae.package;
 in
 {
-  config = lib.mkIf (cfg.preferred.wm == "hyprland") {
+  config = lib.mkIf (cfg.preferred.wm == "hyprland" && lib.hasSuffix "linux" system) {
     services.hyprpaper = {
       enable = true;
       package = pkgs.hyprpaper;

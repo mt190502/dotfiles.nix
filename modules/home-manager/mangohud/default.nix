@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.mangohud;
@@ -11,7 +16,7 @@ in
       description = "mangohud";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     programs.mangohud = {
       enable = true;
       settings = {

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.syncthing;
@@ -14,7 +19,7 @@ in
   config = lib.mkIf cfg.enable {
     services.syncthing = {
       enable = true;
-      tray.enable = true;
+      tray.enable = lib.mkIf (lib.hasSuffix "linux" system) true;
     };
   };
 }

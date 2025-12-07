@@ -29,6 +29,25 @@ let
     });
 in
 {
+  flake.darwinConfigurations = builtins.listToAttrs (
+    map (cfg: {
+      name = cfg.name;
+      value = inputs.nix-darwin.lib.darwinSystem rec {
+        system = cfg.arch;
+        pkgs = repo "nixpkgs" system;
+        specialArgs = {
+          inherit inputs system;
+          pkgs-unstable = repo "nixpkgs-unstable" system;
+          flakeName = cfg.name;
+        };
+        modules = [
+          inputs.home-manager.darwinModules.default
+          (inputs.self + "/users/taha")
+          ./${cfg.name}
+        ];
+      };
+    }) darwinConfigs
+  );
   flake.homeConfigurations = builtins.listToAttrs (
     map (cfg: {
       name = cfg.name;
@@ -38,9 +57,10 @@ in
           inherit inputs;
           pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
           flakeName = cfg.name;
+          system = cfg.arch;
         };
         modules = [
-          (inputs.self + "/users/taha/home")
+          (inputs.self + "/users/taha/linux.nix")
           ./${cfg.name}/home
         ];
       };
@@ -53,7 +73,7 @@ in
         system = cfg.arch;
         pkgs = repo "nixpkgs" system;
         specialArgs = {
-          inherit inputs;
+          inherit inputs system;
           pkgs-unstable = repo "nixpkgs-unstable" system;
           flakeName = cfg.name;
         };

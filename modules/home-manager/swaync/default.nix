@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -9,7 +10,7 @@ let
   cfg = config.moduleopts.home-manager;
 in
 {
-  config = lib.mkIf (cfg.preferred.notifier == "swaync") {
+  config = lib.mkIf (cfg.preferred.notifier == "swaync" && lib.hasSuffix "linux" system) {
     services.swaync = {
       enable = true;
       settings = {

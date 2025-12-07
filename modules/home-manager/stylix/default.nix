@@ -1,5 +1,6 @@
 {
   config,
+  system,
   inputs,
   lib,
   pkgs,
@@ -41,7 +42,7 @@
     };
   };
   config.stylix = {
-    enable = true;
+    enable = lib.mkIf (lib.hasSuffix "linux" system) true;
     # autoEnable = false;
     cursor = {
       package = pkgs.adwaita-icon-theme;

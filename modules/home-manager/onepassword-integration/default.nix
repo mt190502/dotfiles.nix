@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.onepassword-integration;
@@ -8,7 +13,7 @@ in
   options.moduleopts.home-manager.onepassword-integration = {
     enable = lib.mkEnableOption "onepassword-integration";
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     #########################################################################################################
     ### NOTE: You need to create file /etc/1password/custom_allowed_browsers with the following content:  ###
     ### librewolf                                                                                         ###

@@ -27,11 +27,6 @@ in
   home.packages =
     with pkgs;
     [
-      #~ custom ~#
-      inputs.self.packages."${arch}".recidia-audio-visualizer
-      inputs.self.packages."${arch}".zmem
-      inputs.apple-fonts.packages.${arch}.sf-pro-nerd
-
       #~ fonts ~#
       cantarell-fonts
       cascadia-code
@@ -39,6 +34,7 @@ in
       fira-code
       hack-font
       jetbrains-mono
+      meslo-lgs-nf
       nerd-fonts.droid-sans-mono
       nerd-fonts.iosevka
       noto-fonts
@@ -46,6 +42,11 @@ in
       noto-fonts-cjk-serif
       noto-fonts-color-emoji
       noto-fonts
+
+      #~ custom ~#
+      inputs.self.packages."${arch}".recidia-audio-visualizer
+      inputs.self.packages."${arch}".zmem
+      inputs.apple-fonts.packages.${arch}.sf-pro-nerd
 
       #~ packages ~#
       _1password-cli
@@ -201,7 +202,5 @@ in
   #
   ########################################
   home.activation = { };
-  imports =
-    lib.map (p: ./. + "/${p}") (lib.remove "default.nix" (lib.attrNames (builtins.readDir ./.)))
-    ++ [ inputs.self.homeManagerModules.mt190502 ];
+  imports = [ inputs.self.homeManagerModules.mt190502 ];
 }

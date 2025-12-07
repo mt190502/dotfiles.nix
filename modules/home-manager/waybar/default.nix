@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -39,7 +40,7 @@ in
       description = "location for weather";
     };
   };
-  config = lib.mkIf cfg.waybar.enable {
+  config = lib.mkIf (cfg.waybar.enable && lib.hasSuffix "linux" system) {
     programs.waybar = {
       enable = true;
       systemd = {

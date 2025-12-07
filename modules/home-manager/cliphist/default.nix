@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager;
@@ -11,13 +16,15 @@ in
       description = "cliphist";
     };
   };
-  config = lib.mkIf (cfg.cliphist.enable && cfg.preferred.menu != "vicinae") {
-    services.cliphist = {
-      enable = true;
-      allowImages = true;
-      systemdTargets = [
-        "${cfg.preferred.wm}-session.target"
-      ];
-    };
-  };
+  config =
+    lib.mkIf (cfg.cliphist.enable && cfg.preferred.menu != "vicinae" && lib.hasSuffix "linux" system)
+      {
+        services.cliphist = {
+          enable = true;
+          allowImages = true;
+          systemdTargets = [
+            "${cfg.preferred.wm}-session.target"
+          ];
+        };
+      };
 }

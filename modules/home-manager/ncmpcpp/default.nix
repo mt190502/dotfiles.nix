@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -71,7 +72,7 @@ in
       ];
     };
     xdg.configFile = {
-      "ncmpcpp/get_and_copy_purl_from_current_song.sh" = {
+      "ncmpcpp/get_and_copy_purl_from_current_song.sh" = lib.mkIf (lib.hasSuffix "linux" system) {
         text = ''
           #!${lib.getExe' pkgs.bash "bash"}
           current_song_file_path="${config.services.mpd.musicDirectory}/$(${lib.getExe pkgs.mpc} current -f %file%)"

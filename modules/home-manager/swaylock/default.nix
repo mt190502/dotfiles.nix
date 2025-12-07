@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  pkgs,
+  system,
   ...
 }:
 
@@ -17,10 +17,9 @@ in
       description = "Enable systemd service for swaylock";
     };
   };
-  config = lib.mkIf (cfg.preferred.lock-app == "swaylock") {
+  config = lib.mkIf (cfg.preferred.lock-app == "swaylock" && lib.hasSuffix "linux" system) {
     programs.swaylock = {
       enable = true;
-      package = pkgs.swaylock;
       settings = with config.stylix.customColors.withHex; {
         #################################################
         #### SwayLock

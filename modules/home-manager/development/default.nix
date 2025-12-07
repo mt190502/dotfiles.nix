@@ -3,6 +3,7 @@
   lib,
   pkgs,
   pkgs-unstable,
+  system,
   ...
 }:
 
@@ -30,51 +31,56 @@ in
           dive
           postgresql_18
         ])
-        ++ (with pkgs; [
-          air
-          ansible
-          binwalk
-          cargo
-          delta
-          delve
-          direnv
-          gdb
-          gef
-          gnumake
-          go
-          gopls
-          gping
-          hugo
-          hyperfine
-          iftop
-          iperf
-          jq
-          just
-          k0sctl
-          kubectl
-          kubernetes-helm
-          kubetail
-          llvm
-          llvmPackages.clang
-          llvmPackages.clang-tools
-          minikube
-          netcat
-          nixd
-          nixfmt-rfc-style
-          nmap
-          nodejs
-          onefetch
-          opentofu
-          pkg-config
-          pnpm
-          shellcheck
-          siege
-          strace
-          testssl
-          traceroute
-          yq
-          zola
-        ]);
+        ++ (
+          with pkgs;
+          [
+            air
+            ansible
+            binwalk
+            cargo
+            delta
+            delve
+            direnv
+            gdb
+            gef
+            gnumake
+            go
+            gopls
+            gping
+            hugo
+            hyperfine
+            iftop
+            iperf
+            jq
+            just
+            k0sctl
+            kubectl
+            kubernetes-helm
+            kubetail
+            llvm
+            llvmPackages.clang
+            llvmPackages.clang-tools
+            minikube
+            netcat
+            nixd
+            nixfmt-rfc-style
+            nmap
+            nodejs
+            onefetch
+            opentofu
+            pkg-config
+            pnpm
+            shellcheck
+            testssl
+            yq
+            zola
+          ]
+          ++ (lib.optionals (lib.hasSuffix "linux" system) [
+            siege
+            strace
+            traceroute
+          ])
+        );
     };
   };
 }

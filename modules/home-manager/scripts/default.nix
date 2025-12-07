@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -17,7 +18,7 @@ in
       description = "scripts";
     };
   };
-  config = lib.mkIf cfg.scripts.enable {
+  config = lib.mkIf (cfg.scripts.enable && lib.hasSuffix "linux" system) {
     home.file = builtins.listToAttrs (
       lib.map (path: {
         name = ".local/bin/${path}";

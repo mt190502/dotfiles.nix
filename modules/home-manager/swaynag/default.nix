@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.swaynag;
@@ -11,7 +16,7 @@ in
       description = "swaynag";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     wayland.windowManager.sway.swaynag = {
       enable = true;
       settings = with config.stylix.customColors.withHashtag; {

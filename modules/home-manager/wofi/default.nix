@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -9,7 +10,7 @@ let
   cfg = config.moduleopts.home-manager;
 in
 {
-  config = lib.mkIf (cfg.preferred.menu == "wofi") {
+  config = lib.mkIf (cfg.preferred.menu == "wofi" && lib.hasSuffix "linux" system) {
     programs.wofi = {
       enable = true;
       settings = {

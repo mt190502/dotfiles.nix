@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  system,
   ...
 }:
 
@@ -15,7 +16,7 @@ in
       description = "kdeconnect";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     services.kdeconnect = {
       enable = true;
       indicator = true;

@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -16,7 +17,7 @@ in
       description = "rnnoise denoising for PipeWire";
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
     xdg.configFile."pipewire/pipewire.conf.d/99-input-denoising.conf".text = ''
       context.modules = [
         {
