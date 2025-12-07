@@ -11,19 +11,25 @@ in
         autoUpdate = true;
         cleanup = "uninstall";
       };
-      brews = [
-        "tailscale"
-      ];
+      brews = [ ];
       casks = [
         "1password"
+        "1password-cli"
+        "alt-tab"
         "anki"
         "discord"
         "iterm2"
         "jetbrains-toolbox"
+        "keyboardcleantool"
         "libreoffice"
         "librewolf"
+        "logi-options+"
         "obs"
+        "raycast"
+        "shottr"
+        "tailscale-app"
         "vivaldi"
+        "whatsapp"
       ];
     };
   };
