@@ -24,6 +24,7 @@ in
         "libreoffice"
         "librewolf"
         "logi-options+"
+        "jordanbaird-ice@beta"
         "obs"
         "openvpn-connect"
         "raycast"
@@ -32,6 +33,7 @@ in
         "vivaldi"
         "whatsapp"
       ];
+      taps = [ ];
     };
   };
 }
