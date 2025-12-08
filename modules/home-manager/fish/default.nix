@@ -116,7 +116,7 @@ in
           #################################################
           #### Home specific fish variables
           #################################################
-          export PATH="${home}/.nix-profile/sbin:${home}/.nix-profile/bin:${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:${home}/.local/share/flatpak/exports/bin:/var/lib/flatpak/exports/bin:/opt/homebrew/bin:$PATH";
+          export PATH="${home}/.local/share/JetBrains/Toolbox/scripts:${home}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin:${home}/.nix-profile/sbin:${home}/.nix-profile/bin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:${home}/.local/share/flatpak/exports/bin:/var/lib/flatpak/exports/bin:/opt/homebrew/bin:$PATH";
           export XDG_DATA_DIRS="${home}/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${home}/.local/share:/usr/local/share:/usr/share:${home}/.nix-profile/share:$XDG_DATA_DIRS";
 
           #################################################
