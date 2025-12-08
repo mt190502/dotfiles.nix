@@ -41,6 +41,9 @@ in
         diagnostics = {
           inline = {
             enabled = true;
+            padding = 4;
+            min_column = 0;
+            max_severity = null;
           };
           include_warnings = true;
         };
@@ -51,6 +54,14 @@ in
           line_numbers = true;
         };
         icon_theme = "Material Icon Theme";
+        inlay_hints = {
+          show_value_hints = true;
+          show_type_hints = false;
+          show_parameter_hints = true;
+          show_other_hints = true;
+          show_background = false;
+          enabled = true;
+        };
         language_models = {
           openai_compatible = {
             LiteLLM = {
@@ -121,6 +132,24 @@ in
           };
         };
         languages = {
+          TypeScript = {
+            enable_language_server = true;
+            format_on_save = "on";
+            code_actions_on_format = {
+              "source.addMissingImports.ts" = true;
+              "source.fixAll.ts" = true;
+              "source.organizeImports" = true;
+              "source.removeUnused.ts" = true;
+              "source.sortImports" = true;
+            };
+            language_servers = [
+              "vtsls"
+            ];
+            remove_trailing_whitespace_on_save = true;
+            prettier = {
+              allowed = true;
+            };
+          };
           Nix = {
             show_edit_predictions = true;
             language_servers = [
@@ -146,6 +175,7 @@ in
             };
           };
         };
+        lsp_document_colors = "inlay";
         minimap = {
           show = "never";
         };
@@ -190,13 +220,13 @@ in
         {
           context = "((vim_mode == normal || vim_mode == visual) || vim_mode == operator)";
           bindings = {
-            ctrl-j = "editor::MoveLineUp";
+            ctrl-j = "editor::MoveLineDown";
           };
         }
         {
           context = "((vim_mode == normal || vim_mode == visual) || vim_mode == operator)";
           bindings = {
-            ctrl-k = "editor::MoveLineDown";
+            ctrl-k = "editor::MoveLineUp";
           };
         }
         {
@@ -281,12 +311,14 @@ in
           context = "vim_mode == insert";
           bindings = {
             "ctrl-d" = null;
+            "ctrl-s" = null;
           };
         }
         {
           context = "vim_mode == literal";
           bindings = {
             "ctrl-d" = null;
+            "ctrl-s" = null;
           };
         }
         {
