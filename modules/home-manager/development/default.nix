@@ -36,6 +36,7 @@ in
           [
             air
             ansible
+            awscli2
             binwalk
             cargo
             delta
@@ -55,6 +56,7 @@ in
             just
             k0sctl
             kubectl
+            kubectx
             kubernetes-helm
             kubetail
             llvm
