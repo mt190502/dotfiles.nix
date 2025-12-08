@@ -25,6 +25,7 @@ in
         "librewolf"
         "logi-options+"
         "obs"
+        "openvpn-connect"
         "raycast"
         "shottr"
         "tailscale-app"
