@@ -465,6 +465,7 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.12.59-200.fc43.x86_64
+kmod-v4l2loopback-6.12.61-200.fc43.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -885,6 +886,7 @@ libzpool6
 libzstd
 libzstd-devel
 lilv-libs
+linux-atm-libs
 linux-firmware
 linux-firmware-whence
 llvm19-filesystem
@@ -981,6 +983,7 @@ openblas-srpm-macros
 OpenCL-ICD-Loader
 opencore-amr
 openexr-libs
+openfortivpn
 openh264
 openjpeg
 openldap
@@ -1276,6 +1279,7 @@ poppler-data
 poppler-utils
 popt
 power-profiles-daemon
+ppp
 prefixdevname
 procps-ng
 protobuf
