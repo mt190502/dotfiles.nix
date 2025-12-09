@@ -13,7 +13,6 @@ in
   config = lib.mkIf cfg.fish.enable {
     programs.fish = {
       shellAliases = {
-        kc = "kubectx";
         sysdup = lib.mkForce "nix-channel --update && sudo nix-channel --update && cd ${home}/Projects/000_myprojects/dotfiles.nix && nix flake update && sudo darwin-rebuild switch --flake .#${flakeName}";
         sysclean = lib.mkForce "nix-collect-garbage -d";
       };

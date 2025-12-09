@@ -31,8 +31,12 @@ in
         grc = pkgs.grc;
         helm = lib.getExe pkgs.kubernetes-helm;
         hugo = lib.getExe pkgs.hugo;
-        lsd = lib.getExe pkgs.lsd;
         kubectl = lib.getExe pkgs.kubectl;
+        kubectx = lib.getExe pkgs.kubectx;
+        kubens = lib.getExe pkgs.kubens;
+        kubetail = lib.getExe pkgs.kubetail;
+        kubewatch = lib.getExe pkgs.kubewatch;
+        lsd = lib.getExe pkgs.lsd;
         neovide = lib.getExe pkgs.neovide;
         telnet = lib.getExe' pkgs.inetutils "telnet";
         trash = lib.getExe pkgs.trash-cli;
@@ -103,6 +107,10 @@ in
           a = lib.getExe' ansible "ansible";
           ap = "clear; ${lib.getExe' ansible "ansible-playbook"}";
           k = kubectl;
+          kcx = kubectx;
+          kns = kubens;
+          ktl = kubetail;
+          kw = kubewatch;
 
           #~ System
           cp = "cp -i";
