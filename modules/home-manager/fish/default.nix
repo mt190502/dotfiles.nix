@@ -48,6 +48,34 @@ in
           neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
           nevalp = "nix eval nixpkgs#$argv.outPath";
           nevalcd = "cd $(nix eval --raw nixpkgs#$argv.outPath)";
+          workmode = ''
+            set mode (test (count $argv) -gt 0; and echo $argv[1])
+            if [ "$fish_history" = "work" -a "$mode" != "false" ]
+              return
+            end
+            function _tide_item_workmode
+              _tide_print_item workmode $tide_workmode_icon' ' "WorkMode"
+            end
+            set -Ux tide_workmode_icon "" 
+            set -Ux tide_workmode_color 00BBFF
+            funcsave --quiet _tide_item_workmode
+            
+            if [ "$mode" = "true" ]
+              set -Ux default_left_prompt_items $tide_left_prompt_items
+              set -Up tide_left_prompt_items workmode
+              alias --save ssh="ssh -i ${home}/.ssh/id_ed25519_work" &>/dev/null
+              alias --save scp="scp -i ${home}/.ssh/id_ed25519_work" &>/dev/null
+              set -Ux GIT_SSH_COMMAND "ssh -i ${home}/.ssh/id_ed25519_work"
+              set -Ux fish_history "work"
+              tide reload
+            else
+              set -Ux tide_left_prompt_items $default_left_prompt_items             
+              functions --erase ssh 2>/dev/null; and functions --erase scp 2>/dev/null
+              set -Ue GIT_SSH_COMMAND
+              set -Ux fish_history "fish"
+              tide reload              
+            end
+          '';
         };
         generateCompletions = false;
         plugins = [
