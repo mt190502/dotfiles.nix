@@ -14,10 +14,13 @@ in
     openvpn
   ];
   homebrew = lib.mkIf cfg.homebrew.enable {
-    brews = [ ];
+    brews = [
+      "saml2aws"
+    ];
     casks = [
       "clickup"
       "slack"
     ];
+    taps = [];
   };
 }
