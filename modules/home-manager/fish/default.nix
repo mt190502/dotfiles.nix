@@ -139,8 +139,8 @@ in
           passgen = "cat /dev/urandom | tr -dc [:alnum:] | head -c";
           tldr = "${cht_sh}";
           tmp = "cd ~/.tmp";
-          yt-album = "${yt_dlp} -o \"${home}/Music/Albums/%(album)s - %(artist)s/%(playlist_autonumber)02d - %(track)s.%(ext)s\"";
-          yt-music = "${yt_dlp} -o \"${home}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
+          yt-album = "${yt_dlp} --config-locations ${home}/.config/yt-dlp/music -o \"${home}/Music/Albums/%(album)s - %(artist)s/%(playlist_autonumber)02d - %(track)s.%(ext)s\"";
+          yt-music = "${yt_dlp} --config-locations ${home}/.config/yt-dlp/music -o \"${home}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
         };
         shellInit = ''
           #################################################
