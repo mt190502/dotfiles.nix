@@ -70,7 +70,7 @@ in
             set -Ux tide_workmode_icon "" 
             set -Ux tide_workmode_color 00BBFF
             funcsave --quiet _tide_item_workmode
-            
+
             if [ "$mode" = "true" ]
               set -Ux default_left_prompt_items $tide_left_prompt_items
               set -Up tide_left_prompt_items workmode
