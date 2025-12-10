@@ -32,10 +32,9 @@ in
         helm = lib.getExe pkgs.kubernetes-helm;
         hugo = lib.getExe pkgs.hugo;
         kubectl = lib.getExe pkgs.kubectl;
-        kubectx = lib.getExe pkgs.kubectx;
-        kubens = lib.getExe pkgs.kubens;
+        kubecolor = lib.getExe pkgs.kubecolor;
+        kubectx = lib.getExe' pkgs.kubectx "kubectx";
         kubetail = lib.getExe pkgs.kubetail;
-        kubewatch = lib.getExe pkgs.kubewatch;
         lsd = lib.getExe pkgs.lsd;
         neovide = lib.getExe pkgs.neovide;
         telnet = lib.getExe' pkgs.inetutils "telnet";
@@ -46,6 +45,14 @@ in
         enable = true;
         functions = {
           cd = "builtin cd $argv; ${lsd}";
+          k = {
+            wraps = "kubectl";
+            body = "${kubecolor} $argv";
+          };
+          kcx = {
+            wraps = "kubectx";
+            body = "${kubectx} $argv";
+          };
           mapscii = "${telnet} mapscii.me";
           nvim2 = "${neovide} $argv &; disown";
           shell = "nix shell nixpkgs#$argv";
@@ -106,11 +113,7 @@ in
           #~ Containers
           a = lib.getExe' ansible "ansible";
           ap = "clear; ${lib.getExe' ansible "ansible-playbook"}";
-          k = kubectl;
-          kcx = kubectx;
-          kns = kubens;
           ktl = kubetail;
-          kw = kubewatch;
 
           #~ System
           cp = "cp -i";
