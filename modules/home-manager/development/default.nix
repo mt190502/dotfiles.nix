@@ -26,6 +26,16 @@ in
         GOPATH = "${config.home.homeDirectory}/.go";
       };
       packages =
+        let
+          gke-plugins = (
+            pkgs.google-cloud-sdk.withExtraComponents (
+              with pkgs.google-cloud-sdk.components;
+              [
+                gke-gcloud-auth-plugin
+              ]
+            )
+          );
+        in
         (with pkgs-unstable; [
           bun
           dive
@@ -46,6 +56,7 @@ in
             gef
             gnumake
             go
+            gke-plugins
             gopls
             gping
             hugo
