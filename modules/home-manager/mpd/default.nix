@@ -49,6 +49,20 @@ in
               audio_output {
                 type        "pipewire"
                 name        "PipeWire Audio Server"
+                enabled     "yes"
+              }
+              audio_output {
+                type        "httpd"
+                name        "HTTP Stream (opus)"
+                encoder     "opus"
+                port        "8000"
+                complexity  "10"
+                signal      "music"
+                vbr         "no"
+                bitrate     "max"
+                format      "48000:*:2"
+                enabled     "yes"
+                opustags    "yes"
               }
             '';
           };
