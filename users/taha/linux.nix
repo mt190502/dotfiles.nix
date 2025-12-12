@@ -136,6 +136,7 @@ in
   #~ custom modules ~#
   moduleopts.home-manager = {
     preferred = {
+      bar = "waybar";
       lock-app = "swaylock";
       menu = "vicinae";
       notifier = "swaync";

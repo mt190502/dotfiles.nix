@@ -3,6 +3,15 @@
 {
   options.moduleopts.home-manager = {
     preferred = {
+      bar = lib.mkOption {
+        type = lib.types.enum [
+          "quickshell"
+          "waybar"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred status bar";
+      };
       lock-app = lib.mkOption {
         type = lib.types.enum [
           "swaylock"

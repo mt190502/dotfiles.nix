@@ -28,11 +28,6 @@ let
 in
 {
   options.moduleopts.home-manager.waybar = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "waybar";
-    };
     enableLaptopOpts = lib.mkEnableOption "laptop";
     weather_location = lib.mkOption {
       default = "Istanbul";
@@ -40,7 +35,7 @@ in
       description = "location for weather";
     };
   };
-  config = lib.mkIf (cfg.waybar.enable && lib.hasSuffix "linux" system) {
+  config = lib.mkIf (cfg.preferred.bar == "waybar" && lib.hasSuffix "linux" system) {
     programs.waybar = {
       enable = true;
       systemd = {
