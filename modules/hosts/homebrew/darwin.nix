@@ -18,6 +18,7 @@ in
         "alt-tab"
         "anki"
         "discord"
+        "freelens"
         "gcloud-cli"
         "iterm2"
         "jetbrains-toolbox"

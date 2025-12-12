@@ -19,6 +19,7 @@ in
     ];
     casks = [
       "clickup"
+      "microsoft-teams"
       "slack"
     ];
     taps = [];
