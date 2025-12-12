@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, system, ... }:
 
 let
   cfg = config.moduleopts.home-manager.mpv;
@@ -27,7 +27,7 @@ in
         profile = "high-quality";
 
         #~ enable hardware decoding if available
-        hwdec = "vaapi";
+        hwdec = lib.mkIf (lib.hasSuffix "linux" system) "vaapi";
 
         #~ video output (gpu: integrated, gpu-next: dedicated)
         vo = "gpu";
@@ -43,7 +43,7 @@ in
         #### Audio settings
         #################################################
         #~ audio output
-        ao = "pipewire";
+        ao = lib.mkIf (lib.hasSuffix "linux" system) "pipewire";
 
         #~ audio language
         alang = "eng,en,enUS,tr,trTR";
