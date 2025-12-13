@@ -29,6 +29,7 @@ in
         "com.github.libresprite.LibreSprite"
         "com.github.tchx84.Flatseal"
         "com.obsproject.Studio"
+        "com.parsecgaming.parsec"
         "com.slack.Slack"
         "com.stremio.Stremio"
         "com.usebottles.bottles"
