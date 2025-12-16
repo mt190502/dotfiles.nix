@@ -16,6 +16,7 @@ in
   homebrew = lib.mkIf cfg.homebrew.enable {
     brews = [
       "saml2aws"
+      "turbot/tap/steampipe"
     ];
     casks = [
       "clickup"

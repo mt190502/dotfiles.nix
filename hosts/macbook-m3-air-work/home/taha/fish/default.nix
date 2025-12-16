@@ -16,6 +16,9 @@ in
         sysdup = lib.mkForce "nix-channel --update && sudo nix-channel --update && cd ${home}/Projects/000_myprojects/dotfiles.nix && nix flake update && sudo darwin-rebuild switch --flake .#${flakeName}";
         sysclean = lib.mkForce "nix-collect-garbage -d";
       };
+      shellInit = ''
+        steampipe completion fish | source
+      '';
     };
   };
 }
