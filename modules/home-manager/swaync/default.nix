@@ -96,7 +96,7 @@ in
         .control-center-list .notification:hover,
         .notification-action:hover,
         .notification-default-action:hover {
-          background: initial;
+          background: ${border};
           transition: none;
         }
 
@@ -152,27 +152,22 @@ in
           border-top: 0;
         }
 
-        .notification-background,
         .notification {
           padding: 0;
           background: ${border};
-          border: 0;
         }
 
         .notification-content {
           background: ${background};
-          border: 5px solid ${border};
+          border: 2px solid ${border};
         }
 
         .notification-default-action {
-          padding: 0;
-          border: 2px solid ${background};
+          padding: 2px;
         }
 
-        .notification-row {
-          padding: 15px;
-          background: none;
-          border: 0;
+        animatedlistitem {
+          padding-top: 5px;
         }
 
         .widget-mpris-player,
