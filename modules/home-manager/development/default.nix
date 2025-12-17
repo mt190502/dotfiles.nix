@@ -66,7 +66,11 @@ in
             jq
             just
             k0sctl
+            krew
             kubectl
+            kubectl-cnpg
+            kubectl-df-pv
+            kubectl-explore
             kubectx
             kubernetes-helm
             kubetail
