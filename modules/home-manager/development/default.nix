@@ -71,7 +71,6 @@ in
             kubectl-cnpg
             kubectl-df-pv
             kubectl-explore
-            kubectx
             kubernetes-helm
             kubetail
             llvm

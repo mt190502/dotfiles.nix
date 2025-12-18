@@ -33,7 +33,6 @@ in
         hugo = lib.getExe pkgs.hugo;
         kubectl = lib.getExe pkgs.kubectl;
         kubecolor = lib.getExe pkgs.kubecolor;
-        kubectx = lib.getExe' pkgs.kubectx "kubectx";
         kubetail = lib.getExe pkgs.kubetail;
         lsd = lib.getExe pkgs.lsd;
         neovide = lib.getExe pkgs.neovide;
@@ -50,8 +49,8 @@ in
             body = "${kubecolor} $argv";
           };
           kcx = {
-            wraps = "kubectx";
-            body = "${kubectx} $argv";
+            wraps = "kubectl config use-context";
+            body = "${kubecolor} config use-context $argv";
           };
           mapscii = "${telnet} mapscii.me";
           nvim2 = "${neovide} $argv &; disown";
