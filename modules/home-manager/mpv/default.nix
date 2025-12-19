@@ -11,7 +11,7 @@ in
       description = "mpv";
     };
   };
-  config = lib.mkIf (cfg.enable && lib.hasSuffix "linux" system) {
+  config = lib.mkIf cfg.enable {
     programs.mpv = {
       enable = true;
       bindings = {
