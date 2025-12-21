@@ -3,6 +3,7 @@
   lib,
   inputs,
   pkgs,
+  pkgs-unstable,
   ...
 }:
 
@@ -24,8 +25,8 @@ let
       raycastRepo = fetchFromGitHub {
         owner = "raycast";
         repo = "extensions";
-        rev = "bc92e53ae972e41a44800b2a4763a5b7bf69122e";
-        sha256 = "sha256-h5syKKafr0YUIZn4ky89yQx061svX7cL8R5ekxZMyUA=";
+        rev = "27c8726a793b985df4cc8f1a771e354e9c12b195";
+        sha256 = "sha256-6VfYwnFEnKUvZsjqeUSPCY5FCiMxW5kxYp18REetffY=";
         sparseCheckout = map (name: "/extensions/${name}") names;
       };
     in
@@ -57,6 +58,7 @@ in
   config = lib.mkIf (cfg.preferred.menu == "vicinae") {
     programs.vicinae = {
       enable = true;
+      package = pkgs-unstable.vicinae;
       systemd = {
         enable = true;
         autoStart = true;
