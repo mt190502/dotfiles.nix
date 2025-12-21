@@ -464,7 +464,6 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.59-200.fc43.x86_64
 kmod-v4l2loopback-6.12.61-200.fc43.x86_64
 kpartx
 krb5-devel
@@ -881,8 +880,8 @@ libXxf86dga
 libXxf86vm
 libyaml
 libyuv
-libzfs6
-libzpool6
+libzfs7
+libzpool7
 libzstd
 libzstd-devel
 lilv-libs
