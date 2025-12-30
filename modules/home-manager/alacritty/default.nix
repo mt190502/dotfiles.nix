@@ -29,15 +29,15 @@ in
             style = lib.mkForce "Bold";
           };
           bold = {
-            family = "Hack";
+            family = config.stylix.fonts.monospace.name;
             style = "Bold";
           };
           italic = {
-            family = "Hack";
+            family = config.stylix.fonts.monospace.name;
             style = "Italic";
           };
           bold_italic = {
-            family = "Hack";
+            family = config.stylix.fonts.monospace.name;
             style = "Bold Italic";
           };
         };
