@@ -43,6 +43,6 @@
       )
     )
     ++ [
-      inputs.self.homeManagerModules.mt190502
+      inputs.self.homeModules.mt190502
     ];
 }

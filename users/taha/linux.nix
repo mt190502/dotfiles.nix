@@ -203,5 +203,5 @@ in
   #
   ########################################
   home.activation = { };
-  imports = [ inputs.self.homeManagerModules.mt190502 ];
+  imports = [ inputs.self.homeModules.mt190502 ];
 }
