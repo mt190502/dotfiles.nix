@@ -35,60 +35,62 @@ let
     });
 in
 {
-  flake.darwinConfigurations = builtins.listToAttrs (
-    map (cfg: {
-      name = cfg.name;
-      value = inputs.nix-darwin.lib.darwinSystem rec {
-        system = cfg.arch;
-        pkgs = repo "nixpkgs" system;
-        specialArgs = {
-          inherit inputs system;
-          pkgs-unstable = repo "nixpkgs-unstable" system;
-          flakeName = cfg.name;
-        };
-        modules = [
-          inputs.home-manager.darwinModules.default
-          (inputs.self + "/users/taha")
-          ./${cfg.name}
-        ];
-      };
-    }) darwinConfigs
-  );
-  flake.homeConfigurations = builtins.listToAttrs (
-    map (cfg: {
-      name = cfg.name;
-      value = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = repo "nixpkgs" cfg.arch;
-        extraSpecialArgs = {
-          inherit inputs;
-          pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-          flakeName = cfg.name;
+  flake = {
+    darwinConfigurations = builtins.listToAttrs (
+      map (cfg: {
+        inherit (cfg) name;
+        value = inputs.nix-darwin.lib.darwinSystem rec {
           system = cfg.arch;
+          pkgs = repo "nixpkgs" system;
+          specialArgs = {
+            inherit inputs system;
+            pkgs-unstable = repo "nixpkgs-unstable" system;
+            flakeName = cfg.name;
+          };
+          modules = [
+            inputs.home-manager.darwinModules.default
+            (inputs.self + "/users/taha")
+            ./${cfg.name}
+          ];
         };
-        modules = [
-          (inputs.self + "/users/taha/linux.nix")
-          ./${cfg.name}/home
-        ];
-      };
-    }) homeConfigs
-  );
-  flake.nixosConfigurations = builtins.listToAttrs (
-    map (cfg: {
-      name = cfg.name;
-      value = inputs.nixpkgs.lib.nixosSystem rec {
-        system = cfg.arch;
-        pkgs = repo "nixpkgs" system;
-        specialArgs = {
-          inherit inputs system;
-          pkgs-unstable = repo "nixpkgs-unstable" system;
-          flakeName = cfg.name;
+      }) darwinConfigs
+    );
+    homeConfigurations = builtins.listToAttrs (
+      map (cfg: {
+        inherit (cfg) name;
+        value = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = repo "nixpkgs" cfg.arch;
+          extraSpecialArgs = {
+            inherit inputs;
+            pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
+            flakeName = cfg.name;
+            system = cfg.arch;
+          };
+          modules = [
+            (inputs.self + "/users/taha/linux.nix")
+            ./${cfg.name}/home
+          ];
         };
-        modules = [
-          inputs.home-manager.nixosModules.home-manager
-          (inputs.self + "/users/taha")
-          ./${cfg.name}
-        ];
-      };
-    }) nixosConfigs
-  );
+      }) homeConfigs
+    );
+    nixosConfigurations = builtins.listToAttrs (
+      map (cfg: {
+        inherit (cfg) name;
+        value = inputs.nixpkgs.lib.nixosSystem rec {
+          system = cfg.arch;
+          pkgs = repo "nixpkgs" system;
+          specialArgs = {
+            inherit inputs system;
+            pkgs-unstable = repo "nixpkgs-unstable" system;
+            flakeName = cfg.name;
+          };
+          modules = [
+            inputs.home-manager.nixosModules.home-manager
+            (inputs.self + "/users/taha")
+            ./${cfg.name}
+          ];
+        };
+      }) nixosConfigs
+    );
+  };
 }

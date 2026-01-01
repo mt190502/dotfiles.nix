@@ -36,13 +36,18 @@ in
                   (
                     with pkgs;
                     {
+                      inherit
+                        coreutils
+                        imagemagick
+                        imv
+                        mako
+                        newt
+                        sway
+                        ;
                       alacritty = lib.getExe alacritty;
                       bash = lib.getExe' bash "bash";
                       cliphist = lib.getExe cliphist;
-                      coreutils = coreutils;
                       grim = lib.getExe grim;
-                      imagemagick = imagemagick;
-                      imv = imv;
                       jq = lib.getExe jq;
                       lock-screen-function =
                         if cfg.${cfg.preferred.lock-app}.systemd.enable then
@@ -51,19 +56,15 @@ in
                           "${home}/.config/sway/scripts.d/blurlock"
                         else
                           cfg.preferred.lock-app;
-                      mako = mako;
                       ncmpcpp = lib.getExe ncmpcpp;
-                      newt = newt;
                       notify-send = lib.getExe libnotify;
                       sh = lib.getExe' bash "sh";
                       slurp = lib.getExe slurp;
                       swappy = lib.getExe swappy;
-                      sway = sway;
                       swaync = lib.getExe swaynotificationcenter;
                       tesseract = lib.getExe tesseract;
                       tmux = lib.getExe tmux;
                       trans = lib.getExe translate-shell;
-                      wl_clipboard = wl-clipboard;
                       wofi = lib.getExe wofi;
                       wtype = lib.getExe wtype;
                       xev = lib.getExe xorg.xev;

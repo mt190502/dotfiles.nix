@@ -45,17 +45,17 @@ main() {
             takeInitialSS ${3:+$3}
             @grim@ -g "$(@slurp@)" - >"$tempfile"
             killall imv-wayland
-            [[ "$showEditor" == "yes" ]] && @swappy@ -f "$tempfile" | @wl_clipboard@/bin/wl-copy
+            [[ "$showEditor" == "yes" ]] && @swappy@ -f "$tempfile" | @wl-clipboard@/bin/wl-copy
             rm "$tempfile"
         elif [[ $1 == "Full" ]]; then
             takeInitialSS ${3:+$3}
             killall imv-wayland
             FOCUSED=$(@swaymsg@ -t get_outputs | @jq@ -r '.[] | select(.focused) | .name')
-            [[ "$showEditor" == "yes" ]] && @swappy@ -f "/tmp/$FOCUSED.png" | @wl_clipboard@/bin/wl-copy
+            [[ "$showEditor" == "yes" ]] && @swappy@ -f "/tmp/$FOCUSED.png" | @wl-clipboard@/bin/wl-copy
         elif [[ $1 == "Active" ]]; then
             ${3:+sleep $3}
             @grim@ -g "$(@swaymsg@ -t get_tree | @jq@ -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - >"$tempfile"
-            [[ "$showEditor" == "yes" ]] && @swappy@ -f "$tempfile" | @wl_clipboard@/bin/wl-copy
+            [[ "$showEditor" == "yes" ]] && @swappy@ -f "$tempfile" | @wl-clipboard@/bin/wl-copy
             rm "$tempfile"
         fi
         ;;

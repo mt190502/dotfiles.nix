@@ -1,4 +1,9 @@
-{ config, lib, system, ... }:
+{
+  config,
+  lib,
+  system,
+  ...
+}:
 
 let
   cfg = config.moduleopts.home-manager.mpv;

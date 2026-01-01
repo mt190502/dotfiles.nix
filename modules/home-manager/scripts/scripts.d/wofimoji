@@ -7,7 +7,7 @@
 if sed '1,/^### DATA ###$/d' "$0" | @wofi@ --show dmenu --prompt "Search Emoji" -i | cut -d ' ' -f 1 | tr -d '\n' | @wtype@ -; then
     :
 else
-    sed '1,/^### DATA ###$/d' "$0" | @wofi@ --show dmenu --prompt "Search Emoji" -i | cut -d ' ' -f 1 | tr -d '\n' | @wl_clipboard@/bin/wl-copy
+    sed '1,/^### DATA ###$/d' "$0" | @wofi@ --show dmenu --prompt "Search Emoji" -i | cut -d ' ' -f 1 | tr -d '\n' | @wl-clipboard@/bin/wl-copy
 fi
 exit
 ### DATA ###

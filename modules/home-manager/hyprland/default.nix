@@ -53,11 +53,11 @@ in
                     "${v}"
                   ])
                   {
+                    inherit (pkgs) imagemagick;
                     alacritty = lib.getExe pkgs.alacritty;
                     bash = lib.getExe pkgs.bash;
                     grim = lib.getExe pkgs.grim;
                     hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
-                    imagemagick = pkgs.imagemagick;
                     imv-wayland = lib.getExe' pkgs.imv "imv-wayland";
                     jq = lib.getExe pkgs.jq;
                     ncmpcpp = lib.getExe pkgs.ncmpcpp;
@@ -66,7 +66,6 @@ in
                     swappy = lib.getExe pkgs.swappy;
                     tesseract = lib.getExe pkgs.tesseract;
                     tmux = lib.getExe pkgs.tmux;
-                    wl_clipboard = pkgs.wl-clipboard;
                   }
               );
             in

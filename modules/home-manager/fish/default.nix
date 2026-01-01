@@ -22,13 +22,12 @@ in
   config = lib.mkIf cfg.fish.enable {
     programs.fish =
       let
-        ansible = pkgs.ansible;
+        inherit (pkgs) ansible grc;
         cht_sh = lib.getExe pkgs.cht-sh;
         direnv = lib.getExe pkgs.direnv;
         fastfetch = lib.getExe pkgs.fastfetch;
         gh = lib.getExe pkgs.gh;
         git = lib.getExe pkgs.git;
-        grc = pkgs.grc;
         helm = lib.getExe pkgs.kubernetes-helm;
         hugo = lib.getExe pkgs.hugo;
         kubectl = lib.getExe pkgs.kubectl;
@@ -66,7 +65,7 @@ in
             function _tide_item_workmode
               _tide_print_item workmode $tide_workmode_icon' ' "WorkMode"
             end
-            set -Ux tide_workmode_icon "" 
+            set -Ux tide_workmode_icon ""
             set -Ux tide_workmode_color 00BBFF
             funcsave --quiet _tide_item_workmode
 
@@ -79,11 +78,11 @@ in
               set -Ux fish_history "work"
               tide reload
             else
-              set -Ux tide_left_prompt_items $default_left_prompt_items             
+              set -Ux tide_left_prompt_items $default_left_prompt_items
               functions --erase ssh 2>/dev/null; and functions --erase scp 2>/dev/null
               set -Ue GIT_SSH_COMMAND
               set -Ux fish_history "fish"
-              tide reload              
+              tide reload
             end
           '';
         };

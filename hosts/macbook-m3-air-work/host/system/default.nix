@@ -23,6 +23,6 @@ in
       "microsoft-teams"
       "slack"
     ];
-    taps = [];
+    taps = [ ];
   };
 }

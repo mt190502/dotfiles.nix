@@ -6,10 +6,9 @@
 }:
 
 let
+  inherit (config.wayland.windowManager.sway.config) menu modifier;
   cfg = config.moduleopts.home-manager;
   home = config.home.homeDirectory;
-  menu = config.wayland.windowManager.sway.config.menu;
-  modifier = config.wayland.windowManager.sway.config.modifier;
   lock =
     if cfg.preferred.lock-app == "swaylock" then
       "${home}/.config/sway/scripts.d/blurlock"

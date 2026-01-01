@@ -7,9 +7,9 @@
 }:
 
 let
+  inherit (config.wayland.windowManager.sway.config) modifier;
   cfg = config.moduleopts.home-manager;
   onepass = osConfig.moduleopts.nixos.onepassword.package;
-  modifier = config.wayland.windowManager.sway.config.modifier;
 in
 {
   wayland.windowManager.sway.config = lib.mkIf (cfg.preferred.wm == "sway") {

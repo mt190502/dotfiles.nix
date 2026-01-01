@@ -20,5 +20,5 @@ case $@ in
 	;;
 esac
 
-[[ -n "$out" ]] && echo "$out" | @wl_clipboard@/bin/wl-copy
+[[ -n "$out" ]] && echo "$out" | @wl-clipboard@/bin/wl-copy
 rm "$ocrdata" "$tmpdata"

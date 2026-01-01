@@ -20,12 +20,11 @@ in
     gtk = {
       enable = true;
       cursorTheme = {
-        name = config.stylix.cursor.name;
-        size = config.stylix.cursor.size;
+        inherit (config.stylix.cursor) name size;
         package = lib.mkForce config.stylix.cursor.package;
       };
       font = {
-        name = config.stylix.fonts.sansSerif.name;
+        inherit (config.stylix.fonts.sansSerif) name;
         package = lib.mkForce config.stylix.fonts.sansSerif.package;
       };
       iconTheme = {

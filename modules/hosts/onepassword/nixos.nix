@@ -36,9 +36,9 @@ in
   };
   config = lib.mkIf cfg.enable {
     programs._1password-gui = {
+      inherit (cfg) package;
       enable = true;
       polkitPolicyOwners = [ "taha" ];
-      package = cfg.package;
     };
     environment.etc."1password/custom_allowed_browsers" = {
       text = ''

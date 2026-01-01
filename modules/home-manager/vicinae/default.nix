@@ -34,6 +34,7 @@ let
       name:
       buildNpmPackage rec {
         inherit name;
+        inherit (importNpmLock) npmConfigHook;
         src = raycastRepo + "/extensions/${name}";
         buildPhase = ''
           runHook preBuild
@@ -49,7 +50,6 @@ let
           cp -r /build/.config/*/extensions/${name}/* $out/
           runHook postInstall
         '';
-        npmConfigHook = importNpmLock.npmConfigHook;
         npmDeps = importNpmLock { npmRoot = src; };
       }
     ) names;

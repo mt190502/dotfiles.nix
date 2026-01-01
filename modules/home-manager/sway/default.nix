@@ -45,10 +45,10 @@ in
                   (
                     with pkgs;
                     {
+                      inherit imagemagick;
                       alacritty = lib.getExe alacritty;
                       bash = lib.getExe bash;
                       grim = lib.getExe grim;
-                      imagemagick = imagemagick;
                       imv-wayland = lib.getExe' imv "imv-wayland";
                       jq = lib.getExe jq;
                       ncmpcpp = lib.getExe ncmpcpp;
@@ -59,7 +59,6 @@ in
                       swaynag = lib.getExe' sway "swaynag";
                       tesseract = lib.getExe tesseract;
                       tmux = lib.getExe tmux;
-                      wl_clipboard = wl-clipboard;
                     }
                   )
               );

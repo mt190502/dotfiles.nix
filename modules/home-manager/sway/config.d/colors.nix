@@ -10,7 +10,7 @@
       size = config.stylix.fonts.sizes.applications + 0.0;
     };
     colors = with config.stylix.customColors.withHashtag; {
-      background = background;
+      inherit background;
       focused = {
         background = active;
         border = active;
@@ -19,16 +19,15 @@
         childBorder = active;
       };
       focusedInactive = {
+        inherit text;
         background = inactive;
         border = inactive;
-        text = text;
         indicator = inactive;
         childBorder = inactive;
       };
       unfocused = {
-        background = background;
+        inherit background text;
         border = background;
-        text = text;
         indicator = background;
         childBorder = background;
       };

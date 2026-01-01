@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
 let
+  inherit (config.wayland.windowManager.sway.config) modifier;
   cfg = config.moduleopts.home-manager;
-  modifier = config.wayland.windowManager.sway.config.modifier;
 in
 {
   wayland.windowManager.sway.config = lib.mkIf (cfg.preferred.wm == "sway") {
