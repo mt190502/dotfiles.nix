@@ -9,10 +9,6 @@ let
   ];
   homeConfigs = [
     {
-      name = "lenovo-thinkpad-e14-fedora";
-      arch = "x86_64-linux";
-    }
-    {
       name = "msi-h510m-pro-fedora";
       arch = "x86_64-linux";
     }
