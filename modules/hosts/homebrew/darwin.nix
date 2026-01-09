@@ -11,11 +11,12 @@ in
         autoUpdate = true;
         cleanup = "uninstall";
       };
-      brews = [ ];
+      brews = [       
+        "siege"
+      ];
       casks = [
         "1password"
         "1password-cli"
-        "alt-tab"
         "anki"
         "caffeine"
         "discord"

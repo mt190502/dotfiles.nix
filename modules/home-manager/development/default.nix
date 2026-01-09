@@ -87,6 +87,7 @@ in
             pkg-config
             pnpm
             shellcheck
+            sops
             testssl
             yq
             zola
