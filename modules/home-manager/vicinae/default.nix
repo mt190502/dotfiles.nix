@@ -25,8 +25,8 @@ let
       raycastRepo = fetchFromGitHub {
         owner = "raycast";
         repo = "extensions";
-        rev = "27c8726a793b985df4cc8f1a771e354e9c12b195";
-        sha256 = "sha256-6VfYwnFEnKUvZsjqeUSPCY5FCiMxW5kxYp18REetffY=";
+        rev = "c37abc83a33a8179d8276723d14c99710a25c027";
+        sha256 = "sha256-4/xG2ydfMuuM/cipCdpohfMl4bpE39FPpiydRQ3Ts10=";
         sparseCheckout = map (name: "/extensions/${name}") names;
       };
     in
@@ -63,6 +63,30 @@ in
         enable = true;
         autoStart = true;
       };
+      settings = {
+        closeOnFocusLoss = false;
+        considerPreedit = false;
+        faviconService = "google";
+        font = {
+          size = 10.5;
+        };
+        keybinding = "default";
+        keybinds = {
+        };
+        popToRootOnClose = true;
+        rootSearch = {
+          searchFiles = false;
+        };
+        theme = {
+          iconTheme = "Flat-Remix-Blue-Dark";
+          name = "stylix";
+        };
+        window = lib.mkDefault {
+          csd = true;
+          opacity = 1;
+          rounding = 10;
+        };
+      };
       extensions =
         (getVicinaeExtensions [
           "bluetooth"
@@ -77,43 +101,126 @@ in
           "word-count"
         ]);
       themes = {
-        stylix = with config.stylix; {
-          meta = {
-            version = 1;
-            name = "Stylix";
-            description = "Stylix theme for Vicinae";
-            variant = if polarity == "either" then "light" else polarity;
-          };
-          colors =
-            with config.stylix.customColors.withHashtag;
-            with config.lib.stylix.colors.withHashtag;
-            {
-              core = {
-                inherit background border;
-                accent = active;
-                foreground = text;
-                secondary_background = inactive;
-              };
-              accents = {
-                blue = base0D;
-                cyan = base0C;
-                green = base0B;
-                magenta = base0E;
-                orange = base09;
-                purple = base0E;
-                red = base08;
-                yellow = base0A;
-              };
-              list.item = {
-                selection = {
-                  background.name = base02;
-                  secondary_background = base03;
-                };
-                hover.background = base01;
-              };
+        stylix =
+          with config.stylix;
+          lib.mkDefault {
+            meta = {
+              version = 1;
+              name = "Stylix";
+              description = "Stylix theme for Vicinae";
+              variant = if polarity == "either" then "light" else polarity;
             };
-        };
+            colors =
+              with config.stylix.customColors.withHashtag;
+              with config.lib.stylix.colors.withHashtag;
+              {
+                core = {
+                  inherit background border;
+                  accent = active;
+                  foreground = text;
+                  secondary_background = inactive;
+                };
+                accents = {
+                  blue = base0D;
+                  cyan = base0C;
+                  green = base0B;
+                  magenta = base0E;
+                  orange = base09;
+                  purple = base0E;
+                  red = base08;
+                  yellow = base0A;
+                };
+                list.item = {
+                  selection = {
+                    background.name = base02;
+                    secondary_background = base03;
+                  };
+                  hover.background = base01;
+                };
+              };
+          };
       };
     };
+    xdg.configFile."vicinae/settings.json".text = ''
+      {
+         "theme": {
+            "dark": {
+               "name": "stylix",
+               "icon_theme": "Flat-Remix-Blue-Dark"
+            }
+         },
+         "favorites": [
+            "applications:org.kde.dolphin",
+            "applications:org.equicord.equibop",
+            "applications:io.github.ungoogled_software.ungoogled_chromium",
+            "applications:io.gitlab.librewolf-community",
+            "applications:com.valvesoftware.Steam",
+            "applications:md.obsidian.Obsidian",
+            "applications:com.github.tchx84.Flatseal",
+            "applications:com.stremio.Stremio",
+            "applications:org.gnome.Calculator",
+            "applications:org.signal.Signal",
+            "applications:org.gnome.TextEditor"
+         ],
+         "providers": {
+            "@abielzulio/chatgpt": {
+               "preferences": {
+                  "apiEndpoint": "https://litellm.core.xeome.dev/v1",
+                  "useApiEndpoint": true
+               }
+            },
+            "@khasbilegt/1password": {
+               "preferences": {
+                  "cliPath": "/usr/local/bin/op",
+                  "zshPath": "/usr/sbin/fish"
+               }
+            },
+            "@leiserfg/ssh-0": {
+               "preferences": {
+                  "terminal": "alacritty"
+               }
+            },
+            "@samlinville/tailscale": {
+               "preferences": {
+                  "tailscalePath": "/usr/sbin/tailscale"
+               }
+            },
+            "clipboard": {
+               "preferences": {
+                  "encryption": true,
+                  "monitoring": true
+               }
+            },
+            "core": {
+               "entrypoints": {
+                  "documentation": {
+                     "enabled": false
+                  },
+                  "oauth-token-store": {
+                     "enabled": false
+                  },
+                  "open-config-file": {
+                     "enabled": false
+                  },
+                  "open-default-config": {
+                     "enabled": false
+                  },
+                  "report-bug": {
+                     "enabled": false
+                  },
+                  "sponsor": {
+                     "enabled": false
+                  }
+               }
+            },
+            "manage-shortcuts": {
+               "enabled": false
+            },
+            "power": {
+               "enabled": false
+            }
+         }
+      }
+    '';
   };
 }
