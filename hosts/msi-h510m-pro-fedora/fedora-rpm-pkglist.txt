@@ -208,7 +208,6 @@ flatpak
 flatpak-libs
 flatpak-selinux
 flatpak-session-helper
-flat-remix-icon-theme
 flex
 flite
 fmt
