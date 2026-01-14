@@ -45,7 +45,13 @@ in
           cd = "builtin cd $argv; ${lsd}";
           acx = {
             wraps = "aws configure list-profiles";
-            body = "export AWS_PROFILE=$argv";
+            body = ''
+              if test (count $argv) -eq 0
+                aws configure list-profiles
+                return 1
+              end
+              export AWS_PROFILE=$argv
+            '';
           };
           k = {
             wraps = "kubectl";
