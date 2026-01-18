@@ -86,10 +86,6 @@
     };
     polarity = "dark";
     targets = {
-      gtk.extraCss = ''
-        @define-color light_1 #ffffff;
-        @define-color dark_5 #ffffff;
-      '';
       hyprland.enable = false;
       mangohud.enable = false;
       k9s.enable = false;
