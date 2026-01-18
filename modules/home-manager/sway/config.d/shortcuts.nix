@@ -131,7 +131,7 @@ in
         "${modifier}+q" = "kill";
 
         #~~~ other
-        "${modifier}+Return" = ''exec ${term "bash -c \"${tmux} attach -t daemonmodetmux\""}'';
+        "${modifier}+Return" = "exec ${term "bash -c \"${tmux} attach -t daemonmodetmux\""}";
         "${modifier}+l" = "exec ${lock}";
         "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown.sh";
       }

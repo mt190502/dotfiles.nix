@@ -4,13 +4,13 @@ let
   inherit (config.wayland.windowManager.sway.config) modifier;
   cfg = config.moduleopts.home-manager;
   term = (
-      if cfg.preferred.terminal == "alacritty" then
-        "Alacritty"
-      else if cfg.preferred.terminal == "foot" then
-        "footclient"
-      else
-        throw "Unsupported terminal: ${cfg.preferred.terminal}"
-    );
+    if cfg.preferred.terminal == "alacritty" then
+      "Alacritty"
+    else if cfg.preferred.terminal == "foot" then
+      "footclient"
+    else
+      throw "Unsupported terminal: ${cfg.preferred.terminal}"
+  );
 in
 {
   wayland.windowManager.sway = {
