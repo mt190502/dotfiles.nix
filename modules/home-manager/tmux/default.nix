@@ -29,6 +29,7 @@ in
         #### General 
         #################################################
         #~ global settings
+        set -g  allow-passthrough   on
         set -g  display-panes-time  800
         set -g  display-time        1000
         set -g  renumber-windows    off
@@ -36,6 +37,8 @@ in
         set -g  set-titles          on
         set -g  status-interval     10
         set -g  status-position     top
+        set -ga update-environment  TERM
+        set -ga update-environment  TERM_PROGRAM
 
         #~ session-based settings
         set -s  focus-events        on

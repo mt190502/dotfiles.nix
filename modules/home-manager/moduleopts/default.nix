@@ -42,6 +42,7 @@
       terminal = lib.mkOption {
         type = lib.types.enum [
           "alacritty"
+          "foot"
           "none"
         ];
         default = "none";

@@ -1,3 +1,16 @@
+{ config, ... }:
+
+let
+  cfg = config.moduleopts.home-manager;
+  term = (
+      if cfg.preferred.terminal == "alacritty" then
+        "Alacritty"
+      else if cfg.preferred.terminal == "foot" then
+        "footclient"
+      else
+        throw "Unsupported terminal: ${cfg.preferred.terminal}"
+    );
+in
 {
   wayland.windowManager.sway.config = {
     floating.criteria = [
@@ -19,15 +32,15 @@
       }
       { app_id = "1Password"; }
       {
-        app_id = "Alacritty";
+        app_id = term;
         title = "ncmpcpp";
       }
       {
-        app_id = "Alacritty";
+        app_id = term;
         title = "nmtui";
       }
       {
-        app_id = "Alacritty";
+        app_id = term;
         title = "wttr.in";
       }
       { app_id = "com.nextcloud.desktopclient.nextcloud"; }

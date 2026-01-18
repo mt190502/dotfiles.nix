@@ -15,6 +15,8 @@ let
     (
       if cfg.preferred.terminal == "alacritty" then
         lib.getExe pkgs.alacritty + " -T " + title + " -e " + command
+      else if cfg.preferred.terminal == "foot" then
+        (lib.getExe' pkgs.foot "footclient") + " -T ${title} ${command}"
       else
         throw "Unsupported terminal: ${cfg.preferred.terminal}"
     );

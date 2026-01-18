@@ -14,6 +14,16 @@ let
       "${home}/.config/sway/scripts.d/blurlock"
     else
       cfg.preferred.lock-app;
+  term =
+    command:
+    (
+      if cfg.preferred.terminal == "alacritty" then
+        lib.getExe pkgs.alacritty + " -e " + command
+      else if cfg.preferred.terminal == "foot" then
+        (lib.getExe' pkgs.foot "footclient") + " ${command}"
+      else
+        throw "Unsupported terminal: ${cfg.preferred.terminal}"
+    );
 in
 {
   wayland.windowManager.sway.config = {
@@ -45,7 +55,6 @@ in
     };
     keybindings =
       let
-        alacritty = lib.getExe pkgs.alacritty;
         brightnessctl = lib.getExe pkgs.brightnessctl;
         cliphist = lib.getExe pkgs.cliphist;
         pactl = lib.getExe' pkgs.pulseaudio "pactl";
@@ -122,7 +131,7 @@ in
         "${modifier}+q" = "kill";
 
         #~~~ other
-        "${modifier}+Return" = "exec ${alacritty} -e bash -c '${tmux} attach -t daemonmodetmux'";
+        "${modifier}+Return" = ''exec ${term "bash -c \"${tmux} attach -t daemonmodetmux\""}'';
         "${modifier}+l" = "exec ${lock}";
         "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown.sh";
       }

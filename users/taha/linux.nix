@@ -140,7 +140,7 @@ in
       lock-app = "swaylock";
       menu = "vicinae";
       notifier = "swaync";
-      terminal = "alacritty";
+      terminal = "foot";
       wm = "sway";
     };
     alacritty.theme = "hyper";

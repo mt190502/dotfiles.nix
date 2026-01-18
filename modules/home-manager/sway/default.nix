@@ -48,6 +48,7 @@ in
                       inherit imagemagick;
                       alacritty = lib.getExe alacritty;
                       bash = lib.getExe bash;
+                      foot = lib.getExe' foot "footclient";
                       grim = lib.getExe grim;
                       imv-wayland = lib.getExe' imv "imv-wayland";
                       jq = lib.getExe jq;
