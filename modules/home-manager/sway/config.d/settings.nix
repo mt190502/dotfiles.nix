@@ -15,6 +15,7 @@ in
       ];
       floating.border = 5;
       floating.modifier = "${modifier}";
+      focus.newWindow = "focus";
       gaps = {
         inner = 5;
         outer = 0;
