@@ -69,15 +69,15 @@ in
                   echo "Directory not found: $kube_dir"
                   return 1
               end
-          
+
               set -l files_to_merge (find "$kube_dir" -type f -not -name "config" -not -path "*/cache/*")
               set -l all_configs "$kube_dir/config"
-          
+
               for file in $files_to_merge
                   set all_configs "$all_configs:$file"
               end
               set -gx KUBECONFIG "$all_configs"
-          
+
               echo "Merging kubeconfigs into $kube_dir/config"
               if ${kubectl} config view --flatten > "$kube_dir/config.tmp"
                   mv "$kube_dir/config" $HOME/.oldkubeconf-$(date +%Y-%m-%d_%H-%M-%S)
@@ -88,7 +88,7 @@ in
                   rm -f "$kube_dir/config.tmp"
                   return 1
               end
-           
+
               for file in $files_to_merge
                 if [ ! -z "$(cat $file | grep apiVersion)" ]
                    rm -f "$file"

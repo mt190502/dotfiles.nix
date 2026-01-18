@@ -11,7 +11,7 @@ in
         autoUpdate = true;
         cleanup = "uninstall";
       };
-      brews = [       
+      brews = [
         "siege"
       ];
       casks = [
