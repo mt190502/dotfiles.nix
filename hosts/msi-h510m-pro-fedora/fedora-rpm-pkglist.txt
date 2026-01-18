@@ -208,6 +208,7 @@ flatpak
 flatpak-libs
 flatpak-selinux
 flatpak-session-helper
+flat-remix-icon-theme
 flex
 flite
 fmt
@@ -463,7 +464,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.63-200.fc43.x86_64
+kmod-v4l2loopback-6.12.65-200.fc43.x86_64
 kpartx
 krb5-devel
 krb5-libs
