@@ -147,8 +147,8 @@ in
             src = pkgs.fetchFromGitHub {
               owner = "jorgebucaran";
               repo = "fisher";
-              rev = "4.4.5";
-              sha256 = "sha256-VC8LMjwIvF6oG8ZVtFQvo2mGdyAzQyluAGBoK8N2/QM=";
+              rev = "4.4.6";
+              sha256 = "sha256-+MtmcCSRREx8BgSxFrJu5VJ/na/OoAHduyCy3fqaw9M=";
             };
           }
         ];
