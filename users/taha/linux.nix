@@ -138,6 +138,7 @@ in
     preferred = {
       bar = "waybar";
       lock-app = "swaylock";
+      mediaplayer = "rmpc";
       menu = "vicinae";
       notifier = "swaync";
       terminal = "foot";

@@ -281,7 +281,7 @@ in
               tooltip-format = "{artist} - {album} - {title}";
               on-click = "${mpc} toggle";
               on-click-middle = "${mpc} stop";
-              on-click-right = "${home}/.config/${wm}/scripts.d/ncmpcpp.sh";
+              on-click-right = "${home}/.config/${wm}/scripts.d/media.sh";
               on-scroll-up = "${mpc} volume +5";
               on-scroll-down = "${mpc} volume -5";
             };

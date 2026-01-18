@@ -46,6 +46,14 @@ in
                     with pkgs;
                     {
                       inherit imagemagick;
+                      preferred_terminal = cfg.preferred.terminal;
+                      player =
+                        if cfg.preferred.mediaplayer == "ncmpcpp" then
+                          lib.getExe ncmpcpp
+                        else if cfg.preferred.mediaplayer == "rmpc" then
+                          lib.getExe rmpc
+                        else
+                          throw "No preferred music player selected";
                       alacritty = lib.getExe alacritty;
                       bash = lib.getExe bash;
                       foot = lib.getExe' foot "footclient";

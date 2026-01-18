@@ -33,7 +33,7 @@ in
       { app_id = "1Password"; }
       {
         app_id = term;
-        title = "ncmpcpp";
+        title = cfg.preferred.mediaplayer;
       }
       {
         app_id = term;

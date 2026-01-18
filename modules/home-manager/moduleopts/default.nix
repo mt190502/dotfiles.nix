@@ -21,6 +21,15 @@
         default = "none";
         description = "Preferred lock application";
       };
+      mediaplayer = lib.mkOption {
+        type = lib.types.enum [
+          "ncmpcpp"
+          "rmpc"
+          "none"
+        ];
+        default = "none";
+        description = "Preferred media player";
+      };
       menu = lib.mkOption {
         type = lib.types.enum [
           "wofi"
