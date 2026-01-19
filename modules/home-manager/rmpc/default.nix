@@ -19,7 +19,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.cava.enable = true;
     programs.rmpc = {
       enable = true;
       config = ''

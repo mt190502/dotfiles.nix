@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  system,
   ...
 }:
 
@@ -26,7 +27,7 @@ in
       description = "Yazi configuration for Home Manager.";
     };
   };
-  config = lib.mkIf cfg.yazi.enable {
+  config = lib.mkIf (cfg.yazi.enable && lib.hasSuffix "linux" system) {
     programs.yazi = {
       enable = true;
       enableFishIntegration = true;
