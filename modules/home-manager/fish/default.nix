@@ -22,17 +22,13 @@ in
   config = lib.mkIf cfg.fish.enable {
     programs.fish =
       let
-        inherit (pkgs) ansible grc;
+        inherit (pkgs) grc;
         cht_sh = lib.getExe pkgs.cht-sh;
         direnv = lib.getExe pkgs.direnv;
         fastfetch = lib.getExe pkgs.fastfetch;
         gh = lib.getExe pkgs.gh;
         git = lib.getExe pkgs.git;
-        helm = lib.getExe pkgs.kubernetes-helm;
         hugo = lib.getExe pkgs.hugo;
-        kubectl = lib.getExe pkgs.kubectl;
-        kubecolor = lib.getExe pkgs.kubecolor;
-        kubetail = lib.getExe pkgs.kubetail;
         lsd = lib.getExe pkgs.lsd;
         neovide = lib.getExe pkgs.neovide;
         telnet = lib.getExe' pkgs.inetutils "telnet";
@@ -43,60 +39,7 @@ in
         enable = true;
         functions = {
           cd = "builtin cd $argv; ${lsd}";
-          acx = {
-            wraps = "aws configure list-profiles";
-            body = ''
-              if test (count $argv) -eq 0
-                aws configure list-profiles
-                return 1
-              end
-              export AWS_PROFILE=$argv
-            '';
-          };
-          k = {
-            wraps = "kubectl";
-            body = "${kubecolor} $argv";
-          };
-          kcx = {
-            wraps = "kubectl config use-context";
-            body = "${kubecolor} config use-context $argv";
-          };
           mapscii = "${telnet} mapscii.me";
-          mergekconf = ''
-            function mergekconf -d "Merge multiple kubeconfig files into one"
-              set -l kube_dir "$HOME/.kube"
-              if not test -d "$kube_dir"
-                  echo "Directory not found: $kube_dir"
-                  return 1
-              end
-
-              set -l files_to_merge (find "$kube_dir" -type f -not -name "config" -not -path "*/cache/*")
-              set -l all_configs "$kube_dir/config"
-
-              for file in $files_to_merge
-                  set all_configs "$all_configs:$file"
-              end
-              set -gx KUBECONFIG "$all_configs"
-
-              echo "Merging kubeconfigs into $kube_dir/config"
-              if ${kubectl} config view --flatten > "$kube_dir/config.tmp"
-                  mv "$kube_dir/config" $HOME/.oldkubeconf-$(date +%Y-%m-%d_%H-%M-%S)
-                  mv "$kube_dir/config.tmp" "$kube_dir/config"
-                  echo "Successfully merged kubeconfigs."
-              else
-                  echo "Failed to merge kubeconfigs."
-                  rm -f "$kube_dir/config.tmp"
-                  return 1
-              end
-
-              for file in $files_to_merge
-                if [ ! -z "$(cat $file | grep apiVersion)" ]
-                   rm -f "$file"
-                end
-              end
-              set -gx KUBECONFIG "$kube_dir/config"
-            end
-          '';
           nvim2 = "${neovide} $argv &; disown";
           shell = "nix shell nixpkgs#$argv";
           neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
@@ -153,11 +96,6 @@ in
           }
         ];
         shellAliases = {
-          #~ Containers
-          a = lib.getExe' ansible "ansible";
-          ap = "clear; ${lib.getExe' ansible "ansible-playbook"}";
-          ktl = kubetail;
-
           #~ System
           cp = "cp -i";
           crontab = "crontab -i";
@@ -206,9 +144,7 @@ in
           #################################################
           #~ common ~#
           ${direnv} export fish | source
-          ${helm} completion fish | source
           ${hugo} completion fish | source
-          ${kubectl} completion fish | source
 
           #~ grc ~#
           for cmd in g++ gas head make ld ping6 tail traceroute6 $( ls ${grc}/share/grc/ | grep -vE 'jobs|systemctl' )

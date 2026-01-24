@@ -26,26 +26,14 @@ in
         GOPATH = "${config.home.homeDirectory}/.go";
       };
       packages =
-        let
-          gke-plugins = pkgs.google-cloud-sdk.withExtraComponents (
-            with pkgs.google-cloud-sdk.components;
-            [
-              gke-gcloud-auth-plugin
-            ]
-
-          );
-        in
         (with pkgs-unstable; [
           bun
-          dive
           postgresql_18
         ])
         ++ (
           with pkgs;
           [
             air
-            ansible
-            awscli2
             binwalk
             cargo
             delta
@@ -55,7 +43,6 @@ in
             gef
             gnumake
             go
-            gke-plugins
             gopls
             gping
             hugo
@@ -64,26 +51,15 @@ in
             iperf
             jq
             just
-            k0sctl
-            krew
-            kubectl
-            kubectl-cnpg
-            kubectl-df-pv
-            kubectl-explore
-            kubectl-neat
-            kubernetes-helm
-            kubetail
             llvm
             llvmPackages.clang
             llvmPackages.clang-tools
-            minikube
             netcat
             nixd
             nixfmt-rfc-style
             nmap
             nodejs
             onefetch
-            opentofu
             pkg-config
             pnpm
             shellcheck
