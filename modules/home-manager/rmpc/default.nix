@@ -276,11 +276,7 @@ in
                       ))),
                     ],
                   ),
-                  size: "1",
-                ),
-                (
-                  pane: Pane(Tabs),
-                  size: "3",
+                  size: "2",
                 ),
                 (
                   pane: Pane(TabContent),
