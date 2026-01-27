@@ -46,6 +46,7 @@ in
         minikube
         opentofu
         terraform
+        terragrunt
       ]);
     programs.fish = {
       functions = {
