@@ -17,9 +17,34 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs-unstable; [
-      cursor-cli
-    ];
+    home = {
+      file = {
+        ".config/opencode/plugin/terminal-bell.ts".text = ''
+          import type { Plugin } from "@opencode-ai/plugin"
+
+          export const TerminalBell: Plugin = async ({ project, client, $, directory, worktree }) => {
+            return {
+              event: async ({ event }) => {
+                if (event.type === "session.idle") {
+                  await Bun.write(Bun.stdout, "\x07")
+                }
+              }
+            }
+          }
+        '';
+
+        ".opencode/antigravity.json".text = builtins.toJSON {
+          quota_fallback = true;
+          pid_offset_enabled = true;
+          account_selection_strategy = "hybrid";
+          quiet_mode = true;
+        };
+      };
+      packages = with pkgs-unstable; [
+        cursor-cli
+      ];
+    };
+
     programs.opencode = {
       enable = true;
       enableMcpIntegration = true;
@@ -27,12 +52,20 @@ in
       settings = {
         # theme = "flexoki";
         plugin = [
-          "opencode-antigravity-auth@1.2.7"
+          "opencode-antigravity-auth@latest"
         ];
         mcp = {
           context7 = {
             type = "remote";
             url = "https://mcp.context7.com/mcp";
+          };
+          gh_grep = {
+            type = "remote";
+            url = "https://mcp.grep.app";
+          };
+          exa = {
+            type = "remote";
+            url = "https://mcp.exa.ai/mcp";
           };
         };
         permission = {
