@@ -91,10 +91,10 @@ in
               "x":       ToggleRandom,
               "z":       ToggleRepeat,
               ${lib.optionalString (lib.hasSuffix "linux" system) ''
-              ",":       ExternalCommand(
-                command:     ["${config.xdg.configHome}/rmpc/get_and_copy_purl_from_current_song.sh"],
-                description: "Get and copy PURL from current song",
-              ),
+                ",":       ExternalCommand(
+                  command:     ["${config.xdg.configHome}/rmpc/get_and_copy_purl_from_current_song.sh"],
+                  description: "Get and copy PURL from current song",
+                ),
               ''}
             },
             navigation: {
