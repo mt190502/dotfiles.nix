@@ -107,6 +107,8 @@ in
               "<Right>":    Right,
               "<Space>":    Select,
               "<Up>":       Up,
+              "n":          NextResult,
+              "N":          PreviousResult,
               "/":          EnterSearch,
             },
             queue: {
