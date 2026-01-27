@@ -56,7 +56,7 @@ in
               aws configure list-profiles
               return 1
             end
-            export AWS_PROFILE=$argv
+            set -gx AWS_PROFILE $argv[1]
           '';
         };
         k = {
@@ -102,6 +102,16 @@ in
             set -gx KUBECONFIG "$kube_dir/config"
           end
         '';
+        scx = {
+          wraps = "ls $HOME/.sops";
+          body = ''
+            if test (count $argv) -eq 0
+              ls $HOME/.sops
+              return 1
+            end
+            set -gx SOPS_AGE_KEY_FILE "$HOME/.sops/$argv[1]"
+          '';
+        };
       };
       shellAliases = {
         #~ Containers
