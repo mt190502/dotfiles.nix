@@ -26,7 +26,7 @@ in
         --convert-thumbnails jpg
         --embed-metadata
         --embed-thumbnail
-        --exec ${home}/yt-dlp/music/modify-and-trim-nonstandard-characters.sh
+        --exec ${home}/.config/yt-dlp/music/modify-and-trim-nonstandard-characters.sh
         --no-mtime
         --ppa "ffmpeg: -c:v mjpeg -vf crop=\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\""
         --parse-metadata "playlist_index:%(track_number)s"
