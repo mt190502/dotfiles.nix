@@ -44,7 +44,6 @@ in
         kubernetes-helm
         kubetail
         minikube
-        
         skopeo
         terraform
         terragrunt
