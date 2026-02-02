@@ -44,6 +44,8 @@ in
         kubernetes-helm
         kubetail
         minikube
+        opentofu
+        tofu-ls
         skopeo
         terraform
         terragrunt
