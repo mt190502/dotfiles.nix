@@ -9,7 +9,7 @@
 let
   cfg = config.moduleopts.home-manager;
   wofi = lib.getExe pkgs.wofi;
-  vicinae = lib.getExe pkgs.vicinae;
+  vicinae = lib.getExe config.programs.vicinae.package;
 in
 {
   config = lib.mkIf (cfg.preferred.wm == "sway" && lib.hasSuffix "linux" system) {
