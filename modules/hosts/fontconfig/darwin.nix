@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.moduleopts.nixos.fontconfig;
+  cfg = config.moduleopts.darwin.fontconfig;
 in
 {
   config = lib.mkIf cfg.enable {
