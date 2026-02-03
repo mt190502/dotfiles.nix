@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  cfg = config.moduleopts.nixos.fontconfig;
+  cfg = config.moduleopts.nixos.docker;
 in
 {
   config = lib.mkIf cfg.enable {
