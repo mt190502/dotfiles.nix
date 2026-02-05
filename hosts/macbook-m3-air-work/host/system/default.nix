@@ -21,6 +21,7 @@ in
     ];
     casks = [
       "clickup"
+      "firefox"
       "microsoft-teams"
       "slack"
     ];
