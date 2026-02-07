@@ -9,6 +9,87 @@
 
 let
   cfg = config.moduleopts.home-manager;
+  settings = ''
+    {
+       "theme": {
+          "dark": {
+             "name": "stylix",
+             "icon_theme": "Flat-Remix-Blue-Dark"
+          }
+       },
+       "favorites": [
+          "applications:org.kde.dolphin",
+          "applications:org.equicord.equibop",
+          "applications:io.github.ungoogled_software.ungoogled_chromium",
+          "applications:io.gitlab.librewolf-community",
+          "applications:com.valvesoftware.Steam",
+          "applications:md.obsidian.Obsidian",
+          "applications:com.github.tchx84.Flatseal",
+          "applications:com.stremio.Stremio",
+          "applications:org.gnome.Calculator",
+          "applications:org.signal.Signal",
+          "applications:org.gnome.TextEditor"
+       ],
+       "providers": {
+          "@abielzulio/chatgpt": {
+             "preferences": {
+                "apiEndpoint": "https://litellm.core.xeome.dev/v1",
+                "useApiEndpoint": true
+             }
+          },
+          "@khasbilegt/1password": {
+             "preferences": {
+                "cliPath": "/usr/local/bin/op",
+                "zshPath": "/usr/sbin/fish"
+             }
+          },
+          "@leiserfg/ssh-0": {
+             "preferences": {
+                "terminal": "alacritty"
+             }
+          },
+          "@samlinville/tailscale": {
+             "preferences": {
+                "tailscalePath": "/usr/sbin/tailscale"
+             }
+          },
+          "clipboard": {
+             "preferences": {
+                "encryption": false,
+                "monitoring": true
+             }
+          },
+          "core": {
+             "entrypoints": {
+                "documentation": {
+                   "enabled": false
+                },
+                "oauth-token-store": {
+                   "enabled": false
+                },
+                "open-config-file": {
+                   "enabled": false
+                },
+                "open-default-config": {
+                   "enabled": false
+                },
+                "report-bug": {
+                   "enabled": false
+                },
+                "sponsor": {
+                   "enabled": false
+                }
+             }
+          },
+          "manage-shortcuts": {
+             "enabled": false
+          },
+          "power": {
+             "enabled": false
+          }
+       }
+    }
+  '';
 
   rayCli = pkgs.fetchurl {
     url = "https://cli.raycast.com/1.86.0-alpha.65/linux/ray"; #~ https://cli.raycast.com/latest_version.txt
@@ -141,86 +222,12 @@ in
           };
       };
     };
-    xdg.configFile."vicinae/settings.json".text = ''
-      {
-         "theme": {
-            "dark": {
-               "name": "stylix",
-               "icon_theme": "Flat-Remix-Blue-Dark"
-            }
-         },
-         "favorites": [
-            "applications:org.kde.dolphin",
-            "applications:org.equicord.equibop",
-            "applications:io.github.ungoogled_software.ungoogled_chromium",
-            "applications:io.gitlab.librewolf-community",
-            "applications:com.valvesoftware.Steam",
-            "applications:md.obsidian.Obsidian",
-            "applications:com.github.tchx84.Flatseal",
-            "applications:com.stremio.Stremio",
-            "applications:org.gnome.Calculator",
-            "applications:org.signal.Signal",
-            "applications:org.gnome.TextEditor"
-         ],
-         "providers": {
-            "@abielzulio/chatgpt": {
-               "preferences": {
-                  "apiEndpoint": "https://litellm.core.xeome.dev/v1",
-                  "useApiEndpoint": true
-               }
-            },
-            "@khasbilegt/1password": {
-               "preferences": {
-                  "cliPath": "/usr/local/bin/op",
-                  "zshPath": "/usr/sbin/fish"
-               }
-            },
-            "@leiserfg/ssh-0": {
-               "preferences": {
-                  "terminal": "alacritty"
-               }
-            },
-            "@samlinville/tailscale": {
-               "preferences": {
-                  "tailscalePath": "/usr/sbin/tailscale"
-               }
-            },
-            "clipboard": {
-               "preferences": {
-                  "encryption": false,
-                  "monitoring": true
-               }
-            },
-            "core": {
-               "entrypoints": {
-                  "documentation": {
-                     "enabled": false
-                  },
-                  "oauth-token-store": {
-                     "enabled": false
-                  },
-                  "open-config-file": {
-                     "enabled": false
-                  },
-                  "open-default-config": {
-                     "enabled": false
-                  },
-                  "report-bug": {
-                     "enabled": false
-                  },
-                  "sponsor": {
-                     "enabled": false
-                  }
-               }
-            },
-            "manage-shortcuts": {
-               "enabled": false
-            },
-            "power": {
-               "enabled": false
-            }
-         }
-      }
+    home.activation.vicinaeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        target="${config.xdg.configHome}/vicinae/settings.json"
+        [ ! -e "$target" ] && mkdir -p "$(dirname "$target")"
+        cat >"$target" <<'EOF'
+      ${settings}
+      EOF
     '';
   };
 }
