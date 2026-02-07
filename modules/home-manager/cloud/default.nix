@@ -28,6 +28,7 @@ in
     home.packages =
       (with pkgs-unstable; [
         dive
+        lefthook
       ])
       ++ (with pkgs; [
         ansible
