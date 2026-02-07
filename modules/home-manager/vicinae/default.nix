@@ -11,7 +11,7 @@ let
   cfg = config.moduleopts.home-manager;
 
   rayCli = pkgs.fetchurl {
-    url = "https://cli.raycast.com/1.86.0-alpha.65/linux/ray";
+    url = "https://cli.raycast.com/1.86.0-alpha.65/linux/ray"; #~ https://cli.raycast.com/latest_version.txt
     sha256 = "sha256-UgDA2hIH7HwKl3j4UEGIlvh6eE+IWUlSML0wloHFPQw=";
   };
 
@@ -25,8 +25,8 @@ let
       raycastRepo = fetchFromGitHub {
         owner = "raycast";
         repo = "extensions";
-        rev = "c37abc83a33a8179d8276723d14c99710a25c027";
-        sha256 = "sha256-4/xG2ydfMuuM/cipCdpohfMl4bpE39FPpiydRQ3Ts10=";
+        rev = "0618837c0055603bac192ffdc5410e2c3eaff84c";
+        sha256 = "sha256-mDgQmymbZ+5CWNW4koOzV23S05rXPxInA3+buw2rfsg=";
         sparseCheckout = map (name: "/extensions/${name}") names;
       };
     in
@@ -187,7 +187,7 @@ in
             },
             "clipboard": {
                "preferences": {
-                  "encryption": true,
+                  "encryption": false,
                   "monitoring": true
                }
             },
