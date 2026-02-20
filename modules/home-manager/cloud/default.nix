@@ -46,7 +46,6 @@ in
         kubetail
         minikube
         opentofu
-        pacemaker
         packer
         tofu-ls
         skopeo
