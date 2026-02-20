@@ -27,8 +27,10 @@ in
   config = lib.mkIf cfg.enable {
     home.packages =
       (with pkgs-unstable; [
+        cilium-cli
         dive
         lefthook
+        talosctl
       ])
       ++ (with pkgs; [
         ansible
@@ -71,15 +73,6 @@ in
         kcx = {
           wraps = "kubectl config use-context";
           body = "kubecolor config use-context $argv";
-        };
-        kgds = {
-          wraps = "kubectl get secret -n";
-          body = ''
-            if test (count $argv) -eq 0
-              return 1
-            end
-            kubecolor get secret -n $argv[1] $argv[2..-1] -o json | ${lib.getExe pkgs.jq} '.data | map_values(@base64d) | to_entries[]'
-          '';
         };
         mergekconf = ''
           function mergekconf -d "Merge multiple kubeconfig files into one"
