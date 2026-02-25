@@ -20,6 +20,7 @@ in
         "anki"
         "caffeine"
         "discord"
+        "finetune"
         "freelens"
         "gcloud-cli"
         "iina"
