@@ -63,7 +63,10 @@ in
               aws configure list-profiles
               return 1
             end
-            set -gx AWS_PROFILE $argv[1]
+            set -Ux AWS_PROFILE $argv[1]
+            if [ "$argv[2]" = "saml" ]
+              saml2aws login -a "$AWS_PROFILE" -p "$AWS_PROFILE"
+            end
           '';
         };
         k = {
@@ -116,7 +119,7 @@ in
               ls $HOME/.sops
               return 1
             end
-            set -gx SOPS_AGE_KEY_FILE "$HOME/.sops/$argv[1]"
+            set -Ux SOPS_AGE_KEY_FILE "$HOME/.sops/$argv[1]"
           '';
         };
       };
