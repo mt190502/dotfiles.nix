@@ -30,6 +30,13 @@ let
           "applications:org.signal.Signal",
           "applications:org.gnome.TextEditor"
        ],
+       "launcher_window": {
+         "layer_shell": {
+           "enabled": true,
+           "keyboard_interactivity": "exclusive",
+           "layer": "top"
+         }
+       },
        "providers": {
           "@abielzulio/chatgpt": {
              "preferences": {
@@ -152,8 +159,6 @@ in
           size = 10.5;
         };
         keybinding = "default";
-        keybinds = {
-        };
         popToRootOnClose = true;
         rootSearch = {
           searchFiles = false;
