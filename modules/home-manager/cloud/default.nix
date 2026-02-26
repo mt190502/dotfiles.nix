@@ -35,6 +35,7 @@ in
       ++ (with pkgs; [
         ansible
         awscli2
+        eks-node-viewer
         gke-plugins
         k0sctl
         krew
@@ -76,6 +77,10 @@ in
         kcx = {
           wraps = "kubectl config use-context";
           body = "kubecolor config use-context $argv";
+        };
+        kgds = {
+          wraps = "kubectl get secrets -n";
+          body = "kubectl get secrets -n $argv[1] $argv[2..-1] -o json | ${lib.getExe pkgs.jq} '.data | map_values(@base64d)'";
         };
         mergekconf = ''
           function mergekconf -d "Merge multiple kubeconfig files into one"
