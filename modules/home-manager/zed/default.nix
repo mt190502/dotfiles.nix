@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs-unstable, ... }:
 
 let
   cfg = config.moduleopts.home-manager.zed;
@@ -14,6 +14,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.zed-editor = {
       enable = true;
+      package = pkgs-unstable.zed-editor;
       userSettings = {
         agent = {
           default_model = {
