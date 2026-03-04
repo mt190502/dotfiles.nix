@@ -53,6 +53,7 @@ in
         # theme = "flexoki";
         plugin = [
           "opencode-antigravity-auth@latest"
+          "@slkiser/opencode-quota"
         ];
         mcp = {
           context7 = {
