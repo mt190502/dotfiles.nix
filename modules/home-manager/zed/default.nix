@@ -69,7 +69,7 @@ in
               api_url = "https://litellm.core.xeome.dev/v1";
               available_models = [
                 {
-                  name = "taha-claude-sonnet-4.5";
+                  name = "taha-claude-sonnet-4.6";
                   max_tokens = 1000000;
                   max_output_tokens = 64000;
                   max_completion_tokens = 200000;
@@ -81,7 +81,7 @@ in
                   };
                 }
                 {
-                  name = "taha-gemini-2.5-pro";
+                  name = "taha-gemini-3.1-pro";
                   max_tokens = 1000000;
                   max_output_tokens = 65535;
                   max_completion_tokens = 200000;
@@ -105,7 +105,7 @@ in
                   };
                 }
                 {
-                  name = "taha-gpt-5.1";
+                  name = "taha-gpt-5.2";
                   max_tokens = 400000;
                   max_output_tokens = 128000;
                   max_completion_tokens = 20000;
@@ -117,7 +117,7 @@ in
                   };
                 }
                 {
-                  name = "taha-gpt-5.1-codex";
+                  name = "taha-gpt-5.2-codex";
                   max_tokens = 400000;
                   max_output_tokens = 128000;
                   max_completion_tokens = 20000;
