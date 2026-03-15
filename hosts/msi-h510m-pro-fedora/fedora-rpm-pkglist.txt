@@ -474,7 +474,7 @@ kimageannotator-qt6
 kmod
 kmod-libs
 kmodtool
-kmod-v4l2loopback-6.12.68-200.fc43.x86_64
+kmod-v4l2loopback-6.12.76-200.fc43.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -1511,9 +1511,9 @@ steam-devices
 sudo
 supermin
 svt-av1-libs
+sway
 swaybg
-swayfx
-swayfx-config-upstream
+sway-config-upstream
 swaylock
 SwayNotificationCenter
 sway-wallpapers
