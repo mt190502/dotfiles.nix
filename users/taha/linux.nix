@@ -45,6 +45,7 @@ in
 
       #~ custom ~#
       inputs.self.packages."${arch}".recidia-audio-visualizer
+      inputs.self.packages."${arch}".water
       inputs.self.packages."${arch}".zmem
       inputs.apple-fonts.packages.${arch}.sf-pro-nerd
 
