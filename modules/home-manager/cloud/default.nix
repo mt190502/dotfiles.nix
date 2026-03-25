@@ -163,6 +163,7 @@ in
       };
       settings = {
         k9s = {
+          defaultView = "pulses";
           liveViewAutoRefresh = false;
           screenDumpDir = "${config.home.homeDirectory}/.local/state/k9s/screen-dumps";
           refreshRate = 2;
