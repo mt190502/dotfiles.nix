@@ -349,6 +349,7 @@ gstreamer1-plugins-ugly-free
 gtk2
 gtk3
 gtk4
+gtk4-layer-shell
 gtkd
 gtk-immodules-imsettings
 gtk-layer-shell
