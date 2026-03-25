@@ -148,10 +148,12 @@ in
           background: ${background}; 
           color: ${text};
           padding: 0;
-          border: 5px solid ${border}; 
-          border-top: 0;
         }
-
+        
+        .notification-alt-actions {
+          padding: 0;
+        }
+        
         .notification {
           padding: 0;
           background: ${border};
@@ -159,11 +161,11 @@ in
 
         .notification-content {
           background: ${background};
-          border: 2px solid ${border};
+          border: 5px solid ${background};
         }
 
-        .notification-default-action {
-          padding: 2px;
+        .notification-group {
+          background: ${background};
         }
 
         animatedlistitem {
