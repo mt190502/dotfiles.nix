@@ -74,6 +74,10 @@ in
           wraps = "kubectl";
           body = "kubecolor $argv";
         };
+        k9s = {
+          wraps = "k9s";
+          body = "${lib.getExe config.programs.k9s.package} -n all -c pulse $argv";
+        };
         kcx = {
           wraps = "kubectl config use-context";
           body = "kubecolor config use-context $argv";
@@ -163,7 +167,6 @@ in
       };
       settings = {
         k9s = {
-          defaultView = "pulses";
           liveViewAutoRefresh = false;
           screenDumpDir = "${config.home.homeDirectory}/.local/state/k9s/screen-dumps";
           refreshRate = 2;
