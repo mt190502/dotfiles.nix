@@ -20,11 +20,16 @@ in
     };
   };
   config = lib.mkIf cfg.fish.enable {
-    programs.fish =
+    programs = {
+      direnv = {
+        enable = true;
+        mise.enable = true;
+        nix-direnv.enable = true;
+      };
+      fish =
       let
         inherit (pkgs) grc;
         cht_sh = lib.getExe pkgs.cht-sh;
-        direnv = lib.getExe pkgs.direnv;
         fastfetch = lib.getExe pkgs.fastfetch;
         gh = lib.getExe pkgs.gh;
         git = lib.getExe pkgs.git;
@@ -143,7 +148,6 @@ in
           #### Applications
           #################################################
           #~ common ~#
-          ${direnv} export fish | source
           ${hugo} completion fish | source
 
           #~ grc ~#
@@ -166,5 +170,6 @@ in
           end
         '';
       };
+    };
   };
 }
