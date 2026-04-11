@@ -18,8 +18,8 @@ in
       userSettings = {
         agent = {
           default_model = {
-            provider = "LiteLLM";
-            model = "taha-claude-sonnet-4.5";
+            provider = "copilot";
+            model = "gpt-5.3-codex";
           };
           model_parameters = [ ];
         };
@@ -62,75 +62,6 @@ in
           show_other_hints = true;
           show_background = false;
           enabled = true;
-        };
-        language_models = {
-          openai_compatible = {
-            LiteLLM = {
-              api_url = "https://litellm.core.xeome.dev/v1";
-              available_models = [
-                {
-                  name = "taha-claude-sonnet-4.6";
-                  max_tokens = 1000000;
-                  max_output_tokens = 64000;
-                  max_completion_tokens = 200000;
-                  capabilities = {
-                    tools = true;
-                    images = true;
-                    parallel_tool_calls = true;
-                    prompt_cache_key = true;
-                  };
-                }
-                {
-                  name = "taha-gemini-3.1-pro";
-                  max_tokens = 1000000;
-                  max_output_tokens = 65535;
-                  max_completion_tokens = 200000;
-                  capabilities = {
-                    tools = true;
-                    images = true;
-                    parallel_tool_calls = true;
-                    prompt_cache_key = true;
-                  };
-                }
-                {
-                  name = "taha-gpt-4.1";
-                  max_tokens = 1051200;
-                  max_output_tokens = 32768;
-                  max_completion_tokens = 210240;
-                  capabilities = {
-                    tools = true;
-                    images = true;
-                    parallel_tool_calls = true;
-                    prompt_cache_key = true;
-                  };
-                }
-                {
-                  name = "taha-gpt-5.2";
-                  max_tokens = 400000;
-                  max_output_tokens = 128000;
-                  max_completion_tokens = 20000;
-                  capabilities = {
-                    tools = true;
-                    images = true;
-                    parallel_tool_calls = true;
-                    prompt_cache_key = true;
-                  };
-                }
-                {
-                  name = "taha-gpt-5.2-codex";
-                  max_tokens = 400000;
-                  max_output_tokens = 128000;
-                  max_completion_tokens = 20000;
-                  capabilities = {
-                    tools = true;
-                    images = true;
-                    parallel_tool_calls = true;
-                    prompt_cache_key = true;
-                  };
-                }
-              ];
-            };
-          };
         };
         languages = {
           TypeScript = {

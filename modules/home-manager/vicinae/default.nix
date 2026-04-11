@@ -38,12 +38,6 @@ let
          }
        },
        "providers": {
-          "@abielzulio/chatgpt": {
-             "preferences": {
-                "apiEndpoint": "https://litellm.core.xeome.dev/v1",
-                "useApiEndpoint": true
-             }
-          },
           "@khasbilegt/1password": {
              "preferences": {
                 "cliPath": "/usr/local/bin/op",
