@@ -38,10 +38,6 @@
         "kvm-amd"
         "v4l2loopback"
       ];
-      luks.devices = {
-        "cryptroot".device = "/dev/disk/by-uuid/35d05b4f-3ffa-46c9-a8b9-ad578e80449a";
-        "crypthome".device = "/dev/disk/by-uuid/e07c5ce6-810c-43a2-a97d-c0eb4994f7dc";
-      };
     };
     kernelPackages = pkgs.linuxPackages_6_12;
     kernelParams = [
@@ -60,7 +56,6 @@
       };
     };
     supportedFilesystems = [
-      "btrfs"
       "ext4"
       "vfat"
     ];

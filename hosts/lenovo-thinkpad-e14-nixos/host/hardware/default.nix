@@ -4,6 +4,7 @@
       enable = true;
       powerOnBoot = true;
     };
+    enableRedistributableFirmware = true;
     graphics = {
       enable = true;
       enable32Bit = true;

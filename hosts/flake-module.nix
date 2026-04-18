@@ -81,6 +81,7 @@ in
             flakeName = cfg.name;
           };
           modules = [
+            inputs.disko.nixosModules.disko
             inputs.home-manager.nixosModules.home-manager
             (inputs.self + "/users/taha")
             ./${cfg.name}

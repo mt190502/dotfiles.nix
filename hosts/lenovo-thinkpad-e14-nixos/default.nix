@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     inputs.self.nixosModules.mt190502
+    ./disko.nix
     ./host
     ./home
   ];
@@ -13,5 +14,5 @@
     # tailscale.enable = false;
     tlp.enable = true;
   };
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
