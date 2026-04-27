@@ -12,7 +12,7 @@ let
   cfg = config.services.mpdris2-rs;
   package = rustPlatform.buildRustPackage rec {
     pname = "mpdris2-rs";
-    version = "v1.0.2"; #~ TODO: use renovate
+    version = "v1.0.2";
     src = fetchFromGitHub {
       owner = "szclsya";
       repo = pname;

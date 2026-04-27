@@ -12,6 +12,34 @@
   "branchConcurrentLimit": 10,
   "rebaseWhen": "conflicted",
   "labels": ["dependencies"],
-  "enabledManagers": ["custom.regex", "nix"],
-  "pinDigests": false
+  "nix": {
+    "enabled": true
+  },
+  "pinDigests": false,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["\\.nix$"],
+      "matchStrings": [
+        "pname = \"(?<packageName>[^\"]+)\";\\s*version = \"(?<currentValue>[^\"]+)\";\\s*src = fetchFromGitHub \\{\\s*owner = \"(?<depName>[^\"]+)\";\\s*repo = pname;\\s*rev = version"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["\\.nix$"],
+      "matchStrings": [
+        "fetchFromGitHub \\{[^}]*owner = \"(?<depName>[^\"]+)\";[^}]*repo = pname;[^}]*rev = \"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["\\.nix$"],
+      "matchStrings": [
+        "fetchFromGitHub \\{[^}]*owner = \"(?<depName>[^\"]+)\";[^}]*repo = \"(?<packageName>[^\"]+)\";[^}]*rev = \"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-tags"
+    }
+  ]
 }

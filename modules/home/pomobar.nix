@@ -16,7 +16,7 @@ let
     src = fetchFromGitHub {
       owner = "mt190502";
       repo = pname;
-      rev = "8888b17"; #~ TODO: use renovate
+      rev = "8888b17";
       sha256 = "sha256-efsYJx4UwkE0rkhScxgidlD+rMh+PgIb07UHj+Haapo=";
     };
     nativeBuildInputs = with pkgs; [
