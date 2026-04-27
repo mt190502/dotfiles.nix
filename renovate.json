@@ -18,35 +18,36 @@
   "pinDigests": false,
   "packageRules": [
     {
-      "matchFileNames": ["modules/home/fish.nix"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher"],
       "groupName": "fish plugins"
     },
     {
       "matchDatasources": ["github-tags"],
-      "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher", "szclsya/mpdris2-rs"],
+      "matchPackageNames": ["szclsya/mpdris2-rs"],
       "versioning": "semver-coerced"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/fish.nix"],
+      "managerFilePatterns": ["\\.nix$"],
       "matchStrings": [
-        "src = pkgs\\.fetchFromGitHub \\{\\s+owner = \"(?<depName>[^\"]+)\";\\s+repo = \"(?<packageName>[^\"]+)\";\\s+rev = \"(?<currentValue>[^\"]+)\""
+        "src\\s*=\\s*pkgs\\.fetchFromGitHub\\s*\\{\\s+owner\\s*=\\s*\"(?<depName>[^\"]+)\";\\s+repo\\s*=\\s*\"(?<packageName>[^\"]+)\";\\s+rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/mpdris2-rs.nix"],
+      "managerFilePatterns": ["\\.nix$"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
-        "pname = \"(?<packageName>[^\"]+)\";",
-        "version = \"(?<currentValue>[^\"]+)\";",
-        "owner = \"(?<depName>[^\"]+)\";",
-        "repo = pname;",
-        "rev = version;"
+        "pname\\s*=\\s*\"(?<packageName>[^\"]+)\";",
+        "version\\s*=\\s*\"(?<currentValue>[^\"]+)\";",
+        "owner\\s*=\\s*\"(?<depName>[^\"]+)\";",
+        "repo\\s*=\\s*pname;",
+        "rev\\s*=\\s*version;"
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
