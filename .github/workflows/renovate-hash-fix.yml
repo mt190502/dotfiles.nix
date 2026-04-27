@@ -58,7 +58,7 @@ jobs:
               new_sha=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1 | tail -1)
               
               if [[ -n "$new_sha" ]]; then
-                new_sha_base64=$(nix hash convert --hash-algo sha256 --to base64 "$new_sha" 2>&1 || echo "$new_sha")
+                new_sha_base64="sha256-$(nix hash convert --hash-algo sha256 --to base64 "$new_sha")"
                 
                 if [[ "$old_sha" != "$new_sha_base64" ]]; then
                   # Use awk for safe replacement
