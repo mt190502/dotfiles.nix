@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mpdris2-rs";
-  version = "v1.0.2";
+  version = "v1.1.1";
   src = fetchFromGitHub {
     owner = "szclsya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-E9H6bjmWZx35fZo/ZPvJL1w/YQ34pJ7z81YbB5fUZSU=";
+    sha256 = "sha256-oiyqK7vj41d9bsXBtenc477SOrVHRkXpFljkN8MjdQg=";
   };
-  cargoHash = "sha256-rA/za8fc2RiURaiijc49y+2QBcS6cDavZQFjVh+7Iow=";
+  cargoHash = "sha256-xdgUKU9YiaC3o1uH38ZjvQgR78B/1LqTPis4+XqinQ8=";
   meta = {
     description = "MPRIS2 client for MPD written in Rust";
     homepage = "https://github.com/szclsya/mpdris2-rs";
