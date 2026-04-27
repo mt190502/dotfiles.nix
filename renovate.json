@@ -31,7 +31,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["\\.nix$"],
+      "managerFilePatterns": ["**/*.nix"],
       "matchStrings": [
         "src\\s*=\\s*pkgs\\.fetchFromGitHub\\s*\\{\\s+owner\\s*=\\s*\"(?<depName>[^\"]+)\";\\s+repo\\s*=\\s*\"(?<packageName>[^\"]+)\";\\s+rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
@@ -40,7 +40,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["\\.nix$"],
+      "managerFilePatterns": ["**/*.nix"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
         "pname\\s*=\\s*\"(?<packageName>[^\"]+)\";",
