@@ -37,7 +37,7 @@
       "customType": "regex",
       "managerFilePatterns": ["modules/home/fish.nix"],
       "matchStrings": [
-        "fetchFromGitHub \\{\\s+owner = \"(?<depName>[^\"]+)\";\\s+repo = \"(?<packageName>[^\"]+)\";\\s+rev = \"(?<currentValue>[^\"]+)\""
+        "src = pkgs\\.fetchFromGitHub \\{\\s+owner = \"(?<depName>[^\"]+)\";\\s+repo = \"(?<packageName>[^\"]+)\";\\s+rev = \"(?<currentValue>[^\"]+)\""
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
