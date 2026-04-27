@@ -4,7 +4,7 @@
 }:
 
 let
-  discoverPackages =
+  discoverProfiles =
     dir:
     let
       entries = builtins.readDir dir;
@@ -13,9 +13,9 @@ let
         name:
         if entries.${name} == "directory" then
           let
-            pkgPath = "${dir}/${name}/default.nix";
+            profilePath = "${dir}/${name}/default.nix";
           in
-          if builtins.pathExists pkgPath then { ${name} = import pkgPath; } else { }
+          if builtins.pathExists profilePath then { ${name} = import profilePath; } else { }
         else if name == "flake-module.nix" then
           { }
         else if lib.hasSuffix ".nix" name then
@@ -26,12 +26,9 @@ let
     builtins.foldl' (acc: name: acc // (processEntry name)) { } entryNames;
 in
 {
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages = lib.filterAttrs (_: drv: pkgs.lib.meta.availableOn pkgs.stdenv.hostPlatform drv) (
-        lib.mapAttrs (_: pkg: pkgs.callPackage pkg { }) (discoverPackages ./.)
-      );
-    };
-  flake.overlays.default = final: prev: (discoverPackages ./.);
+  flake = {
+    darwinProfiles = discoverProfiles ./darwin;
+    homeProfiles = discoverProfiles ./home;
+    nixosProfiles = discoverProfiles ./nixos;
+  };
 }

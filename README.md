@@ -1,25 +1,69 @@
-# mt190502's dots
+# mt190502's Dotfiles
 
-This dotfiles is made for my personal use. I use it with Nix Package Manager, so you can use it with NixOS or Nix installed on your system.
+A modular, cross-platform Nix configuration using flake-parts. Supports NixOS, macOS (nix-darwin), and standalone Home Manager.
 
-## Configuration & Modules
+## Structure
 
-| Name                   | Description                                                            |
-| ---------------------- | ---------------------------------------------------------------------- |
-| [Assets](./assets)     | Assets for the configuration (wallpapers, etc.)                        |
-| [Hosts](./hosts)       | Configuration for hosts (laptop, desktop, etc.)                        |
-| [Modules](./modules)   | Package configurations and nixGL wrapped packages                      |
-| [Packages](./packages) | Modded & Custom packages                                               |
-| [Users](./users)       | User configurations (home-manager)                                     |
+```sh
+├── assets/                    # Wallpapers, screenshots, etc.
+├── hosts/                     # Host-specific configurations
+│   ├── <hostname>/            # Per-host config
+│   │   ├── home/              # Home-manager overrides
+│   │   ├── host/              # NixOS/Darwin system overrides
+│   │   ├── config.nix         # Host configuration (platform, modules, profiles, etc.)
+│   │   └── disko.nix          # NixOS disk configuration (if applicable)
+│   └── flake-module.nix       # Build logic (nixosConfigurations, darwinConfigurations, homeConfigurations)
+├── modules/                   # Reusable modules
+│   ├── darwin/                # Darwin modules
+│   ├── home/                  # Home-manager modules
+│   │   ├── bin.nix            # Centralized binary path definitions
+│   │   ├── preferences.nix    # User preferences (terminal, wm, menu, etc.)
+│   │   └── wrapped/           # Linux-only wrapped binaries (dolphin, pcmanfm-qt, etc.)
+│   ├── nixos/                 # NixOS modules
+│   └── flake-module.nix       # Module builder
+├── packages/                  # Custom packages (recidia, ubuntu-fonts-google, etc.)
+│   └── flake-module.nix       # Package builder
+├── profiles/                  # Configuration bundles
+│   ├── darwin/                # Darwin profiles   
+│   ├── home/                  # Home-manager profiles (ai, cloud, development, etc.)
+│   └── nixos/                 # NixOS profiles
+├── users/                     # User-level defaults
+│   └── <username>/            # User-specific base config
+│       ├── darwin.nix         # Darwin user config
+│       ├── default.nix        # Centralized user config (imported by all platforms)
+│       ├── home.nix           # Home-manager user config
+│       └── nixos.nix          # NixOS user config
+└── flake.nix                  # Flake entry point
+```
 
 ## Hosts
 
-| Name                                                             | Description                                                                     | Screenshot                                        |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [lenovo-thinkpad-e14-nixos](./hosts/lenovo-thinkpad-e14-nixos)   | Laptop running a AMD Ryzen 5 7530U, 16GB of RAM and a AMD Barcelo Graphics      | ![image](./assets/lenovo-thinkpad-e14-nixos.png)  |
-| [macbook-m3-air-work](./hosts/macbook-m3-air-work)               | MacBook Air M3 Workstation Setup with nix-darwin and home-manager               | ![image](./assets/macbook-m3-air-work.jpeg)       |
-| [msi-h510m-pro-nixos](./hosts/msi-h510m-pro-nixos)               | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-nixos.png)        |
-| [msi-h510m-pro-fedora](./hosts/msi-h510m-pro-fedora)             | Same as msi-h510m-pro-nixos but running Fedora instead of NixOS                 | ![image](./assets/msi-h510m-pro-fedora.png)       |
+| Host                                                                             | Description                                                                     | Screenshot          |
+|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------|---------------------|
+| [lenovo-thinkpad-e14-nixos-personal](./hosts/lenovo-thinkpad-e14-nixos-personal) | Laptop running a AMD Ryzen 5 7530U, 16GB of RAM and a AMD Barcelo Graphics      | ![image](./assets/lenovo-thinkpad-e14-nixos-personal.png) |
+| [macbook-m3-air-darwin-work](./hosts/macbook-m3-air-darwin-work)                 | MacBook Air M3 Workstation Setup with nix-darwin and home-manager               | ![image](./assets/macbook-m3-air-darwin-work.jpeg) |
+| [msi-h510m-pro-fedora-personal](./hosts/msi-h510m-pro-fedora-personal)           | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-fedora-personal.png) |
+
+## Architecture
+
+### Host Configuration
+
+Each host has `config.nix` defining:
+
+```nix
+{
+  stateVersion = "25.11";
+  platform = "nixos" | "darwin" | "home";
+  arch = "x86_64-linux" | "aarch64-darwin";
+  users = [ "taha" ];      # NixOS/Darwin only
+  user = "taha";           # Home only
+  modules = [ "docker" "pipewire" ... ];
+  profiles = [ "development" "sway" ... ];
+  packages = [ "recidia" ... ];
+  nixSettings = { experimental-features = [ "nix-command" "flakes" ]; };
+  extraConfig = { ... }: { };
+}
+```
 
 ## Installation
 
@@ -35,13 +79,26 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 
 - Then, set up user and system configurations
 
-  - For user configuration, change the username in the [users/](./users/) and hosts/YOUR_CONFIG/home directory
+  - For user configuration, change the username in the [users/](./users/) and `hosts/YOUR_CONFIG/home` directory
   - For system configuration, change the [hosts/](./hosts/) directory
 
-- After that, you can switch the configuration like below:
+- Then, set up disko configuration for your system (if you haven't already). Change
+the `hosts/YOUR_CONFIG/disko.nix` file according to your disk layout. After that,
+you can use the disko scripts to partition and format your disks.
 
   ```bash
-  sudo nixos-rebuild switch --flake .#msi-h510m-pro-nixos
+  sudo nix run github:nix-community/disko -- --mode disko hosts/YOUR_CONFIG/disko.nix
+  ```
+
+- After that, you can mount partitions and install NixOS on your system using the
+following command:
+
+  ```bash
+  sudo mount /dev/sdX3 /mnt                             #~ replace sdX3 with your root partition
+  sudo mkdir -p /mnt/{boot/efi,home}
+  sudo mount /dev/sdX1 /mnt/boot/efi                    #~ replace sdX1 with your EFI partition
+  sudo mount /dev/sdX2 /mnt/home                        #~ replace sdX2 with your home partition
+  sudo nixos-install --root /mnt --flake .#YOUR_CONFIG
   ```
 
 </details>
@@ -83,7 +140,7 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - After that, you can switch the configuration like below:
 
   ```bash
-  sudo darwin-rebuild switch --flake .#macbook-m3-air-work
+  sudo darwin-rebuild switch --flake .#macbook-m3-air-darwin-work
   ```
 
 </details>
@@ -119,15 +176,15 @@ This dotfiles is made for my personal use. I use it with Nix Package Manager, so
 - Switch this flake
 
     ```sh
-    home-manager switch --no-out-link --flake github:mt190502/dotfiles.nix/unstable#msi-h510m-pro-fedora
+    home-manager switch --no-out-link --flake github:mt190502/dotfiles.nix/unstable#msi-h510m-pro-fedora-personal
     ```
 
-    Note: In this example, you must change username into the [hosts/msi-h510m-pro-fedora/home/default.nix](./hosts/msi-h510m-pro-fedora/home/default.nix) file.
+    Note: In this example, you must change username into the [hosts/msi-h510m-pro-fedora-personal/home/default.nix](./hosts/msi-h510m-pro-fedora-personal/home/default.nix) file.
 
 </details>
 
-## Credits & Big Thanks
+## Credits
 
-- [Kranzes](https://github.com/Kranzes) - I basically copy pasted and edited his [config](https://github.com/Kranzes/nix-config)
-- [yomaq](https://github.com/yomaq) - For the module system [idea](https://github.com/yomaq/nix-config)
-- [usdogu](https://github.com/usdogu) - Special thanks for the inspiration and support!
+- [Kranzes](https://github.com/Kranzes) - Initial config structure
+- [yomaq](https://github.com/yomaq) - Module system inspiration
+- [usdogu](https://github.com/usdogu) - Support and inspiration

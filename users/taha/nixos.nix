@@ -7,12 +7,20 @@
   ...
 }:
 
-rec {
+{
   programs.fish.enable = true;
   users.users.taha = {
     shell = pkgs.fish;
-    home = "/Users/taha";
-    uid = 502;
+    isNormalUser = true;
+    extraGroups = [
+      "audio"
+      "kvm"
+      "libvirtd"
+      "networkmanager"
+      "qemu"
+      "video"
+      "wheel"
+    ];
   };
   home-manager = {
     useGlobalPkgs = false;
@@ -25,9 +33,9 @@ rec {
         ;
     };
     users.taha = {
-      home.homeDirectory = users.users.taha.home;
       nixpkgs.config.allowUnfree = true;
       imports = [
+        ./home.nix
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
@@ -36,11 +44,28 @@ rec {
         direnv
         fastfetch
         fish
+        flatpak
         fontconfig
+        foot
         git
+        gnome-keyring
+        gtk
+        kde-apps-wm-fix
+        kdeconnect
+        mangohud
+        mpdris2-rs
         mpv
         preferences
+        qt-apps-wm-fix
+        rmpc
+        rnnoise
         scripts
+        stylix
+        swappy
+        syncthing
+        vicinae
+        wrapped
+        yazi
         ytdlp
         zed
       ])
@@ -48,7 +73,9 @@ rec {
         ai
         cloud
         development
+        mediaplayer
         neovim
+        sway
         tmux
       ]);
     };
