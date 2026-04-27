@@ -25,11 +25,6 @@
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher", "szclsya/mpdris2-rs"],
       "versioning": "semver-coerced"
-    },
-    {
-      "matchDatasources": ["github-tags"],
-      "matchPackageNames": ["GhostNaN/recidia-audio-visualizer", "bouquet2/water", "mt190502/pomobar"],
-      "versioning": "semver"
     }
   ],
   "customManagers": [
@@ -44,7 +39,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/mpdris2-rs.nix", "packages/recidia.nix", "packages/water.nix"],
+      "managerFilePatterns": ["modules/home/mpdris2-rs.nix"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
         "pname = \"(?<packageName>[^\"]+)\";",
@@ -52,19 +47,6 @@
         "owner = \"(?<depName>[^\"]+)\";",
         "repo = pname;",
         "rev = version;"
-      ],
-      "datasourceTemplate": "github-tags",
-      "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["modules/home/pomobar.nix"],
-      "matchStringsStrategy": "combination",
-      "matchStrings": [
-        "pname = \"(?<packageName>[^\"]+)\";",
-        "owner = \"(?<depName>[^\"]+)\";",
-        "repo = pname;",
-        "rev = \"(?<currentValue>[^\"]+)\";"
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"

@@ -17,7 +17,6 @@
   ];
   profiles = [ "extra" ];
   packages = [
-    "recidia"
     "ubuntu-fonts-google"
   ];
   nixSettings = {
