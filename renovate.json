@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":ignoreModulesAndTests"
+  ],
+  "timezone": "Europe/Istanbul",
+  "schedule": ["* 0,12 * * *"],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 5,
+  "branchConcurrentLimit": 10,
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
+  "enabledManagers": ["custom.regex", "nix"],
+  "pinDigests": false
+}

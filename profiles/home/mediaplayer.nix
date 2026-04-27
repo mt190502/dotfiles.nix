@@ -1,0 +1,52 @@
+{ config, ... }:
+
+let
+  home = config.home.homeDirectory;
+in
+{
+  services = {
+    mpd = {
+      enable = true;
+      dataDir = "${home}/.cache/mpd";
+      musicDirectory = "${home}/Music";
+      playlistDirectory = "${home}/Music/Playlists";
+      network = {
+        listenAddress = "any";
+        port = 6600;
+        startWhenNeeded = true;
+      };
+      extraConfig = ''
+        audio_output {
+          type        "pipewire"
+          name        "PipeWire Audio Server"
+          enabled     "yes"
+        }
+        audio_output {
+          type        "httpd"
+          name        "HTTP Stream (opus)"
+          encoder     "opus"
+          port        "8000"
+          complexity  "10"
+          signal      "music"
+          vbr         "no"
+          bitrate     "max"
+          format      "48000:*:2"
+          enabled     "yes"
+          opustags    "yes"
+        }
+      '';
+    };
+    mpd-discord-rpc = {
+      enable = true;
+      settings = {
+        hosts = [ "localhost:6600" ];
+        format = {
+          details = "$title ($date)";
+          state = "$artist / $album";
+          timestamp = "elapsed";
+        };
+      };
+    };
+    mpdris2-rs.enable = true;
+  };
+}

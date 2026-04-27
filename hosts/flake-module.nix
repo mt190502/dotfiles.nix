@@ -1,93 +1,135 @@
-{ inputs, ... }:
+{ lib, inputs, ... }:
 
 let
-  darwinConfigs = [
-    {
-      name = "macbook-m3-air-work";
-      arch = "aarch64-darwin";
-    }
-  ];
-  homeConfigs = [
-    {
-      name = "msi-h510m-pro-fedora";
-      arch = "x86_64-linux";
-    }
-  ];
-  nixosConfigs = [
-    {
-      name = "lenovo-thinkpad-e14-nixos";
-      arch = "x86_64-linux";
-    }
-    {
-      name = "msi-h510m-pro-nixos";
-      arch = "x86_64-linux";
-    }
-  ];
   repo =
     name: arch:
-    (import inputs.${name} {
+    import inputs.${name} {
       system = arch;
       config.allowUnfree = true;
-    });
+    };
+
+  getConfigsByPlatform =
+    platform:
+    let
+      entries = builtins.readDir ./.;
+      dirs = lib.filterAttrs (
+        name: type: type == "directory" && builtins.pathExists ./${name}/config.nix
+      ) entries;
+      hostConfigs = lib.mapAttrs (name: _: import ./${name}/config.nix) dirs;
+    in
+    lib.filterAttrs (name: cfg: cfg.platform == platform) hostConfigs;
+
+  buildNixosConfig =
+    name: cfg:
+    let
+      pkgs = repo "nixpkgs" cfg.arch;
+      pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
+      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
+      profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
+      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
+      hostConfig = {
+        system.stateVersion = cfg.stateVersion;
+        nix.settings = cfg.nixSettings or { };
+      };
+    in
+    inputs.nixpkgs.lib.nixosSystem {
+      inherit pkgs;
+      specialArgs = {
+        inherit inputs pkgs-unstable;
+        flakeName = name;
+        system = cfg.arch;
+      };
+      modules = [
+        inputs.disko.nixosModules.disko
+        inputs.home-manager.nixosModules.home-manager
+        ./${name}
+      ]
+      ++ moduleConfigs
+      ++ profileConfigs
+      ++ userConfigs
+      ++ [
+        hostConfig
+        cfg.extraConfig
+      ];
+    };
+
+  buildDarwinConfig =
+    name: cfg:
+    let
+      pkgs = repo "nixpkgs" cfg.arch;
+      pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
+      userConfigs = map (u: lib.attrByPath [ u "darwin" ] { } (inputs.self.users or { })) cfg.users;
+      profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
+      moduleConfigs = map (m: inputs.self.darwinModules.${m} or { }) cfg.modules;
+      hostConfig = {
+        system.primaryUser = cfg.primaryUser;
+        system.stateVersion = cfg.stateVersion;
+        nix.settings = cfg.nixSettings or { };
+      };
+    in
+    inputs.nix-darwin.lib.darwinSystem {
+      inherit pkgs;
+      specialArgs = {
+        inherit inputs pkgs-unstable;
+        flakeName = name;
+        system = cfg.arch;
+      };
+      modules = [
+        inputs.home-manager.darwinModules.default
+        ./${name}
+      ]
+      ++ moduleConfigs
+      ++ profileConfigs
+      ++ userConfigs
+      ++ [
+        hostConfig
+        cfg.extraConfig
+      ];
+    };
+
+  buildHomeConfig =
+    name: cfg:
+    let
+      pkgs = repo "nixpkgs" cfg.arch;
+      pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
+      userConfig = lib.attrByPath [ cfg.user "home" ] { } (inputs.self.users or { });
+      profileConfigs = map (p: inputs.self.homeProfiles.${p} or { }) cfg.profiles;
+      moduleConfigs = map (m: inputs.self.homeModules.${m} or { }) (
+        cfg.modules
+        ++ [
+          "bin"
+          "preferences"
+          "stylix"
+          "wrapped"
+        ]
+      );
+      hostConfig = {
+        home.stateVersion = cfg.stateVersion;
+      };
+    in
+    inputs.home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = {
+        inherit inputs;
+        inherit pkgs-unstable;
+        flakeName = name;
+        system = cfg.arch;
+      };
+      modules =
+        moduleConfigs
+        ++ profileConfigs
+        ++ [
+          ./${name}
+          userConfig
+          hostConfig
+          cfg.extraConfig
+        ];
+    };
 in
 {
   flake = {
-    darwinConfigurations = builtins.listToAttrs (
-      map (cfg: {
-        inherit (cfg) name;
-        value = inputs.nix-darwin.lib.darwinSystem rec {
-          system = cfg.arch;
-          pkgs = repo "nixpkgs" system;
-          specialArgs = {
-            inherit inputs system;
-            pkgs-unstable = repo "nixpkgs-unstable" system;
-            flakeName = cfg.name;
-          };
-          modules = [
-            inputs.home-manager.darwinModules.default
-            (inputs.self + "/users/taha")
-            ./${cfg.name}
-          ];
-        };
-      }) darwinConfigs
-    );
-    homeConfigurations = builtins.listToAttrs (
-      map (cfg: {
-        inherit (cfg) name;
-        value = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = repo "nixpkgs" cfg.arch;
-          extraSpecialArgs = {
-            inherit inputs;
-            pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-            flakeName = cfg.name;
-            system = cfg.arch;
-          };
-          modules = [
-            (inputs.self + "/users/taha/linux.nix")
-            ./${cfg.name}/home
-          ];
-        };
-      }) homeConfigs
-    );
-    nixosConfigurations = builtins.listToAttrs (
-      map (cfg: {
-        inherit (cfg) name;
-        value = inputs.nixpkgs.lib.nixosSystem rec {
-          system = cfg.arch;
-          pkgs = repo "nixpkgs" system;
-          specialArgs = {
-            inherit inputs system;
-            pkgs-unstable = repo "nixpkgs-unstable" system;
-            flakeName = cfg.name;
-          };
-          modules = [
-            inputs.disko.nixosModules.disko
-            inputs.home-manager.nixosModules.home-manager
-            (inputs.self + "/users/taha")
-            ./${cfg.name}
-          ];
-        };
-      }) nixosConfigs
-    );
+    nixosConfigurations = builtins.mapAttrs buildNixosConfig (getConfigsByPlatform "nixos");
+    darwinConfigurations = builtins.mapAttrs buildDarwinConfig (getConfigsByPlatform "darwin");
+    homeConfigurations = builtins.mapAttrs buildHomeConfig (getConfigsByPlatform "home");
   };
 }

@@ -1,0 +1,17 @@
+#!@bash@
+#################################################
+##
+#### Swaylock with Blurred Background
+##
+#################################################
+#~~~ lock function
+[[ -n "$(pgrep swaylock)" ]] && exit
+for output in $(@swaymsg@ -t get_outputs | @jq@ -r '.[].name'); do
+    image="$HOME/.cache/$output-lock"
+    [[ -e $image ]] && rm "$image"
+    @grim@ -l 1 -o "$output" "$image.png"
+    @imagemagick@ convert -blur 0x10 "$image.png" "$image-blurred.png"
+    args="$args --image $output:$image-blurred.png"
+done
+# shellcheck disable=SC2086
+swaylock --daemonize $args
