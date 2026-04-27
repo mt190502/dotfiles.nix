@@ -61,12 +61,77 @@ jobs:
                 new_sha_base64="sha256-$(nix hash convert --hash-algo sha256 --to base64 "$new_sha")"
                 
                 if [[ "$old_sha" != "$new_sha_base64" ]]; then
-                  # Use awk for safe replacement
                   awk -v old="$old_sha" -v new="$new_sha_base64" '{
                     gsub("sha256 = \"" old "\"", "sha256 = \"" new "\"")
                     print
                   }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                   echo "Updated sha256: $old_sha -> $new_sha_base64"
+                fi
+              fi
+            fi
+          done
+
+      - name: Update cargoHash/vendorHash
+        run: |
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
+          
+          for file in $changed_files; do
+            if grep -q 'cargoHash\|vendorHash\|cargoDeps' "$file"; then
+              echo "=== Updating cargoHash/vendorHash in $file ==="
+              
+              # Set fake hash to trigger rebuild
+              fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+              
+              old_cargo=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1 || true)
+              old_vendor=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1 || true)
+              
+              if [[ -n "$old_cargo" ]]; then
+                awk -v old="$old_cargo" -v new="$fake_hash" '{
+                  gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
+                  print
+                }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                
+                # Try to get correct hash from build error
+                pkg_name=$(basename "$file" .nix)
+                new_hash=$(nix build ".#$pkg_name" 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                
+                if [[ -n "$new_hash" ]]; then
+                  awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
+                    gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
+                    print
+                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated cargoHash: $old_cargo -> sha256-$new_hash"
+                else
+                  # Restore original if failed
+                  awk -v old="$fake_hash" -v new="$old_cargo" '{
+                    gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
+                    print
+                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Failed to calculate cargoHash, keeping original"
+                fi
+              fi
+              
+              if [[ -n "$old_vendor" ]]; then
+                awk -v old="$old_vendor" -v new="$fake_hash" '{
+                  gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
+                  print
+                }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                
+                pkg_name=$(basename "$file" .nix)
+                new_hash=$(nix build ".#$pkg_name" 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                
+                if [[ -n "$new_hash" ]]; then
+                  awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
+                    gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
+                    print
+                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated vendorHash: $old_vendor -> sha256-$new_hash"
+                else
+                  awk -v old="$fake_hash" -v new="$old_vendor" '{
+                    gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
+                    print
+                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Failed to calculate vendorHash, keeping original"
                 fi
               fi
             fi
