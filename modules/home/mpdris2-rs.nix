@@ -17,7 +17,7 @@ let
       owner = "szclsya";
       repo = pname;
       rev = version;
-      sha256 = "sha256-E9H6bjmWZx35fZo/ZPvJL1w/YQ34pJ7z81YbB5fUZSU=";
+      sha256 = "sha256-oiyqK7vj41d9bsXBtenc477SOrVHRkXpFljkN8MjdQg=";
     };
     cargoHash = "sha256-rA/za8fc2RiURaiijc49y+2QBcS6cDavZQFjVh+7Iow=";
     meta = {
