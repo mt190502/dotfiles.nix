@@ -81,9 +81,6 @@ jobs:
             if grep -qE 'cargoHash|vendorHash' "$file"; then
               echo "=== Updating cargoHash/vendorHash in $file ==="
               
-              old_cargo=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1 || true)
-              old_vendor=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1 || true)
-              
               if [[ "$file" =~ ^packages/ ]]; then
                 pkg_name=$(basename "$file" .nix)
                 build_target=".#$pkg_name"
@@ -94,48 +91,32 @@ jobs:
               
               echo "Build target: $build_target"
               
-              if [[ -n "$old_cargo" ]]; then
-                awk -v old="$old_cargo" -v new="$fake_hash" '{
-                  gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
-                  print
-                }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+              if grep -q 'cargoHash' "$file"; then
+                original=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1)
+                awk -v new="$fake_hash" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                 
                 new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
                 
                 if [[ -n "$new_hash" ]]; then
-                  awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
-                    gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated cargoHash: $old_cargo -> sha256-$new_hash"
+                  awk -v new="sha256-$new_hash" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated cargoHash: sha256-$new_hash"
                 else
-                  awk -v old="$fake_hash" -v new="$old_cargo" '{
-                    gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  awk -v new="$original" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                   echo "Failed to calculate cargoHash, keeping original"
                 fi
               fi
               
-              if [[ -n "$old_vendor" ]]; then
-                awk -v old="$old_vendor" -v new="$fake_hash" '{
-                  gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
-                  print
-                }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+              if grep -q 'vendorHash' "$file"; then
+                original=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1)
+                awk -v new="$fake_hash" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                 
                 new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
                 
                 if [[ -n "$new_hash" ]]; then
-                  awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
-                    gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated vendorHash: $old_vendor -> sha256-$new_hash"
+                  awk -v new="sha256-$new_hash" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated vendorHash: sha256-$new_hash"
                 else
-                  awk -v old="$fake_hash" -v new="$old_vendor" '{
-                    gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  awk -v new="$original" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                   echo "Failed to calculate vendorHash, keeping original"
                 fi
               fi
