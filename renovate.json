@@ -24,12 +24,12 @@
     {
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher", "szclsya/mpdris2-rs"],
-      "versioningTemplate": "semver-coerced"
+      "versioning": "semver-coerced"
     },
     {
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["GhostNaN/recidia-audio-visualizer", "bouquet2/water", "mt190502/pomobar"],
-      "versioningTemplate": "semver"
+      "versioning": "semver"
     }
   ],
   "customManagers": [
