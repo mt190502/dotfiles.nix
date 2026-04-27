@@ -20,20 +20,31 @@
     {
       "matchFileNames": ["modules/home/fish.nix"],
       "groupName": "fish plugins"
+    },
+    {
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher", "szclsya/mpdris2-rs"],
+      "versioningTemplate": "semver-coerced"
+    },
+    {
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["GhostNaN/recidia-audio-visualizer", "bouquet2/water", "mt190502/pomobar"],
+      "versioningTemplate": "semver"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^modules/home/fish\\.nix$/"],
+      "managerFilePatterns": ["modules/home/fish.nix"],
       "matchStrings": [
         "fetchFromGitHub \\{\\s+owner = \"(?<depName>[^\"]+)\";\\s+repo = \"(?<packageName>[^\"]+)\";\\s+rev = \"(?<currentValue>[^\"]+)\""
       ],
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^modules/home/mpdris2-rs\\.nix$/", "/^packages/recidia\\.nix$/", "/^packages/water\\.nix$/"],
+      "managerFilePatterns": ["modules/home/mpdris2-rs.nix", "packages/recidia.nix", "packages/water.nix"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
         "pname = \"(?<packageName>[^\"]+)\";",
@@ -42,11 +53,12 @@
         "repo = pname;",
         "rev = version;"
       ],
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^modules/home/pomobar\\.nix$/"],
+      "managerFilePatterns": ["modules/home/pomobar.nix"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
         "pname = \"(?<packageName>[^\"]+)\";",
@@ -54,7 +66,8 @@
         "repo = pname;",
         "rev = \"(?<currentValue>[^\"]+)\";"
       ],
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
     }
   ]
 }
