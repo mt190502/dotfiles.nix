@@ -16,30 +16,39 @@
     "enabled": true
   },
   "pinDigests": false,
+  "packageRules": [
+    {
+      "matchCategories": ["fish-plugins"],
+      "groupName": "fish plugins"
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
       "fileMatch": ["\\.nix$"],
       "matchStrings": [
-        "pname = \"(?<packageName>[^\"]+)\";\\s*version = \"(?<currentValue>[^\"]+)\";\\s*src = fetchFromGitHub \\{\\s*owner = \"(?<depName>[^\"]+)\";\\s*repo = pname;\\s*rev = version"
+        "fetchFromGitHub[\\s\\S]{0,300}?owner\\s*=\\s*\"(?<depName>[^\"]+)\"[\\s\\S]{0,300}?repo\\s*=\\s*\"(?<packageName>[^\"]+)\"[\\s\\S]{0,300}?rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "categoryTemplate": "fish-plugins"
     },
     {
       "customType": "regex",
       "fileMatch": ["\\.nix$"],
       "matchStrings": [
-        "fetchFromGitHub \\{[^}]*owner = \"(?<depName>[^\"]+)\";[^}]*repo = pname;[^}]*rev = \"(?<currentValue>[^\"]+)\""
+        "pname\\s*=\\s*\"(?<packageName>[^\"]+)\"[\\s\\S]{0,500}?version\\s*=\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]{0,500}?fetchFromGitHub[\\s\\S]{0,300}?owner\\s*=\\s*\"(?<depName>[^\"]+)\"[\\s\\S]{0,300}?repo\\s*=\\s*pname[\\s\\S]{0,300}?rev\\s*=\\s*version"
       ],
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "categoryTemplate": "nix-packages"
     },
     {
       "customType": "regex",
       "fileMatch": ["\\.nix$"],
       "matchStrings": [
-        "fetchFromGitHub \\{[^}]*owner = \"(?<depName>[^\"]+)\";[^}]*repo = \"(?<packageName>[^\"]+)\";[^}]*rev = \"(?<currentValue>[^\"]+)\""
+        "pname\\s*=\\s*\"(?<packageName>[^\"]+)\"[\\s\\S]{0,500}?fetchFromGitHub[\\s\\S]{0,300}?owner\\s*=\\s*\"(?<depName>[^\"]+)\"[\\s\\S]{0,300}?repo\\s*=\\s*pname[\\s\\S]{0,300}?rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "categoryTemplate": "nix-packages"
     }
   ]
 }
