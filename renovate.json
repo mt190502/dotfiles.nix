@@ -45,7 +45,7 @@
       "matchStrings": [
         "pname\\s*=\\s*\"(?<packageName>[^\"]+)\";",
         "version\\s*=\\s*\"(?<currentValue>[^\"]+)\";",
-        "src\\s*=\\s*fetchFromGitHub\\s*\\{",
+        "src\\s*=\\s*fetchFromGitHub\\s*\\{\\s",
         "owner\\s*=\\s*\"(?<depName>[^\"]+)\";",
         "repo\\s*=\\s*pname;",
         "rev\\s*=\\s*version;"
