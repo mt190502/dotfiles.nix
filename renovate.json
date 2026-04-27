@@ -18,7 +18,6 @@
   "pinDigests": false,
   "packageRules": [
     {
-      "matchManagers": ["regex"],
       "matchFileNames": ["modules/home/fish.nix"],
       "groupName": "fish plugins"
     }
@@ -26,25 +25,34 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["\\.nix$"],
+      "managerFilePatterns": ["modules/home/fish\\.nix$"],
       "matchStrings": [
-        "fetchFromGitHub[\\s\\S]{0,500}?owner\\s*=\\s*\"(?<depName>[^\"]+)\"[\\s\\S]{0,500}?repo\\s*=\\s*\"(?<packageName>[^\"]+)\"[\\s\\S]{0,500}?rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "fetchFromGitHub \\{\\s+owner = \"(?<depName>[^\"]+)\";\\s+repo = \"(?<packageName>[^\"]+)\";\\s+rev = \"(?<currentValue>[^\"]+)\""
       ],
       "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["\\.nix$"],
+      "managerFilePatterns": ["modules/home/mpdris2-rs\\.nix$", "packages/recidia\\.nix$", "packages/water\\.nix$"],
+      "matchStringsStrategy": "combination",
       "matchStrings": [
-        "pname\\s*=\\s*\"(?<packageName>[^\"]+)\"[\\s\\S]{0,500}?version\\s*=\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]{0,500}?fetchFromGitHub[\\s\\S]{0,500}?owner\\s*=\\s*\"(?<depName>[^\"]+)\"[\\s\\S]{0,500}?repo\\s*=\\s*pname[\\s\\S]{0,500}?rev\\s*=\\s*version"
+        "pname = \"(?<packageName>[^\"]+)\";",
+        "version = \"(?<currentValue>[^\"]+)\";",
+        "owner = \"(?<depName>[^\"]+)\";",
+        "repo = pname;",
+        "rev = version;"
       ],
       "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["\\.nix$"],
+      "managerFilePatterns": ["modules/home/pomobar\\.nix$"],
+      "matchStringsStrategy": "combination",
       "matchStrings": [
-        "pname\\s*=\\s*\"(?<packageName>[^\"]+)\"[\\s\\S]{0,500}?fetchFromGitHub[\\s\\S]{0,500}?owner\\s*=\\s*\"(?<depName>[^\"]+)\"[\\s\\S]{0,500}?repo\\s*=\\s*pname[\\s\\S]{0,500}?rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "pname = \"(?<packageName>[^\"]+)\";",
+        "owner = \"(?<depName>[^\"]+)\";",
+        "repo = pname;",
+        "rev = \"(?<currentValue>[^\"]+)\";"
       ],
       "datasourceTemplate": "github-tags"
     }
