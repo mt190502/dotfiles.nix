@@ -36,39 +36,41 @@ jobs:
           for file in $changed_files; do
             echo "=== Processing $file ==="
             
-            owner=$(grep -oP 'owner = "\K[^"]+' "$file" | head -1 || true)
+            # Get the changed revs from git diff
+            changed_revs=$(git diff origin/${{ github.base_ref }} HEAD -- "$file" | grep -oP '^\+.*rev = "\K[^"]+' || true)
             
-            if grep -q 'repo = pname' "$file"; then
-              repo=$(grep -oP 'pname = "\K[^"]+' "$file" | head -1 || true)
-            else
-              repo=$(grep -oP 'repo = "\K[^"]+' "$file" | head -1 || true)
-            fi
-            
-            if grep -q 'rev = version' "$file"; then
-              rev=$(grep -oP 'version = "\K[^"]+' "$file" | head -1 || true)
-            else
-              rev=$(grep -oP 'rev = "\K[^"]+' "$file" | head -1 || true)
-            fi
-            
-            old_sha=$(grep -oP 'sha256 = "\K[^"]+' "$file" | head -1 || true)
-            
-            if [[ -n "$owner" && -n "$repo" && -n "$rev" && -n "$old_sha" ]]; then
-              echo "Found: owner=$owner, repo=$repo, rev=$rev"
+            for rev in $changed_revs; do
+              echo "Checking rev: $rev"
               
-              new_sha=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1 | tail -1)
+              # Find the fetchFromGitHub block containing this rev
+              # Extract the block context (owner, repo, old sha256)
+              block_info=$(grep -B5 -A1 "rev = \"$rev\"" "$file" | grep -E 'owner = |repo = |sha256 = ')
               
-              if [[ -n "$new_sha" ]]; then
-                new_sha_base64="sha256-$(nix hash convert --hash-algo sha256 --to base64 "$new_sha")"
+              owner=$(echo "$block_info" | grep -oP 'owner = "\K[^"]+' || true)
+              repo=$(echo "$block_info" | grep -oP 'repo = "\K[^"]+' || true)
+              old_sha=$(echo "$block_info" | grep -oP 'sha256 = "\K[^"]+' || true)
+              
+              if [[ -n "$owner" && -n "$repo" && -n "$rev" && -n "$old_sha" ]]; then
+                echo "Found: owner=$owner, repo=$repo, rev=$rev"
                 
-                if [[ "$old_sha" != "$new_sha_base64" ]]; then
-                  awk -v old="$old_sha" -v new="$new_sha_base64" '{
-                    gsub("sha256 = \"" old "\"", "sha256 = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated sha256: $old_sha -> $new_sha_base64"
+                new_sha=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1 | tail -1)
+                
+                if [[ -n "$new_sha" ]]; then
+                  new_sha_base64="sha256-$(nix hash convert --hash-algo sha256 --to base64 "$new_sha")"
+                  
+                  if [[ "$old_sha" != "$new_sha_base64" ]]; then
+                    # Use line number to update specific sha256
+                    sha_line=$(grep -n "rev = \"$rev\"" "$file" | cut -d: -f1)
+                    next_sha_line=$(awk -v start="$sha_line" 'NR > start && /sha256 = / { print NR; exit }' "$file")
+                    
+                    if [[ -n "$next_sha_line" ]]; then
+                      awk -v line="$next_sha_line" -v new="$new_sha_base64" 'NR == line { sub(/sha256 = "sha256-[^"]*"/, "sha256 = \"" new "\"") } { print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                      echo "Updated sha256 on line $next_sha_line: $old_sha -> $new_sha_base64"
+                    fi
+                  fi
                 fi
               fi
-            fi
+            done
           done
 
       - name: Update cargoHash/vendorHash
