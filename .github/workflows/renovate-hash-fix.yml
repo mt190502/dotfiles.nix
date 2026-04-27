@@ -18,7 +18,6 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
@@ -37,71 +36,38 @@ jobs:
           for file in $changed_files; do
             echo "=== Processing $file ==="
             
-            # Extract fetchFromGitHub parameters
-            owner=$(grep -oP 'owner = "\K[^"]+' "$file" 2>/dev/null | head -1 || true)
+            owner=$(grep -oP 'owner = "\K[^"]+' "$file" | head -1 || true)
             
-            # Handle repo (could be pname or explicit)
             if grep -q 'repo = pname' "$file"; then
-              repo=$(grep -oP 'pname = "\K[^"]+' "$file" 2>/dev/null | head -1 || true)
+              repo=$(grep -oP 'pname = "\K[^"]+' "$file" | head -1 || true)
             else
-              repo=$(grep -oP 'repo = "\K[^"]+' "$file" 2>/dev/null | head -1 || true)
+              repo=$(grep -oP 'repo = "\K[^"]+' "$file" | head -1 || true)
             fi
             
-            # Handle rev (could be version or explicit)
             if grep -q 'rev = version' "$file"; then
-              rev=$(grep -oP 'version = "\K[^"]+' "$file" 2>/dev/null | head -1 || true)
+              rev=$(grep -oP 'version = "\K[^"]+' "$file" | head -1 || true)
             else
-              rev=$(grep -oP 'rev = "\K[^"]+' "$file" 2>/dev/null | head -1 || true)
+              rev=$(grep -oP 'rev = "\K[^"]+' "$file" | head -1 || true)
             fi
             
-            old_sha=$(grep -oP 'sha256 = "\K[^"]+' "$file" 2>/dev/null | head -1 || true)
+            old_sha=$(grep -oP 'sha256 = "\K[^"]+' "$file" | head -1 || true)
             
             if [[ -n "$owner" && -n "$repo" && -n "$rev" && -n "$old_sha" ]]; then
               echo "Found: owner=$owner, repo=$repo, rev=$rev"
               
               new_sha=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1 | tail -1)
               
-              if [[ -n "$new_sha" && "$old_sha" != "$new_sha" ]]; then
-                sed -i "s/sha256 = \"$old_sha\"/sha256 = \"$new_sha\"/" "$file"
-                echo "Updated sha256: $old_sha -> $new_sha"
-              fi
-            fi
-          done
-
-      - name: Update vendorHash (Go modules)
-        run: |
-          changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
-          
-          for file in $changed_files; do
-            if grep -q 'vendorHash' "$file"; then
-              echo "=== Updating vendorHash in $file ==="
-              
-              # Set fake hash to trigger nix to give us the correct one
-              old_vendor=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1)
-              fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-              
-              sed -i "s/vendorHash = \"$old_vendor\"/vendorHash = \"$fake_hash\"/" "$file"
-              
-              # Try to evaluate and get correct hash from error
-              pkg_name=$(basename "$file" .nix)
-              new_vendor=$(nix eval --impure --expr "
-                let pkgs = import <nixpkgs> {};
-                    pkg = pkgs.callPackage ./$file {};
-                in pkg.goModules.drvPath
-              " 2>&1 | grep -oP 'sha256-\K[0-9a-zA-Z+/=]+' || true)
-              
-              # Alternative: use nix-build error output
-              if [[ -z "$new_vendor" ]]; then
-                new_vendor=$(nix-build --no-out-link "<nixpkgs>" -A "callPackage $file {}" 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' || true)
-              fi
-              
-              if [[ -n "$new_vendor" ]]; then
-                sed -i "s/vendorHash = \"$fake_hash\"/vendorHash = \"sha256-$new_vendor\"/" "$file"
-                echo "Updated vendorHash: $old_vendor -> sha256-$new_vendor"
-              else
-                # Revert if we couldn't get the hash
-                sed -i "s/vendorHash = \"$fake_hash\"/vendorHash = \"$old_vendor\"/" "$file"
-                echo "Could not calculate vendorHash, keeping original"
+              if [[ -n "$new_sha" ]]; then
+                new_sha_base64=$(nix hash convert --hash-algo sha256 --to base64 "$new_sha" 2>&1 || echo "$new_sha")
+                
+                if [[ "$old_sha" != "$new_sha_base64" ]]; then
+                  # Use awk for safe replacement
+                  awk -v old="$old_sha" -v new="$new_sha_base64" '{
+                    gsub("sha256 = \"" old "\"", "sha256 = \"" new "\"")
+                    print
+                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated sha256: $old_sha -> $new_sha_base64"
+                fi
               fi
             fi
           done
