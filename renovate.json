@@ -25,7 +25,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/fish\\.nix$"],
+      "managerFilePatterns": ["/^modules/home/fish\\.nix$/"],
       "matchStrings": [
         "fetchFromGitHub \\{\\s+owner = \"(?<depName>[^\"]+)\";\\s+repo = \"(?<packageName>[^\"]+)\";\\s+rev = \"(?<currentValue>[^\"]+)\""
       ],
@@ -33,7 +33,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/mpdris2-rs\\.nix$", "packages/recidia\\.nix$", "packages/water\\.nix$"],
+      "managerFilePatterns": ["/^modules/home/mpdris2-rs\\.nix$/", "/^packages/recidia\\.nix$/", "/^packages/water\\.nix$/"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
         "pname = \"(?<packageName>[^\"]+)\";",
@@ -46,7 +46,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/pomobar\\.nix$"],
+      "managerFilePatterns": ["/^modules/home/pomobar\\.nix$/"],
       "matchStringsStrategy": "combination",
       "matchStrings": [
         "pname = \"(?<packageName>[^\"]+)\";",
