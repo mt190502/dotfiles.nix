@@ -176,7 +176,7 @@ following command:
 - Switch this flake
 
     ```sh
-    home-manager switch --no-out-link --flake github:mt190502/dotfiles.nix/unstable#msi-h510m-pro-fedora-personal
+    home-manager switch --no-out-link --flake github:mt190502/dotfiles.nix#msi-h510m-pro-fedora-personal
     ```
 
     Note: In this example, you must change username into the [hosts/msi-h510m-pro-fedora-personal/home/default.nix](./hosts/msi-h510m-pro-fedora-personal/home/default.nix) file.
