@@ -33,7 +33,7 @@
       "customType": "regex",
       "managerFilePatterns": ["**/*.nix"],
       "matchStrings": [
-        "src\\s*=\\s*pkgs\\.fetchFromGitHub\\s*\\{[^}]*owner\\s*=\\s*\"(?<depName>[^\"]+)\";[^}]*repo\\s*=\\s*\"(?<packageName>[^\"]+)\";[^}]*rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "src\\s*=\\s*pkgs\\.fetchFromGitHub\\s*\\{\\s+owner\\s*=\\s*\"(?<depName>[^\"]+)\";\\s+repo\\s*=\\s*\"(?<packageName>[^\"]+)\";\\s+rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
@@ -41,8 +41,14 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["**/*.nix"],
+      "matchStringsStrategy": "combination",
       "matchStrings": [
-        "src\\s*=\\s*fetchFromGitHub\\s*\\{[^}]*owner\\s*=\\s*\"(?<depName>[^\"]+)\";[^}]*repo\\s*=\\s*pname;[^}]*rev\\s*=\\s*version[^}]*pname\\s*=\\s*\"(?<packageName>[^\"]+)\";[^}]*version\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "pname\\s*=\\s*\"(?<packageName>[^\"]+)\";",
+        "version\\s*=\\s*\"(?<currentValue>[^\"]+)\";",
+        "src\\s*=\\s*fetchFromGitHub\\s*\\{",
+        "owner\\s*=\\s*\"(?<depName>[^\"]+)\";",
+        "repo\\s*=\\s*pname;",
+        "rev\\s*=\\s*version;"
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{depName}}}/{{{packageName}}}"
