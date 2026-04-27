@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mpdris2-rs";
-  version = "v1.0.2";
+  version = "v1.1.1";
   src = fetchFromGitHub {
     owner = "szclsya";
     repo = pname;
