@@ -1,5 +1,5 @@
 {
-  description = "M.Taha's Ultimate Nix Configuration Flake";
+  description = "M.Taha's Ultimate Nix Configuration Flake v2.0";
 
   inputs = {
     nixpkgs-unstable = {
@@ -9,6 +9,10 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-25.11";
       flake = true;
+    };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager-unstable = {
       url = "github:nix-community/home-manager";
@@ -25,10 +29,6 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs-unstable";
-    };
-    alacritty-theme = {
-      url = "github:alexghr/alacritty-theme.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     apple-fonts = {
       url = "github:Lyndeno/apple-fonts.nix";
@@ -68,17 +68,14 @@
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
-
       imports = [
-        ./packages/flake-module.nix
-        ./hosts/flake-module.nix
         inputs.pre-commit-hooks.flakeModule
+        ./hosts/flake-module.nix
+        ./modules/flake-module.nix
+        ./packages/flake-module.nix
+        ./profiles/flake-module.nix
+        ./users/flake-module.nix
       ];
-
       perSystem = {
         pre-commit.settings.hooks = {
           nixfmt-rfc-style.enable = true;
@@ -87,11 +84,10 @@
           statix.enable = true;
         };
       };
-
-      flake = {
-        nixosModules.mt190502 = import ./modules/hosts/nixos.nix;
-        darwinModules.mt190502 = import ./modules/hosts/darwin.nix;
-        homeModules.mt190502 = import ./modules/home-manager;
-      };
+      systems = [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
     };
 }

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":ignoreModulesAndTests"
+  ],
+  "timezone": "Europe/Istanbul",
+  "schedule": ["* 0,12 * * *"],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 5,
+  "branchConcurrentLimit": 10,
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
+  "nix": {
+    "enabled": true
+  },
+  "pinDigests": false,
+  "packageRules": [
+    {
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher"],
+      "groupName": "fish plugins"
+    },
+    {
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["szclsya/mpdris2-rs"],
+      "versioning": "semver-coerced"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["**/*.nix"],
+      "matchStrings": [
+        "src\\s*=\\s*pkgs\\.fetchFromGitHub\\s*\\{\\s+owner\\s*=\\s*\"(?<owner>[^\"]+)\";\\s+repo\\s*=\\s*\"(?<repo>[^\"]+)\";\\s+rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "{{{owner}}}/{{{repo}}}",
+      "packageNameTemplate": "{{{owner}}}/{{{repo}}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["**/*.nix"],
+      "matchStrings": [
+        "pname\\s*=\\s*\"(?<repo>[^\"]+)\";[\\s\\S]*?version\\s*=\\s*\"(?<currentValue>[^\"]+)\";[\\s\\S]*?src\\s*=\\s*fetchFromGitHub\\s*\\{[\\s\\S]*?owner\\s*=\\s*\"(?<owner>[^\"]+)\";[\\s\\S]*?repo\\s*=\\s*pname;[\\s\\S]*?rev\\s*=\\s*version;"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "{{{owner}}}/{{{repo}}}",
+      "packageNameTemplate": "{{{owner}}}/{{{repo}}}"
+    }
+  ]
+}

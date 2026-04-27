@@ -1,72 +1,56 @@
-{ pkgs, ... }:
-
 {
-  ########################################
-  #
-  ## Home Manager Required Variables
-  #
-  ########################################
-  home.stateVersion = "25.05";
-  programs.home-manager.enable = true;
+  inputs,
+  flakeName,
+  system,
+  pkgs,
+  pkgs-unstable,
+  ...
+}:
 
-  ########################################
-  #
-  ## Packages
-  #
-  ########################################
-  home.packages = with pkgs; [
-    #~ packages ~#
-    android-tools
-    aria2
-    bat
-    bat-extras.batman
-    bc
-    btop
-    fastfetch
-    fd
-    grc
-    heimdall
-    lsd
-    mpc
-    pipes-rs
-    rclone
-    ripgrep-all
-    rsync
-    tesseract
-    tmux
-    translate-shell
-    tree
-    unrar
-    unzip
-    yt-dlp
-  ];
-
-  ########################################
-  #
-  ## Module Configurations
-  #
-  ########################################
-  #~ custom modules ~#
-  moduleopts.home-manager = {
-    alacritty.theme = "hyper";
+rec {
+  programs.fish.enable = true;
+  users.users.taha = {
+    shell = pkgs.fish;
+    home = "/Users/taha";
+    uid = 502;
   };
-
-  ########################################
-  #
-  ## Variables
-  #
-  ########################################
-  home.sessionVariables = {
-    ##############################
-    ## SYSTEM
-    ##############################
-    EDITOR = "vim";
+  home-manager = {
+    useGlobalPkgs = false;
+    extraSpecialArgs = {
+      inherit
+        inputs
+        flakeName
+        system
+        pkgs-unstable
+        ;
+    };
+    users.taha = {
+      home.homeDirectory = users.users.taha.home;
+      nixpkgs.config.allowUnfree = true;
+      imports = [
+        ./default.nix
+      ]
+      ++ (with inputs.self.homeModules; [
+        bin
+        delta
+        direnv
+        fastfetch
+        fish
+        fontconfig
+        git
+        mpv
+        preferences
+        scripts
+        ytdlp
+        zed
+      ])
+      ++ (with inputs.self.homeProfiles; [
+        ai
+        cloud
+        development
+        neovim
+        tmux
+      ]);
+    };
   };
-
-  ########################################
-  #
-  ## Other Configurations
-  #
-  ########################################
-  home.activation = { };
 }

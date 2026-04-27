@@ -1,0 +1,137 @@
+name: Renovate Hash Fix
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: ["*"]
+
+jobs:
+  fix-hash:
+    if: github.actor == 'renovate[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Configure git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Update SHA256 hashes
+        run: |
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
+          
+          for file in $changed_files; do
+            echo "=== Processing $file ==="
+            
+            # Get the changed revs from git diff
+            changed_revs=$(git diff origin/${{ github.base_ref }} HEAD -- "$file" | grep -oP '^\+.*rev = "\K[^"]+' || true)
+            
+            for rev in $changed_revs; do
+              echo "Checking rev: $rev"
+              
+              # Find the fetchFromGitHub block containing this rev
+              # Extract the block context (owner, repo, old sha256)
+              block_info=$(grep -B5 -A1 "rev = \"$rev\"" "$file" | grep -E 'owner = |repo = |sha256 = ')
+              
+              owner=$(echo "$block_info" | grep -oP 'owner = "\K[^"]+' || true)
+              repo=$(echo "$block_info" | grep -oP 'repo = "\K[^"]+' || true)
+              old_sha=$(echo "$block_info" | grep -oP 'sha256 = "\K[^"]+' || true)
+              
+              if [[ -n "$owner" && -n "$repo" && -n "$rev" && -n "$old_sha" ]]; then
+                echo "Found: owner=$owner, repo=$repo, rev=$rev"
+                
+                new_sha=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1 | tail -1)
+                
+                if [[ -n "$new_sha" ]]; then
+                  new_sha_base64="sha256-$(nix hash convert --hash-algo sha256 --to base64 "$new_sha")"
+                  
+                  if [[ "$old_sha" != "$new_sha_base64" ]]; then
+                    # Use line number to update specific sha256
+                    sha_line=$(grep -n "rev = \"$rev\"" "$file" | cut -d: -f1)
+                    next_sha_line=$(awk -v start="$sha_line" 'NR > start && /sha256 = / { print NR; exit }' "$file")
+                    
+                    if [[ -n "$next_sha_line" ]]; then
+                      awk -v line="$next_sha_line" -v new="$new_sha_base64" 'NR == line { sub(/sha256 = "sha256-[^"]*"/, "sha256 = \"" new "\"") } { print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                      echo "Updated sha256 on line $next_sha_line: $old_sha -> $new_sha_base64"
+                    fi
+                  fi
+                fi
+              fi
+            done
+          done
+
+      - name: Update cargoHash/vendorHash
+        run: |
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
+          
+          fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+          
+          for file in $changed_files; do
+            if grep -qE 'cargoHash|vendorHash' "$file"; then
+              echo "=== Updating cargoHash/vendorHash in $file ==="
+              
+              if [[ "$file" =~ ^packages/ ]]; then
+                pkg_name=$(basename "$file" .nix)
+                build_target=".#$pkg_name"
+              else
+                echo "File not in packages/, skipping cargoHash/vendorHash update"
+                continue
+              fi
+              
+              echo "Build target: $build_target"
+              
+              if grep -q 'cargoHash' "$file"; then
+                original=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1)
+                awk -v new="$fake_hash" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                
+                new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                
+                if [[ -n "$new_hash" ]]; then
+                  awk -v new="sha256-$new_hash" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated cargoHash: sha256-$new_hash"
+                else
+                  awk -v new="$original" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Failed to calculate cargoHash, keeping original"
+                fi
+              fi
+              
+              if grep -q 'vendorHash' "$file"; then
+                original=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1)
+                awk -v new="$fake_hash" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                
+                new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                
+                if [[ -n "$new_hash" ]]; then
+                  awk -v new="sha256-$new_hash" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Updated vendorHash: sha256-$new_hash"
+                else
+                  awk -v new="$original" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                  echo "Failed to calculate vendorHash, keeping original"
+                fi
+              fi
+            fi
+          done
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git add -A
+          git commit -m "fix: update nix hashes [skip ci]"
+          git push
