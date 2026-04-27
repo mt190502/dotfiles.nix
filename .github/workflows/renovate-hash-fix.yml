@@ -76,38 +76,60 @@ jobs:
           changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
           
           for file in $changed_files; do
-            if grep -q 'cargoHash\|vendorHash\|cargoDeps' "$file"; then
+            if grep -qE 'cargoHash|vendorHash' "$file"; then
               echo "=== Updating cargoHash/vendorHash in $file ==="
               
-              # Set fake hash to trigger rebuild
               fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
               
               old_cargo=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1 || true)
               old_vendor=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1 || true)
               
               if [[ -n "$old_cargo" ]]; then
+                # Replace with fake hash to trigger calculation
                 awk -v old="$old_cargo" -v new="$fake_hash" '{
                   gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
                   print
                 }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                 
-                # Try to get correct hash from build error
-                pkg_name=$(basename "$file" .nix)
-                new_hash=$(nix build ".#$pkg_name" 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                # Calculate hash using nix-prefetch
+                pname=$(grep -oP 'pname = "\K[^"]+' "$file" | head -1)
+                version=$(grep -oP 'version = "\K[^"]+' "$file" | head -1)
+                owner=$(grep -oP 'owner = "\K[^"]+' "$file" | head -1)
                 
-                if [[ -n "$new_hash" ]]; then
-                  awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
-                    gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated cargoHash: $old_cargo -> sha256-$new_hash"
-                else
-                  # Restore original if failed
-                  awk -v old="$fake_hash" -v new="$old_cargo" '{
-                    gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Failed to calculate cargoHash, keeping original"
+                if [[ -n "$pname" && -n "$version" && -n "$owner" ]]; then
+                  # Fetch source and calculate cargo hash
+                  src_hash=$(nix-prefetch-url --unpack "https://github.com/$owner/$pname/archive/$version.tar.gz" 2>&1 | tail -1)
+                  
+                  # Use nix to calculate cargo dependencies hash
+                  new_hash=$(nix eval --impure --expr "
+                    let
+                      pkgs = import <nixpkgs> {};
+                      src = builtins.fetchTarball {
+                        url = \"https://github.com/$owner/$pname/archive/$version.tar.gz\";
+                        sha256 = \"$src_hash\";
+                      };
+                      cargoToml = builtins.fromTOML (builtins.readFile \"$src/Cargo.toml\");
+                    in builtins.hashString \"sha256\" (builtins.concatStringsSep \"\" (map (d: d.name ++ d.version) cargoToml.dependencies))
+                  " 2>&1 | tail -1 || true)
+                  
+                  # Alternative: just build and get from error
+                  if [[ -z "$new_hash" ]]; then
+                    new_hash=$(timeout 120 nix build .#nixosConfigurations.lenovo-thinkpad-e14-nixos-personal.config.system.build.toplevel 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                  fi
+                  
+                  if [[ -n "$new_hash" ]]; then
+                    awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
+                      gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
+                      print
+                    }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                    echo "Updated cargoHash: $old_cargo -> sha256-$new_hash"
+                  else
+                    awk -v old="$fake_hash" -v new="$old_cargo" '{
+                      gsub("cargoHash = \"" old "\"", "cargoHash = \"" new "\"")
+                      print
+                    }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                    echo "Failed to calculate cargoHash, keeping original"
+                  fi
                 fi
               fi
               
@@ -117,21 +139,28 @@ jobs:
                   print
                 }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                 
-                pkg_name=$(basename "$file" .nix)
-                new_hash=$(nix build ".#$pkg_name" 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                pname=$(grep -oP 'pname = "\K[^"]+' "$file" | head -1)
+                version=$(grep -oP 'version = "\K[^"]+' "$file" | head -1)
+                owner=$(grep -oP 'owner = "\K[^"]+' "$file" | head -1)
                 
-                if [[ -n "$new_hash" ]]; then
-                  awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
-                    gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated vendorHash: $old_vendor -> sha256-$new_hash"
-                else
-                  awk -v old="$fake_hash" -v new="$old_vendor" '{
-                    gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
-                    print
-                  }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Failed to calculate vendorHash, keeping original"
+                if [[ -n "$pname" && -n "$version" && -n "$owner" ]]; then
+                  src_hash=$(nix-prefetch-url --unpack "https://github.com/$owner/$pname/archive/$version.tar.gz" 2>&1 | tail -1)
+                  
+                  new_hash=$(timeout 120 nix build .#nixosConfigurations.lenovo-thinkpad-e14-nixos-personal.config.system.build.toplevel 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                  
+                  if [[ -n "$new_hash" ]]; then
+                    awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
+                      gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
+                      print
+                    }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                    echo "Updated vendorHash: $old_vendor -> sha256-$new_hash"
+                  else
+                    awk -v old="$fake_hash" -v new="$old_vendor" '{
+                      gsub("vendorHash = \"" old "\"", "vendorHash = \"" new "\"")
+                      print
+                    }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                    echo "Failed to calculate vendorHash, keeping original"
+                  fi
                 fi
               fi
             fi
