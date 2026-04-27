@@ -75,14 +75,24 @@ jobs:
         run: |
           changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
           
+          fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+          
           for file in $changed_files; do
             if grep -qE 'cargoHash|vendorHash' "$file"; then
               echo "=== Updating cargoHash/vendorHash in $file ==="
               
-              fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-              
               old_cargo=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1 || true)
               old_vendor=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1 || true)
+              
+              if [[ "$file" =~ ^packages/ ]]; then
+                pkg_name=$(basename "$file" .nix)
+                build_target=".#$pkg_name"
+              else
+                echo "File not in packages/, skipping cargoHash/vendorHash update"
+                continue
+              fi
+              
+              echo "Build target: $build_target"
               
               if [[ -n "$old_cargo" ]]; then
                 awk -v old="$old_cargo" -v new="$fake_hash" '{
@@ -90,8 +100,7 @@ jobs:
                   print
                 }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                 
-                # Build home configuration to get hash from error
-                new_hash=$(timeout 120 nix build .#homeConfigurations.msi-h510m-pro-fedora-personal.activationPackage 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
                 
                 if [[ -n "$new_hash" ]]; then
                   awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
@@ -114,7 +123,7 @@ jobs:
                   print
                 }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
                 
-                new_hash=$(timeout 120 nix build .#homeConfigurations.msi-h510m-pro-fedora-personal.activationPackage 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+                new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
                 
                 if [[ -n "$new_hash" ]]; then
                   awk -v old="$fake_hash" -v new="sha256-$new_hash" '{
