@@ -2,6 +2,8 @@
 1password-cli
 abattis-cantarell-vf-fonts
 abseil-cpp
+accountsservice
+accountsservice-libs
 acl
 add-determinism
 adobe-mappings-cmap
@@ -49,9 +51,38 @@ blueman
 bluez
 bluez-libs
 bluez-obexd
+boost
+boost-atomic
+boost-charconv
+boost-chrono
+boost-cobalt
+boost-container
+boost-context
+boost-contract
+boost-coroutine
+boost-date-time
+boost-fiber
+boost-filesystem
+boost-graph
 boost-iostreams
-boost-system
+boost-json
+boost-locale
+boost-log
+boost-math
+boost-nowide
+boost-process
+boost-program-options
+boost-python3
+boost-random
+boost-regex
+boost-serialization
+boost-stacktrace
+boost-test
 boost-thread
+boost-timer
+boost-type_erasure
+boost-url
+boost-wave
 bpftool
 breeze-icon-theme
 bridge-utils
@@ -78,6 +109,7 @@ clevis
 clevis-luks
 clevis-pin-tpm2
 cmake-filesystem
+cmake-srpm-macros
 cnrdrvcups-ufr2-uk
 codec2
 colord
@@ -372,6 +404,8 @@ gvfs-mtp
 gvfs-nfs
 gvfs-smb
 gvnc
+gweather-locations
+gweather-locations-common
 gzip
 harfbuzz
 harfbuzz-icu
@@ -426,7 +460,6 @@ iwlwifi-mvm-firmware
 jack-audio-connection-kit
 jansson
 jasper-libs
-javascriptcoregtk4.0
 javascriptcoregtk4.1
 javascriptcoregtk6.0
 java-srpm-macros
@@ -476,6 +509,7 @@ kmod
 kmod-libs
 kmodtool
 kmod-v4l2loopback-6.12.80-200.fc43.x86_64
+kmod-v4l2loopback-6.12.83-200.fc43.x86_64
 kpartx
 krb5-devel
 krb5-libs
@@ -574,6 +608,7 @@ libdisplay-info
 libdnf
 libdnf5
 libdnf5-cli
+libdnf5-plugin-appstream
 libdnf5-plugin-expired-pgp-keys
 libdovi
 libdrm
@@ -684,6 +719,7 @@ libnfs
 libnfsidmap
 libnftnl
 libnghttp2
+libnghttp3
 libnice
 libnl3
 libnotify
@@ -709,6 +745,7 @@ libpkgconf
 libplacebo
 libplist
 libpmem
+libpmemobj
 libpng
 libportal
 libportal-gtk3
@@ -717,6 +754,7 @@ libppd
 libproxy
 libpsl
 libpwquality
+libquadmath
 librados2
 LibRaw
 libraw1394
@@ -896,6 +934,7 @@ libzpool7
 libzstd
 libzstd-devel
 lilv-libs
+linkdupes
 linux-atm-libs
 linux-firmware
 linux-firmware-whence
@@ -903,6 +942,8 @@ llvm19-filesystem
 llvm19-libs
 llvm20-filesystem
 llvm20-libs
+llvm21-filesystem
+llvm21-libs
 llvm-filesystem
 llvm-libs
 lmdb-libs
@@ -966,7 +1007,11 @@ NetworkManager-libnm
 NetworkManager-tui
 NetworkManager-wifi
 newt
+nfs-client-utils
+nfs-common-utils
 nfs-utils
+nfsv3-client-utils
+nfsv4-client-utils
 nftables
 nftables-services
 ngtcp2
@@ -989,6 +1034,7 @@ numad
 ocaml-srpm-macros
 oniguruma
 openal-soft
+openapv-libs
 openblas-srpm-macros
 OpenCL-ICD-Loader
 opencore-amr
@@ -1430,6 +1476,7 @@ qt-settings
 quota
 quota-nls
 rav1e-libs
+rdma-core-common
 readline
 realtek-firmware
 redhat-lsb
@@ -1450,6 +1497,7 @@ rpm-libs
 rpm-plugin-selinux
 rpm-sequoia
 rpm-sign-libs
+R-srpm-macros
 rsync
 rtkit
 rubberband-libs
@@ -1457,7 +1505,8 @@ rust-srpm-macros
 rutabaga-gfx-ffi
 samba-client-libs
 samba-common
-samba-common-libs
+samba-core-libs
+samba-ndr-libs
 satyr
 scenefx
 scrub
@@ -1491,6 +1540,7 @@ sord
 sound-theme-freedesktop
 soundtouch
 soxr
+spandsp
 speex
 spice-glib
 spice-gtk3
@@ -1614,7 +1664,6 @@ vvenc-libs
 wavpack
 waydroid
 waydroid-selinux
-webkit2gtk4.0
 webkit2gtk4.1
 webkitgtk6.0
 webrtc-audio-processing
@@ -1626,6 +1675,7 @@ wireless-regdb
 wireplumber
 wireplumber-libs
 wlroots
+wlroots0.19
 wmctrl
 woff2
 wpa_supplicant
