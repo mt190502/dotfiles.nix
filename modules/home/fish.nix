@@ -26,7 +26,12 @@ in
   programs.fish = {
     enable = true;
     functions = {
-      cd = "builtin cd $argv; ${lsd}";
+      cd = ''
+        builtin cd $argv
+        if status is-interactive
+          ${lsd}
+        end
+      '';
       mapscii = "${telnet} mapscii.me";
       nvim2 = "${neovide} $argv &; disown";
       shell = "nix shell nixpkgs#$argv";
