@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  inputs,
   pkgs,
   pkgs-unstable,
   ...
@@ -11,10 +12,34 @@ let
   mk' = pkg: bin: lib.getExe' pkg bin;
 in
 {
-  options.bin = lib.mkOption {
-    type = lib.types.attrsOf lib.types.str;
-    default = { };
-    description = "Centralized binary path definitions";
+  options = {
+    bin = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      description = "Centralized binary path definitions";
+    };
+    fontcfg = lib.mkOption {
+      type = lib.types.attrsOf lib.types.anything;
+      default = {
+        monospace = {
+          name = "MesloLGS NF";
+          package = pkgs.meslo-lgs-nf;
+        };
+        sansSerif = {
+          name = "Ubuntu Nerd Font Medium";
+          package = inputs.self.packages."${pkgs.stdenv.hostPlatform.system}".ubuntu-fonts-google;
+        };
+        serif = {
+          name = "Ubuntu Nerd Font Medium";
+          package = inputs.self.packages."${pkgs.stdenv.hostPlatform.system}".ubuntu-fonts-google;
+        };
+        sizes = {
+          applications = 10;
+          terminal = 9;
+        };
+      };
+      description = "Centralized font configuration definitions";
+    };
   };
   config.bin = {
     alacritty = mk pkgs.alacritty;

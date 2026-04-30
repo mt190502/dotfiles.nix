@@ -1,15 +1,5 @@
 { config, pkgs-unstable, ... }:
 
-let
-  fontcfg =
-    config.stylix.fonts or {
-      monospace.name = "MesloLGS NF";
-      sizes = {
-        applications = 10;
-        terminal = 9;
-      };
-    };
-in
 {
   programs.zed-editor = {
     enable = true;
@@ -33,7 +23,7 @@ in
         "Droid Sans Fallback"
       ];
       buffer_font_family = "Iosevka Nerd Font";
-      buffer_font_size = fontcfg.sizes.applications + 4.5;
+      buffer_font_size = config.fontcfg.sizes.applications + 4.5;
       buffer_font_weight = 500;
       buffer_line_height = {
         custom = 1.25;
@@ -116,17 +106,17 @@ in
       relative_line_numbers = "enabled";
       show_edit_predictions = true;
       terminal = {
-        font_family = fontcfg.monospace.name;
+        font_family = config.fontcfg.monospace.name;
         font_fallbacks = [
           "Fira Code"
           "Droid Sans"
           "Droid Sans Fallback"
         ];
-        font_size = fontcfg.sizes.terminal + 3.5;
+        font_size = config.fontcfg.sizes.terminal + 3.5;
       };
       theme = "Ayu Dark";
-      ui_font_family = fontcfg.monospace.name;
-      ui_font_size = fontcfg.sizes.terminal + 4.5;
+      ui_font_family = config.fontcfg.monospace.name;
+      ui_font_size = config.fontcfg.sizes.terminal + 4.5;
       vim_mode = true;
     };
     userKeymaps = [
