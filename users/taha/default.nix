@@ -82,5 +82,4 @@
   #
   ########################################
   home.activation = { };
-  #  imports = [ inputs.self.homeModules.mt190502 ];
 }

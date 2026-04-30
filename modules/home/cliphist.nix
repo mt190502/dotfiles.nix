@@ -10,7 +10,7 @@
       enable = true;
       allowImages = true;
       systemdTargets = [
-        "${config.preferences.wm}-session.target"
+        "${config.preferences.desktopenv}-session.target"
       ];
     };
   };

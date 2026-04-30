@@ -144,14 +144,31 @@ in
         type "$cmd" >/dev/null 2>&1 && alias "$cmd"="${grc} --colour=auto $cmd"
       end
     '';
-    loginShellInit = lib.mkIf (config.preferences.wm == "sway" && pkgs.stdenv.hostPlatform.isLinux) ''
-      if [ "$(tty)" = "/dev/tty1" ]
-        export $(${config.bin.systemd-env})
-        export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
-        export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
-        ${config.bin.dbus} --systemd --all
-        XDG_CURRENT_DESKTOP=sway sway &>${home}/.cache/swaywm.log
-      end
-    '';
+    loginShellInit = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (
+      ''
+        if [ "$(tty)" = "/dev/tty1" ]
+          export $(${config.bin.systemd-env})
+          export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
+          export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
+          ${config.bin.dbus} --systemd --all
+      ''
+      + (
+        if (config.preferences.desktopenv == "sway") then
+          ''
+            XDG_CURRENT_DESKTOP=sway sway &>${home}/.cache/swaywm.log
+          ''
+        else if (config.preferences.desktopenv == "plasma") then
+          ''
+            XDG_CURRENT_DESKTOP=KDE startplasma-wayland &>${home}/.cache/plasma.log
+          ''
+        else
+          ''
+            echo "No WM set in preferences, skipping session start" >&2
+          ''
+      )
+      + ''
+        end
+      ''
+    );
   };
 }

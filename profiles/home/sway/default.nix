@@ -17,7 +17,7 @@ in
 {
   config = {
     preferences = {
-      wm = lib.mkDefault "sway";
+      desktopenv = lib.mkDefault "sway";
       lock-app = lib.mkDefault "swaylock";
       notifier = lib.mkDefault "swaync";
     };

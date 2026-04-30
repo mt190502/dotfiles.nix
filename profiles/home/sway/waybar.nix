@@ -36,7 +36,7 @@ in
       enable = true;
       systemd = {
         enable = true;
-        target = "${config.preferences.wm}-session.target";
+        target = "${config.preferences.desktopenv}-session.target";
       };
       settings = {
         mainBar = {
@@ -51,12 +51,12 @@ in
           #################################################
           modules-left = [
             "custom/space2"
-            "${config.preferences.wm}/workspaces"
+            "${config.preferences.desktopenv}/workspaces"
             "custom/space"
-            "${config.preferences.wm}/window"
+            "${config.preferences.desktopenv}/window"
           ];
 
-          modules-center = (lib.optional (config.preferences.wm == "sway") "sway/mode") ++ [
+          modules-center = (lib.optional (config.preferences.desktopenv == "sway") "sway/mode") ++ [
             "custom/space"
             "mpd"
             "custom/space"
@@ -72,7 +72,7 @@ in
             "custom/space"
             "idle_inhibitor"
             "custom/space"
-            "${config.preferences.wm}/language"
+            "${config.preferences.desktopenv}/language"
             "custom/space"
             "network"
             "custom/space"
@@ -260,7 +260,7 @@ in
             tooltip-format = "{artist} - {album} - {title}";
             on-click = "${mpc} toggle";
             on-click-middle = "${mpc} stop";
-            on-click-right = "${home}/.config/${config.preferences.wm}/scripts.d/media.sh";
+            on-click-right = "${home}/.config/${config.preferences.desktopenv}/scripts.d/media.sh";
             on-scroll-up = "${mpc} volume +5";
             on-scroll-down = "${mpc} volume -5";
           };

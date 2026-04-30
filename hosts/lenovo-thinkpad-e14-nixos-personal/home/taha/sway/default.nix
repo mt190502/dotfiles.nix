@@ -10,7 +10,7 @@ let
   onepass = lib.getExe' osConfig.programs._1password-gui.package "1password";
 in
 {
-  wayland.windowManager.sway.config = lib.mkIf (config.preferences.wm == "sway") {
+  wayland.windowManager.sway.config = lib.mkIf (config.preferences.desktopenv == "sway") {
     keybindings = {
       "${modifier}+g" = "exec ${onepass}/bin/1password --quick-access";
     };
