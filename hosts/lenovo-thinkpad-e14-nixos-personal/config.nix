@@ -2,7 +2,7 @@
   stateVersion = "25.11";
   platform = "nixos";
   arch = "x86_64-linux";
-  users = [ "taha" ];
+  users = [ "taha" "rose" ];
   modules = [
     "docker"
     "fontconfig"
@@ -11,6 +11,7 @@
     "mate-polkit"
     "onepassword"
     "pipewire"
+    "plasma"
     "printer"
     "tailscale"
     "tlp"
