@@ -2,15 +2,40 @@
   config,
   lib,
   inputs,
+  pkgs,
   ...
 }:
 
+let
+  plasmoid_windowtitle = pkgs.stdenvNoCC.mkDerivation {
+    name = "WindowTitle";
+    src = pkgs.fetchFromGitHub {
+      owner = "dhruv8sh";
+      repo = "plasma6-window-title-applet";
+      rev = "v0.9.0";
+      sha256 = "sha256-pFXVySorHq5EpgsBz01vZQ0sLAy2UrF4VADMjyz2YLs=";
+    };
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/plasma/plasmoids/org.kde.windowtitle
+      cp -r ./* $out/share/plasma/plasmoids/org.kde.windowtitle/
+      runHook postInstall
+    '';
+    passthru.updateScript = pkgs.nix-update-script { };
+  };
+in
 {
   imports = [ inputs.plasma-manager.homeModules.plasma-manager ];
   config = {
     preferences.desktopenv = lib.mkDefault "plasma";
+    home.packages = [
+      plasmoid_windowtitle
+    ];
     programs.plasma = {
       enable = true;
+      configFile.kded5rc = {
+         "Module-gtkconfig"."autoload" = false;
+      };
       desktop = {
         icons = {
           alignment = "left";
@@ -140,16 +165,41 @@
       panels = [
         {
           alignment = "center";
-          floating = false;
+          floating = true;
           height = 32;
           location = "top";
           opacity = "translucent";
           widgets = [
             "org.kde.plasma.kickoff"
-            #~ todo: add appmenu widget here
+            {
+              name = "org.kde.windowtitle";
+              config = {
+                Appearance = {
+                  altTxt = "";
+                  firstSpace = 10;
+                  lastSpace = 5;
+                  visible = false;
+                };
+              };
+            }
             "org.kde.plasma.appmenu"
             "org.kde.plasma.panelspacer"
-            "org.kde.plasma.digitalclock"
+            {
+              name = "org.kde.plasma.digitalclock";
+              config = {
+                Appearance = {
+                  autoFontAndSize = false;
+                  customDateFormat = "ddd d MMM  ";
+                  dateDisplayFormat = "BesideTime";
+                  dateFormat = "custom";
+                  fontFamily = config.fontcfg.serif.name;
+                  fontSize = config.fontcfg.sizes.applications - 3;
+                  fontStyleName = "Regular";
+                  fontWeight = 500;
+                  showSeconds = "Always";
+                };
+              };
+            }
             "org.kde.plasma.panelspacer"
             "org.kde.plasma.systemtray"
           ];
@@ -158,6 +208,7 @@
           alignment = "center";
           floating = true;
           height = 48;
+          hiding = "dodgewindows";
           lengthMode = "fit";
           location = "bottom";
           opacity = "translucent";
@@ -197,7 +248,7 @@
         cursor = {
           animationTime = null;
           cursorFeedback = "None";
-          size = 32;
+          size = 30;
           taskManagerFeedback = true;
           theme = "Adwaita";
         };
