@@ -1,0 +1,8 @@
+keys:
+  - &personal age1vshrm5lkqp3s0v3wgnhyjf8dlvhnf53u9779xs7ntycpeleud38q48eq53
+
+creation_rules:
+  - path_regex: ^secrets/[^/]+/[^/]+/secret\.yml$
+    key_groups:
+      - age:
+          - *personal

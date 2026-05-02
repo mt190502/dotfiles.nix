@@ -8,6 +8,7 @@
     "docker"
     "fontconfig"
     "homebrew"
+    "sops"
   ];
   profiles = [ ];
   packages = [ "ubuntu-fonts-google" ];
