@@ -35,7 +35,7 @@ rec {
         "v4l2loopback"
       ];
     };
-    kernelPackages = pkgs.linuxPackages_6_12;
+    kernelPackages = pkgs.linuxPackages_6_18;
     kernelParams = [
       "rw"
       "loglevel=3"
