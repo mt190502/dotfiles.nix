@@ -13,7 +13,7 @@ let
       owner = "dhruv8sh";
       repo = "plasma6-window-title-applet";
       rev = "v0.21";
-      sha256 = "sha256-pFXVySorHq5EpgsBz01vZQ0sLAy2UrF4VADMjyz2YLs=";
+      sha256 = "sha256-2GLVYix777hP4BkcrTHo6QOUQhcSnhkDBc3el8AuNe8=";
     };
     installPhase = ''
       runHook preInstall
