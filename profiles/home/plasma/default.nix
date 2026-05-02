@@ -12,7 +12,7 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "dhruv8sh";
       repo = "plasma6-window-title-applet";
-      rev = "v0.9.0";
+      rev = "v0.21";
       sha256 = "sha256-pFXVySorHq5EpgsBz01vZQ0sLAy2UrF4VADMjyz2YLs=";
     };
     installPhase = ''
