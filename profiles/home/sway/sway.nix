@@ -230,7 +230,7 @@ in
         #~~~ window
         "${modifier}+f" = "fullscreen";
         "${modifier}+Shift+space" =
-          "exec ${swaymsg} input 'type:keyboard' xkb_switch_layout next && ${swaymsg} floating toggle"; #~ https://github.com/swaywm/sway/issues/8403
+          "exec ${swaymsg} input 'type:keyboard' xkb_switch_layout next && ${swaymsg} floating toggle"; # ~ https://github.com/swaywm/sway/issues/8403
         "${modifier}+shift+1" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 1";
         "${modifier}+shift+2" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 2";
         "${modifier}+shift+3" = "exec ${home}/.config/sway/scripts.d/workspace.sh move-container 3";

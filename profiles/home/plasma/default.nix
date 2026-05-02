@@ -34,7 +34,7 @@ in
     programs.plasma = {
       enable = true;
       configFile.kded5rc = {
-         "Module-gtkconfig"."autoload" = false;
+        "Module-gtkconfig"."autoload" = false;
       };
       desktop = {
         icons = {

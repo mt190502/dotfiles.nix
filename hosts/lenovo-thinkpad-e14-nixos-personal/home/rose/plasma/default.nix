@@ -16,7 +16,7 @@
           vendorId = "046D";
         }
       ];
-      touchpads = [ 
+      touchpads = [
         {
           disableWhileTyping = true;
           enable = true;
@@ -27,7 +27,7 @@
           productId = "CE5C";
           tapToClick = true;
           vendorId = "06CB";
-        } 
+        }
       ];
     };
     kscreenlocker.appearance.wallpaper = ../../../../../assets/wallpapers/wallpaper1.jpg;
