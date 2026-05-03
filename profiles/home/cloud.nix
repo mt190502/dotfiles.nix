@@ -202,13 +202,13 @@ rec {
         end
       '';
       scx = {
-        wraps = "ls $HOME/.sops";
+        wraps = "ls $HOME/.config/sops/age";
         body = ''
           if test (count $argv) -eq 0
-            ls $HOME/.sops
+            ls $HOME/.config/sops/age
             return 1
           end
-          set -Ux SOPS_AGE_KEY_FILE "$HOME/.sops/$argv[1]"
+          set -Ux SOPS_AGE_KEY_FILE "$HOME/.config/sops/age/$argv[1]"
         '';
       };
     };
