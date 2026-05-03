@@ -1,8 +1,10 @@
 keys:
-  - &personal age1vshrm5lkqp3s0v3wgnhyjf8dlvhnf53u9779xs7ntycpeleud38q48eq53
+  - &lenovo-thinkpad-e14-nixos-personal age1vshrm5lkqp3s0v3wgnhyjf8dlvhnf53u9779xs7ntycpeleud38q48eq53
+  - &msi-h510m-pro-fedora-personal age1dvx9zzl3cjd85u0pxsakz029xzh9eddfju23tf9guqaka0mwle6qktczfc
 
 creation_rules:
   - path_regex: ^secrets/[^/]+/[^/]+/secret\..*$
     key_groups:
       - age:
-          - *personal
+          - *lenovo-thinkpad-e14-nixos-personal
+          - *msi-h510m-pro-fedora-personal
