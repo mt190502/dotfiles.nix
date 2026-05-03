@@ -40,7 +40,6 @@
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
-        bin
         fastfetch
         fish
         fontconfig
@@ -49,12 +48,8 @@
         kdeconnect
         mangohud
         mpv
-        preferences
         rnnoise
-        sops
-        stylix
         syncthing
-        wrapped
         ytdlp
       ])
       ++ (with inputs.self.homeProfiles; [

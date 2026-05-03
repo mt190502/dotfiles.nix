@@ -31,7 +31,6 @@ rec {
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
-        bin
         delta
         direnv
         fastfetch
@@ -39,9 +38,6 @@ rec {
         fontconfig
         git
         mpv
-        preferences
-        scripts
-        sops
         ytdlp
         zed
       ])

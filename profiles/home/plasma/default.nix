@@ -189,7 +189,7 @@ in
               config = {
                 Appearance = {
                   autoFontAndSize = false;
-                  customDateFormat = "ddd d MMM  ";
+                  customDateFormat = "ddd d MMM ";
                   dateDisplayFormat = "BesideTime";
                   dateFormat = "custom";
                   fontFamily = config.fontcfg.serif.name;

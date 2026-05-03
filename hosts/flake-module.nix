@@ -19,6 +19,15 @@ let
     in
     lib.filterAttrs (name: cfg: cfg.platform == platform) hostConfigs;
 
+  defaultHomeModules = [
+    "bin"
+    "preferences"
+    "scripts"
+    "sops"
+    "stylix"
+    "wrapped"
+  ];
+
   buildNixosConfig =
     name: cfg:
     let
@@ -27,6 +36,7 @@ let
       userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
       profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
+      homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
         system.stateVersion = cfg.stateVersion;
         nix.settings = cfg.nixSettings or { };
@@ -42,6 +52,9 @@ let
       modules = [
         inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager.sharedModules = homeModules;
+        }
         ./${name}
       ]
       ++ moduleConfigs
@@ -61,6 +74,7 @@ let
       userConfigs = map (u: lib.attrByPath [ u "darwin" ] { } (inputs.self.users or { })) cfg.users;
       profileConfigs = map (p: inputs.self.darwinProfiles.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.darwinModules.${m} or { }) cfg.modules;
+      homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
         system.primaryUser = cfg.primaryUser;
         system.stateVersion = cfg.stateVersion;
@@ -76,6 +90,9 @@ let
       };
       modules = [
         inputs.home-manager.darwinModules.default
+        {
+          home-manager.sharedModules = homeModules;
+        }
         ./${name}
       ]
       ++ moduleConfigs
@@ -94,16 +111,7 @@ let
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
       userConfig = lib.attrByPath [ cfg.user "home" ] { } (inputs.self.users or { });
       profileConfigs = map (p: inputs.self.homeProfiles.${p} or { }) cfg.profiles;
-      moduleConfigs = map (m: inputs.self.homeModules.${m} or { }) (
-        cfg.modules
-        ++ [
-          "bin"
-          "preferences"
-          "sops"
-          "stylix"
-          "wrapped"
-        ]
-      );
+      moduleConfigs = map (m: inputs.self.homeModules.${m} or { }) (cfg.modules ++ defaultHomeModules);
       hostConfig = {
         home.stateVersion = cfg.stateVersion;
       };

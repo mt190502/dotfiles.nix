@@ -41,7 +41,6 @@
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
-        bin
         delta
         direnv
         fastfetch
@@ -57,17 +56,12 @@
         mangohud
         mpdris2-rs
         mpv
-        preferences
         qt-apps-wm-fix
         rmpc
         rnnoise
-        scripts
-        sops
-        stylix
         swappy
         syncthing
         vicinae
-        wrapped
         yazi
         ytdlp
         zed
