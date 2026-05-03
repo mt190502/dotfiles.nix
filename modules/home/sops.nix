@@ -9,6 +9,7 @@ let
   secrets = inputs.self.secrets or { };
   homeUser = config.home.username;
   userSecrets = secrets.${homeUser} or { };
+  nonPasswordSecrets = lib.filterAttrs (_: cfg: (cfg.type or "default") != "userPassword") userSecrets;
   flattenSecrets = lib.mapAttrs' (
     name: cfg:
     let
@@ -45,7 +46,7 @@ let
       // lib.optionalAttrs (targetPath != null) { path = targetPath; }
       // lib.optionalAttrs (type == "env") { mode = "0400"; };
     }
-  ) userSecrets;
+  ) nonPasswordSecrets;
 in
 {
   imports = [ inputs.sops-nix.homeManagerModules.sops ];

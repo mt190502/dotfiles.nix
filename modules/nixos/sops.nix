@@ -47,7 +47,7 @@ let
         // base
         // lib.optionalAttrs (cfg ? mode) { mode = cfg.mode; }
         // lib.optionalAttrs (targetPath != null) { path = targetPath; }
-        // lib.optionalAttrs (type == "password") { neededForUsers = true; }
+        // lib.optionalAttrs (type == "userPassword") { neededForUsers = true; }
         // lib.optionalAttrs (type == "env") { mode = "0400"; };
       }
     ) userSecrets)

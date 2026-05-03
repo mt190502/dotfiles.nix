@@ -5,6 +5,7 @@ pre-commit:
     glob: "*secret*"
     exclude: 
       - "*.example"
+      - "*.nix"
     run: |
       for f in {staged_files}; do
         if ! sops filestatus "$f" | grep -q "true"; then

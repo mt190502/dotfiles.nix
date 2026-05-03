@@ -1,4 +1,4 @@
 {
-  type = "password";
+  type = "userPassword";
   source = "secret.txt";
 }
