@@ -59,7 +59,7 @@ let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
       userConfigs = map (u: lib.attrByPath [ u "darwin" ] { } (inputs.self.users or { })) cfg.users;
-      profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
+      profileConfigs = map (p: inputs.self.darwinProfiles.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.darwinModules.${m} or { }) cfg.modules;
       hostConfig = {
         system.primaryUser = cfg.primaryUser;
