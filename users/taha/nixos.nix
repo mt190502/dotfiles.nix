@@ -51,15 +51,12 @@
         git
         gnome-keyring
         gtk
-        kde-apps-wm-fix
         kdeconnect
         mangohud
         mpdris2-rs
         mpv
-        qt-apps-wm-fix
         rmpc
         rnnoise
-        swappy
         syncthing
         vicinae
         yazi

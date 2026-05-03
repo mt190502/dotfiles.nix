@@ -68,10 +68,16 @@ in
     );
   };
   imports = [
+    # ./cliphist.nix
+    ./kde-apps-wm-fix.nix
+    # ./mako.nix
+    ./qt-apps-wm-fix.nix
+    ./swappy.nix
+    ./sway.nix
     ./swaylock.nix
     ./swaynag.nix
     ./swaync.nix
-    ./sway.nix
     ./waybar.nix
+    # ./wofi.nix
   ];
 }
