@@ -17,32 +17,47 @@ let
     // (lib.mapAttrs' (
       name: cfg:
       let
+        type = cfg.type or "default";
+        targetPath =
+          if type == "env" then
+            "${homeDir}/.config/environment.d/${name}.conf"
+          else if cfg ? homeTarget then
+            "${homeDir}/${cfg.homeTarget}"
+          else if cfg ? globalTarget then
+            cfg.globalTarget
+          else
+            null;
         base = builtins.removeAttrs cfg [
+          "type"
           "sopsFile"
-          "key"
-          "format"
-          "relativePath"
+          "sopsFormat"
+          "source"
+          "homeTarget"
+          "globalTarget"
+          "mode"
         ];
       in
       {
         name = "${user}/${name}";
         value = {
           sopsFile = cfg.sopsFile;
-          key = cfg.key or name;
-          format = cfg.format or "yaml";
+          format = cfg.sopsFormat;
+          owner = user;
         }
         // base
-        // lib.optionalAttrs (cfg ? relativePath) {
-          path = "${homeDir}/${cfg.relativePath}";
-        };
+        // lib.optionalAttrs (cfg ? mode) { mode = cfg.mode; }
+        // lib.optionalAttrs (targetPath != null) { path = targetPath; }
+        // lib.optionalAttrs (type == "password") { neededForUsers = true; }
+        // lib.optionalAttrs (type == "env") { mode = "0400"; };
       }
     ) userSecrets)
   ) { } (builtins.attrNames secrets);
 in
 {
   imports = [ inputs.sops-nix.nixosModules.sops ];
+  users.mutableUsers = false;
   sops = {
-    defaultSopsFormat = "yaml";
+    defaultSopsFormat = "binary";
     age.keyFile = "/etc/sops/age/keys.txt";
     age.generateKey = true;
     secrets = flattenSecrets;

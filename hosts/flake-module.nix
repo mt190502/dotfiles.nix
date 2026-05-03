@@ -99,6 +99,7 @@ let
         ++ [
           "bin"
           "preferences"
+          "sops"
           "stylix"
           "wrapped"
         ]

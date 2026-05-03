@@ -41,6 +41,7 @@ rec {
         mpv
         preferences
         scripts
+        sops
         ytdlp
         zed
       ])

@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   flakeName,
   system,
@@ -11,6 +12,7 @@
   programs.fish.enable = true;
   users.users.rose = {
     shell = pkgs.fish;
+    hashedPasswordFile = config.sops.secrets."rose/shadow".path;
     isNormalUser = true;
     extraGroups = [
       "audio"
@@ -49,6 +51,7 @@
         mpv
         preferences
         rnnoise
+        sops
         stylix
         syncthing
         wrapped

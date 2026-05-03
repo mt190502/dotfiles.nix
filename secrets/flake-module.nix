@@ -10,12 +10,19 @@ let
     in
     lib.mapAttrs (
       name: _:
-      (import (userDir + "/${name}/config.nix"))
+      let
+        secretDir = userDir + "/${name}";
+        cfg = import (secretDir + "/config.nix");
+      in
+      (builtins.removeAttrs cfg [ "source" ])
       // {
-        sopsFile = "${inputs.self}/secrets/${user}/${name}/secret.yml";
+        sopsFile = "${inputs.self}/secrets/${user}/${name}/${cfg.source}";
+        sopsFormat = "binary";
       }
     ) dirs;
-  users = lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./.);
+  users = lib.filterAttrs (name: type: type == "directory" && name != "template") (
+    builtins.readDir ./.
+  );
 in
 {
   flake.secrets = lib.mapAttrs (user: _: discoverSecrets user) users;

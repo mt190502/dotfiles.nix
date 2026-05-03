@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   flakeName,
   system,
@@ -12,6 +13,7 @@
   users.users.taha = {
     shell = pkgs.fish;
     isNormalUser = true;
+    hashedPasswordFile = config.sops.secrets."taha/shadow".path;
     extraGroups = [
       "audio"
       "kvm"
@@ -60,6 +62,7 @@
         rmpc
         rnnoise
         scripts
+        sops
         stylix
         swappy
         syncthing

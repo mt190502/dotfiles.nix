@@ -1,0 +1,14 @@
+pre-commit:
+  jobs:
+  #~ Check that all secret files are encrypted with SOPS
+  - name: check-sops
+    glob: "*secret*"
+    exclude: 
+      - "*.example"
+    run: |
+      for f in {staged_files}; do
+        if ! sops filestatus "$f" | grep -q "true"; then
+          echo "File $f is not encrypted with SOPS"
+          exit 1
+        fi
+      done
