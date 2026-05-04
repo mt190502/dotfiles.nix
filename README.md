@@ -27,6 +27,12 @@ A modular, cross-platform Nix configuration using flake-parts. Supports NixOS, m
 │   ├── darwin/                # Darwin profiles   
 │   ├── home/                  # Home-manager profiles (ai, cloud, development, etc.)
 │   └── nixos/                 # NixOS profiles
+├── secrets/                   # Encrypted secrets (using sops or similar)
+│   ├── <username>/            # User-specific secrets
+│   │   └── <secretname>/      # Encrypted secret dir
+│   │       ├── config.nix     # Secret configuration (e.g., environment variables)
+│   │       └── secretfile     # Encrypted file (e.g., .env, credentials.json, etc.)
+│   └── flake-module.nix       # Secret management logic
 ├── users/                     # User-level defaults
 │   └── <username>/            # User-specific base config
 │       ├── darwin.nix         # Darwin user config
@@ -45,6 +51,16 @@ A modular, cross-platform Nix configuration using flake-parts. Supports NixOS, m
 | [msi-h510m-pro-fedora-personal](./hosts/msi-h510m-pro-fedora-personal)           | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-fedora-personal.png) |
 
 ## Architecture
+
+### Layered Configuration
+
+Configuration is organized in three layers, from generic to specific. This pattern applies to all platforms (NixOS, Darwin, Home Manager):
+
+1. **`modules/`** — Reusable, platform-agnostic modules (e.g. `modules/home/`, `modules/nixos/`, `modules/darwin/`). Shared across all users and hosts.
+2. **`users/<username>/`** — User-level defaults (e.g. `users/taha/`). Applies base config per user, regardless of host.
+3. **`hosts/<hostname>/`** — Host-specific overrides (e.g. `home/` for user-level, `host/` for system-level). The most specific layer; overrides or extends user and module defaults for a particular machine.
+
+Each layer inherits from the one above it, allowing shared defaults in `modules/` and `users/` while enabling per-host customization in `hosts/`.
 
 ### Host Configuration
 
