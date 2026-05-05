@@ -7,6 +7,7 @@
 
 let
   secrets = inputs.self.secrets or { };
+  systemUsers = builtins.attrNames config.users.users;
   flattenSecrets = lib.foldl' (
     acc: user:
     let
@@ -51,7 +52,7 @@ let
         // lib.optionalAttrs (type == "env") { mode = "0400"; };
       }
     ) userSecrets)
-  ) { } (builtins.attrNames secrets);
+  ) { } (builtins.filter (user: builtins.elem user systemUsers) (builtins.attrNames secrets));
 in
 {
   imports = [ inputs.sops-nix.nixosModules.sops ];

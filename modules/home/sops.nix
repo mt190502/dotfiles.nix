@@ -9,7 +9,9 @@ let
   secrets = inputs.self.secrets or { };
   homeUser = config.home.username;
   userSecrets = secrets.${homeUser} or { };
-  nonPasswordSecrets = lib.filterAttrs (_: cfg: (cfg.type or "default") != "userPassword") userSecrets;
+  nonPasswordSecrets = lib.filterAttrs (
+    _: cfg: (cfg.type or "default") != "userPassword"
+  ) userSecrets;
   flattenSecrets = lib.mapAttrs' (
     name: cfg:
     let
