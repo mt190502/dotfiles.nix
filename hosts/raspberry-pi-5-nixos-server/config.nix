@@ -8,7 +8,10 @@
     "docker"
     "sops"
   ];
-  profiles = [ "raspberrypi" ];
+  profiles = [
+    "k3s"
+    "raspberrypi"
+  ];
   packages = [ ];
   nixSettings = {
     experimental-features = [
