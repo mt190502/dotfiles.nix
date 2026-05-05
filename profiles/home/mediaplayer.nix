@@ -37,7 +37,7 @@ in
       '';
     };
     mpd-discord-rpc = {
-      enable = true;
+      enable = false;
       settings = {
         hosts = [ "localhost:6600" ];
         format = {
