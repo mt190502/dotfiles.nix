@@ -1,5 +1,3 @@
-{ ... }:
-
 {
   services.tlp = {
     enable = true;

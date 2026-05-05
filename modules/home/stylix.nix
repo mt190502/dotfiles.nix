@@ -44,8 +44,7 @@
   config = {
     fontcfg = lib.mkForce {
       monospace = {
-        name = config.stylix.fonts.monospace.name;
-        package = config.stylix.fonts.monospace.package;
+        inherit (config.stylix.fonts.monospace) name package;
         # name = "Scientifica Nerd Font";
         # package = pkgs.scientifica.overrideAttrs (o: {
         #   nativeBuildInputs = [ pkgs.nerd-font-patcher ];
@@ -59,27 +58,20 @@
         # });
       };
       sansSerif = {
-        name = config.stylix.fonts.sansSerif.name;
-        package = config.stylix.fonts.sansSerif.package;
+        inherit (config.stylix.fonts.sansSerif) name package;
       };
       serif = {
-        name = config.stylix.fonts.serif.name;
-        package = config.stylix.fonts.serif.package;
+        inherit (config.stylix.fonts.serif) name package;
       };
       sizes = {
-        applications = config.stylix.fonts.sizes.applications;
-        terminal = config.stylix.fonts.sizes.terminal;
+        inherit (config.stylix.fonts.sizes) applications terminal;
       };
     };
     cursorcfg = lib.mkForce {
-      name = config.stylix.cursor.name;
-      size = config.stylix.cursor.size;
-      package = config.stylix.cursor.package;
+      inherit (config.stylix.cursor) name size package;
     };
     iconthemecfg = lib.mkForce {
-      dark = config.stylix.iconTheme.dark;
-      light = config.stylix.iconTheme.light;
-      package = config.stylix.iconTheme.package;
+      inherit (config.stylix.iconTheme) dark light package;
     };
     stylix = {
       enable = lib.mkIf (lib.hasSuffix "linux" system) true;

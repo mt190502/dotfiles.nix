@@ -1,13 +1,28 @@
 { lib, ... }:
 
 {
-  ########################################
-  #
-  ## Home Manager Required Variables
-  #
-  ########################################
-  home.username = lib.mkForce "fedora";
-  home.homeDirectory = lib.mkForce "/home/fedora";
+  home = {
+    ########################################
+    #
+    ## Home Manager Required Variables
+    #
+    ########################################
+    username = lib.mkForce "fedora";
+    homeDirectory = lib.mkForce "/home/fedora";
+
+    ########################################
+    #
+    ## Variables
+    #
+    ########################################
+    sessionVariables = {
+      ##############################
+      ## LIBVA/VDPAU
+      ##############################
+      LIBVA_DRIVER_NAME = "iHD";
+      VDPAU_DRIVER = "radeonsi";
+    };
+  };
 
   ########################################
   #
@@ -16,19 +31,6 @@
   ########################################
   #~ custom modules ~#
   targets.genericLinux.enable = true;
-
-  ########################################
-  #
-  ## Variables
-  #
-  ########################################
-  home.sessionVariables = {
-    ##############################
-    ## LIBVA/VDPAU
-    ##############################
-    LIBVA_DRIVER_NAME = "iHD";
-    VDPAU_DRIVER = "radeonsi";
-  };
 
   ########################################
   #

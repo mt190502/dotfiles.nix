@@ -92,7 +92,7 @@ let
   '';
 
   rayCli = pkgs.fetchurl {
-    url = "https://cli.raycast.com/1.86.0-alpha.65/linux/ray"; #~ https://cli.raycast.com/latest_version.txt
+    url = "https://cli.raycast.com/1.86.0-alpha.65/linux/ray"; # ~ https://cli.raycast.com/latest_version.txt
     sha256 = "sha256-UgDA2hIH7HwKl3j4UEGIlvh6eE+IWUlSML0wloHFPQw=";
   };
 

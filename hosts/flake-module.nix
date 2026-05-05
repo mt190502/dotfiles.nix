@@ -17,7 +17,7 @@ let
       ) entries;
       hostConfigs = lib.mapAttrs (name: _: import ./${name}/config.nix) dirs;
     in
-    lib.filterAttrs (name: cfg: cfg.platform == platform) hostConfigs;
+    lib.filterAttrs (_: cfg: cfg.platform == platform) hostConfigs;
 
   defaultHomeModules = [
     "bin"

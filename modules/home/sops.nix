@@ -22,10 +22,8 @@ let
           "${homeDir}/.config/environment.d/${name}.conf"
         else if cfg ? homeTarget then
           "${homeDir}/${cfg.homeTarget}"
-        else if cfg ? globalTarget then
-          cfg.globalTarget
         else
-          null;
+          cfg.globalTarget or null;
       base = builtins.removeAttrs cfg [
         "type"
         "sopsFile"
@@ -40,11 +38,11 @@ let
     {
       name = "${homeUser}/${name}";
       value = {
-        sopsFile = cfg.sopsFile;
+        inherit (cfg) sopsFile;
         format = cfg.sopsFormat;
       }
       // base
-      // lib.optionalAttrs (cfg ? mode) { mode = cfg.mode; }
+      // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
       // lib.optionalAttrs (targetPath != null) { path = targetPath; }
       // lib.optionalAttrs (type == "env") { mode = "0400"; };
     }

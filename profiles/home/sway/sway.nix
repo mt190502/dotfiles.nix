@@ -80,7 +80,7 @@ in
     };
     config = {
       inherit modifier menu;
-      terminal = config.preferences.terminal;
+      inherit (config.preferences) terminal;
 
       ##############################
       #
@@ -168,8 +168,6 @@ in
           workspaceButtons = true;
         }
       ];
-      floating.border = 5;
-      floating.modifier = modifier;
       focus.newWindow = "focus";
       gaps = {
         inner = 5;
@@ -312,76 +310,80 @@ in
       ## Window Rules
       #
       ##############################
-      floating.criteria = [
-        {
-          app_id = "(firefox|LibreWolf)";
-          title = "^(.*)Sharing Indicator(.*)";
-        }
-        {
-          app_id = "(firefox|LibreWolf)";
-          title = "^Extension:(.*)";
-        }
-        {
-          app_id = "(firefox|LibreWolf)";
-          title = "^Library$";
-        }
-        {
-          app_id = "(firefox|LibreWolf)";
-          title = "^Picture-in-Picture(.*)$";
-        }
-        { app_id = "1Password"; }
-        {
-          app_id = termid;
-          title = config.preferences.mediaplayer;
-        }
-        {
-          app_id = termid;
-          title = "nmtui";
-        }
-        {
-          app_id = termid;
-          title = "wttr.in";
-        }
-        { app_id = "com.nextcloud.desktopclient.nextcloud"; }
-        { app_id = "com.usebottles.bottles"; }
-        { app_id = "evolution-alarm-notify"; }
-        {
-          app_id = "flameshot";
-          title = "flameshot";
-        }
-        { app_id = "nm-connection-editor$"; }
-        { app_id = "org.freedesktop.impl.portal.desktop.kde"; }
-        { app_id = "org.gnome.Calculator"; }
-        { app_id = "org.kde.discover"; }
-        { app_id = "org.kde.dolphin"; }
-        { app_id = "org.kde.polkit-kde-authentication-agent-1"; }
-        { app_id = "org.oe-f.openboard"; }
-        { app_id = "pavucontrol"; }
-        { app_id = "setroubleshoot"; }
-        { app_id = "simple-scan"; }
-        { app_id = "tlp-ui"; }
-        { app_id = "Waydroid"; }
-        { app_id = "xfce-polkit"; }
-        { app_id = "zoom"; }
-        {
-          class = "jetbrains-(.*)";
-          title = "splash";
-        }
-        {
-          class = "jetbrains-(.*)";
-          title = "Welcome to (.*)";
-        }
-        {
-          class = "Steam";
-          title = "Steam - News(.*)";
-        }
-        { window_role = "bubble"; }
-        { window_role = "pop-up"; }
-        { window_role = "Preferences"; }
-        { window_role = "task_dialog"; }
-        { window_type = "dialog"; }
-        { window_type = "menu"; }
-      ];
+      floating = {
+        inherit modifier;
+        border = 5;
+        criteria = [
+          {
+            app_id = "(firefox|LibreWolf)";
+            title = "^(.*)Sharing Indicator(.*)";
+          }
+          {
+            app_id = "(firefox|LibreWolf)";
+            title = "^Extension:(.*)";
+          }
+          {
+            app_id = "(firefox|LibreWolf)";
+            title = "^Library$";
+          }
+          {
+            app_id = "(firefox|LibreWolf)";
+            title = "^Picture-in-Picture(.*)$";
+          }
+          { app_id = "1Password"; }
+          {
+            app_id = termid;
+            title = config.preferences.mediaplayer;
+          }
+          {
+            app_id = termid;
+            title = "nmtui";
+          }
+          {
+            app_id = termid;
+            title = "wttr.in";
+          }
+          { app_id = "com.nextcloud.desktopclient.nextcloud"; }
+          { app_id = "com.usebottles.bottles"; }
+          { app_id = "evolution-alarm-notify"; }
+          {
+            app_id = "flameshot";
+            title = "flameshot";
+          }
+          { app_id = "nm-connection-editor$"; }
+          { app_id = "org.freedesktop.impl.portal.desktop.kde"; }
+          { app_id = "org.gnome.Calculator"; }
+          { app_id = "org.kde.discover"; }
+          { app_id = "org.kde.dolphin"; }
+          { app_id = "org.kde.polkit-kde-authentication-agent-1"; }
+          { app_id = "org.oe-f.openboard"; }
+          { app_id = "pavucontrol"; }
+          { app_id = "setroubleshoot"; }
+          { app_id = "simple-scan"; }
+          { app_id = "tlp-ui"; }
+          { app_id = "Waydroid"; }
+          { app_id = "xfce-polkit"; }
+          { app_id = "zoom"; }
+          {
+            class = "jetbrains-(.*)";
+            title = "splash";
+          }
+          {
+            class = "jetbrains-(.*)";
+            title = "Welcome to (.*)";
+          }
+          {
+            class = "Steam";
+            title = "Steam - News(.*)";
+          }
+          { window_role = "bubble"; }
+          { window_role = "pop-up"; }
+          { window_role = "Preferences"; }
+          { window_role = "task_dialog"; }
+          { window_type = "dialog"; }
+          { window_type = "menu"; }
+        ];
+      };
 
       ##############################
       #

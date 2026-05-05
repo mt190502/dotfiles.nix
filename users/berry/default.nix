@@ -1,34 +1,55 @@
 { pkgs, pkgs-unstable, ... }:
 
 {
-  ########################################
-  #
-  ## Home Manager Required Variables
-  #
-  ########################################
-  home.stateVersion = "25.11";
-  home.username = "berry";
   programs.home-manager.enable = true;
+  home = {
+    ########################################
+    #
+    ## Home Manager Required Variables
+    #
+    ########################################
+    stateVersion = "25.11";
+    username = "berry";
 
-  ########################################
-  #
-  ## Packages
-  #
-  ########################################
-  home.packages =
-    with pkgs;
-    [
-      #~ packages ~#
-      aria2
-      btop
-      grc
-      lsd
-      rclone
-      tree
-      unrar
-      unzip
-    ]
-    ++ (with pkgs-unstable; [ ]);
+    ########################################
+    #
+    ## Packages
+    #
+    ########################################
+    packages =
+      with pkgs;
+      [
+        #~ packages ~#
+        aria2
+        btop
+        grc
+        lsd
+        rclone
+        tree
+        unrar
+        unzip
+      ]
+      ++ (with pkgs-unstable; [ ]);
+
+    ########################################
+    #
+    ## Variables
+    #
+    ########################################
+    sessionVariables = {
+      ##############################
+      ## SYSTEM
+      ##############################
+      EDITOR = "vim";
+    };
+
+    ########################################
+    #
+    ## Activations
+    #
+    ########################################
+    activation = { };
+  };
 
   ########################################
   #
@@ -36,23 +57,4 @@
   #
   ########################################
   # programs.git.settings = { };
-
-  ########################################
-  #
-  ## Variables
-  #
-  ########################################
-  home.sessionVariables = {
-    ##############################
-    ## SYSTEM
-    ##############################
-    EDITOR = "vim";
-  };
-
-  ########################################
-  #
-  ## Other Configurations
-  #
-  ########################################
-  home.activation = { };
 }

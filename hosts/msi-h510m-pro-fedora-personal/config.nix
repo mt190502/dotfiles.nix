@@ -38,5 +38,5 @@
     "tmux"
   ];
   packages = [ ];
-  extraConfig = { ... }: { };
+  extraConfig = _: { };
 }

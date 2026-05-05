@@ -33,5 +33,5 @@ in
         lib.mapAttrs (_: pkg: pkgs.callPackage pkg { }) (discoverPackages ./.)
       );
     };
-  flake.overlays.default = final: prev: (discoverPackages ./.);
+  flake.overlays.default = _: _: (discoverPackages ./.);
 }

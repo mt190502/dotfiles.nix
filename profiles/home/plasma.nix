@@ -60,7 +60,7 @@ in
         };
         small = {
           family = config.fontcfg.serif.name;
-          pointSize = (config.fontcfg.sizes.applications - 2);
+          pointSize = config.fontcfg.sizes.applications - 2;
           styleStrategy.antialiasing = "prefer";
         };
         toolbar = {
