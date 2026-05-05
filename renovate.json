@@ -16,6 +16,12 @@
     "enabled": true
   },
   "pinDigests": false,
+  "customDatasources": {
+    "raycast-cli": {
+      "defaultRegistryUrlTemplate": "https://cli.raycast.com/latest_version.txt",
+      "format": "plain"
+    }
+  },
   "packageRules": [
     {
       "matchDatasources": ["github-tags"],
@@ -26,6 +32,12 @@
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["szclsya/mpdris2-rs"],
       "versioning": "semver-coerced"
+    },
+    {
+      "matchPackageNames": ["raycast/extensions"],
+      "matchManagers": ["regex"],
+      "matchDatasources": ["github-tags"],
+      "enabled": false
     }
   ],
   "customManagers": [
@@ -48,6 +60,27 @@
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "{{{owner}}}/{{{repo}}}",
       "packageNameTemplate": "{{{owner}}}/{{{repo}}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["modules/home/vicinae.nix"],
+      "matchStrings": [
+        "url\\s*=\\s*\"https://cli\\.raycast\\.com/(?<currentValue>[^\"]+)/linux/ray\""
+      ],
+      "datasourceTemplate": "custom.raycast-cli",
+      "depNameTemplate": "raycast-cli",
+      "versioningTemplate": "loose"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["modules/home/vicinae.nix"],
+      "matchStrings": [
+        "owner\\s*=\\s*\"raycast\";\\s*repo\\s*=\\s*\"extensions\";[\\s\\S]*?rev\\s*=\\s*\"(?<currentDigest>[a-f0-9]+)\""
+      ],
+      "datasourceTemplate": "git-refs",
+      "packageNameTemplate": "https://github.com/raycast/extensions",
+      "currentValueTemplate": "main",
+      "depNameTemplate": "raycast/extensions"
     }
   ]
 }
