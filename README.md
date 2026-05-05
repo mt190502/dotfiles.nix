@@ -44,11 +44,12 @@ A modular, cross-platform Nix configuration using flake-parts. Supports NixOS, m
 
 ## Hosts
 
-| Host                                                                             | Description                                                                     | Screenshot          |
-|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------|---------------------|
+| Host                                                                             | Description                                                                     | Screenshot                                                |
+|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------|-----------------------------------------------------------|
 | [lenovo-thinkpad-e14-nixos-personal](./hosts/lenovo-thinkpad-e14-nixos-personal) | Laptop running a AMD Ryzen 5 7530U, 16GB of RAM and a AMD Barcelo Graphics      | ![image](./assets/lenovo-thinkpad-e14-nixos-personal.png) |
-| [macbook-m3-air-darwin-work](./hosts/macbook-m3-air-darwin-work)                 | MacBook Air M3 Workstation Setup with nix-darwin and home-manager               | ![image](./assets/macbook-m3-air-darwin-work.jpeg) |
-| [msi-h510m-pro-fedora-personal](./hosts/msi-h510m-pro-fedora-personal)           | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-fedora-personal.png) |
+| [macbook-m3-air-darwin-work](./hosts/macbook-m3-air-darwin-work)                 | MacBook Air M3 Workstation Setup with nix-darwin and home-manager               | ![image](./assets/macbook-m3-air-darwin-work.jpeg)        |
+| [msi-h510m-pro-fedora-personal](./hosts/msi-h510m-pro-fedora-personal)           | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-fedora-personal.png)      |
+| [raspberry-pi-5-nixos-server](./hosts/raspberry-pi-5-nixos-server)               | Raspberry Pi 5 server running NixOS with headless configuration                 | ![image](./assets/raspberry-pi-5-nixos-server.png)        |
 
 ## Architecture
 

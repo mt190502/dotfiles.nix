@@ -27,6 +27,44 @@ let
     "wrapped"
   ];
 
+  buildRPIConfig =
+    name: cfg:
+    let
+      pkgs = repo "nixpkgs" cfg.arch;
+      pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
+      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
+      profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
+      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
+      homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
+      hostConfig = {
+        system.stateVersion = cfg.stateVersion;
+        nix.settings = cfg.nixSettings or { };
+      };
+    in
+    inputs.nixos-raspberrypi.lib.nixosSystem {
+      inherit pkgs;
+      specialArgs = {
+        inherit inputs pkgs-unstable;
+        flakeName = name;
+        system = cfg.arch;
+      };
+      modules = [
+        inputs.disko.nixosModules.disko
+        inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager.sharedModules = homeModules;
+        }
+        ./${name}
+      ]
+      ++ moduleConfigs
+      ++ profileConfigs
+      ++ userConfigs
+      ++ [
+        hostConfig
+        cfg.extraConfig
+      ];
+    };
+
   buildNixosConfig =
     name: cfg:
     let
@@ -136,7 +174,9 @@ let
 in
 {
   flake = {
-    nixosConfigurations = builtins.mapAttrs buildNixosConfig (getConfigsByPlatform "nixos");
+    nixosConfigurations =
+      (builtins.mapAttrs buildNixosConfig (getConfigsByPlatform "nixos"))
+      // (builtins.mapAttrs buildRPIConfig (getConfigsByPlatform "rpi"));
     darwinConfigurations = builtins.mapAttrs buildDarwinConfig (getConfigsByPlatform "darwin");
     homeConfigurations = builtins.mapAttrs buildHomeConfig (getConfigsByPlatform "home");
   };
