@@ -70,8 +70,8 @@ Each host has `config.nix` defining:
 ```nix
 {
   stateVersion = "25.11";
-  platform = "nixos" | "darwin" | "home";
-  arch = "x86_64-linux" | "aarch64-darwin";
+  platform = "nixos" | "darwin" | "home" | "rpi"
+  arch = "x86_64-linux" | "aarch64-darwin" | "aarch64-linux";
   users = [ "taha" ];      # NixOS/Darwin only
   user = "taha";           # Home only
   modules = [ "docker" "pipewire" ... ];
