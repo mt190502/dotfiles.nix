@@ -60,6 +60,7 @@
         nvtopPackages.full
         nwg-look
         ocs-url
+        slurp
         system-config-printer
         wl-clipboard
         wlr-randr
