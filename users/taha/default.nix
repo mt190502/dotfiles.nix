@@ -27,6 +27,7 @@
         bc
         btop
         fd
+        git
         grc
         heimdall
         imagemagick

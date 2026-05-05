@@ -22,6 +22,7 @@
         #~ packages ~#
         aria2
         btop
+        git
         grc
         lsd
         rclone

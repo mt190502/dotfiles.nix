@@ -23,6 +23,7 @@
         android-tools
         aria2
         btop
+        git
         grc
         heimdall
         imagemagick
