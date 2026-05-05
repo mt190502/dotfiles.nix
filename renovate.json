@@ -35,7 +35,7 @@
     },
     {
       "matchPackageNames": ["raycast/extensions"],
-      "matchManagers": ["regex"],
+      "matchManagers": ["custom.regex"],
       "matchDatasources": ["github-tags"],
       "enabled": false
     }
