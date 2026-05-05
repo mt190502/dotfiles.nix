@@ -19,9 +19,7 @@
   "customDatasources": {
     "raycast-cli": {
       "defaultRegistryUrlTemplate": "https://cli.raycast.com/latest_version.txt",
-      "transformTemplates": [
-        "{\"releases\":[{\"version\":\"{{trim body.\"0\"}}\"}]}"
-      ]
+      "format": "plain"
     }
   },
   "packageRules": [
