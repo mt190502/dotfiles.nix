@@ -61,6 +61,7 @@
         nwg-look
         ocs-url
         system-config-printer
+        wl-clipboard
         wlr-randr
         wtype
         ydotool
