@@ -16,5 +16,5 @@
       "flakes"
     ];
   };
-  extraConfig = { ... }: { };
+  extraConfig = _: { };
 }

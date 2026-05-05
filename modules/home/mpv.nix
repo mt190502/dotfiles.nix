@@ -7,7 +7,7 @@
 
 let
   home = config.home.homeDirectory;
-  system = pkgs.stdenv.hostPlatform.system;
+  inherit (pkgs.stdenv.hostPlatform) system;
 in
 {
   programs.mpv = {

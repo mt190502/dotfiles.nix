@@ -1,52 +1,73 @@
 { pkgs, pkgs-unstable, ... }:
 
 {
-  ########################################
-  #
-  ## Home Manager Required Variables
-  #
-  ########################################
-  home.stateVersion = "25.11";
-  home.username = "taha";
   programs.home-manager.enable = true;
+  home = {
+    ########################################
+    #
+    ## Home Manager Required Variables
+    #
+    ########################################
+    stateVersion = "25.11";
+    username = "taha";
 
-  ########################################
-  #
-  ## Packages
-  #
-  ########################################
-  home.packages =
-    with pkgs;
-    [
-      #~ packages ~#
-      android-tools
-      aria2
-      bat
-      bat-extras.batman
-      bc
-      btop
-      fd
-      grc
-      heimdall
-      imagemagick
-      lsd
-      mpc
-      pipes-rs
-      r2modman
-      rclone
-      ripgrep-all
-      rsync
-      scrcpy
-      tesseract
-      tmux
-      translate-shell
-      trash-cli
-      tree
-      unrar
-      unzip
-      yt-dlp
-    ]
-    ++ (with pkgs-unstable; [ ]);
+    ########################################
+    #
+    ## Packages
+    #
+    ########################################
+    packages =
+      with pkgs;
+      [
+        #~ packages ~#
+        android-tools
+        aria2
+        bat
+        bat-extras.batman
+        bc
+        btop
+        fd
+        grc
+        heimdall
+        imagemagick
+        lsd
+        mpc
+        pipes-rs
+        r2modman
+        rclone
+        ripgrep-all
+        rsync
+        scrcpy
+        tesseract
+        tmux
+        translate-shell
+        trash-cli
+        tree
+        unrar
+        unzip
+        yt-dlp
+      ]
+      ++ (with pkgs-unstable; [ ]);
+
+    ########################################
+    #
+    ## Variables
+    #
+    ########################################
+    sessionVariables = {
+      ##############################
+      ## SYSTEM
+      ##############################
+      EDITOR = "vim";
+    };
+
+    ########################################
+    #
+    ## Activations
+    #
+    ########################################
+    activation = { };
+  };
 
   ########################################
   #
@@ -63,23 +84,4 @@
       format = "ssh";
     };
   };
-
-  ########################################
-  #
-  ## Variables
-  #
-  ########################################
-  home.sessionVariables = {
-    ##############################
-    ## SYSTEM
-    ##############################
-    EDITOR = "vim";
-  };
-
-  ########################################
-  #
-  ## Other Configurations
-  #
-  ########################################
-  home.activation = { };
 }

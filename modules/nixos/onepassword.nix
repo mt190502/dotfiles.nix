@@ -3,7 +3,7 @@
 {
   programs._1password-gui = {
     enable = true;
-    package = (
+    package =
       with pkgs;
       _1password-gui.overrideAttrs (
         {
@@ -21,8 +21,7 @@
               --append-flags "--password-store=gnome"
           '';
         }
-      )
-    );
+      );
     polkitPolicyOwners = [ "taha" ];
   };
   environment.etc."1password/custom_allowed_browsers" = {

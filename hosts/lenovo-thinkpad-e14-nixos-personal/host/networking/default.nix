@@ -15,8 +15,8 @@ in
     hostName = "thinkpad-190502";
     firewall = {
       enable = true;
-      allowedTCPPorts = [ ] ++ syncthing;
-      allowedUDPPorts = [ ] ++ syncthing;
+      allowedTCPPorts = syncthing;
+      allowedUDPPorts = syncthing;
       allowedTCPPortRanges = [ kdeconnect ];
       allowedUDPPortRanges = [ kdeconnect ];
     };

@@ -1,5 +1,3 @@
-{ ... }:
-
 {
   fonts.fontconfig = {
     enable = true;

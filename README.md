@@ -78,7 +78,7 @@ Each host has `config.nix` defining:
   profiles = [ "development" "sway" ... ];
   packages = [ "recidia" ... ];
   nixSettings = { experimental-features = [ "nix-command" "flakes" ]; };
-  extraConfig = { ... }: { };
+  extraConfig = _: { };
 }
 ```
 
