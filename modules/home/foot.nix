@@ -1,7 +1,8 @@
 { config, lib, ... }:
 
 let
-  size = builtins.toString config.stylix.fonts.sizes.terminal;
+  size = builtins.toString config.fontcfg.sizes.terminal;
+  font = config.fontcfg.monospace.name;
 in
 {
   config = {
@@ -11,10 +12,10 @@ in
       server.enable = true;
       settings = {
         main = {
-          font = lib.mkForce "${config.stylix.fonts.monospace.name}:weight=Bold:size=${size}";
-          font-bold = lib.mkForce "${config.stylix.fonts.monospace.name}:weight=Bold:size=${size}";
-          font-italic = lib.mkForce "${config.stylix.fonts.monospace.name}:slant=Italic:size=${size}";
-          font-bold-italic = lib.mkForce "${config.stylix.fonts.monospace.name}:weight=Bold:slant=Italic:size=${size}";
+          font = lib.mkForce "${font}:weight=Bold:size=${size}";
+          font-bold = lib.mkForce "${font}:weight=Bold:size=${size}";
+          font-italic = lib.mkForce "${font}:slant=Italic:size=${size}";
+          font-bold-italic = lib.mkForce "${font}:weight=Bold:slant=Italic:size=${size}";
           resize-by-cells = "no";
         };
         cursor = {

@@ -20,6 +20,7 @@
     "rmpc"
     "rnnoise"
     "scripts"
+    "stylix"
     "swappy"
     "syncthing"
     "vicinae"

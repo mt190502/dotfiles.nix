@@ -40,6 +40,24 @@ in
       };
       description = "Centralized font configuration definitions";
     };
+    cursorcfg = lib.mkOption {
+      type = lib.types.attrsOf lib.types.anything;
+      default = {
+        name = "Adwaita";
+        size = 16;
+        package = pkgs.adwaita-icon-theme;
+      };
+      description = "Centralized cursor theme configuration definitions";
+    };
+    iconthemecfg = lib.mkOption {
+      type = lib.types.attrsOf lib.types.anything;
+      default = {
+        dark = "Flat-Remix-Blue-Dark";
+        light = "Flat-Remix-Blue-Light";
+        package = pkgs.flat-remix-icon-theme;
+      };
+      description = "Centralized icon theme configuration definitions";
+    };
   };
   config.bin = {
     alacritty = mk pkgs.alacritty;

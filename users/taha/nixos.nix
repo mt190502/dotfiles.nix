@@ -57,6 +57,7 @@
         mpv
         rmpc
         rnnoise
+        stylix
         syncthing
         vicinae
         yazi

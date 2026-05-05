@@ -9,7 +9,7 @@
       cpu_power = true;
       cpu_stats = true;
       cpu_temp = true;
-      font_size = lib.mkForce (config.stylix.fonts.sizes.applications + 7);
+      font_size = config.fontcfg.sizes.applications + 7;
       fps = true;
       gpu_core_clock = true;
       gpu_mem_clock = true;

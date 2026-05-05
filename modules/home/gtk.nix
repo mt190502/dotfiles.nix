@@ -4,16 +4,16 @@
   gtk = {
     enable = true;
     cursorTheme = {
-      inherit (config.stylix.cursor) name size;
-      package = lib.mkForce config.stylix.cursor.package;
+      inherit (config.cursorcfg) name size;
+      package = lib.mkForce config.cursorcfg.package;
     };
     font = {
-      inherit (config.stylix.fonts.sansSerif) name;
-      package = lib.mkForce config.stylix.fonts.sansSerif.package;
+      inherit (config.fontcfg.sansSerif) name;
+      package = lib.mkForce config.fontcfg.sansSerif.package;
     };
     iconTheme = {
-      name = config.stylix.iconTheme.dark;
-      package = lib.mkForce config.stylix.iconTheme.package;
+      name = config.iconthemecfg.dark;
+      package = lib.mkForce config.iconthemecfg.package;
     };
     gtk4.extraConfig = {
       gtk-xft-antialias = 1;

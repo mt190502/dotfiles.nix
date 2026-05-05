@@ -7,21 +7,21 @@
       enable = true;
       settings = {
         font = {
-          size = config.stylix.fonts.sizes.terminal;
+          size = config.fontcfg.sizes.terminal;
           normal = {
-            family = config.stylix.fonts.monospace.name;
+            family = config.fontcfg.monospace.name;
             style = lib.mkForce "Bold";
           };
           bold = {
-            family = config.stylix.fonts.monospace.name;
+            family = config.fontcfg.monospace.name;
             style = "Bold";
           };
           italic = {
-            family = config.stylix.fonts.monospace.name;
+            family = config.fontcfg.monospace.name;
             style = "Italic";
           };
           bold_italic = {
-            family = config.stylix.fonts.monospace.name;
+            family = config.fontcfg.monospace.name;
             style = "Bold Italic";
           };
         };

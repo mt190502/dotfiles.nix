@@ -24,7 +24,6 @@ let
     "preferences"
     "scripts"
     "sops"
-    "stylix"
     "wrapped"
   ];
 
