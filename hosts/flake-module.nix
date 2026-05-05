@@ -1,6 +1,7 @@
 { lib, inputs, ... }:
 
 let
+  keys = import ../users/keys.nix;
   repo =
     name: arch:
     import inputs.${name} {
@@ -33,6 +34,9 @@ let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
       userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
+      userKeyConfigs = map (u: {
+        users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
+      }) cfg.users;
       profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
@@ -59,6 +63,7 @@ let
       ++ moduleConfigs
       ++ profileConfigs
       ++ userConfigs
+      ++ userKeyConfigs
       ++ [
         hostConfig
         cfg.extraConfig
@@ -71,6 +76,9 @@ let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
       userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
+      userKeyConfigs = map (u: {
+        users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
+      }) cfg.users;
       profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
@@ -97,6 +105,7 @@ let
       ++ moduleConfigs
       ++ profileConfigs
       ++ userConfigs
+      ++ userKeyConfigs
       ++ [
         hostConfig
         cfg.extraConfig
@@ -109,6 +118,9 @@ let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
       userConfigs = map (u: lib.attrByPath [ u "darwin" ] { } (inputs.self.users or { })) cfg.users;
+      userKeyConfigs = map (u: {
+        users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
+      }) cfg.users;
       profileConfigs = map (p: inputs.self.darwinProfiles.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.darwinModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
@@ -135,6 +147,7 @@ let
       ++ moduleConfigs
       ++ profileConfigs
       ++ userConfigs
+      ++ userKeyConfigs
       ++ [
         hostConfig
         cfg.extraConfig
