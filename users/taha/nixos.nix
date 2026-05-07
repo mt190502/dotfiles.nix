@@ -2,6 +2,7 @@
   config,
   flakeName,
   inputs,
+  lib,
   pkgs,
   pkgs-unstable,
   sharing,
@@ -17,12 +18,16 @@
     hashedPasswordFile = config.sops.secrets."taha/shadow".path;
     extraGroups = [
       "audio"
-      "kvm"
-      "libvirtd"
-      "networkmanager"
-      "qemu"
       "video"
       "wheel"
+    ]
+    ++ lib.optionals config.networking.networkmanager.enable [
+      "networkmanager"
+    ]
+    ++ lib.optionals config.virtualisation.libvirtd.enable [
+      "kvm"
+      "libvirtd"
+      "qemu"
     ];
   };
   home-manager = {

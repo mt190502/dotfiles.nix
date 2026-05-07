@@ -2,6 +2,7 @@
   config,
   flakeName,
   inputs,
+  lib,
   pkgs,
   pkgs-unstable,
   sharing,
@@ -17,12 +18,15 @@
     isNormalUser = true;
     extraGroups = [
       "audio"
+      "video"
+    ]
+    ++ lib.optionals config.networking.networkmanager.enable [
+      "networkmanager"
+    ]
+    ++ lib.optionals config.virtualisation.libvirtd.enable [
       "kvm"
       "libvirtd"
-      "networkmanager"
       "qemu"
-      "video"
-      "wheel"
     ];
   };
   home-manager = {

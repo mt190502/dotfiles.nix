@@ -2,6 +2,7 @@
   config,
   flakeName,
   inputs,
+  lib,
   pkgs,
   pkgs-unstable,
   sharing,
@@ -16,7 +17,12 @@
     hashedPasswordFile = config.sops.secrets."berry/shadow".path;
     isNormalUser = true;
     extraGroups = [
+      "audio"
+      "video"
       "wheel"
+    ]
+    ++ lib.optionals config.networking.networkmanager.enable [
+      "networkmanager"
     ];
   };
   home-manager = {
