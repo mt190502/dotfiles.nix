@@ -1,10 +1,11 @@
 {
   config,
-  inputs,
   flakeName,
-  system,
+  inputs,
   pkgs,
   pkgs-unstable,
+  sharing,
+  system,
   ...
 }:
 
@@ -22,10 +23,11 @@
     useGlobalPkgs = false;
     extraSpecialArgs = {
       inherit
-        inputs
         flakeName
-        system
+        inputs
         pkgs-unstable
+        sharing
+        system
         ;
     };
     users.berry = {
@@ -37,7 +39,7 @@
         fastfetch
         fish
       ])
-      ++ (with inputs.self.homeProfiles; [
+      ++ (with sharing.profiles.home; [
       ]);
     };
   };

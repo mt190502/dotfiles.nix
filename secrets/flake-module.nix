@@ -25,5 +25,10 @@ let
   );
 in
 {
-  flake.secrets = lib.mapAttrs (user: _: discoverSecrets user) users;
+  options.sharing.secrets = lib.mkOption {
+    type = lib.types.attrs;
+    description = "A set of secrets to share. Each user should have a directory with their name, and inside that directory, you can have subdirectories for each secret, each containing a config.nix file that specifies the source file for the secret.";
+    default = { };
+  };
+  config.sharing.secrets = lib.mapAttrs (user: _: discoverSecrets user) users;
 }

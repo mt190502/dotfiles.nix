@@ -1,10 +1,11 @@
 {
   config,
-  inputs,
   flakeName,
-  system,
+  inputs,
   pkgs,
   pkgs-unstable,
+  sharing,
+  system,
   ...
 }:
 
@@ -28,10 +29,11 @@
     useGlobalPkgs = false;
     extraSpecialArgs = {
       inherit
-        inputs
         flakeName
-        system
+        inputs
         pkgs-unstable
+        sharing
+        system
         ;
     };
     users.taha = {
@@ -64,7 +66,7 @@
         ytdlp
         zed
       ])
-      ++ (with inputs.self.homeProfiles; [
+      ++ (with sharing.profiles.home; [
         ai
         cloud
         development

@@ -1,12 +1,13 @@
 {
-  inputs,
   config,
+  inputs,
   lib,
+  sharing,
   ...
 }:
 
 let
-  secrets = inputs.self.secrets or { };
+  inherit (sharing) secrets;
   systemUsers = builtins.attrNames config.users.users;
   flattenSecrets = lib.foldl' (
     acc: user:

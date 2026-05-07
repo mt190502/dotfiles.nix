@@ -1,12 +1,13 @@
 {
-  inputs,
   config,
+  inputs,
   lib,
+  sharing,
   ...
 }:
 
 let
-  secrets = inputs.self.secrets or { };
+  inherit (sharing) secrets;
   homeUser = config.home.username;
   userSecrets = secrets.${homeUser} or { };
   nonPasswordSecrets = lib.filterAttrs (

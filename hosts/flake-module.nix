@@ -1,7 +1,13 @@
-{ lib, inputs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 
 let
   keys = import ../users/keys.nix;
+  inherit (config) sharing;
   repo =
     name: arch:
     import inputs.${name} {
@@ -33,11 +39,11 @@ let
     let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
+      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } sharing.users) cfg.users;
       userKeyConfigs = map (u: {
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
-      profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
+      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
@@ -48,7 +54,7 @@ let
     inputs.nixos-raspberrypi.lib.nixosSystem {
       inherit pkgs;
       specialArgs = {
-        inherit inputs pkgs-unstable;
+        inherit inputs pkgs-unstable sharing;
         flakeName = name;
         system = cfg.arch;
       };
@@ -75,11 +81,11 @@ let
     let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } (inputs.self.users or { })) cfg.users;
+      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } sharing.users) cfg.users;
       userKeyConfigs = map (u: {
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
-      profileConfigs = map (p: inputs.self.nixosProfiles.${p} or { }) cfg.profiles;
+      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
@@ -90,7 +96,7 @@ let
     inputs.nixpkgs.lib.nixosSystem {
       inherit pkgs;
       specialArgs = {
-        inherit inputs pkgs-unstable;
+        inherit inputs pkgs-unstable sharing;
         flakeName = name;
         system = cfg.arch;
       };
@@ -117,11 +123,11 @@ let
     let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-      userConfigs = map (u: lib.attrByPath [ u "darwin" ] { } (inputs.self.users or { })) cfg.users;
+      userConfigs = map (u: lib.attrByPath [ u "darwin" ] { } sharing.users) cfg.users;
       userKeyConfigs = map (u: {
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
-      profileConfigs = map (p: inputs.self.darwinProfiles.${p} or { }) cfg.profiles;
+      profileConfigs = map (p: sharing.profiles.darwin.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.darwinModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
@@ -133,7 +139,7 @@ let
     inputs.nix-darwin.lib.darwinSystem {
       inherit pkgs;
       specialArgs = {
-        inherit inputs pkgs-unstable;
+        inherit inputs pkgs-unstable sharing;
         flakeName = name;
         system = cfg.arch;
       };
@@ -159,8 +165,8 @@ let
     let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-      userConfig = lib.attrByPath [ cfg.user "home" ] { } (inputs.self.users or { });
-      profileConfigs = map (p: inputs.self.homeProfiles.${p} or { }) cfg.profiles;
+      userConfig = lib.attrByPath [ cfg.user "home" ] { } sharing.users;
+      profileConfigs = map (p: sharing.profiles.home.${p} or { }) cfg.profiles;
       moduleConfigs = map (m: inputs.self.homeModules.${m} or { }) (cfg.modules ++ defaultHomeModules);
       hostConfig = {
         home.stateVersion = cfg.stateVersion;
@@ -169,8 +175,7 @@ let
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       extraSpecialArgs = {
-        inherit inputs;
-        inherit pkgs-unstable;
+        inherit inputs pkgs-unstable sharing;
         flakeName = name;
         system = cfg.arch;
       };

@@ -26,9 +26,26 @@ let
     builtins.foldl' (acc: name: acc // (processEntry name)) { } entryNames;
 in
 {
-  flake = {
-    darwinProfiles = discoverProfiles ./darwin;
-    homeProfiles = discoverProfiles ./home;
-    nixosProfiles = discoverProfiles ./nixos;
+  options.sharing.profiles = {
+    nixos = lib.mkOption {
+      type = lib.types.attrs;
+      description = "A set of NixOS profiles to share. Each user should have a directory with their name, and inside that directory, you can have a default.nix file that defines the NixOS profile for that user.";
+      default = { };
+    };
+    darwin = lib.mkOption {
+      type = lib.types.attrs;
+      description = "A set of Darwin profiles to share. Each user should have a directory with their name, and inside that directory, you can have a default.nix file that defines the Darwin profile for that user.";
+      default = { };
+    };
+    home = lib.mkOption {
+      type = lib.types.attrs;
+      description = "A set of Home Manager profiles to share. Each user should have a directory with their name, and inside that directory, you can have a default.nix file that defines the Home Manager profile for that user.";
+      default = { };
+    };
+  };
+  config.sharing.profiles = {
+    darwin = discoverProfiles ./darwin;
+    home = discoverProfiles ./home;
+    nixos = discoverProfiles ./nixos;
   };
 }

@@ -10,5 +10,10 @@ let
   users = lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./.);
 in
 {
-  flake.users = lib.mapAttrs loadUser users;
+  options.sharing.users = lib.mkOption {
+    type = lib.types.attrs;
+    description = "A set of users to share configurations for. Each user should have a directory with their name, and inside that directory, you can have darwin.nix, home.nix, and nixos.nix files for their respective configurations.";
+    default = { };
+  };
+  config.sharing.users = lib.mapAttrs loadUser users;
 }
