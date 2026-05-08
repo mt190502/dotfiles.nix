@@ -7,6 +7,7 @@
   modules = [
     "docker"
     "sops"
+    "tailscale"
   ];
   profiles = [
     "k3s"
