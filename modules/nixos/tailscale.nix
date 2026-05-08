@@ -6,10 +6,7 @@
 }:
 
 let
-  tags = if (lib.hasSuffix "server" flakeName) then
-    "tag:servers"
-  else
-    "tag:personal";
+  tags = if (lib.hasSuffix "server" flakeName) then "tag:servers" else "tag:personal";
 in
 {
   services.tailscale = {
