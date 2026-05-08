@@ -33,7 +33,10 @@ let
         "homeTarget"
         "globalTarget"
         "mode"
+        "group"
         "neededForUsers"
+        "restartUnits"
+        "reloadUnits"
       ];
     in
     {

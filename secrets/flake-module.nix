@@ -2,33 +2,47 @@
 
 let
   discoverSecrets =
-    user:
+    dir: relPath:
     let
-      userDir = ./. + "/${user}";
-      entries = builtins.readDir userDir;
+      entries = builtins.readDir dir;
       dirs = lib.filterAttrs (_: type: type == "directory") entries;
     in
     lib.mapAttrs (
       name: _:
       let
-        secretDir = userDir + "/${name}";
+        secretDir = dir + "/${name}";
         cfg = import (secretDir + "/config.nix");
       in
       (builtins.removeAttrs cfg [ "source" ])
       // {
-        sopsFile = "${inputs.self}/secrets/${user}/${name}/${cfg.source}";
+        sopsFile = "${inputs.self}/${relPath}/${name}/${cfg.source}";
         sopsFormat = "binary";
       }
     ) dirs;
-  users = lib.filterAttrs (name: type: type == "directory" && name != "template") (
-    builtins.readDir ./.
-  );
+
+  globalSecrets =
+    let
+      globalDir = ./. + "/global";
+    in
+    if builtins.pathExists globalDir then discoverSecrets globalDir "secrets/global" else { };
+
+  users = lib.filterAttrs (
+    name: type: type == "directory" && name != "template" && name != "global"
+  ) (builtins.readDir ./.);
 in
 {
   options.sharing.secrets = lib.mkOption {
     type = lib.types.attrs;
-    description = "A set of secrets to share. Each user should have a directory with their name, and inside that directory, you can have subdirectories for each secret, each containing a config.nix file that specifies the source file for the secret.";
+    description = ''
+      A set of secrets to share.
+      - User-specific secrets: secrets/<username>/<secret>/config.nix
+      - Global secrets: secrets/global/<secret>/config.nix
+    '';
     default = { };
   };
-  config.sharing.secrets = lib.mapAttrs (user: _: discoverSecrets user) users;
+  config.sharing.secrets =
+    lib.mapAttrs (user: _: discoverSecrets (./. + "/${user}") "secrets/${user}") users
+    // {
+      global = globalSecrets;
+    };
 }

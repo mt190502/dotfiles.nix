@@ -47,8 +47,9 @@ let
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
-        system.stateVersion = cfg.stateVersion;
         nix.settings = cfg.nixSettings or { };
+        system.stateVersion = cfg.stateVersion;
+        users.mutableUsers = false;
       };
     in
     inputs.nixos-raspberrypi.lib.nixosSystem {
@@ -89,8 +90,9 @@ let
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
-        system.stateVersion = cfg.stateVersion;
         nix.settings = cfg.nixSettings or { };
+        system.stateVersion = cfg.stateVersion;
+        users.mutableUsers = false;
       };
     in
     inputs.nixpkgs.lib.nixosSystem {
@@ -131,9 +133,9 @@ let
       moduleConfigs = map (m: inputs.self.darwinModules.${m} or { }) cfg.modules;
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
+        nix.settings = cfg.nixSettings or { };
         system.primaryUser = cfg.primaryUser;
         system.stateVersion = cfg.stateVersion;
-        nix.settings = cfg.nixSettings or { };
       };
     in
     inputs.nix-darwin.lib.darwinSystem {
