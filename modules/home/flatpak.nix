@@ -1,5 +1,6 @@
 {
   config,
+  flakeName,
   inputs,
   lib,
   ...
@@ -7,7 +8,10 @@
 
 {
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
-  programs.fish.shellAliases.sysclean = lib.mkOverride 500 "${config.bin.flatpak} remove --unused && nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+  programs.fish.shellAliases = {
+    sysdup = lib.mkOverride 500 "nix-channel --update && sudo nix-channel --update && ${config.bin.flatpak} update && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/.config/dotfiles.nix#${flakeName} --upgrade";
+    sysclean = lib.mkOverride 500 "${config.bin.flatpak} remove --unused && nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+  };
   services.flatpak = {
     enable = true;
     packages = [
