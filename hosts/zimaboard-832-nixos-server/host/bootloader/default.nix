@@ -23,8 +23,8 @@ rec {
         "kvm-intel"
       ];
       luks.devices.cryptroot.preOpenCommands = ''
-        export PATH=$PATH:${pkgs.curl}/bin:${pkgs.gnused}/bin
-        ${pkgs.clevis}/bin/clevis luks unlock -d /dev/sda2 -n cryptroot
+        export PATH=$PATH:${pkgs.curl}/bin:${pkgs.gnused}/bin:${pkgs.util-linux}/bin
+        ${pkgs.clevis}/bin/clevis luks unlock -d $(blkid -t PARTLABEL="disk-SSD-ROOT" -o device) -n cryptroot
       '';
       network = {
         enable = true;
