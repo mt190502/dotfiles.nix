@@ -2,12 +2,13 @@
   stateVersion = "25.11";
   platform = "rpi";
   arch = "aarch64-linux";
-  primaryUser = "berry";
-  users = [ "berry" ];
+  primaryUser = "srvadmin";
+  users = [ "srvadmin" ];
   modules = [
     "docker"
     "sops"
     "tailscale"
+    "tang"
   ];
   profiles = [
     "k3s"

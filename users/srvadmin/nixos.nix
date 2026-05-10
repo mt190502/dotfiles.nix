@@ -12,9 +12,9 @@
 
 {
   programs.fish.enable = true;
-  users.users.berry = {
+  users.users.srvadmin = {
     shell = pkgs.fish;
-    hashedPasswordFile = config.sops.secrets."berry/shadow".path;
+    hashedPasswordFile = config.sops.secrets."srvadmin/shadow".path;
     isNormalUser = true;
     extraGroups = [
       "audio"
@@ -36,7 +36,7 @@
         system
         ;
     };
-    users.berry = {
+    users.srvadmin = {
       nixpkgs.config.allowUnfree = true;
       imports = [
         ./default.nix

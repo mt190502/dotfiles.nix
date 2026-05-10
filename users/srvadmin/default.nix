@@ -9,7 +9,7 @@
     #
     ########################################
     stateVersion = "25.11";
-    username = "berry";
+    username = "srvadmin";
 
     ########################################
     #
@@ -57,5 +57,5 @@
   ## Module Configurations
   #
   ########################################
-  # programs.git.settings = { };
+  preferences.desktopenv = "none";
 }
