@@ -50,6 +50,7 @@ A modular, cross-platform Nix configuration using flake-parts. Supports NixOS, m
 | [macbook-m3-air-darwin-work](./hosts/macbook-m3-air-darwin-work)                 | MacBook Air M3 Workstation Setup with nix-darwin and home-manager               | ![image](./assets/macbook-m3-air-darwin-work.jpeg)        |
 | [msi-h510m-pro-fedora-personal](./hosts/msi-h510m-pro-fedora-personal)           | Desktop pc running a Intel i5-11400, 32GB of RAM and a MSI RX570 OC Edition 4GB | ![image](./assets/msi-h510m-pro-fedora-personal.png)      |
 | [raspberry-pi-5-nixos-server](./hosts/raspberry-pi-5-nixos-server)               | Raspberry Pi 5 server running NixOS with headless configuration                 | ![image](./assets/raspberry-pi-5-nixos-server.png)        |
+| [zimaboard-832-nixos-server](./hosts/zimaboard-832-nixos-server)                 | ZimaBoard 832 server running NixOS with headless configuration                  | ![image](./assets/zimaboard-832-nixos-server.png)         |
 
 ## Architecture
 
