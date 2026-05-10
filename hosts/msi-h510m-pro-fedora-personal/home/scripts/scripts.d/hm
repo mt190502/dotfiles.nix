@@ -7,7 +7,7 @@ for arg in "$@"; do
         break
     }
 done
-[[ -z "$dir" ]] && dir="$HOME/Projects/000_myprojects/dotfiles.nix"
+[[ -z "$dir" ]] && dir="$HOME/.config/dotfiles.nix"
 [[ -z "$flake" ]] && flake="$1"
 pushd "$dir" || exit
 rpm -qa --queryformat '%{NAME}\n' | sort | uniq > hosts/"$flake"/fedora-rpm-pkglist.txt

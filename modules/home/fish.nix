@@ -97,7 +97,7 @@ in
       rm = "rm -i";
       srm = "${trash} -i";
       sysclean = lib.mkDefault "nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
-      sysdup = "nix-channel --update && sudo nix-channel --update && flatpak update && sudo nixos-rebuild switch --flake ${home}/Projects/000_myprojects/dotfiles.nix#${flakeName} --upgrade";
+      sysdup = "nix-channel --update && sudo nix-channel --update && flatpak update && sudo nixos-rebuild switch --flake ${home}/.config/dotfiles.nix#${flakeName} --upgrade";
 
       #~ Git
       gita = "${git} add -A";

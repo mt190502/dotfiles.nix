@@ -14,6 +14,7 @@
       type = lib.types.enum [
         "sway"
         "plasma"
+        "none"
       ];
       default = "sway";
       description = "Preferred window manager: sway or plasma";
