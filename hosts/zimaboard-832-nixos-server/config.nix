@@ -12,6 +12,7 @@
     "lanzaboote"
     "printer"
     "sops"
+    "syncthing"
     "tailscale"
   ];
   profiles = [ ];
