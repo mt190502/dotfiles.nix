@@ -1,6 +1,9 @@
 { lib, ... }:
 
 let
+  nfs = [
+    2049
+  ];
   syncthing = [
     8384
     21027
@@ -12,8 +15,8 @@ in
     hostName = "zimaboard-190502";
     firewall = {
       enable = true;
-      allowedTCPPorts = syncthing;
-      allowedUDPPorts = syncthing;
+      allowedTCPPorts = nfs ++ syncthing;
+      allowedUDPPorts = nfs ++ syncthing;
       allowedTCPPortRanges = [ ];
       allowedUDPPortRanges = [ ];
     };
