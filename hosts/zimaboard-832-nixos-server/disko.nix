@@ -43,6 +43,49 @@
           };
         };
       };
+      DATASSD = {
+        type = "disk";
+        device = "/dev/sdb";
+        content = {
+          type = "gpt";
+          partitions = {
+            PART1 = {
+              device = "/dev/sdb1";
+              size = "512G";
+              content = {
+                type = "luks";
+                name = "cryptpart1";
+                settings = {
+                  allowDiscards = true;
+                  fallbackToPassword = true;
+                };
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = "/mnt/ssd/data";
+                };
+              };
+            };
+            PART2 = {
+              device = "/dev/sdb2";
+              size = "100%";
+              content = {
+                type = "luks";
+                name = "cryptpart2";
+                settings = {
+                  allowDiscards = true;
+                  fallbackToPassword = true;
+                };
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = "/mnt/ssd/nfs";
+                };
+              };
+            };
+          };
+        };
+      };
     };
   };
 }
