@@ -8,14 +8,15 @@
   ];
   modules = [
     "clevis"
-    "docker"
     "lanzaboote"
     "printer"
     "sops"
     "syncthing"
     "tailscale"
   ];
-  profiles = [ ];
+  profiles = [
+    "k3s"
+  ];
   packages = [ ];
   nixSettings = {
     experimental-features = [
