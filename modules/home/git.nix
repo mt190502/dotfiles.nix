@@ -9,9 +9,15 @@
 {
   programs.git = {
     enable = true;
-    settings.gpg."ssh".program = lib.mkIf (osConfig != null) (
-      lib.getExe' osConfig.programs._1password-gui.package "op-ssh-sign"
-    );
+    settings = {
+      commit.gpgsign = true;
+      gpg = {
+        format = "ssh";
+        "ssh".program = lib.mkIf (osConfig != null) (
+          lib.getExe' osConfig.programs._1password-gui.package "op-ssh-sign"
+        );
+      };
+    };
   };
   programs.gh = {
     enable = true;

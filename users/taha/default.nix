@@ -76,10 +76,11 @@
   #
   ########################################
   programs = {
-    git.settings = {
+    git.settings = rec {
       user = {
         name = "Taha";
         email = "mt190502@mtaha.dev";
+        signingKey = signing.key;
       };
       signing = {
         key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVyQNBWyCGvlRlqEh/3Ga6CDF01MZo6Jj15mjqHzPFD";
