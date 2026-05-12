@@ -28,6 +28,7 @@ let
 
   defaultHomeModules = [
     "bin"
+    "ssh"
     "preferences"
     "scripts"
     "sops"

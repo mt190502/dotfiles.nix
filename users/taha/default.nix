@@ -75,14 +75,23 @@
   ## Module Configurations
   #
   ########################################
-  programs.git.settings = {
-    user = {
-      name = "Taha";
-      email = "mt190502@mtaha.dev";
+  programs = {
+    git.settings = {
+      user = {
+        name = "Taha";
+        email = "mt190502@mtaha.dev";
+      };
+      signing = {
+        key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVyQNBWyCGvlRlqEh/3Ga6CDF01MZo6Jj15mjqHzPFD";
+        format = "ssh";
+      };
     };
-    signing = {
-      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVyQNBWyCGvlRlqEh/3Ga6CDF01MZo6Jj15mjqHzPFD";
-      format = "ssh";
+    ssh.matchBlocks = {
+      "envs" = {
+        host = "envs";
+        hostname = "envs.net";
+        user = "mt190502";
+      };
     };
   };
 }
