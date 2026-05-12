@@ -93,6 +93,7 @@ in
       cp = "cp -i";
       crontab = "crontab -i";
       ls = lsd;
+      lsgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | sort -r";
       mv = "mv -i";
       rm = "rm -i";
       srm = "${trash} -i";
