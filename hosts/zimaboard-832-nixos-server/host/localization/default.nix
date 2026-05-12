@@ -7,7 +7,7 @@
     useXkbConfig = false;
   };
   time = {
-    hardwareClockInLocalTime = true;
+    hardwareClockInLocalTime = false;
     timeZone = "Europe/Istanbul";
   };
 }
