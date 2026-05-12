@@ -58,4 +58,15 @@
   #
   ########################################
   preferences.desktopenv = "none";
+  programs.git.settings = rec {
+    user = {
+      name = "SrvAdmin";
+      email = "srvadmin@mtaha.dev";
+      signingKey = signing.key;
+    };
+    signing = {
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKVyQNBWyCGvlRlqEh/3Ga6CDF01MZo6Jj15mjqHzPFD";
+      format = "ssh";
+    };
+  };
 }
