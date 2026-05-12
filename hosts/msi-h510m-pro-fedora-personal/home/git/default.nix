@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
-  programs.git.signing.signer = "/opt/1Password/op-ssh-sign";
+  programs.git.settings.gpg."ssh".program = lib.mkForce "/opt/1Password/op-ssh-sign";
 }

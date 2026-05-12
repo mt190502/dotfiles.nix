@@ -1,7 +1,18 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  osConfig,
+  pkgs,
+  ...
+}:
 
 {
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    settings.gpg."ssh".program = lib.mkIf (osConfig != null) (
+      lib.getExe' osConfig.programs._1password-gui.package "op-ssh-sign"
+    );
+  };
   programs.gh = {
     enable = true;
     extensions = with pkgs; [
