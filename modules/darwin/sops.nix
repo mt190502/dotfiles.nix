@@ -57,7 +57,7 @@ let
         // lib.optionalAttrs (owner != null) { inherit owner; }
         // base
         // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
-        // lib.optionalAttrs (cfg ? group) { inherit (cfg) group; }
+        // lib.optionalAttrs (cfg ? group) { group = if cfg.group == "root" then "wheel" else cfg.group; }
         // lib.optionalAttrs (targetPath != null) { path = targetPath; }
         // lib.optionalAttrs (!isGlobal && type == "userPassword") { neededForUsers = true; }
         // lib.optionalAttrs (!isGlobal && type == "env") { mode = "0400"; };
