@@ -108,14 +108,9 @@ you can use the disko scripts to partition and format your disks.
   sudo nix run github:nix-community/disko -- --mode disko hosts/YOUR_CONFIG/disko.nix
   ```
 
-- After that, you can mount partitions and install NixOS on your system using the
-following command:
+- After that, you can install NixOS on your system using the following command:
 
   ```bash
-  sudo mount /dev/sdX3 /mnt                             #~ replace sdX3 with your root partition
-  sudo mkdir -p /mnt/{boot/efi,home}
-  sudo mount /dev/sdX1 /mnt/boot/efi                    #~ replace sdX1 with your EFI partition
-  sudo mount /dev/sdX2 /mnt/home                        #~ replace sdX2 with your home partition
   sudo nixos-install --root /mnt --flake .#YOUR_CONFIG
   ```
 
@@ -204,5 +199,7 @@ following command:
 ## Credits
 
 - [Kranzes](https://github.com/Kranzes) - Initial config structure
-- [yomaq](https://github.com/yomaq) - Module system inspiration
+- [Kreato](https://github.com/kreatoo) - For helps and inspiration
 - [usdogu](https://github.com/usdogu) - Support and inspiration
+- [Valentinus](https://github.com/valeninki) - For helps and inspiration
+- [yomaq](https://github.com/yomaq) - Module system inspiration
