@@ -26,7 +26,7 @@ let
               in
               if (content.type or null) == "luks" then
                 {
-                  name = content.name;
+                  inherit (content) name;
                   value = "disk-${diskName}-${partName}";
                 }
               else
