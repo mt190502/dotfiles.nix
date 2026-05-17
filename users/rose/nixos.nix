@@ -14,6 +14,7 @@
   programs.fish.enable = true;
   users.users.rose = {
     shell = pkgs.fish;
+    uid = 1001;
     hashedPasswordFile = config.sops.secrets."rose/shadow".path;
     isNormalUser = true;
     extraGroups = [
@@ -46,6 +47,7 @@
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
+        anki
         fastfetch
         fish
         fontconfig
@@ -55,6 +57,7 @@
         mangohud
         mpv
         rnnoise
+        solaar
         syncthing
         ytdlp
       ])

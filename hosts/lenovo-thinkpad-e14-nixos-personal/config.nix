@@ -8,6 +8,7 @@
   ];
   modules = [
     "docker"
+    "evolution"
     "fontconfig"
     "lanzaboote"
     "libvirt"
@@ -17,6 +18,7 @@
     "plasma"
     "printer"
     "sops"
+    "steam"
     "tailscale"
     "tlp"
   ];

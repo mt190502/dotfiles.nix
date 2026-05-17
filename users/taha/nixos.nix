@@ -14,6 +14,7 @@
   programs.fish.enable = true;
   users.users.taha = {
     shell = pkgs.fish;
+    uid = 1000;
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets."taha/shadow".path;
     extraGroups = [
@@ -48,11 +49,11 @@
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
+        anki
         delta
         direnv
         fastfetch
         fish
-        flatpak
         fontconfig
         foot
         git
@@ -62,8 +63,10 @@
         mangohud
         mpdris2-rs
         mpv
+        obs-studio
         rmpc
         rnnoise
+        solaar
         stylix
         syncthing
         vicinae
