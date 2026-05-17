@@ -296,7 +296,7 @@ in
         else if config.preferences.menu == "vicinae" then
           {
             #~~~ clipboard (vicinae)
-            "${modifier}+v" = "exec ${menu} 'vicinae://extensions/vicinae/clipboard/history'";
+            "${modifier}+v" = "exec ${menu} 'vicinae://launch/clipboard/history'";
 
             #~~~ others
             "${modifier}+d" = "exec ${menu} toggle";

@@ -1,20 +1,7 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    flat-remix-icon-theme
-    flatpak
-    gparted
-    librewolf
-    libva-utils
-    lm_sensors
-    psmisc
-    v4l-utils
-    vim
-    xdg-user-dirs
-    xdg-user-dirs-gtk
-    xdg-utils
-  ];
+  environment.systemPackages = with pkgs; [ ];
   services = {
     fprintd = {
       enable = true;

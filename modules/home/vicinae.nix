@@ -2,6 +2,7 @@
   config,
   lib,
   inputs,
+  osConfig ? null,
   pkgs,
   pkgs-unstable,
   ...
@@ -13,20 +14,24 @@ let
        "theme": {
           "dark": {
              "name": "stylix",
-             "icon_theme": "Flat-Remix-Blue-Dark"
+             "icon_theme": "${config.iconthemecfg.dark}"
           }
        },
        "favorites": [
           "applications:org.kde.dolphin",
           "applications:org.equicord.equibop",
+          "applications:equibop",
           "applications:io.github.ungoogled_software.ungoogled_chromium",
           "applications:io.gitlab.librewolf-community",
+          "applications:librewolf",
           "applications:com.valvesoftware.Steam",
+          "applications:steam",
           "applications:md.obsidian.Obsidian",
           "applications:com.github.tchx84.Flatseal",
           "applications:com.stremio.Stremio",
           "applications:org.gnome.Calculator",
           "applications:org.signal.Signal",
+          "applications:signal",
           "applications:org.gnome.TextEditor"
        ],
        "launcher_window": {
@@ -39,18 +44,22 @@ let
        "providers": {
           "@khasbilegt/1password": {
              "preferences": {
-                "cliPath": "/usr/local/bin/op",
-                "zshPath": "/usr/sbin/fish"
+                "cliPath": "${
+                  if osConfig != null then "/run/wrappers/bin/op" else "/usr/local/bin/op"
+                }",
+                "zshPath": "${
+                  if osConfig != null then "/run/current-system/sw/bin/fish" else "/usr/bin/fish"
+                }"
              }
           },
           "@leiserfg/ssh-0": {
              "preferences": {
-                "terminal": "alacritty"
+                "terminal": "${config.preferences.terminal}"
              }
           },
           "@samlinville/tailscale": {
              "preferences": {
-                "tailscalePath": "/usr/sbin/tailscale"
+                "tailscalePath": "${lib.getExe pkgs.tailscale}"
              }
           },
           "clipboard": {
@@ -158,7 +167,7 @@ in
           searchFiles = false;
         };
         theme = {
-          iconTheme = "Flat-Remix-Blue-Dark";
+          iconTheme = config.iconthemecfg.dark;
           name = "stylix";
         };
         window = lib.mkDefault {
@@ -222,9 +231,9 @@ in
       };
     };
     home.activation.vicinaeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        target="${config.xdg.configHome}/vicinae/settings.json"
-        [ ! -e "$target" ] && mkdir -p "$(dirname "$target")"
-        cat >"$target" <<'EOF'
+      target="${config.xdg.configHome}/vicinae/settings.json"
+      [ ! -e "$target" ] && mkdir -p "$(dirname "$target")"
+      cat >"$target" <<'EOF'
       ${settings}
       EOF
     '';

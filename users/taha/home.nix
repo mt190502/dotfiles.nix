@@ -39,35 +39,52 @@
         noto-fonts
 
         #~ packages ~#
-        _1password-cli
         adw-gtk3
+        audacity
+        bottles
         config.wrapped.dolphin
         ffmpegthumbnailer
         gcolor3
+        gimp3
+        gnome-calculator
         gnome-icon-theme
         gnome-tweaks
+        handbrake
         hicolor-icon-theme
         imagemagick
+        kdePackages.ark
         kdePackages.dolphin-plugins
         kdePackages.ffmpegthumbs
         kdePackages.kdegraphics-thumbnailers
+        kdePackages.kdenlive
+        kdePackages.kruler
+        kdePackages.okular
         kdePackages.qt6ct
         kdePackages.qtstyleplugin-kvantum
         kdePackages.qtsvg
         kdePackages.qtwayland
+        krita
         libsForQt5.qt5ct
         libsForQt5.qtstyleplugin-kvantum
+        libreoffice
         nvtopPackages.full
         nwg-look
         ocs-url
+        picard
+        signal-desktop
         slurp
         system-config-printer
+        telegram-desktop
         wl-clipboard
         wlr-randr
         wtype
         ydotool
       ]
-      ++ (with pkgs-unstable; [ ]);
+      ++ (with pkgs-unstable; [
+        equibop
+        prismlauncher
+        slack
+      ]);
 
     ########################################
     #

@@ -12,7 +12,7 @@ in
 {
   wayland.windowManager.sway.config = lib.mkIf (config.preferences.desktopenv == "sway") {
     keybindings = {
-      "${modifier}+g" = "exec ${onepass}/bin/1password --quick-access";
+      "${modifier}+g" = "exec ${onepass} --quick-access";
     };
     output = {
       "*" = {
@@ -28,7 +28,7 @@ in
         command = "${config.bin.solaar} -w hide";
       }
       {
-        command = "${onepass}/bin/1password --silent";
+        command = "${onepass} --silent";
       }
     ];
   };
