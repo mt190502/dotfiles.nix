@@ -1,12 +1,18 @@
-{ config, ... }:
+{
+  config,
+  osConfig,
+  lib,
+  ...
+}:
 
 let
   inherit (config.wayland.windowManager.sway.config) modifier;
+  onepass = lib.getExe' osConfig.programs._1password-gui.package "1password";
 in
 {
-  wayland.windowManager.sway.config = {
+  wayland.windowManager.sway.config = lib.mkIf (config.preferences.desktopenv == "sway") {
     keybindings = {
-      "${modifier}+g" = "exec /opt/1Password/1password --quick-access";
+      "${modifier}+g" = "exec ${onepass} --quick-access";
     };
     output = {
       "*" = {
@@ -23,7 +29,10 @@ in
     };
     startup = [
       {
-        command = "/opt/1Password/1password --silent --password-store=gnome";
+        command = "${config.bin.solaar} -w hide";
+      }
+      {
+        command = "${onepass} --silent";
       }
     ];
   };
