@@ -1,5 +1,6 @@
 {
   config,
+  flakeName,
   inputs,
   lib,
   sharing,
@@ -8,6 +9,20 @@
 
 let
   inherit (sharing) secrets;
+  matchHost =
+    hostName: patterns:
+    builtins.any (
+      pat: builtins.match (builtins.replaceStrings [ "*" ] [ ".*" ] pat) hostName != null
+    ) patterns;
+  shouldInclude =
+    _: cfg:
+    let
+      hosts = cfg.hosts or [ ];
+      excludeHosts = cfg.excludeHosts or [ ];
+      inHosts = hosts == [ ] || matchHost flakeName hosts;
+      inExclude = matchHost flakeName excludeHosts;
+    in
+    inHosts && !inExclude;
   systemUsers = builtins.attrNames config.users.users;
   validEntries = builtins.filter (entry: entry == "global" || builtins.elem entry systemUsers) (
     builtins.attrNames secrets
@@ -18,7 +33,7 @@ let
       isGlobal = entry == "global";
       owner = if isGlobal then null else entry;
       homeDir = if isGlobal then null else config.users.users.${entry}.home;
-      entrySecrets = secrets.${entry} or { };
+      entrySecrets = lib.filterAttrs shouldInclude (secrets.${entry} or { });
     in
     acc
     // (lib.mapAttrs' (
@@ -46,6 +61,8 @@ let
           "restartUnits"
           "reloadUnits"
           "neededForUsers"
+          "hosts"
+          "excludeHosts"
         ];
       in
       {
