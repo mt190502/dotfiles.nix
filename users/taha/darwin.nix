@@ -33,6 +33,7 @@ rec {
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
+        cnf
         delta
         direnv
         fastfetch

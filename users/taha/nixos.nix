@@ -50,6 +50,7 @@
       ]
       ++ (with inputs.self.homeModules; [
         anki
+        cnf
         delta
         direnv
         fastfetch

@@ -42,6 +42,7 @@
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
+        cnf
         fastfetch
         fish
       ])
