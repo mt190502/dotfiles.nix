@@ -3,8 +3,12 @@
 {
   fonts = {
     packages = with pkgs; [
+      corefonts
       eb-garamond
       inputs.self.packages.${stdenv.hostPlatform.system}.msfonts
+      vista-fonts
+      vista-fonts-chs
+      vista-fonts-cht
     ];
     fontconfig = {
       enable = true;
