@@ -1,12 +1,17 @@
-{ pkgs, ... }:
+{
+  fetchurl,
+  nerd-font-patcher,
+  stdenv,
+  ...
+}:
 
-pkgs.stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "ubuntu-fonts-google";
   version = "1.0.0";
 
-  nativeBuildInputs = [ pkgs.nerd-font-patcher ];
+  nativeBuildInputs = [ nerd-font-patcher ];
 
-  srcs = with pkgs; [
+  srcs = [
     (fetchurl {
       url = "https://github.com/google/fonts/raw/refs/heads/main/ufl/ubuntu/Ubuntu-Bold.ttf";
       sha256 = "sha256-Z5tcHgnKsxVruO9SlzX5OCvzHKesc3OCq5WSl/jYKtQ=";
