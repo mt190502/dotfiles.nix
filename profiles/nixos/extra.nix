@@ -21,6 +21,15 @@
     xdg-utils
   ];
   programs = {
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        stdenv.cc.cc
+        openssl
+        zlib
+        glibc
+      ];
+    };
     dconf.enable = true;
   };
   services = {
