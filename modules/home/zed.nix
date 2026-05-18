@@ -1,16 +1,44 @@
-{ config, pkgs-unstable, ... }:
+{
+  config,
+  pkgs,
+  pkgs-unstable,
+  ...
+}:
 
 {
   programs.zed-editor = {
     enable = true;
     package = pkgs-unstable.zed-editor;
+    extensions = [
+      "basher"
+      "dockerfile"
+      "html"
+      "markdownlint"
+      "material-icon-theme"
+      "nix"
+      "rainbow-csv"
+      "terraform"
+    ];
+    extraPackages = with pkgs; [
+      nixd
+      vtsls
+    ];
     userSettings = {
       agent = {
+        dock = "right";
+        sidebar_side = "right";
         default_model = {
-          provider = "copilot";
-          model = "gpt-5.3-codex";
+          effort = "medium";
+          enable_thinking = true;
+          model = "gpt-5.2-codex";
+          provider = "copilot_chat";
         };
         model_parameters = [ ];
+      };
+      agent_servers = {
+        github-copilot-cli = {
+          type = "registry";
+        };
       };
       autosave = {
         after_delay = {
@@ -28,34 +56,45 @@
       buffer_line_height = {
         custom = 1.25;
       };
+      collaboration_panel = {
+        dock = "left";
+      };
       diagnostics = {
+        include_warnings = true;
         inline = {
           enabled = true;
-          padding = 4;
-          min_column = 0;
           max_severity = null;
+          min_column = 0;
+          padding = 4;
         };
-        include_warnings = true;
       };
       features = {
         edit_prediction_provider = "copilot";
+      };
+      git_panel = {
+        dock = "left";
       };
       gutter = {
         line_numbers = true;
       };
       icon_theme = "Material Icon Theme";
       inlay_hints = {
-        show_value_hints = true;
-        show_type_hints = false;
-        show_parameter_hints = true;
-        show_other_hints = true;
-        show_background = false;
         enabled = true;
+        show_background = false;
+        show_other_hints = true;
+        show_parameter_hints = true;
+        show_type_hints = false;
+        show_value_hints = true;
       };
       languages = {
+        Nix = {
+          language_servers = [
+            "nixd"
+            "!nil"
+          ];
+          show_edit_predictions = true;
+        };
         TypeScript = {
-          enable_language_server = true;
-          format_on_save = "on";
           code_actions_on_format = {
             "source.addMissingImports.ts" = true;
             "source.fixAll.ts" = true;
@@ -63,20 +102,13 @@
             "source.removeUnused.ts" = true;
             "source.sortImports" = true;
           };
-          language_servers = [
-            "vtsls"
-          ];
-          remove_trailing_whitespace_on_save = true;
+          enable_language_server = true;
+          format_on_save = "on";
+          language_servers = [ "vtsls" ];
           prettier = {
             allowed = true;
           };
-        };
-        Nix = {
-          show_edit_predictions = true;
-          language_servers = [
-            "nixd"
-            "!nil"
-          ];
+          remove_trailing_whitespace_on_save = true;
         };
       };
       lsp = {
@@ -89,9 +121,7 @@
               ];
             };
             formatting = {
-              command = [
-                "nixfmt"
-              ];
+              command = [ "nixfmt" ];
             };
           };
         };
@@ -103,15 +133,18 @@
       prettier = {
         allowed = false;
       };
+      project_panel = {
+        dock = "left";
+      };
       relative_line_numbers = "enabled";
       show_edit_predictions = true;
       terminal = {
-        font_family = config.fontcfg.monospace.name;
         font_fallbacks = [
           "Fira Code"
           "Droid Sans"
           "Droid Sans Fallback"
         ];
+        font_family = config.fontcfg.monospace.name;
         font_size = config.fontcfg.sizes.terminal + 3.5;
       };
       theme = "Ayu Dark";
