@@ -1,10 +1,10 @@
-{ 
+{
   cacert,
   curl,
   lib,
   p7zip,
   stdenv,
-  ... 
+  ...
 }:
 
 let
@@ -13,18 +13,18 @@ in
 stdenv.mkDerivation {
   pname = "msfonts";
   version = "25H2";
-  
+
   nativeBuildInputs = [
     cacert
     curl
     p7zip
   ];
   CURL_CA_BUNDLE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
- 
+
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = "sha256-bLjJgAxCHjw1F4IdqsK8Hel61s6eiimisJ6VCFjW1RE=";
-  
+
   dontUnpack = true;
   buildPhase = ''
     curl -L -o /tmp/win.iso '${ISO}'
