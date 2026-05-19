@@ -315,19 +315,19 @@ in
         border = 5;
         criteria = [
           {
-            app_id = "(firefox|LibreWolf)";
+            app_id = "(firefox|LibreWolf|librewolf)";
             title = "^(.*)Sharing Indicator(.*)";
           }
           {
-            app_id = "(firefox|LibreWolf)";
+            app_id = "(firefox|LibreWolf|librewolf)";
             title = "^Extension:(.*)";
           }
           {
-            app_id = "(firefox|LibreWolf)";
+            app_id = "(firefox|LibreWolf|librewolf)";
             title = "^Library$";
           }
           {
-            app_id = "(firefox|LibreWolf)";
+            app_id = "(firefox|LibreWolf|librewolf)";
             title = "^Picture-in-Picture(.*)$";
           }
           { app_id = "1Password"; }
@@ -441,7 +441,7 @@ in
       set $altMod        Mod1
 
       #~~~ apps
-      set $browser       ${flatpak} run io.gitlab.librewolf-community
+      set $browser       librewolf
       set $filemanager   ${dolphin}
       set $mediaplayer   ${mpv}
     '';
