@@ -17,9 +17,7 @@
     "pipewire"
     "plasma"
     "printer"
-    "sops"
     "steam"
-    "tailscale"
     "tlp"
   ];
   profiles = [ "extra" ];

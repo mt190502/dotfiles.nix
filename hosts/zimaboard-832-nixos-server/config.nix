@@ -10,9 +10,7 @@
     "clevis"
     "lanzaboote"
     "printer"
-    "sops"
     "syncthing"
-    "tailscale"
   ];
   profiles = [
     "k3s"

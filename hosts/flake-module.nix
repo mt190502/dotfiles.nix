@@ -35,6 +35,12 @@ let
     "wrapped"
   ];
 
+  defaultNixosModules = [
+    "resolved"
+    "sops"
+    "tailscale"
+  ];
+
   buildRPIConfig =
     name: cfg:
     let
@@ -45,7 +51,9 @@ let
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
       profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) cfg.profiles;
-      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
+      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) (
+        (cfg.modules or [ ]) ++ defaultNixosModules
+      );
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
         nix.settings = cfg.nixSettings or { };
@@ -88,7 +96,9 @@ let
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
       profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) cfg.profiles;
-      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) cfg.modules;
+      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) (
+        (cfg.modules or [ ]) ++ defaultNixosModules
+      );
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
         nix.settings = cfg.nixSettings or { };

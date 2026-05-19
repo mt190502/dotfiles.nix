@@ -6,8 +6,6 @@
   users = [ "srvadmin" ];
   modules = [
     "docker"
-    "sops"
-    "tailscale"
     "tang"
   ];
   profiles = [
