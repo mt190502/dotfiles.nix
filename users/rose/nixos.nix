@@ -55,6 +55,7 @@
         git
         gtk
         kdeconnect
+        librewolf
         mangohud
         mpv
         rnnoise

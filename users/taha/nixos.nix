@@ -61,6 +61,7 @@
         gnome-keyring
         gtk
         kdeconnect
+        librewolf
         mangohud
         mpdris2-rs
         mpv

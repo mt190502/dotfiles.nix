@@ -108,6 +108,7 @@
       polarity = "dark";
       targets = {
         hyprland.enable = false;
+        librewolf.profileNames = [ "main" ];
         mangohud.enable = false;
         k9s.enable = false;
         kde.enable = false;
