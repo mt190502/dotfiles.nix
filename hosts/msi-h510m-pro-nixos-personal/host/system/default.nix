@@ -3,7 +3,7 @@
 {
   environment.systemPackages = with pkgs; [ ];
   fileSystems."/mnt/nfs" = {
-    device = "zimaboard-190502.lan:/mnt/ssd/nfs";
+    device = "192.168.1.200:/mnt/ssd/nfs";
     fsType = "nfs";
     options = [
       "nfsvers=4"
