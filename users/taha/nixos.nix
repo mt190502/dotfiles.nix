@@ -53,6 +53,7 @@
         cnf
         delta
         direnv
+        dolphin
         fastfetch
         fish
         fontconfig
