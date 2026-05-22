@@ -7,7 +7,6 @@
     flat-remix-icon-theme
     gnome-text-editor
     gparted
-    librewolf
     libva-utils
     loupe
     lm_sensors

@@ -41,7 +41,6 @@ let
     brightnessctl
     cliphist
     dolphin
-    flatpak
     mpv
     pactl
     playerctl

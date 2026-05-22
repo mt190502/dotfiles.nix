@@ -1,6 +1,11 @@
 { config, pkgs, ... }:
 
 {
+  home.file.".local/share/dbus-1/services/org.kde.kded6.service".text = ''
+    [D-BUS Service]
+    Name=org.kde.kded6
+    Exec=${pkgs.coreutils}/bin/false
+  '';
   xdg = {
     configFile = {
       "menus/applications.menu".text =
