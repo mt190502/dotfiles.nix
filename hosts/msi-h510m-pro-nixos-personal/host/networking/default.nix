@@ -20,7 +20,32 @@ in
       allowedTCPPortRanges = [ kdeconnect ];
       allowedUDPPortRanges = [ kdeconnect ];
     };
-    networkmanager.enable = true;
+    interfaces.eth0.wakeOnLan.enable = true;
+    networkmanager = {
+      enable = true;
+      ensureProfiles = {
+        profiles = {
+          eth0 = {
+            connection = {
+              id = "eth0";
+              type = "ethernet";
+              interface-name = "eth0";
+              autoconnect = true;
+            };
+            ipv4 = {
+              method = "auto";
+            };
+            ipv6 = {
+              addr-gen-mode = "stable-privacy";
+              method = "auto";
+            };
+            ethernet = {
+              wake-on-lan = 64;
+            };
+          };
+        };
+      };
+    };
     useDHCP = lib.mkDefault true;
   };
 }

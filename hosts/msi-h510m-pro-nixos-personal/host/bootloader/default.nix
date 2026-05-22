@@ -41,6 +41,7 @@ rec {
       "intel_iommu=on"
       "iommu=pt"
       "skew_tick=1"
+      "net.ifnames=0"
     ];
     loader = {
       efi = {
