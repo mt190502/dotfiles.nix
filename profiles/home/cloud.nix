@@ -46,6 +46,8 @@ rec {
       kubectl-neat
       kubernetes-helm
       kubetail
+      kustomize
+      kustomize-sops
       minikube
       opentofu
       packer

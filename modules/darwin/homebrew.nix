@@ -31,6 +31,7 @@
       "raycast"
       "shottr"
       "tailscale-app"
+      "the-unarchiver"
       "vivaldi"
       "whatsapp"
     ];
