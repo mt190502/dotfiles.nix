@@ -1,0 +1,22 @@
+---
+apiVersion: viaduct.ai/v1
+kind: ksops
+metadata:
+  name: garage-secret
+  annotations:
+    config.kubernetes.io/function: |
+      exec:
+        path: ksops
+files:
+  - ./webui-secret.yaml
+---
+apiVersion: viaduct.ai/v1
+kind: ksops
+metadata:
+  name: garage-config
+  annotations:
+    config.kubernetes.io/function: |
+      exec:
+        path: ksops
+files:
+  - ./configmap.yaml   

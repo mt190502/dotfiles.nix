@@ -15,3 +15,9 @@ creation_rules:
           - *msi-h510m-pro-nixos-personal
           - *raspberry-pi-5-nixos-server
           - *zimaboard-832-nixos-server
+  - path_regex: hosts/zimaboard-832-nixos-server/host/system/garage/*
+    key_groups:
+      - age:
+          - *lenovo-thinkpad-e14-nixos-personal
+          - *msi-h510m-pro-nixos-personal
+          - *zimaboard-832-nixos-server
