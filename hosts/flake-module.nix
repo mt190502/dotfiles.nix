@@ -41,6 +41,10 @@ let
     "tailscale"
   ];
 
+  defaultNixosProfiles = [
+    "base"
+  ];
+
   buildRPIConfig =
     name: cfg:
     let
@@ -50,7 +54,9 @@ let
       userKeyConfigs = map (u: {
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
-      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) cfg.profiles;
+      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) (
+        (cfg.profiles or [ ]) ++ defaultNixosProfiles
+      );
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) (
         (cfg.modules or [ ]) ++ defaultNixosModules
       );
@@ -95,7 +101,9 @@ let
       userKeyConfigs = map (u: {
         users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
       }) cfg.users;
-      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) cfg.profiles;
+      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) (
+        (cfg.profiles or [ ]) ++ defaultNixosProfiles
+      );
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) (
         (cfg.modules or [ ]) ++ defaultNixosModules
       );

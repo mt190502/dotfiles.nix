@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [ ];
   fileSystems."/home/rose/win" = {
     device = "zimaboard-190502:/mnt/ssd/nfs/win";
     fsType = "nfs";
