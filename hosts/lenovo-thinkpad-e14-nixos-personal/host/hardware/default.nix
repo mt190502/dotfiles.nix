@@ -2,6 +2,7 @@
 
 rec {
   hardware = {
+    alsa.enable = lib.mkForce true;
     bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -25,8 +26,5 @@ rec {
      KEYBOARD_KEY_4c=previoussong                     # Answer Voip call key
      KEYBOARD_KEY_4d=nextsong                         # Hang Voip call key
      KEYBOARD_KEY_45=playpause                        # Favorites
-  '';
-  boot.extraModprobeConfig = ''
-    options snd-hda-intel model=auto
   '';
 }
