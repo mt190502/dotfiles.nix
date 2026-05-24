@@ -19,6 +19,10 @@
         driver = pkgs.libfprint-2-tod1-elan;
       };
     };
+    tlp.settings = {
+      START_CHARGE_THRESH_BAT0 = 75;
+      STOP_CHARGE_THRESH_BAT0 = 85;
+    };
   };
   systemd.services = {
     fprintd = {
