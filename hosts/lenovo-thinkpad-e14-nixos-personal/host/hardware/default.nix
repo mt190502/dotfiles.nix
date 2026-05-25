@@ -1,8 +1,7 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 rec {
   hardware = {
-    alsa.enable = lib.mkForce true;
     bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -21,10 +20,21 @@ rec {
   powerManagement = {
     cpuFreqGovernor = "performance";
   };
-  services.udev.extraHwdb = ''
-    evdev:name:ThinkPad Extra Buttons:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:*
-     KEYBOARD_KEY_4c=previoussong                     # Answer Voip call key
-     KEYBOARD_KEY_4d=nextsong                         # Hang Voip call key
-     KEYBOARD_KEY_45=playpause                        # Favorites
-  '';
+  services.udev = {
+    extraHwdb = ''
+      evdev:name:ThinkPad Extra Buttons:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:*
+       KEYBOARD_KEY_4c=previoussong                     # Answer Voip call key
+       KEYBOARD_KEY_4d=nextsong                         # Hang Voip call key
+       KEYBOARD_KEY_45=playpause                        # Favorites
+    '';
+    extraRules = with pkgs; ''
+      ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC1", RUN+="${writeShellScript "micmute-led-wrapper" ''
+        exec ${lib.getExe' systemd "systemd-run"} --no-block --unit=micmute-led-setup ${writeShellScript "micmute-led-setup" ''
+          ${lib.getExe' kmod "modprobe"} snd_ctl_led
+          ${lib.getExe' alsa-utils "alsactl"} init 1 || true
+          echo 'Mic ACP LED Capture Switch' | ${lib.getExe' coreutils-full "tee"} /sys/class/sound/ctl-led/mic/card1/attach 2>/dev/null || true
+        ''}
+      ''}"
+    '';
+  };
 }

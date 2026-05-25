@@ -1,8 +1,6 @@
-{ lib, ... }:
-
 {
   services.pipewire = {
-    enable = lib.mkForce true;
+    enable = true;
     alsa = {
       enable = true;
       support32Bit = true;
