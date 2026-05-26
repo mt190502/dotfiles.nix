@@ -1,16 +1,6 @@
 { pkgs, ... }:
 
-{
-  fileSystems."/home/rose/win" = {
-    device = "zimaboard-190502:/mnt/ssd/nfs/win";
-    fsType = "nfs";
-    options = [
-      "nfsvers=4"
-      "noauto"
-      "nofail"
-      "x-systemd.automount"
-    ];
-  };
+{ 
   services = {
     fprintd = {
       enable = true;
