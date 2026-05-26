@@ -78,8 +78,12 @@ in
             "custom/space"
             "bluetooth"
           ]
-          ++ (lib.optional config.waybar.enableLaptopOpts "custom/space")
-          ++ (lib.optional config.waybar.enableLaptopOpts "battery")
+          ++ (lib.optionals config.waybar.enableLaptopOpts [
+            "custom/space"
+            "battery"
+            "custom/space"
+            "backlight"
+          ])
           ++ [
             "custom/space"
             "pulseaudio"
@@ -165,6 +169,19 @@ in
               focused = "";
               default = "";
             };
+          };
+
+          backlight = {
+            device = "intel_backlight";
+            format = "{icon} {percent}%";
+            format-icons = [
+              "󰃞"
+              "󰃝"
+              "󰃟"
+              "󰃠"
+              "󰃚"
+            ];
+            scroll-step = 5;
           };
 
           battery = {
