@@ -3,8 +3,8 @@
 let
   disks = config.disko.devices.disk or { };
   clevisUnlock = name: partLabel: ''
-    export PATH=$PATH:${pkgs.curl}/bin:${pkgs.gnused}/bin:${pkgs.util-linux}/bin
-    ${pkgs.clevis}/bin/clevis luks unlock -d $(blkid -t PARTLABEL="${partLabel}" -o device) -n ${name}
+    export PATH=$PATH:${pkgs.curl}/bin:${pkgs.gnused}/bin:${pkgs.util-linux}/bin:${pkgs.clevis}/bin
+    clevis luks unlock -d $(blkid -t PARTLABEL="${partLabel}" -o device) -n ${name}
   '';
   luksPartLabels =
     let
@@ -47,6 +47,9 @@ in
     luks.devices = builtins.mapAttrs (name: partLabel: {
       preOpenCommands = clevisUnlock name partLabel;
     }) luksPartLabels;
-    network.enable = true;
+    network = {
+      enable = true;
+      udhcpc.enable = true;
+    };
   };
 }

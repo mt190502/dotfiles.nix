@@ -19,9 +19,10 @@
     ];
     initrd = {
       availableKernelModules = [
-        "xhci_pci"
         "ahci"
+        "e1000e"
         "nvme"
+        "xhci_pci"
       ];
       kernelModules = [
         "kvm-intel"

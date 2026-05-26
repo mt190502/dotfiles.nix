@@ -16,10 +16,6 @@
       kernelModules = [
         "kvm-intel"
       ];
-      network = {
-        enable = true;
-        udhcpc.enable = true;
-      };
     };
     kernelParams = [
       "intel_iommu=on"

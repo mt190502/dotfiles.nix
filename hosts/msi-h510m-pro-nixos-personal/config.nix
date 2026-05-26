@@ -7,6 +7,7 @@
     "rose"
   ];
   modules = [
+    "clevis"
     "docker"
     "evolution"
     "fontconfig"
