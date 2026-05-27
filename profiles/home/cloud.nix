@@ -120,12 +120,12 @@ rec {
         };
         thresholds = {
           cpu = {
-            critical = 90;
-            warn = 70;
+            critical = 95;
+            warn = 90;
           };
           memory = {
-            critical = 90;
-            warn = 70;
+            critical = 95;
+            warn = 85;
           };
         };
       };
