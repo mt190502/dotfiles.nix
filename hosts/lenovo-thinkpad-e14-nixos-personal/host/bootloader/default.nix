@@ -31,12 +31,20 @@
         "kvm-amd"
         "v4l2loopback"
       ];
+      services.udev.rules = ''
+        SUBSYSTEM=="pci", KERNEL=="0000:04:00.3", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:04:00.3/power/wakeup'"
+        SUBSYSTEM=="pci", KERNEL=="0000:04:00.4", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:04:00.4/power/wakeup'"
+      '';
     };
     kernelParams = [
       "amd_iommu=on"
       "iommu=pt"
       "amdgpu.dcdebugmask=0x610"
       "amdgpu.ppfeaturemask=0xfffd3fff"
+      "acpi_osi=\"Linux\""
+      "acpi_osi=\"!Windows 2020\""
+      #"pcie_port_pm=off"
+      #"acpi.ec_no_wakeup=1"
     ];
   };
 }
