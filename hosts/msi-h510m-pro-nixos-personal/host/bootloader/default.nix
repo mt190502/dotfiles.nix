@@ -20,11 +20,11 @@
     initrd = {
       availableKernelModules = [
         "ahci"
-        "e1000e"
         "nvme"
         "xhci_pci"
       ];
       kernelModules = [
+        "e1000e"
         "kvm-intel"
         "v4l2loopback"
       ];
