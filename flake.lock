@@ -2,6 +2,7 @@
   "nodes": {
     "apple-fonts": {
       "inputs": {
+        "ci": "ci",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -15,11 +16,11 @@
         "sf-pro": "sf-pro"
       },
       "locked": {
-        "lastModified": 1777376912,
-        "narHash": "sha256-aLvNGToDh5g3Lm2NoTPN3ifYLxlCs3yF7qO3qZ1X46s=",
+        "lastModified": 1779851139,
+        "narHash": "sha256-MbveJ0ka8bAIAXHXPEoQ5xnDDejeu1ptuBpNwQSPER8=",
         "owner": "Lyndeno",
         "repo": "apple-fonts.nix",
-        "rev": "746df8b060c2f16080ea2faf502fee652b733047",
+        "rev": "e593ac862763f1863359d066f0b1032b180ec993",
         "type": "github"
       },
       "original": {
@@ -109,6 +110,54 @@
         "owner": "tinted-theming",
         "repo": "base16-vim",
         "rev": "577fe8125d74ff456cf942c733a85d769afe58b7",
+        "type": "github"
+      }
+    },
+    "blueprint": {
+      "inputs": {
+        "nixpkgs": [
+          "apple-fonts",
+          "ci",
+          "nixpkgs"
+        ],
+        "systems": [
+          "apple-fonts",
+          "ci"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776249299,
+        "narHash": "sha256-Dt9t1TGRmJFc0xVYhttNBD6QsAgHOHCArqGa0AyjrJY=",
+        "owner": "numtide",
+        "repo": "blueprint",
+        "rev": "56131e8628f173d24a27f6d27c0215eff57e40dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "blueprint",
+        "type": "github"
+      }
+    },
+    "ci": {
+      "inputs": {
+        "blueprint": "blueprint",
+        "nixpkgs": [
+          "apple-fonts",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779849193,
+        "narHash": "sha256-Bc80n+fA3NtxqYHWcdb1XFuYLaV+yX2xnvDRnwAv4ak=",
+        "owner": "Lyndeno",
+        "repo": "ci",
+        "rev": "38cfa6f01bdaf91bc4ce44176b322bab2bb208a0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Lyndeno",
+        "repo": "ci",
         "type": "github"
       }
     },
@@ -819,11 +868,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779765539,
-        "narHash": "sha256-2QxuD5gJcfCFsnqv54LGEHQKvd+K+DW/ecERwAvuA7w=",
+        "lastModified": 1779851998,
+        "narHash": "sha256-UkkMh3bX9QW4Luqkm98nUaOqKWrU6i65mUnph3WeSSw=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "09889992e640378f7008c3302b9d4892579df610",
+        "rev": "6cddd512fa2bf7231f098d3a2f92f6e4cff71e0a",
         "type": "github"
       },
       "original": {
@@ -1147,11 +1196,11 @@
         "vicinae": "vicinae"
       },
       "locked": {
-        "lastModified": 1779152347,
-        "narHash": "sha256-V9ByOBzaUCMessP9T8LwXQTYl+eIQr+NeGceRprbsT8=",
+        "lastModified": 1779919177,
+        "narHash": "sha256-M2hmGokQXbvoKUEvkgF2IIxOUGCF5v7bXyjPzpSQIJw=",
         "owner": "vicinaehq",
         "repo": "extensions",
-        "rev": "5ef25b54b9db906b391ef7e6b85177f6ecd7f3d6",
+        "rev": "c7a8d7d2e3fa599922c4964a94315c55c9bfe80b",
         "type": "github"
       },
       "original": {
