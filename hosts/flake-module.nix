@@ -38,6 +38,7 @@ let
   defaultNixosModules = [
     "resolved"
     "sops"
+    "statenotifier"
     "tailscale"
   ];
 
