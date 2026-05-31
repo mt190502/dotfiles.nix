@@ -31,7 +31,6 @@
                 name = "cryptroot";
                 settings = {
                   allowDiscards = true;
-                  fallbackToPassword = true;
                 };
                 content = {
                   type = "filesystem";
@@ -57,7 +56,6 @@
                 name = "cryptpart1";
                 settings = {
                   allowDiscards = true;
-                  fallbackToPassword = true;
                 };
                 content = {
                   type = "filesystem";
@@ -74,7 +72,6 @@
                 name = "cryptpart2";
                 settings = {
                   allowDiscards = true;
-                  fallbackToPassword = true;
                 };
                 content = {
                   type = "filesystem";

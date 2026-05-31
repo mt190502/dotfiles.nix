@@ -36,7 +36,7 @@ in
       enable = true;
       systemd = {
         enable = true;
-        target = "${config.preferences.desktopenv}-session.target";
+        targets = [ "${config.preferences.desktopenv}-session.target" ];
       };
       settings = {
         mainBar = {

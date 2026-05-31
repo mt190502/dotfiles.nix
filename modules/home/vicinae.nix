@@ -11,6 +11,10 @@
 let
   settings = ''
     {
+       "close_on_focus_loss": false,
+       "pop_to_root_on_close": true,
+       "favicon_service": "google",
+       "search_files_in_root": true,
        "theme": {
           "dark": {
              "name": "stylix",
@@ -153,28 +157,6 @@ in
       systemd = {
         enable = true;
         autoStart = true;
-      };
-      settings = {
-        closeOnFocusLoss = false;
-        considerPreedit = false;
-        faviconService = "google";
-        font = {
-          size = 10.5;
-        };
-        keybinding = "default";
-        popToRootOnClose = true;
-        rootSearch = {
-          searchFiles = false;
-        };
-        theme = {
-          iconTheme = config.iconthemecfg.dark;
-          name = "stylix";
-        };
-        window = lib.mkDefault {
-          csd = true;
-          opacity = 1;
-          rounding = 10;
-        };
       };
       extensions =
         (getVicinaeExtensions [

@@ -15,13 +15,16 @@
       name = config.iconthemecfg.dark;
       package = lib.mkForce config.iconthemecfg.package;
     };
-    gtk4.extraConfig = {
-      gtk-xft-antialias = 1;
-      gtk-xft-hinting = 1;
-      gtk-xft-hintstyle = "hintslight";
-      gtk-xft-rgba = "rgb";
-      gtk-enable-event-sounds = 0;
-      gtk-enable-input-feedback-sounds = 0;
+    gtk4 = {
+      inherit (config.gtk) theme;
+      extraConfig = {
+        gtk-xft-antialias = 1;
+        gtk-xft-hinting = 1;
+        gtk-xft-hintstyle = "hintslight";
+        gtk-xft-rgba = "rgb";
+        gtk-enable-event-sounds = 0;
+        gtk-enable-input-feedback-sounds = 0;
+      };
     };
     gtk3.extraConfig = {
       gtk-xft-antialias = 1;

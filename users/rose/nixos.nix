@@ -58,7 +58,6 @@
         librewolf
         mangohud
         mpv
-        rnnoise
         solaar
         syncthing
         ytdlp

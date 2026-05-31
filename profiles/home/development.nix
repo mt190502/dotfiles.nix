@@ -45,7 +45,7 @@
           llvmPackages.clang-tools
           netcat
           nixd
-          nixfmt-rfc-style
+          nixfmt
           nmap
           nodejs
           onefetch

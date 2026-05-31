@@ -64,12 +64,11 @@
         kdeconnect
         librewolf
         mangohud
-        mpdris2-rs
         mpv
         obs-studio
         rmpc
-        rnnoise
         solaar
+        ssh
         stylix
         syncthing
         vicinae

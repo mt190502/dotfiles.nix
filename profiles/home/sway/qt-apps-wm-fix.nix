@@ -7,7 +7,7 @@
 let
   shared = ''
     custom_palette=false
-    icon_theme=${config.stylix.iconTheme.dark}
+    icon_theme=${config.stylix.icons.dark}
     standard_dialogs=xdgdesktopportal
     style=kvantum-dark
 

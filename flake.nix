@@ -7,7 +7,7 @@
       flake = true;
     };
     nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-25.11";
+      url = "github:NixOS/nixpkgs/nixos-26.05";
       flake = true;
     };
     home-manager-unstable = {
@@ -15,7 +15,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
@@ -23,11 +23,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-raspberrypi = {
       url = "github:nvmd/nixos-raspberrypi/main";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -47,8 +48,7 @@
       url = "github:gmodena/nix-flatpak/?ref=latest";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/nixvim/nixos-26.05";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
@@ -68,7 +68,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:nix-community/stylix/release-25.11";
+      url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vicinae-extensions = {
@@ -100,7 +100,7 @@
       ];
       perSystem = {
         pre-commit.settings.hooks = {
-          nixfmt-rfc-style.enable = true;
+          nixfmt.enable = true;
           nil.enable = true;
           deadnix.enable = true;
           statix.enable = true;

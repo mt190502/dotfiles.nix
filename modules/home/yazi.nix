@@ -51,5 +51,6 @@ in
     plugins = {
       inherit (pkgs.yaziPlugins) mount restore wl-clipboard;
     };
+    shellWrapperName = "yy";
   };
 }

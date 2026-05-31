@@ -87,7 +87,7 @@
         format = "ssh";
       };
     };
-    ssh.matchBlocks = {
+    ssh.settings = {
       "envs" = {
         host = "envs";
         hostname = "envs.net";

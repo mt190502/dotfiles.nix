@@ -121,6 +121,6 @@ in
     wl-copy = mk' pkgs.wl-clipboard "wl-copy";
     wofi = mk pkgs.wofi;
     wtype = mk pkgs.wtype;
-    xev = mk pkgs.xorg.xev;
+    xev = mk pkgs.xev;
   });
 }

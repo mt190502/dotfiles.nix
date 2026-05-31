@@ -9,7 +9,7 @@
   xdg = {
     configFile = {
       "menus/applications.menu".text =
-        builtins.readFile "${pkgs.libsForQt5.kservice}/etc/xdg/menus/applications.menu"; # ~ https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985/7
+        builtins.readFile "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
       "Kvantum/kvantum.kvconfig".text = ''
         [General]
         theme=KvFlat
@@ -30,7 +30,7 @@
         toolBarFont=${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
 
         [Icons]
-        Theme=${config.stylix.iconTheme.dark}
+        Theme=${config.stylix.icons.dark}
 
         [KDE]
         LookAndFeelPackage=org.kde.breezedark.desktop

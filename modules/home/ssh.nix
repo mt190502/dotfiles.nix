@@ -54,8 +54,8 @@ in
     extraOptionOverrides = {
       "Include" = "overrides/*.conf";
     };
-    matchBlocks = {
-      "*".extraOptions = {
+    settings = {
+      "*" = {
         IdentityAgent = "~/.1password/agent.sock";
       };
     }

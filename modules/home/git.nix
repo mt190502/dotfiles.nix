@@ -22,7 +22,7 @@
   programs.gh = {
     enable = true;
     extensions = with pkgs; [
-      gh-copilot
+      github-copilot-cli
     ];
     settings = {
       editor = config.home.sessionVariables.EDITOR or "vim";

@@ -2,9 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    flat-remix-gnome
-    flat-remix-gtk
-    flat-remix-icon-theme
     gnome-text-editor
     gparted
     libva-utils

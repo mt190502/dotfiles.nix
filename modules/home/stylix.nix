@@ -71,7 +71,7 @@
       inherit (config.stylix.cursor) name size package;
     };
     iconthemecfg = lib.mkForce {
-      inherit (config.stylix.iconTheme) dark light package;
+      inherit (config.stylix.icons) dark light package;
     };
     stylix = {
       enable = lib.mkIf (lib.hasSuffix "linux" system) true;
@@ -99,7 +99,7 @@
           terminal = 9;
         };
       };
-      iconTheme = {
+      icons = {
         enable = true;
         package = pkgs.flat-remix-icon-theme;
         light = "Flat-Remix-Blue-Light";
@@ -119,6 +119,7 @@
         swaylock.enable = false;
         swaync.enable = false;
         waybar.enable = false;
+        vicinae.enable = false;
         wofi.enable = false;
         zed.enable = false;
       };
