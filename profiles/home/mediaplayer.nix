@@ -47,6 +47,9 @@ in
         };
       };
     };
-    mpdris2-rs.enable = true;
+    mpdris2-rs = {
+      enable = true;
+      notifications.enable = true;
+    };
   };
 }
