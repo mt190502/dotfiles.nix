@@ -26,7 +26,6 @@
       kernelModules = [
         "e1000e"
         "kvm-intel"
-        "v4l2loopback"
       ];
       services.udev.rules = ''
         SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:00:14.0/power/wakeup'"

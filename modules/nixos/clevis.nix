@@ -5,17 +5,24 @@
       useTang = true;
     };
     systemd = {
-      enable = true;
       network = {
         enable = true;
+        wait-online.extraArgs = [ "-4" ];
         networks."10-eth" = {
           matchConfig = {
-            Type = "ether";
+            Name = "eth0";
           };
           networkConfig = {
-            DHCP = "yes";
+            DHCP = "ipv4";
           };
         };
+      };
+      targets.cryptsetup = {
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+      };
+      services.systemd-udevd = {
+        after = [ "systemd-modules-load.service" ];
       };
     };
   };

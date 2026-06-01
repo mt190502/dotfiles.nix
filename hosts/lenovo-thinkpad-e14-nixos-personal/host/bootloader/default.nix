@@ -27,10 +27,7 @@
         "ahci"
         "nvme"
       ];
-      kernelModules = [
-        "kvm-amd"
-        "v4l2loopback"
-      ];
+      kernelModules = [ "kvm-amd" ];
       services.udev.rules = ''
         SUBSYSTEM=="pci", KERNEL=="0000:04:00.3", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:04:00.3/power/wakeup'"
         SUBSYSTEM=="pci", KERNEL=="0000:04:00.4", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:04:00.4/power/wakeup'"

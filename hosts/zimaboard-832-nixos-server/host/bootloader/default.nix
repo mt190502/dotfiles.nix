@@ -10,11 +10,11 @@
       availableKernelModules = [
         "ahci"
         "igc"
-        "r8169"
         "xhci_pci"
       ];
       kernelModules = [
         "kvm-intel"
+        "r8169"
       ];
     };
     kernelParams = [
