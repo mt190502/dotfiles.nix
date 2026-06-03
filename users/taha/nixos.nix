@@ -71,6 +71,7 @@
         ssh
         stylix
         syncthing
+        tailscale
         vicinae
         yazi
         ytdlp
