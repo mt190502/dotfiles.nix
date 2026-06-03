@@ -22,6 +22,9 @@
     packages =
       with pkgs;
       [
+        #~ custom ~#
+        config.wrapped.jetbrains-toolbox
+
         #~ fonts ~#
         cantarell-fonts
         cascadia-code
