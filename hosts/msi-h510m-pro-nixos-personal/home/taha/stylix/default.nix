@@ -3,6 +3,6 @@
 {
   config.stylix = {
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/apathy.yaml";
-    image = ../../../../../assets/wallpapers/wallpaper6.jpg;
+    image = ../../../../../assets/wallpapers/wallpaper11.jpg;
   };
 }

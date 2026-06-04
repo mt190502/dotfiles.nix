@@ -15,7 +15,7 @@
         }
       ];
     };
-    kscreenlocker.appearance.wallpaper = ../../../../../assets/wallpapers/wallpaper1.jpg;
-    workspace.wallpaper = ../../../../../assets/wallpapers/wallpaper1.jpg;
+    kscreenlocker.appearance.wallpaper = ../../../../../assets/wallpapers/wallpaper11.jpg;
+    workspace.wallpaper = ../../../../../assets/wallpapers/wallpaper11.jpg;
   };
 }
