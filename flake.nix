@@ -40,6 +40,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "rust-overlay";
     };
+    ihtc = {
+      url = "github:kreatoo/ihtc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak/?ref=latest";
     };

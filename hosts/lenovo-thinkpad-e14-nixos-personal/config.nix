@@ -10,6 +10,7 @@
     "docker"
     "evolution"
     "fontconfig"
+    "ihtc"
     "lanzaboote"
     "libvirt"
     "mate-polkit"
