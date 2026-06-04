@@ -52,4 +52,15 @@ in
       notifications.enable = true;
     };
   };
+  systemd.user.services.mpdris2-rs = {
+    Install = {
+      WantedBy = [ 
+        "graphical.target"
+        "${config.preferences.desktopenv}-session.target"
+      ];
+    };
+    Unit = {
+      Wants = [ "mpd.service" ];
+    };
+  };
 }
