@@ -88,9 +88,13 @@ in
     yt-dlp = mk pkgs.yt-dlp;
   }
   // (lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+    dbus = mk' pkgs.dbus "dbus-update-activation-environment";
+    systemctl = mk' pkgs.systemd "systemctl";
+    systemd-env = "${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator";
+  })
+  // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && config.preferences.desktopenv != "none") {
     brightnessctl = mk pkgs.brightnessctl;
     cliphist = mk pkgs.cliphist;
-    dbus = mk' pkgs.dbus "dbus-update-activation-environment";
     dolphin = mk' config.wrapped.dolphin "dolphin";
     dragon-drop = mk pkgs.dragon-drop;
     flatpak = mk' pkgs.flatpak "flatpak";
@@ -114,13 +118,11 @@ in
     swaymsg = mk' pkgs.sway "swaymsg";
     swaynag = mk' pkgs.sway "swaynag";
     swaync = mk' pkgs.swaynotificationcenter "swaync-client";
-    systemctl = mk' pkgs.systemd "systemctl";
-    systemd-env = "${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator";
     vicinae = mk pkgs-unstable.vicinae;
     wlsunset = mk pkgs.wlsunset;
     wl-copy = mk' pkgs.wl-clipboard "wl-copy";
     wofi = mk pkgs.wofi;
     wtype = mk pkgs.wtype;
     xev = mk pkgs.xev;
-  });
+  };
 }
