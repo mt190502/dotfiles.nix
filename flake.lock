@@ -462,11 +462,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780433547,
-        "narHash": "sha256-EfACS/49RHvaPqYGOA2k27t2AeFfX9dM4b0IHri2BK0=",
+        "lastModified": 1780603684,
+        "narHash": "sha256-C2pbSLEed6QMP/POO1XCAg36teBTEJIN/p8WH1sn1UM=",
         "owner": "kreatoo",
         "repo": "ihtc",
-        "rev": "4f481e93ff2eb7b5fa698f75b82a9fc826f53458",
+        "rev": "4b24e9c6127b0237e0051a54aa4a83c22c416a46",
         "type": "github"
       },
       "original": {
