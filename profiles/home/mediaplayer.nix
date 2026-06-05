@@ -34,6 +34,13 @@ in
           enabled     "yes"
           opustags    "yes"
         }
+        audio_output {
+          type        "fifo"
+          name        "Cava"
+          path        "/tmp/mpd.fifo"
+          format      "44100:16:2"
+          enabled     "yes"
+        }
       '';
     };
     mpd-discord-rpc = {

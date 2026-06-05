@@ -7,6 +7,7 @@
 
 {
   config = lib.mkIf config.services.mpd.enable {
+    home.packages = with pkgs; [ cava ];
     preferences.mediaplayer = lib.mkDefault "rmpc";
     programs.rmpc = {
       enable = true;
@@ -42,7 +43,7 @@
               sample_bits: 16,
             ),
             smoothing: (
-              noise_reduction: 77,
+              noise_reduction: 15,
               monstercat: false,
               waves: false,
             ),
@@ -51,6 +52,7 @@
           directories_sort: SortFormat(group_by_type: true, reverse: false),
           enable_config_hot_reload: true,
           keybinds: (
+            clear: true,
             global: {
               "<Left>":  SeekBack,
               "<Right>": SeekForward,
@@ -105,12 +107,12 @@
               "k":          Up,
               "n":          NextResult,
               "/":          EnterSearch,
+              "a":          Save(kind: Modal(all: false)),
+              "s":          Save(kind: Modal(all: true)),
             },
             queue: {
               "<CR>": Play,
-              "a":    AddToPlaylist,
               "c":    DeleteAll,
-              "s":    Save,
             },
           ),
           password: None,
@@ -130,15 +132,21 @@
           select_current_song_on_change: true,
           tabs: [
              (
-               name: "Playlist",
-               pane: Split(
-                  direction: Horizontal,
-                  panes: [
-                    (size: "25%", pane: Pane(AlbumArt)),
-                    (size: "75%", pane: Pane(Queue)),
-                  ],
-               ),
-             ),
+                name: "Playlist",
+                pane: Split(
+                   direction: Horizontal,
+                   panes: [
+                     (size: "25%", borders: "RIGHT", pane: Split(
+                       direction: Vertical,
+                       panes: [
+                         (size: "75%", pane: Pane(AlbumArt)),
+                         (size: "25%", borders: "TOP", pane: Pane(Cava)),
+                       ],
+                     )),
+                     (size: "75%", pane: Pane(Queue)),
+                   ],
+                ),
+              ),
             ( name: "Directories", pane: Pane(Directories) ),
             ( name: "Artists", pane: Pane(Artists) ),
             ( name: "Album Artists", pane: Pane(AlbumArtists) ),
@@ -160,8 +168,6 @@
           #![enable(unwrap_variant_newtypes)]
           (
             default_album_art_path: None,
-            show_song_table_header: true,
-            draw_borders: true,
             format_tag_separator: " | ",
             browser_column_widths: [20, 38, 42],
             background_color: None,
@@ -175,7 +181,7 @@
               active_style: (fg: "black", bg: "blue", modifiers: "Bold"),
               inactive_style: (),
             ),
-            highlighted_item_style: (fg: "blue", modifiers: "Bold"),
+            highlighted_item_style: (fg: "blue", bg: "black", modifiers: "Bold"),
             current_item_style: (fg: "black", bg: "blue", modifiers: "Bold"),
             borders_style: (fg: "blue"),
             highlight_border_style: (fg: "blue"),
@@ -202,6 +208,10 @@
               elapsed_style: (fg: "white"),
               thumb_style: (fg: "white"),
               use_track_when_empty: false,
+            ),
+            cava: (
+              bar_width: 1,
+              bar_spacing: 0,
             ),
             scrollbar: (
               symbols: ["│", "█", "▲", "▼"],
