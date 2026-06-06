@@ -6,12 +6,9 @@
     gparted
     libva-utils
     loupe
-    lm_sensors
     openboard
-    psmisc
     seahorse
     v4l-utils
-    vim
     xdg-user-dirs
     xdg-user-dirs-gtk
     xdg-utils

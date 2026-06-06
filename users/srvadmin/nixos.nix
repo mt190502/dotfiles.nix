@@ -47,6 +47,8 @@
         fish
       ])
       ++ (with sharing.profiles.home; [
+        neovim
+        tmux
       ]);
     };
   };

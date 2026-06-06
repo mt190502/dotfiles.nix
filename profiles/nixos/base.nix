@@ -43,7 +43,11 @@
     keyMap = lib.mkForce "us";
     useXkbConfig = false;
   };
-  environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = with pkgs; [
+    lm_sensors
+    psmisc
+    vim
+  ];
   networking = {
     firewall = {
       enable = true;
