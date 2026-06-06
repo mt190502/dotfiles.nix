@@ -8,14 +8,12 @@
 
 let
   inherit (config.bin)
-    cht-sh
     fastfetch
     gh
     git
     grc
     hugo
     lsd
-    neovide
     telnet
     trash
     yt-dlp
@@ -33,7 +31,6 @@ in
         end
       '';
       mapscii = "${telnet} mapscii.me";
-      nvim2 = "${neovide} $argv &; disown";
       shell = "nix shell nixpkgs#$argv";
       neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
       nevalp = "nix eval nixpkgs#$argv.outPath";
@@ -115,10 +112,13 @@ in
       ais = "${gh} copilot suggest";
       ff = "${fastfetch}";
       passgen = "cat /dev/urandom | tr -dc [:alnum:] | head -c";
-      tldr = "${cht-sh}";
+
       tmp = "cd ~/.tmp";
       yt-album = "${yt-dlp} --config-locations ${home}/.config/yt-dlp/music -o \"${home}/Music/Albums/%(album)s - %(artist)s/%(playlist_autonumber)02d - %(track)s.%(ext)s\"";
       yt-music = "${yt-dlp} --config-locations ${home}/.config/yt-dlp/music -o \"${home}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
+    }
+    // lib.optionalAttrs (!lib.hasSuffix "server" flakeName) {
+      tldr = "${config.bin.cht-sh}";
     };
     shellInit = ''
       #################################################

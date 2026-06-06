@@ -9,7 +9,6 @@
   modules = [
     "clevis"
     "lanzaboote"
-    "printer"
     "syncthing"
   ];
   profiles = [

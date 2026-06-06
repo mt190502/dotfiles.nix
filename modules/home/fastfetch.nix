@@ -10,6 +10,7 @@
     enable = true;
     package = pkgs.fastfetch.override (
       lib.optionalAttrs (lib.hasSuffix "server" flakeName) {
+        brightnessSupport = false;
         dbusSupport = false;
         enlightenmentSupport = false;
         gnomeSupport = false;

@@ -63,9 +63,8 @@ in
     alacritty = mk pkgs.alacritty;
     bash = mk' pkgs.bash "bash";
     curl = mk pkgs.curl;
-    cht-sh = mk pkgs.cht-sh;
     env = mk' pkgs.coreutils "env";
-    fastfetch = mk pkgs.fastfetch;
+    fastfetch = mk config.programs.fastfetch.package;
     ffprobe = mk' pkgs.ffmpeg "ffprobe";
     gh = mk pkgs.gh;
     git = mk pkgs.git;
@@ -77,7 +76,6 @@ in
     lsd = mk pkgs.lsd;
     mpv = mk pkgs.mpv;
     mpc = mk' pkgs.mpc "mpc";
-    neovide = mk pkgs.neovide;
     rmpc = mk pkgs.rmpc;
     ncmpcpp = mk pkgs.ncmpcpp;
     sh = mk' pkgs.bash "sh";
@@ -94,6 +92,8 @@ in
   })
   // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && config.preferences.desktopenv != "none") {
     brightnessctl = mk pkgs.brightnessctl;
+    cht-sh = mk pkgs.cht-sh;
+    neovide = mk pkgs.neovide;
     cliphist = mk pkgs.cliphist;
     dolphin = mk' config.wrapped.dolphin "dolphin";
     dragon-drop = mk pkgs.dragon-drop;

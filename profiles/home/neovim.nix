@@ -1,8 +1,8 @@
-{ config, inputs, ... }:
+{ config, flakeName, inputs, lib, ... }:
 
 {
   imports = [ inputs.nixvim.homeModules.nixvim ];
-  programs.neovide = {
+  programs.neovide = lib.mkIf (!lib.hasSuffix "server" flakeName) {
     enable = true;
     settings = {
       font = {
@@ -59,6 +59,7 @@
         };
       };
     };
+    clipboard.providers.wl-copy.enable = lib.mkIf (lib.hasSuffix "server" flakeName) false;
     opts = {
       expandtab = true;
       incsearch = false;
