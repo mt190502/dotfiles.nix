@@ -61,7 +61,7 @@ in
   };
   systemd.user.services.mpdris2-rs = {
     Install = {
-      WantedBy = [ 
+      WantedBy = [
         "graphical.target"
         "${config.preferences.desktopenv}-session.target"
       ];
