@@ -51,6 +51,7 @@ jobs:
               if [[ -n "$owner" && -n "$repo" && -n "$rev" && -n "$old_sha" ]]; then
                 echo "Found: owner=$owner, repo=$repo, rev=$rev"
                 new_sha_base64=""
+                used_fake_hash=0
 
                 # Method 1: nix-prefetch-url with 180s timeout
                 if prefetch_out=$(timeout 180 nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1); then
@@ -72,6 +73,7 @@ jobs:
                   if [[ -n "$next_sha_line" ]]; then
                     # Temporarily set fake hash
                     awk -v line="$next_sha_line" -v fake="$fake_hash" 'NR == line { sub(/sha256 = "sha256-[^"]*"/, "sha256 = \"" fake "\"") } { print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+                    used_fake_hash=1
 
                     # Try building the flake checks to trigger the hash mismatch error
                     got_hash=$(timeout 600 nix build .#checks.x86_64-linux.pre-commit --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
@@ -91,7 +93,7 @@ jobs:
                   fi
                 fi
 
-                if [[ -n "$new_sha_base64" && "$old_sha" != "$new_sha_base64" ]]; then
+                if [[ -n "$new_sha_base64" && ( "$old_sha" != "$new_sha_base64" || "$used_fake_hash" -eq 1 ) ]]; then
                   sha_line_num=$(grep -n "rev = \"$rev\"" "$file" | cut -d: -f1)
                   next_sha_line=$(awk -v start="$sha_line_num" 'NR > start && /sha256 = / { print NR; exit }' "$file")
 
