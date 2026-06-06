@@ -1,6 +1,27 @@
 {
+  lib,
+  flakeName,
+  pkgs,
+  ...
+}:
+
+{
   programs.fastfetch = {
     enable = true;
+    package = pkgs.fastfetch.override (
+      lib.optionalAttrs (lib.hasSuffix "server" flakeName) {
+        dbusSupport = false;
+        enlightenmentSupport = false;
+        gnomeSupport = false;
+        imageSupport = false;
+        openclSupport = false;
+        openglSupport = false;
+        vulkanSupport = false;
+        waylandSupport = false;
+        x11Support = false;
+        xfceSupport = false;
+      }
+    );
     settings = {
       display = {
         separator = ": ";
