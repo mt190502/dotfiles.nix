@@ -38,6 +38,7 @@
     ];
     tmp.cleanOnBoot = true;
   };
+  nix.optimise.automatic = true;
   console = {
     font = "eurlatgr";
     keyMap = lib.mkForce "us";
