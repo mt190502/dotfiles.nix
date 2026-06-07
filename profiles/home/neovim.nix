@@ -1,4 +1,10 @@
-{ config, flakeName, inputs, lib, ... }:
+{
+  config,
+  flakeName,
+  inputs,
+  lib,
+  ...
+}:
 
 {
   imports = [ inputs.nixvim.homeModules.nixvim ];

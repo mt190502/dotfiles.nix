@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   pname = "commandcode-proxy";
   version = "1.0.0";
-  
+
   src = ./.;
   dontBuild = true;
   nativeBuildInputs = [ python3 ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   postFixup = ''
     patchShebangs $out/bin/commandcode-proxy
   '';
-  
+
   meta = {
     description = "A proxy server for CommandCode, written by Kreato.";
     homepage = "https://github.com/kreatoo";
