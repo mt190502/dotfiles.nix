@@ -11,6 +11,7 @@
   programs.fish.shellAliases = {
     sysdup = lib.mkOverride 500 "nix-channel --update && sudo nix-channel --update && ${config.bin.flatpak} update && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/.config/dotfiles.nix#${flakeName} --upgrade";
     sysclean = lib.mkOverride 500 "${config.bin.flatpak} remove --unused && nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+    rebuild = lib.mkOverride 500 "sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/.config/dotfiles.nix#${flakeName}";
   };
   services.flatpak = {
     enable = true;

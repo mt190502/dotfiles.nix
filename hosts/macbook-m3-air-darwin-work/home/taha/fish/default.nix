@@ -10,6 +10,7 @@
     shellAliases = {
       sysdup = lib.mkForce "nix-channel --update && sudo nix-channel --update && cd ${config.home.homeDirectory}/.config/dotfiles.nix && nix flake update && sudo darwin-rebuild switch --flake .#${flakeName}";
       sysclean = lib.mkForce "nix-collect-garbage -d";
+      rebuild = lib.mkForce "sudo darwin-rebuild switch --flake ${config.home.homeDirectory}/.config/dotfiles.nix#${flakeName}";
     };
   };
 }
