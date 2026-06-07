@@ -46,6 +46,15 @@ let
          }
        },
        "providers": {
+          "@CT-7567/simple-dictionary": {
+            "entrypoints": {
+              "search": {
+                "preferences": {
+                  "default_language": "en"
+                }
+              }
+            }
+          },
           "@khasbilegt/1password": {
              "preferences": {
                 "cliPath": "${
@@ -59,6 +68,18 @@ let
           "@leiserfg/ssh-0": {
              "preferences": {
                 "terminal": "${config.preferences.terminal}"
+             }
+          },
+          "@mooxl/deepcast": {
+             "preferences": {
+                "closeRaycastAfterTranslation": false,
+                "defaultFormality": "default",
+                "defaultTargetLanguage": "TR",
+                "onTranslateAction": "view",
+                "returnToRootState": false,
+                "showFormalityConfig": false,
+                "showTransliteration": "whenProvided",
+                "source": "selected"
              }
           },
           "@samlinville/tailscale": {
@@ -120,7 +141,7 @@ let
         owner = "raycast";
         repo = "extensions";
         rev = "e7c04a122cdde3ed58bf5184e2424808153644ad";
-        sha256 = "sha256-HcpuQw3otkjm5IYiKZtK7ldfiEEwatdhpdDweVlRGMU=";
+        sha256 = "sha256-iqXLoPWsSpND418UoDaOTPEzTIjRfIvw12snDAVK6M4=";
         sparseCheckout = map (name: "/extensions/${name}") names;
       };
     in
@@ -168,6 +189,8 @@ in
         ++ (genRaycastExtensions [
           "1password"
           "chatgpt"
+          "deepcast"
+          "simple-dictionary"
           "tailscale"
           "word-count"
         ]);
