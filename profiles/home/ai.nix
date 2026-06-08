@@ -4,10 +4,18 @@
 {
   config,
   inputs,
+  lib,
+  osConfig ? null,
   pkgs,
   pkgs-unstable,
   ...
 }:
+
+let
+  commandcode-proxy-bin = "${
+    inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.commandcode-proxy
+  }/bin/commandcode-proxy";
+in
 
 {
   ########################################
@@ -22,25 +30,38 @@
   ## CommandCode Proxy Server
   #
   ########################################
-  systemd.user.services.commandcode-proxy = {
-    Unit = {
-      Description = "CommandCode Proxy Server";
-      After = [ "network.target" ];
-    };
+  systemd.user.services.commandcode-proxy =
+    lib.mkIf (pkgs.stdenv.hostPlatform.isLinux)
+      {
+        Unit = {
+          Description = "CommandCode Proxy Server";
+          After = [ "network.target" ];
+        };
 
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-    Service = {
-      ExecStart = "${
-        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.commandcode-proxy
-      }/bin/commandcode-proxy";
-      Restart = "always";
-      RestartSec = 5;
-      StandardOutput = "journal";
-      StandardError = "journal";
-    };
-  };
+        Install = {
+          WantedBy = [ "default.target" ];
+        };
+        Service = {
+          ExecStart = commandcode-proxy-bin;
+          Restart = "always";
+          RestartSec = 5;
+          StandardOutput = "journal";
+          StandardError = "journal";
+        };
+      };
+
+  launchd.agents.commandcode-proxy =
+    lib.mkIf (osConfig != null && pkgs.stdenv.hostPlatform.isDarwin)
+      {
+        enable = true;
+        config = {
+          ProgramArguments = [ commandcode-proxy-bin ];
+          RunAtLoad = true;
+          KeepAlive = true;
+          StandardOutPath = "${config.home.homeDirectory}/Library/Logs/commandcode-proxy.log";
+          StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/commandcode-proxy.log";
+        };
+      };
 
   ########################################
   #
