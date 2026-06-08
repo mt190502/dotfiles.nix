@@ -30,25 +30,23 @@ in
   ## CommandCode Proxy Server
   #
   ########################################
-  systemd.user.services.commandcode-proxy =
-    lib.mkIf (pkgs.stdenv.hostPlatform.isLinux)
-      {
-        Unit = {
-          Description = "CommandCode Proxy Server";
-          After = [ "network.target" ];
-        };
+  systemd.user.services.commandcode-proxy = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux) {
+    Unit = {
+      Description = "CommandCode Proxy Server";
+      After = [ "network.target" ];
+    };
 
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-        Service = {
-          ExecStart = commandcode-proxy-bin;
-          Restart = "always";
-          RestartSec = 5;
-          StandardOutput = "journal";
-          StandardError = "journal";
-        };
-      };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+    Service = {
+      ExecStart = commandcode-proxy-bin;
+      Restart = "always";
+      RestartSec = 5;
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+  };
 
   launchd.agents.commandcode-proxy =
     lib.mkIf (osConfig != null && pkgs.stdenv.hostPlatform.isDarwin)
@@ -98,31 +96,263 @@ in
       provider = {
         commandcode = {
           name = "CommandCode";
-          models = builtins.listToAttrs (
-            map
-              (model: {
-                name = model.id;
-                value = {
-                  name = model.name;
-                  limit = {
-                    context = if model.context_length != null then model.context_length else 128000;
-                    output = 16384;
-                  };
-                  modalities = {
-                    input = [ "text" ];
-                    output = [ "text" ];
-                  };
-                };
-              })
-              (builtins.fromJSON (
-                builtins.readFile (
-                  builtins.fetchurl {
-                    url = "http://127.0.0.1:8082/v1/models";
-                    sha256 = "0rbkscgin16bj13md5pbwghd6ylkp5mzlwj4rmpwyrc6560kwrx1";
-                  }
-                )
-              )).data
-          );
+          models = {
+            "MiniMaxAI/MiniMax-M2.7" = {
+              limit = {
+                context = 200000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "MiniMax M2.7";
+            };
+            "Qwen/Qwen3.7-Max" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "Qwen 3.7 Max";
+            };
+            "Qwen/Qwen3.7-Plus" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "Qwen 3.7 Plus";
+            };
+            "deepseek/deepseek-v4-flash" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "DeepSeek V4 Flash";
+            };
+            "deepseek/deepseek-v4-pro" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "DeepSeek V4 Pro";
+            };
+            "gpt-5.3-codex" = {
+              limit = {
+                context = 400000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "GPT-5.3 Codex";
+            };
+            "gpt-5.4" = {
+              limit = {
+                context = 400000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "GPT-5.4";
+            };
+            "gpt-5.4-mini" = {
+              limit = {
+                context = 400000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "GPT-5.4 Mini";
+            };
+            "gpt-5.5" = {
+              limit = {
+                context = 200000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "GPT-5.5";
+            };
+            "moonshotai/Kimi-K2.6" = {
+              limit = {
+                context = 256000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "Kimi K2.6";
+            };
+            "nvidia/nemotron-3-ultra-550b-a55b" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "Nemotron 3 Ultra";
+            };
+            "stepfun/Step-3.5-Flash" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "Step 3.5 Flash";
+            };
+            "stepfun/Step-3.7-Flash" = {
+              limit = {
+                context = 256000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "Step 3.7 Flash";
+            };
+            "xiaomi/mimo-v2.5" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "MiMo V2.5";
+            };
+            "xiaomi/mimo-v2.5-pro" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "MiMo V2.5 Pro";
+            };
+            "zai-org/GLM-5" = {
+              limit = {
+                context = 200000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "GLM-5";
+            };
+            "zai-org/GLM-5.1" = {
+              limit = {
+                context = 200000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "GLM-5.1";
+            };
+          };
           options = {
             baseURL = "http://127.0.0.1:8082/v1";
             apiKey = "{file:${config.sops.secrets."global/commandcode".path}}";
