@@ -140,7 +140,7 @@ let
       raycastRepo = fetchFromGitHub {
         owner = "raycast";
         repo = "extensions";
-        rev = "e7c04a122cdde3ed58bf5184e2424808153644ad";
+        rev = "8c54fe97aea4ecf903fe3072477859320ec5e92a";
         sha256 = "sha256-iqXLoPWsSpND418UoDaOTPEzTIjRfIvw12snDAVK6M4=";
         sparseCheckout = map (name: "/extensions/${name}") names;
       };
