@@ -124,5 +124,8 @@ in
     wofi = mk pkgs.wofi;
     wtype = mk pkgs.wtype;
     xev = mk pkgs.xev;
+  }
+  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+    cht-sh = mk pkgs.cht-sh;
   };
 }
