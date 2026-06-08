@@ -41,6 +41,7 @@ rec {
         fontconfig
         git
         mpv
+        ssh
         ytdlp
         zed
       ])
