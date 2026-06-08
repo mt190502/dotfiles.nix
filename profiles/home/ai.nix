@@ -56,6 +56,7 @@ in
           ProgramArguments = [ commandcode-proxy-bin ];
           RunAtLoad = true;
           KeepAlive = true;
+          WorkingDirectory = config.home.homeDirectory;
           StandardOutPath = "${config.home.homeDirectory}/Library/Logs/commandcode-proxy.log";
           StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/commandcode-proxy.log";
         };
