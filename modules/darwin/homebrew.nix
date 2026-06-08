@@ -4,6 +4,7 @@
     onActivation = {
       autoUpdate = true;
       cleanup = "uninstall";
+      extraFlags = [ "--force" ];
     };
     brews = [
       "siege"
