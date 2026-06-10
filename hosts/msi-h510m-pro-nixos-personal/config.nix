@@ -20,6 +20,7 @@
     "printer"
     "steam"
     "tlp"
+    "waydroid"
   ];
   profiles = [ "extra" ];
   packages = [
