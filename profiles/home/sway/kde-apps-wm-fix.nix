@@ -23,11 +23,11 @@
         XftAntialias=true
         XftHintStyle=hintslight
         XftSubPixel=rgb
-        fixed=${config.stylix.fonts.monospace.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1
-        font=${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
-        menuFont=${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
+        fixed=${config.stylix.fonts.monospace.name},${toString config.stylix.fonts.sizes.applications},-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+        font=${config.stylix.fonts.sansSerif.name},${toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
+        menuFont=${config.stylix.fonts.sansSerif.name},${toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
         smallestReadableFont=${config.stylix.fonts.sansSerif.name},8,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
-        toolBarFont=${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
+        toolBarFont=${config.stylix.fonts.sansSerif.name},${toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
 
         [Icons]
         Theme=${config.stylix.icons.dark}
@@ -35,7 +35,8 @@
         [KDE]
         LookAndFeelPackage=org.kde.breezedark.desktop
         ShowDeleteCommand=true
-        widgetStyle=kvantum
+        simpleColorScheme=BreezeDark
+        widgetStyle=breeze
 
         [KFileDialog Settings]
         Allow Expansion=false
@@ -64,7 +65,7 @@
         [WM]
         activeBackground=61,61,62
         activeBlend=61,61,62
-        activeFont=${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
+        activeFont=${config.stylix.fonts.sansSerif.name},${toString config.stylix.fonts.sizes.applications},-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular
         activeForeground=255,255,255
         inactiveBackground=61,61,62
         inactiveBlend=61,61,62

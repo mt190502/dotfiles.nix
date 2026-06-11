@@ -10,8 +10,8 @@
       buildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/dolphin \
-          --set QT_STYLE_OVERRIDE kvantum \
-          --set QT_QPA_PLATFORMTHEME kde
+          --set QT_QPA_PLATFORMTHEME qt6ct \
+          --add-flags "-style kvantum-dark"
       '';
       meta.mainProgram = "dolphin";
     };

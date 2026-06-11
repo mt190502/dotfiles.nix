@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
 let
   shared = ''
@@ -12,8 +8,8 @@ let
     style=kvantum-dark
 
     [Fonts]
-    fixed="${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,57,0,0,0,0,0,Regular"
-    general="${config.stylix.fonts.sansSerif.name},${builtins.toString config.stylix.fonts.sizes.applications},-1,5,57,0,0,0,0,0,Regular"
+    fixed="${config.stylix.fonts.sansSerif.name},${toString config.stylix.fonts.sizes.applications},-1,5,57,0,0,0,0,0,Regular"
+    general="${config.stylix.fonts.sansSerif.name},${toString config.stylix.fonts.sizes.applications},-1,5,57,0,0,0,0,0,Regular"
   '';
 in
 {

@@ -38,7 +38,6 @@
     ];
     tmp.cleanOnBoot = true;
   };
-  nix.optimise.automatic = true;
   console = {
     font = "eurlatgr";
     keyMap = lib.mkForce "us";
@@ -94,6 +93,7 @@
       };
     };
   };
+  nix.optimise.automatic = true;
   time = {
     hardwareClockInLocalTime = false;
     timeZone = "Europe/Istanbul";

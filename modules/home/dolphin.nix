@@ -32,6 +32,9 @@ let
 
     [Toolbar mainToolBar]
     ToolButtonStyle=IconOnly
+
+    [UiSettings]
+    ColorScheme=BreezeDark
   '';
   dolphinui = ''
     <!DOCTYPE gui>
