@@ -101,9 +101,9 @@
       };
       icons = {
         enable = true;
-        package = pkgs.flat-remix-icon-theme;
-        light = "Flat-Remix-Blue-Light";
-        dark = "Flat-Remix-Blue-Dark";
+        package = pkgs.papirus-icon-theme;
+        light = "Papirus-Light";
+        dark = "Papirus-Dark";
       };
       polarity = "dark";
       targets = {

@@ -52,9 +52,9 @@ in
     iconthemecfg = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = {
-        dark = "Flat-Remix-Blue-Dark";
-        light = "Flat-Remix-Blue-Light";
-        package = pkgs.flat-remix-icon-theme;
+        dark = "Papirus-Dark";
+        light = "Papirus-Light";
+        package = pkgs.papirus-icon-theme;
       };
       description = "Centralized icon theme configuration definitions";
     };

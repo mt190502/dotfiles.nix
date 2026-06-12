@@ -252,7 +252,7 @@ in
           taskManagerFeedback = true;
           theme = "Adwaita";
         };
-        iconTheme = "Flat-Remix-Blue-Dark";
+        iconTheme = config.iconthemecfg.dark;
         lookAndFeel = "org.kde.breezedark.desktop";
         soundTheme = "ocean";
         theme = "breeze-dark";
