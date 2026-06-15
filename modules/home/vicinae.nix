@@ -141,7 +141,7 @@ let
         owner = "raycast";
         repo = "extensions";
         rev = "a48ae7d334c1ecbff20bef5d537ff43be1717957";
-        sha256 = "sha256-iqXLoPWsSpND418UoDaOTPEzTIjRfIvw12snDAVK6M4=";
+        sha256 = "sha256-hSSpt3/sw7+UxU//Fx/RtYgYSsLQLQlYCZmJM+p5W0E=";
         sparseCheckout = map (name: "/extensions/${name}") names;
       };
     in
