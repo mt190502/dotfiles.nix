@@ -35,6 +35,35 @@ in
       neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
       nevalp = "nix eval nixpkgs#$argv.outPath";
       nevalcd = "cd $(nix eval --raw nixpkgs#$argv.outPath)";
+      watchdiff = ''
+        if test (count $argv) -lt 1
+          echo "Usage: watchdiff <command>"
+          return 1
+        end
+
+        set targetfile $argv[1]
+        if not test -f $targetfile
+          echo "File $targetfile does not exist."
+          return 1
+        end
+
+        set oldfile_tmp (mktemp)
+        cat $targetfile > $oldfile_tmp
+        echo "Watching $targetfile for changes. Press Ctrl+C to stop."
+        while true
+          ${lib.getExe' pkgs.inotify-tools "inotifywait"} -q -e modify $targetfile >/dev/null
+          set newfile_tmp (mktemp)
+          cat $targetfile > $newfile_tmp
+          clear
+
+          echo "=== "(date)" ==="
+          echo ""
+          ${lib.getExe' pkgs.diffutils "diff"} --color=always -u $oldfile_tmp $newfile_tmp
+
+          rm -f $oldfile_tmp
+          set oldfile_tmp $newfile_tmp
+        end
+      '';
       workmode = ''
         set mode (test (count $argv) -gt 0; and echo $argv[1])
         if [ "$fish_history" = "work" -a "$mode" != "false" ]
