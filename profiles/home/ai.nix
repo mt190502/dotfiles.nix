@@ -113,6 +113,21 @@ in
               };
               name = "MiniMax M2.7";
             };
+            "MiniMaxAI/MiniMax-M3" = {
+              limit = {
+                context = 1000000;
+                output = 16384;
+              };
+              modalities = {
+                input = [
+                  "text"
+                ];
+                output = [
+                  "text"
+                ];
+              };
+              name = "MiniMax M3";
+            };
             "Qwen/Qwen3.7-Max" = {
               limit = {
                 context = 1000000;

@@ -63,6 +63,7 @@ MODELS = {
     "baseten:zai-org/GLM-5.1": {"name": "GLM-5.1"},
     "baseten:MiniMaxAI/MiniMax-M2.5": {"name": "MiniMax M2.5", "context": 200_000},
     "baseten:MiniMaxAI/MiniMax-M2.7": {"name": "MiniMax M2.7"},
+    "baseten:MiniMaxAI/MiniMax-M3": {"name": "MiniMax M3", "context": 1_000_000},
     "baseten:deepseek/deepseek-v4-pro": {"name": "DeepSeek V4 Pro", "context": 1_000_000},
     "baseten:deepseek/deepseek-v4-flash": {"name": "DeepSeek V4 Flash", "context": 1_000_000},
     "baseten:Qwen/Qwen3.6-Max-Preview": {"name": "Qwen 3.6 Max Preview"},
