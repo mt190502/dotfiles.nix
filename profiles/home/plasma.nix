@@ -25,7 +25,10 @@ let
   };
 in
 {
-  imports = [ inputs.plasma-manager.homeModules.plasma-manager ];
+  imports = [
+    inputs.plasma-manager.homeModules.plasma-manager
+    inputs.self.homeModules.theming
+  ];
   config = {
     preferences.desktopenv = lib.mkDefault "plasma";
     home.packages = [

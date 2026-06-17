@@ -7,17 +7,16 @@
 }:
 
 let
-  inherit (config.bin)
-    fastfetch
-    gh
-    git
-    grc
-    hugo
-    lsd
-    telnet
-    trash
-    yt-dlp
-    ;
+  inherit (lib) getExe getExe';
+  fastfetch = getExe config.programs.fastfetch.package;
+  gh = getExe pkgs.gh;
+  git = getExe pkgs.git;
+  grc = getExe pkgs.grc;
+  hugo = getExe pkgs.hugo;
+  lsd = getExe pkgs.lsd;
+  telnet = getExe' pkgs.inetutils "telnet";
+  trash = getExe' pkgs.trash-cli "trash";
+  yt-dlp = getExe pkgs.yt-dlp;
   home = config.home.homeDirectory;
 in
 {
@@ -51,7 +50,7 @@ in
         cat $targetfile > $oldfile_tmp
         echo "Watching $targetfile for changes. Press Ctrl+C to stop."
         while true
-          ${lib.getExe' pkgs.inotify-tools "inotifywait"} -q -e modify $targetfile >/dev/null
+          ${lib.getExe' pkgs.fswatch "fswatch"} --event Modified --one-event $targetfile >/dev/null
           set newfile_tmp (mktemp)
           cat $targetfile > $newfile_tmp
           clear
@@ -148,7 +147,7 @@ in
       yt-music = "${yt-dlp} --config-locations ${home}/.config/yt-dlp/music -o \"${home}/Music/Artists/%(artist)s/%(album)s/%(title)s.%(ext)s\"";
     }
     // lib.optionalAttrs (!lib.hasSuffix "server" flakeName) {
-      tldr = "${config.bin.cht-sh}";
+      tldr = "${getExe pkgs.cht-sh}";
     };
     shellInit = ''
       #################################################
@@ -178,10 +177,10 @@ in
     loginShellInit = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (
       ''
         if [ "$(tty)" = "/dev/tty1" ]
-          export $(${config.bin.systemd-env})
+          export $(${pkgs.systemd}/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
           export GNOME_KEYRING_CONTROL=/run/user/$(id -u)/keyring
           export SSH_AUTH_SOCK=$GNOME_KEYRING_CONTROL/ssh
-          ${config.bin.dbus} --systemd --all
+          ${getExe' pkgs.dbus "dbus-update-activation-environment"} --systemd --all
       ''
       + (
         if (config.preferences.desktopenv == "sway") then

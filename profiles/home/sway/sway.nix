@@ -1,7 +1,9 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
+  pkgs-unstable,
   ...
 }:
 
@@ -37,21 +39,20 @@ let
       "foot"
     else
       throw "Unsupported terminal: ${config.preferences.terminal}";
-  inherit (config.bin)
-    brightnessctl
-    cliphist
-    dolphin
-    mpv
-    pactl
-    playerctl
-    swayidle
-    swaymsg
-    tmux
-    vicinae
-    wl-copy
-    wlsunset
-    wofi
-    ;
+  inherit (lib) getExe getExe';
+  brightnessctl = getExe pkgs.brightnessctl;
+  cliphist = getExe pkgs.cliphist;
+  dolphin = getExe' inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dolphin "dolphin";
+  mpv = getExe pkgs.mpv;
+  pactl = getExe' pkgs.pulseaudio "pactl";
+  playerctl = getExe pkgs.playerctl;
+  swayidle = getExe pkgs.swayidle;
+  swaymsg = getExe' pkgs.sway "swaymsg";
+  tmux = getExe pkgs.tmux;
+  vicinae = getExe pkgs-unstable.vicinae;
+  wl-copy = getExe' pkgs.wl-clipboard "wl-copy";
+  wlsunset = getExe pkgs.wlsunset;
+  wofi = getExe pkgs.wofi;
 in
 {
   wayland.windowManager.sway = {

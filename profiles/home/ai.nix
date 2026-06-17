@@ -30,7 +30,7 @@ in
   ## CommandCode Proxy Server
   #
   ########################################
-  systemd.user.services.commandcode-proxy = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux) {
+  systemd.user.services.commandcode-proxy = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     Unit = {
       Description = "CommandCode Proxy Server";
       After = [ "network.target" ];

@@ -1,5 +1,5 @@
 {
-  config,
+  inputs,
   pkgs,
   pkgs-unstable,
   ...
@@ -20,11 +20,12 @@
     #
     ########################################
     packages =
-      with pkgs;
+      with inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
       [
-        #~ custom ~#
-        config.wrapped.jetbrains-toolbox
-
+        jetbrains-toolbox
+        dolphin
+      ]
+      ++ (with pkgs; [
         #~ fonts ~#
         cantarell-fonts
         cascadia-code
@@ -39,13 +40,11 @@
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
         noto-fonts-color-emoji
-        noto-fonts
 
         #~ packages ~#
         adw-gtk3
         audacity
         bottles
-        config.wrapped.dolphin
         ffmpegthumbnailer
         gcolor3
         gimp3
@@ -82,7 +81,7 @@
         wlr-randr
         wtype
         ydotool
-      ]
+      ])
       ++ (with pkgs-unstable; [
         equibop
         prismlauncher

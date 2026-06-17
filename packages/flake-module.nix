@@ -1,5 +1,6 @@
 {
   lib,
+  inputs,
   ...
 }:
 
@@ -24,14 +25,37 @@ let
           { };
     in
     builtins.foldl' (acc: name: acc // (processEntry name)) { } entryNames;
+  discovered = discoverPackages ./.;
 in
 {
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages = lib.filterAttrs (_: drv: pkgs.lib.meta.availableOn pkgs.stdenv.hostPlatform drv) (
-        lib.mapAttrs (_: pkg: pkgs.callPackage pkg { }) (discoverPackages ./.)
-      );
-    };
-  flake.overlays.default = _: _: (discoverPackages ./.);
+  options.sharing.customPackages = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule {
+        options = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+          };
+        };
+      }
+    );
+    default = lib.mapAttrs (_: _: { enable = true; }) discovered;
+  };
+  config = {
+    sharing.customPackages = lib.mapAttrs (_: _: { enable = true; }) discovered;
+    perSystem =
+      { pkgs, ... }:
+      let
+        pkgs-unstable = import inputs.nixpkgs-unstable {
+          system = pkgs.stdenv.hostPlatform.system;
+          config.allowUnfree = true;
+        };
+      in
+      {
+        packages = lib.filterAttrs (_: drv: pkgs.lib.meta.availableOn pkgs.stdenv.hostPlatform drv) (
+          lib.mapAttrs (_: pkg: pkgs.callPackage pkg { inherit pkgs-unstable; }) (discoverPackages ./.)
+        );
+      };
+    flake.overlays.default = _: _: (discoverPackages ./.);
+  };
 }

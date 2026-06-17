@@ -81,7 +81,7 @@
         name = "Adwaita";
         size = 16;
       };
-      fonts = {
+      fonts = rec {
         monospace = {
           name = "MesloLGS NF";
           package = pkgs.meslo-lgs-nf;
@@ -90,10 +90,7 @@
           name = "Ubuntu Nerd Font Medium";
           package = inputs.self.packages."${pkgs.stdenv.hostPlatform.system}".ubuntu-fonts-google;
         };
-        serif = {
-          name = "Ubuntu Nerd Font Medium";
-          package = inputs.self.packages."${pkgs.stdenv.hostPlatform.system}".ubuntu-fonts-google;
-        };
+        serif = sansSerif;
         sizes = {
           applications = 10;
           terminal = 9;

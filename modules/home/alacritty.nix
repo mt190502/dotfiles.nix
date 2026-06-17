@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   config = {
@@ -25,7 +30,7 @@
             style = "Bold Italic";
           };
         };
-        terminal.shell.program = config.bin.tmux;
+        terminal.shell.program = lib.getExe' pkgs.tmux "tmux";
         window.dynamic_title = true;
       };
     };

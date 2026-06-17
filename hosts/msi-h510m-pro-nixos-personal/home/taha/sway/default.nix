@@ -2,6 +2,7 @@
   config,
   osConfig,
   lib,
+  pkgs,
   ...
 }:
 
@@ -29,7 +30,7 @@ in
     };
     startup = [
       {
-        command = "${config.bin.solaar} -w hide";
+        command = "${lib.getExe pkgs.solaar} -w hide";
       }
       {
         command = "${onepass} --silent";

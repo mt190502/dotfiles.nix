@@ -14,7 +14,6 @@
   profiles = [
     "k3s"
   ];
-  packages = [ ];
   nixSettings = {
     experimental-features = [
       "nix-command"

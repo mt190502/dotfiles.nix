@@ -9,7 +9,6 @@
     "k3s"
     "raspberrypi"
   ];
-  packages = [ ];
   nixSettings = {
     experimental-features = [
       "nix-command"

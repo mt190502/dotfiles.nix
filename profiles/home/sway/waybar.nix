@@ -6,16 +6,15 @@
 }:
 
 let
-  inherit (config.bin)
-    curl
-    mpc
-    nmeditor
-    pactl
-    pavucontrol
-    systemctl
-    swaymsg
-    swaync
-    ;
+  inherit (lib) getExe getExe';
+  curl = getExe pkgs.curl;
+  mpc = getExe' pkgs.mpc "mpc";
+  nmeditor = getExe' pkgs.networkmanagerapplet "nm-connection-editor";
+  pactl = getExe' pkgs.pulseaudio "pactl";
+  pavucontrol = getExe pkgs.pavucontrol;
+  systemctl = getExe' pkgs.systemd "systemctl";
+  swaymsg = getExe' pkgs.sway "swaymsg";
+  swaync = getExe' pkgs.swaynotificationcenter "swaync-client";
   home = config.home.homeDirectory;
   term =
     title: command:

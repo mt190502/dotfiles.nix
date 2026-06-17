@@ -1,5 +1,18 @@
 { config, lib, ... }:
 
+let
+  xftCfg = {
+    gtk-xft-antialias = 1;
+    gtk-xft-hinting = 1;
+    gtk-xft-hintstyle = "hintslight";
+    gtk-xft-rgba = "rgb";
+    gtk-enable-event-sounds = 0;
+    gtk-enable-input-feedback-sounds = 0;
+  };
+  xftCfgStr = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (n: v: "${n}=${if builtins.isString v then "\"${v}\"" else toString v}") xftCfg
+  );
+in
 {
   gtk = {
     enable = true;
@@ -24,30 +37,9 @@
           inherit (theme) name;
           package = lib.mkForce theme.package;
         };
-        extraConfig = {
-          gtk-xft-antialias = 1;
-          gtk-xft-hinting = 1;
-          gtk-xft-hintstyle = "hintslight";
-          gtk-xft-rgba = "rgb";
-          gtk-enable-event-sounds = 0;
-          gtk-enable-input-feedback-sounds = 0;
-        };
+        extraConfig = xftCfg;
       };
-    gtk3.extraConfig = {
-      gtk-xft-antialias = 1;
-      gtk-xft-hinting = 1;
-      gtk-xft-hintstyle = "hintslight";
-      gtk-xft-rgba = "rgb";
-      gtk-enable-event-sounds = 0;
-      gtk-enable-input-feedback-sounds = 0;
-    };
-    gtk2.extraConfig = ''
-      gtk-xft-antialias=1
-      gtk-xft-hinting=1
-      gtk-xft-hintstyle="hintslight"
-      gtk-xft-rgba="rgb"
-      gtk-enable-event-sounds=0
-      gtk-enable-input-feedback-sounds=0
-    '';
+    gtk3.extraConfig = xftCfg;
+    gtk2.extraConfig = xftCfgStr;
   };
 }

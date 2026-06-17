@@ -23,9 +23,6 @@
     "waydroid"
   ];
   profiles = [ "extra" ];
-  packages = [
-    "ubuntu-fonts-google"
-  ];
   nixSettings = {
     experimental-features = [
       "nix-command"

@@ -27,11 +27,9 @@ let
     lib.filterAttrs (_: cfg: cfg.platform == platform) hostConfigs;
 
   defaultHomeModules = [
-    "bin"
     "preferences"
     "scripts"
     "sops"
-    "wrapped"
   ];
 
   defaultNixosModules = [
