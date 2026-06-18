@@ -11,7 +11,7 @@ in
 {
   services.tailscale = {
     enable = true;
-    authKeyFile = config.sops.secrets."global/tailscale".path;
+    authKeyFile = config.sops.secrets."tailscale".path;
     authKeyParameters = {
       ephemeral = false;
       preauthorized = true;

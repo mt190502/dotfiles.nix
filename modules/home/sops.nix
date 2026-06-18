@@ -11,7 +11,6 @@ let
   inherit (sharing) secrets;
   homeUser = config.home.username;
   userSecrets = secrets.${homeUser} or { };
-  globalSecrets = secrets.global or { };
   matchHost =
     hostName: patterns:
     builtins.any (
@@ -30,7 +29,6 @@ let
     _: cfg: (cfg.type or "default") != "userPassword"
   ) userSecrets;
   filteredUserSecrets = lib.filterAttrs shouldInclude nonPasswordSecrets;
-  filteredGlobalSecrets = lib.filterAttrs shouldInclude globalSecrets;
   processSecrets =
     prefix: secrets:
     lib.mapAttrs' (
@@ -73,6 +71,10 @@ let
         // lib.optionalAttrs (type == "env") { mode = "0400"; };
       }
     ) secrets;
+  userAliases = lib.mapAttrs' (n: v: {
+    name = lib.removePrefix "${homeUser}/" n;
+    value = v;
+  }) (processSecrets homeUser filteredUserSecrets);
 in
 {
   imports = [ inputs.sops-nix.homeManagerModules.sops ];
@@ -80,7 +82,6 @@ in
     defaultSopsFormat = "binary";
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     age.generateKey = true;
-    secrets =
-      (processSecrets homeUser filteredUserSecrets) // (processSecrets "global" filteredGlobalSecrets);
+    secrets = userAliases;
   };
 }

@@ -371,7 +371,7 @@ in
           };
           options = {
             baseURL = "http://127.0.0.1:8082/v1";
-            apiKey = "{file:${config.sops.secrets."global/commandcode".path}}";
+            apiKey = "{file:${config.sops.secrets."commandcode".path}}";
           };
         };
       };

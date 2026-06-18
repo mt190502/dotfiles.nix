@@ -47,7 +47,6 @@
         ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
-        anki
         cnf
         fastfetch
         fish

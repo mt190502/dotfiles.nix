@@ -16,7 +16,7 @@ let
         else
           "⚪️"
       }] ${flakeName}", "message": "${message}", "priority": 5}' \
-      "$(cat ${config.sops.secrets."global/gotify".path})" || true
+      "$(cat ${config.sops.secrets."gotify".path})" || true
   '';
 in
 {
