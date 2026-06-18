@@ -16,6 +16,7 @@
       "firefox"
       "microsoft-teams"
       "slack"
+      "windows-app"
     ];
     taps = [ ];
   };

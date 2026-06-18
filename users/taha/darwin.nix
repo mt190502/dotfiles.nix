@@ -42,6 +42,7 @@ rec {
         git
         mpv
         ssh
+        theming
         ytdlp
         zed
       ])
