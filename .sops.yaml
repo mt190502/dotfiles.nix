@@ -1,7 +1,6 @@
 keys:
   - &lenovo-thinkpad-e14-nixos-personal age1vshrm5lkqp3s0v3wgnhyjf8dlvhnf53u9779xs7ntycpeleud38q48eq53
   - &macbook-m3-air-darwin-work age158xvu4vxlceqtc3pur5a3z22ng80myzwrk8ugdjwtf3ypx9r3dusevya57
-  - &msi-h510m-pro-fedora-personal age1dvx9zzl3cjd85u0pxsakz029xzh9eddfju23tf9guqaka0mwle6qktczfc
   - &msi-h510m-pro-nixos-personal age15xalxx87nllapelvvd7c435ktjcd84u96238g8mek26mg9aljuvqhm60uj
   - &raspberry-pi-5-nixos-server age14c6s260t9hstxftfded8qnrqkxtexy2x9zk366cepefwggawpg7svd36mw
   - &zimaboard-832-nixos-server age1fc3lwl2pzxrlsjra4m3rx850tl4caq7ryp64crcleh05nez445fswzw354

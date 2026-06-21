@@ -24,6 +24,7 @@
       [
         jetbrains-toolbox
         dolphin
+        flameshot
       ]
       ++ (with pkgs; [
         #~ fonts ~#
@@ -118,13 +119,6 @@
       SYSTEMD_EDITOR = "vim";
       WLR_DRM_NO_ATOMIC = "1";
     };
-
-    ########################################
-    #
-    ## Activations
-    #
-    ########################################
-    activation = { };
   };
   ########################################
   #

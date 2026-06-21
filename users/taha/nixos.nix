@@ -46,7 +46,6 @@
       nixpkgs.config.allowUnfree = true;
       imports = [
         ./home.nix
-        ./default.nix
       ]
       ++ (with inputs.self.homeModules; [
         anki

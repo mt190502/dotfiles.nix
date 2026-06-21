@@ -53,9 +53,9 @@ in
       in
       {
         packages = lib.filterAttrs (_: drv: pkgs.lib.meta.availableOn pkgs.stdenv.hostPlatform drv) (
-          lib.mapAttrs (_: pkg: pkgs.callPackage pkg { inherit pkgs-unstable; }) (discoverPackages ./.)
+          lib.mapAttrs (_: pkg: pkgs.callPackage pkg { inherit pkgs-unstable; }) discovered
         );
       };
-    flake.overlays.default = _: _: (discoverPackages ./.);
+    flake.overlays.default = _: _: discovered;
   };
 }

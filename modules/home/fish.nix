@@ -18,6 +18,8 @@ let
   trash = getExe' pkgs.trash-cli "trash";
   yt-dlp = getExe pkgs.yt-dlp;
   home = config.home.homeDirectory;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
+  rebuildCmd = if isDarwin then "darwin-rebuild" else "nixos-rebuild";
 in
 {
   programs.fish = {
@@ -34,6 +36,112 @@ in
       neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
       nevalp = "nix eval nixpkgs#$argv.outPath";
       nevalcd = "cd $(nix eval --raw nixpkgs#$argv.outPath)";
+      _rebuilddiff = ''
+        set -l oldsys /run/current-system
+        set -l newsys $argv[1]
+        if test -z "$newsys"
+          echo "No system path provided"
+          return 1
+        end
+
+        echo "Diffing $oldsys -> $newsys"
+        echo ""
+
+        echo "=== nvd version diff ==="
+        ${getExe pkgs.nvd} diff $oldsys $newsys 2>/dev/null
+        echo ""
+
+        echo "=== Closure diff ==="
+        nix store diff-closures $oldsys $newsys 2>/dev/null
+        echo ""
+
+        echo "=== New/removed files in /etc (non-hash) ==="
+        diff -rq $oldsys/etc $newsys/etc 2>/dev/null | grep -vE 'cachedir|nix/store' | head -40
+        echo ""
+
+        echo "=== Changed systemd units ==="
+        diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E 'home-manager|\.service$' | head -20
+        echo ""
+
+        set -l old_hm (grep -oP '/nix/store/[a-z0-9]+-home-manager-generation' $oldsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+        set -l new_hm (grep -oP '/nix/store/[a-z0-9]+-home-manager-generation' $newsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+        if test -n "$old_hm" -a -n "$new_hm" -a "$old_hm" != "$new_hm"
+          echo "=== Home-manager files diff ==="
+          diff -rq $old_hm/home-files $new_hm/home-files 2>/dev/null | head -40
+          echo ""
+        end
+      '';
+      rebuild = ''
+        set -l flake "${home}/.config/dotfiles.nix"
+        set -l cmd ${flakeName}
+        set -l dry_run false
+        for arg in $argv
+          switch $arg
+            case --dry-run
+              set dry_run true
+          end
+        end
+
+        echo "Building $cmd..."
+        sudo ${rebuildCmd} build --flake $flake#$cmd
+        if test $status -ne 0
+          return 1
+        end
+        echo ""
+
+        set -l newsys (readlink -f result)
+        _rebuilddiff $newsys
+        rm -f result
+
+        if test "$dry_run" = true
+          return
+        end
+
+        read -P "Switch to new configuration? [y/N] " confirm
+        if test "$confirm" = "y" -o "$confirm" = "Y"
+          sudo ${rebuildCmd} switch --flake $flake#$cmd
+        else
+          echo "Aborted."
+        end
+      '';
+      sysdup = ''
+        set -l flake "${home}/.config/dotfiles.nix"
+        set -l cmd ${flakeName}
+        set -l dry_run false
+        for arg in $argv
+          switch $arg
+            case --dry-run
+              set dry_run true
+          end
+        end
+
+        echo "Updating channels and flake inputs..."
+        nix-channel --update && sudo nix-channel --update
+        nix flake update --flake $flake
+        echo ""
+
+        echo "Building $cmd..."
+        sudo ${rebuildCmd} build --flake $flake#$cmd
+        if test $status -ne 0
+          return 1
+        end
+        echo ""
+
+        set -l newsys (readlink -f result)
+        _rebuilddiff $newsys
+        rm -f result
+
+        if test "$dry_run" = true
+          return
+        end
+
+        read -P "Switch to new configuration? [y/N] " confirm
+        if test "$confirm" = "y" -o "$confirm" = "Y"
+          sudo ${rebuildCmd} switch --flake $flake#$cmd
+        else
+          echo "Aborted."
+        end
+      '';
       watchdiff = ''
         if test (count $argv) -lt 1
           echo "Usage: watchdiff <command>"
@@ -122,9 +230,12 @@ in
       mv = "mv -i";
       rm = "rm -i";
       srm = "${trash} -i";
-      sysclean = lib.mkDefault "nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
-      sysdup = lib.mkDefault "nix-channel --update && sudo nix-channel --update && nix flake update && sudo nixos-rebuild switch --flake ${home}/.config/dotfiles.nix#${flakeName}";
-      rebuild = lib.mkDefault "sudo nixos-rebuild switch --flake ${home}/.config/dotfiles.nix#${flakeName}";
+      sysclean = lib.mkDefault (
+        if isDarwin then
+          "nix-collect-garbage -d"
+        else
+          "nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot"
+      );
 
       #~ Git
       gita = "${git} add -A";

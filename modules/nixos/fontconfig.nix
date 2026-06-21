@@ -2,14 +2,20 @@
 
 {
   fonts = {
-    packages = with pkgs; [
-      corefonts
-      eb-garamond
-      inputs.self.packages.${stdenv.hostPlatform.system}.msfonts
-      vista-fonts
-      vista-fonts-chs
-      vista-fonts-cht
-    ];
+    packages =
+      with pkgs;
+      with inputs.self.packages.${stdenv.hostPlatform.system};
+      with inputs.apple-fonts.packages.${stdenv.hostPlatform.system};
+      [
+        corefonts
+        eb-garamond
+        msfonts
+        sf-pro-nerd
+        sf-mono
+        vista-fonts
+        vista-fonts-chs
+        vista-fonts-cht
+      ];
     fontconfig = {
       enable = true;
       antialias = true;

@@ -8,27 +8,14 @@
 }:
 
 let
+  inherit (import "${inputs.self}/lib/sops.nix") shouldInclude baseSecret;
   inherit (sharing) secrets;
   homeUser = config.home.username;
   userSecrets = secrets.${homeUser} or { };
-  matchHost =
-    hostName: patterns:
-    builtins.any (
-      pat: builtins.match (builtins.replaceStrings [ "*" ] [ ".*" ] pat) hostName != null
-    ) patterns;
-  shouldInclude =
-    _: cfg:
-    let
-      hosts = cfg.hosts or [ ];
-      excludeHosts = cfg.excludeHosts or [ ];
-      inHosts = hosts == [ ] || matchHost flakeName hosts;
-      inExclude = matchHost flakeName excludeHosts;
-    in
-    inHosts && !inExclude;
   nonPasswordSecrets = lib.filterAttrs (
     _: cfg: (cfg.type or "default") != "userPassword"
   ) userSecrets;
-  filteredUserSecrets = lib.filterAttrs shouldInclude nonPasswordSecrets;
+  filteredUserSecrets = lib.filterAttrs (shouldInclude flakeName) nonPasswordSecrets;
   processSecrets =
     prefix: secrets:
     lib.mapAttrs' (
@@ -43,32 +30,14 @@ let
             "${homeDir}/${cfg.homeTarget}"
           else
             cfg.globalTarget or null;
-        base = builtins.removeAttrs cfg [
-          "type"
-          "sopsFile"
-          "sopsFormat"
-          "source"
-          "homeTarget"
-          "globalTarget"
-          "mode"
-          "group"
-          "neededForUsers"
-          "restartUnits"
-          "reloadUnits"
-          "hosts"
-          "excludeHosts"
-        ];
       in
       {
         name = "${prefix}/${name}";
-        value = {
-          inherit (cfg) sopsFile;
-          format = cfg.sopsFormat;
-        }
-        // base
-        // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
-        // lib.optionalAttrs (targetPath != null) { path = targetPath; }
-        // lib.optionalAttrs (type == "env") { mode = "0400"; };
+        value =
+          baseSecret cfg
+          // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
+          // lib.optionalAttrs (targetPath != null) { path = targetPath; }
+          // lib.optionalAttrs (type == "env") { mode = "0400"; };
       }
     ) secrets;
   userAliases = lib.mapAttrs' (n: v: {

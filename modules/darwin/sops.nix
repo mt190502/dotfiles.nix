@@ -8,54 +8,23 @@
 }:
 
 let
+  inherit (import "${inputs.self}/lib/sops.nix") shouldInclude baseSecret;
   inherit (sharing) secrets;
-  matchHost =
-    hostName: patterns:
-    builtins.any (
-      pat: builtins.match (builtins.replaceStrings [ "*" ] [ ".*" ] pat) hostName != null
-    ) patterns;
-  shouldInclude =
-    _: cfg:
-    let
-      hosts = cfg.hosts or [ ];
-      excludeHosts = cfg.excludeHosts or [ ];
-      inHosts = hosts == [ ] || matchHost flakeName hosts;
-      inExclude = matchHost flakeName excludeHosts;
-    in
-    inHosts && !inExclude;
-  globalSecrets = lib.filterAttrs shouldInclude (secrets.global or { });
+  globalSecrets = lib.filterAttrs (shouldInclude flakeName) (secrets.global or { });
   processGlobalSecrets = lib.mapAttrs' (
     name: cfg:
     let
       targetPath = cfg.globalTarget or null;
-      base = removeAttrs cfg [
-        "type"
-        "sopsFile"
-        "sopsFormat"
-        "source"
-        "homeTarget"
-        "globalTarget"
-        "mode"
-        "group"
-        "restartUnits"
-        "reloadUnits"
-        "neededForUsers"
-        "hosts"
-        "excludeHosts"
-      ];
     in
     {
       name = "global/${name}";
-      value = {
-        inherit (cfg) sopsFile;
-        format = cfg.sopsFormat;
-      }
-      // base
-      // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
-      // lib.optionalAttrs (cfg ? group) { group = if cfg.group == "root" then "wheel" else cfg.group; }
-      // lib.optionalAttrs (targetPath != null) { path = targetPath; }
-      // lib.optionalAttrs (cfg ? restartUnits) { inherit (cfg) restartUnits; }
-      // lib.optionalAttrs (cfg ? reloadUnits) { inherit (cfg) reloadUnits; };
+      value =
+        baseSecret cfg
+        // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
+        // lib.optionalAttrs (cfg ? group) { group = if cfg.group == "root" then "wheel" else cfg.group; }
+        // lib.optionalAttrs (targetPath != null) { path = targetPath; }
+        // lib.optionalAttrs (cfg ? restartUnits) { inherit (cfg) restartUnits; }
+        // lib.optionalAttrs (cfg ? reloadUnits) { inherit (cfg) reloadUnits; };
     }
   ) globalSecrets;
   globalAliases = lib.mapAttrs' (n: v: {
@@ -70,42 +39,21 @@ let
     acc: userName:
     let
       userPasswordSecrets = lib.filterAttrs (_: cfg: (cfg.type or "default") == "userPassword") (
-        lib.filterAttrs shouldInclude (secrets.${userName} or { })
+        lib.filterAttrs (shouldInclude flakeName) (secrets.${userName} or { })
       );
     in
     acc
-    // (lib.mapAttrs' (
-      name: cfg:
-      let
-        base = removeAttrs cfg [
-          "type"
-          "sopsFile"
-          "sopsFormat"
-          "source"
-          "homeTarget"
-          "globalTarget"
-          "mode"
-          "group"
-          "restartUnits"
-          "reloadUnits"
-          "neededForUsers"
-          "hosts"
-          "excludeHosts"
-        ];
-      in
-      {
-        name = "${userName}/${name}";
-        value = {
-          inherit (cfg) sopsFile;
-          format = cfg.sopsFormat;
+    // (lib.mapAttrs' (name: cfg: {
+      name = "${userName}/${name}";
+      value =
+        (baseSecret cfg)
+        // {
           owner = userName;
           neededForUsers = true;
         }
-        // base
         // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
         // lib.optionalAttrs (cfg ? group) { group = if cfg.group == "root" then "wheel" else cfg.group; };
-      }
-    ) userPasswordSecrets)
+    }) userPasswordSecrets)
   ) { } userEntries;
 in
 {

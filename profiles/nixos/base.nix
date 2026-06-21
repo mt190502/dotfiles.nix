@@ -18,7 +18,7 @@
       "net.ipv4.conf.all.src_valid_mark" = 1;
       "net.ipv4.ip_forward" = 1;
     };
-    kernelPackages = pkgs.linuxPackages_6_18;
+    kernelPackages = pkgs.linuxPackages;
     kernelParams = [
       "rw"
       "loglevel=3"
@@ -93,7 +93,21 @@
       };
     };
   };
-  nix.optimise.automatic = true;
+  nix = {
+    optimise.automatic = true;
+    settings = {
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nixos-raspberrypi.cachix.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6CHFhJg8g5Q5T2NI3jNgQ8DxbIXGs6Zht7G7DH2Q3tn="
+        "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
+  };
   time = {
     hardwareClockInLocalTime = false;
     timeZone = "Europe/Istanbul";

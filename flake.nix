@@ -4,11 +4,9 @@
   inputs = {
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-26.05";
-      flake = true;
     };
     nixpkgs-unstable = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
-      flake = true;
     };
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
@@ -25,7 +23,6 @@
     apple-fonts = {
       url = "github:Lyndeno/apple-fonts.nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      flake = true;
     };
     disko = {
       url = "github:nix-community/disko";
@@ -33,7 +30,7 @@
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs-unstable";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     ihtc = {
       url = "github:kreatoo/ihtc";
@@ -77,15 +74,6 @@
     };
   };
 
-  nixConfig = {
-    extra-substituters = [
-      "https://nixos-raspberrypi.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
-    ];
-  };
-
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
@@ -98,14 +86,48 @@
         ./secrets/flake-module.nix
         ./users/flake-module.nix
       ];
-      perSystem = {
-        pre-commit.settings.hooks = {
-          nixfmt.enable = true;
-          nil.enable = true;
-          deadnix.enable = true;
-          statix.enable = true;
+      perSystem =
+        {
+          lib,
+          pkgs,
+          config,
+          ...
+        }:
+        {
+          pre-commit.settings.hooks = {
+            nixfmt.enable = true;
+            nil.enable = true;
+            deadnix.enable = true;
+            statix.enable = true;
+            check-sops = {
+              enable = true;
+              name = "check-sops";
+              description = "Check that all secret files are encrypted with SOPS";
+              files = "secret";
+              excludes = [
+                "\\.example$"
+                "\\.nix$"
+              ];
+              entry = "${pkgs.writeShellScript "check-sops" ''
+                for f in "$@"; do
+                  if ! out=$(${lib.getExe pkgs.sops} filestatus "$f" 2>&1); then
+                    echo "File $f is not encrypted with SOPS (or sops failed: $out)"
+                    exit 1
+                  fi
+                  if ! echo "$out" | grep -q '"encrypted":true'; then
+                    echo "File $f is not encrypted with SOPS"
+                    exit 1
+                  fi
+                done
+              ''}";
+              pass_filenames = true;
+            };
+          };
+          devShells.default = pkgs.mkShell {
+            shellHook = config.pre-commit.settings.shellHook;
+            buildInputs = config.pre-commit.settings.enabledPackages;
+          };
         };
-      };
       systems = [
         "aarch64-darwin"
         "aarch64-linux"

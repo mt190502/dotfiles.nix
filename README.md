@@ -13,21 +13,20 @@ A modular, cross-platform Nix configuration using flake-parts. Supports NixOS, m
 │   │   ├── config.nix         # Host configuration (platform, modules, profiles, etc.)
 │   │   └── disko.nix          # NixOS disk configuration (if applicable)
 │   └── flake-module.nix       # Build logic (nixosConfigurations, darwinConfigurations, homeConfigurations)
+├── lib/                       # Shared helper functions (importers, substitutions)
 ├── modules/                   # Reusable modules
 │   ├── darwin/                # Darwin modules
 │   ├── home/                  # Home-manager modules
-│   │   ├── bin.nix            # Centralized binary path definitions
 │   │   ├── preferences.nix    # User preferences (terminal, wm, menu, etc.)
-│   │   └── wrapped/           # Linux-only wrapped binaries (dolphin, pcmanfm-qt, etc.)
+│   │   └── scripts/           # User scripts with substitution support
 │   ├── nixos/                 # NixOS modules
 │   └── flake-module.nix       # Module builder
-├── packages/                  # Custom packages (recidia, ubuntu-fonts-google, etc.)
+├── packages/                  # Custom packages (dolphin, flameshot, jetbrains-toolbox, etc.)
 │   └── flake-module.nix       # Package builder
 ├── profiles/                  # Configuration bundles
-│   ├── darwin/                # Darwin profiles   
-│   ├── home/                  # Home-manager profiles (ai, cloud, development, etc.)
+│   ├── home/                  # Home-manager profiles (ai, cloud, development, sway, etc.)
 │   └── nixos/                 # NixOS profiles
-├── secrets/                   # Encrypted secrets (using sops or similar)
+├── secrets/                   # Encrypted secrets (using sops)
 │   ├── <username>/            # User-specific secrets
 │   │   └── <secretname>/      # Encrypted secret dir
 │   │       ├── config.nix     # Secret configuration (e.g., environment variables)
@@ -189,10 +188,10 @@ you can use the disko scripts to partition and format your disks.
 - Switch this flake
 
     ```sh
-    home-manager switch --no-out-link --flake github:mt190502/dotfiles.nix#msi-h510m-pro-fedora-personal
+    home-manager switch --no-out-link --flake github:mt190502/dotfiles.nix#<hostname>
     ```
 
-    Note: In this example, you must change username into the [hosts/msi-h510m-pro-fedora-personal/home/default.nix](./hosts/msi-h510m-pro-fedora-personal/home/default.nix) file.
+    Note: You must change the username in the corresponding `hosts/<hostname>/home/` directory.
 
 </details>
 

@@ -43,8 +43,8 @@ let
     "base"
   ];
 
-  buildRPIConfig =
-    name: cfg:
+  buildLinuxConfig =
+    nixosSystem: name: cfg:
     let
       pkgs = repo "nixpkgs" cfg.arch;
       pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
@@ -65,54 +65,7 @@ let
         users.mutableUsers = false;
       };
     in
-    inputs.nixos-raspberrypi.lib.nixosSystem {
-      inherit pkgs;
-      specialArgs = {
-        inherit inputs pkgs-unstable sharing;
-        flakeName = name;
-        system = cfg.arch;
-      };
-      modules = [
-        inputs.disko.nixosModules.disko
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.sharedModules = homeModules;
-        }
-        ./${name}
-      ]
-      ++ moduleConfigs
-      ++ profileConfigs
-      ++ userConfigs
-      ++ userKeyConfigs
-      ++ [
-        hostConfig
-        cfg.extraConfig
-      ];
-    };
-
-  buildNixosConfig =
-    name: cfg:
-    let
-      pkgs = repo "nixpkgs" cfg.arch;
-      pkgs-unstable = repo "nixpkgs-unstable" cfg.arch;
-      userConfigs = map (u: lib.attrByPath [ u "nixos" ] { } sharing.users) cfg.users;
-      userKeyConfigs = map (u: {
-        users.users.${u}.openssh.authorizedKeys.keys = keys.all or [ ];
-      }) cfg.users;
-      profileConfigs = map (p: sharing.profiles.nixos.${p} or { }) (
-        (cfg.profiles or [ ]) ++ defaultNixosProfiles
-      );
-      moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) (
-        (cfg.modules or [ ]) ++ defaultNixosModules
-      );
-      homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
-      hostConfig = {
-        nix.settings = cfg.nixSettings or { };
-        system.stateVersion = cfg.stateVersion;
-        users.mutableUsers = false;
-      };
-    in
-    inputs.nixpkgs.lib.nixosSystem {
+    nixosSystem {
       inherit pkgs;
       specialArgs = {
         inherit inputs pkgs-unstable sharing;
@@ -212,8 +165,10 @@ in
 {
   flake = {
     nixosConfigurations =
-      (builtins.mapAttrs buildNixosConfig (getConfigsByPlatform "nixos"))
-      // (builtins.mapAttrs buildRPIConfig (getConfigsByPlatform "rpi"));
+      (builtins.mapAttrs (buildLinuxConfig inputs.nixpkgs.lib.nixosSystem) (getConfigsByPlatform "nixos"))
+      // (builtins.mapAttrs (buildLinuxConfig inputs.nixos-raspberrypi.lib.nixosSystem) (
+        getConfigsByPlatform "rpi"
+      ));
     darwinConfigurations = builtins.mapAttrs buildDarwinConfig (getConfigsByPlatform "darwin");
     homeConfigurations = builtins.mapAttrs buildHomeConfig (getConfigsByPlatform "home");
   };

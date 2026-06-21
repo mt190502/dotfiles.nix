@@ -1,6 +1,11 @@
-{ pkgs, pkgs-unstable, ... }:
+{
+  pkgs,
+  pkgs-unstable,
+  ...
+}:
 
 {
+  imports = [ ./garage ];
   environment.systemPackages = with pkgs; [
     fish
   ];
