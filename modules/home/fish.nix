@@ -284,6 +284,9 @@ in
         set cmd "$(echo $cmd | sed 's/conf\.//g')"
         type "$cmd" >/dev/null 2>&1 && alias "$cmd"="${grc} --colour=auto $cmd"
       end
+
+      #~ tide fix (https://github.com/IlanCosman/tide/issues/622#issuecomment-3845573685) ~#
+      set -gx tide_character_vi_icon_default "❯"
     '';
     loginShellInit = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (
       ''
