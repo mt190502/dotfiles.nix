@@ -27,18 +27,17 @@ let
     lib.filterAttrs (_: cfg: cfg.platform == platform) hostConfigs;
 
   defaultHomeModules = [
+    "direnv"
     "preferences"
     "scripts"
     "sops"
   ];
-
   defaultNixosModules = [
     "resolved"
     "sops"
     "statenotifier"
     "tailscale"
   ];
-
   defaultNixosProfiles = [
     "base"
   ];

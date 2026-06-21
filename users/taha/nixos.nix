@@ -51,7 +51,6 @@
         anki
         cnf
         delta
-        direnv
         dolphin
         fastfetch
         fish
