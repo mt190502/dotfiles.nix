@@ -8,6 +8,7 @@
   ];
   modules = [
     "clevis"
+    "initrd-tools"
     "lanzaboote"
     "syncthing"
   ];

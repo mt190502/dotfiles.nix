@@ -11,6 +11,7 @@
     "docker"
     "evolution"
     "fontconfig"
+    "initrd-tools"
     "lanzaboote"
     "libvirt"
     "mate-polkit"

@@ -4,7 +4,10 @@
   arch = "aarch64-linux";
   primaryUser = "srvadmin";
   users = [ "srvadmin" ];
-  modules = [ "docker" ];
+  modules = [
+    "docker"
+    "initrd-tools"
+  ];
   profiles = [
     "k3s"
     "raspberrypi"
