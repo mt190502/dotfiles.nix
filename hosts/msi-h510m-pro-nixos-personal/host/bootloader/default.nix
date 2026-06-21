@@ -15,6 +15,7 @@
       options v4l2loopback exclusive_caps=1
     '';
     extraModulePackages = with config.boot.kernelPackages; [
+      nct6687d
       v4l2loopback
     ];
     initrd = {
@@ -26,6 +27,7 @@
       kernelModules = [
         "e1000e"
         "kvm-intel"
+        "nct6687"
       ];
       services.udev.rules = ''
         SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:00:14.0/power/wakeup'"

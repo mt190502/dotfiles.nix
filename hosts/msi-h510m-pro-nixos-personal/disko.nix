@@ -29,8 +29,6 @@
               content = {
                 type = "luks";
                 name = "crypthome";
-                enrollFido2 = true;
-                enrollRecovery = false;
                 settings = {
                   allowDiscards = true;
                 };
@@ -47,8 +45,6 @@
               content = {
                 type = "luks";
                 name = "cryptroot";
-                enrollFido2 = true;
-                enrollRecovery = false;
                 settings = {
                   allowDiscards = true;
                 };
