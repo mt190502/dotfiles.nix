@@ -113,6 +113,13 @@ you can use the disko scripts to partition and format your disks.
   sudo nixos-install --root /mnt --flake .#YOUR_CONFIG
   ```
 
+- If your host uses `clevis` module (initrd SSH for remote unlock), generate initrd SSH host keys:
+
+  ```bash
+  sudo mkdir -p /etc/secrets/initrd
+  sudo ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
+  ```
+
 </details>
 
 <details>
