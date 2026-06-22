@@ -13,158 +13,110 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
+      - uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixos-unstable
 
-      - name: Configure git
+      - name: Fix hashes
+        env:
+          BASE_REF: origin/${{ github.base_ref }}
+          FAKE: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Update fetchFromGitHub SHA256 hashes
-        run: |
-          changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
+          files=$(git diff --name-only $BASE_REF HEAD -- '*.nix')
+          [ -z "$files" ] && exit 0
 
-          for file in $changed_files; do
-            echo "=== Processing $file ==="
+          for file in $files; do
+            echo "=== $file ==="
 
-            changed_revs=$(git diff origin/${{ github.base_ref }} HEAD -- "$file" | grep -oP '^\+.*rev = "\K[^"]+' || true)
+            # fetchFromGitHub sha256
+            for rev in $(git diff $BASE_REF HEAD -- "$file" | grep -oP '^\+.*rev = "\K[^"]+' || true); do
+              sha_line=$(grep -n "rev = \"$rev\"" "$file" | head -1 | cut -d: -f1)
+              target_line=$(awk -v s="$sha_line" 'NR>s && /sha256 = /{print NR; exit}' "$file")
+              [ -z "$target_line" ] && continue
 
-            for rev in $changed_revs; do
-              echo "Checking rev: $rev"
+              old=$(sed -n "${target_line}p" "$file" | grep -oP 'sha256 = "\K[^"]+')
+              [ "$old" = "$FAKE" ] && continue
 
-              # Extract fetchFromGitHub block info: owner, repo, sha256
-              block_info=$(grep -B5 -A1 "rev = \"$rev\"" "$file" | grep -E 'owner = |repo = |sha256 = ')
+              owner=$(grep -B5 "rev = \"$rev\"" "$file" | grep -oP 'owner = "\K[^"]+' | head -1)
+              repo=$(grep -B5 "rev = \"$rev\"" "$file" | grep -oP 'repo = "\K[^"]+' | head -1)
+              [ -z "$owner" ] || [ -z "$repo" ] && continue
 
-              owner=$(echo "$block_info" | grep -oP 'owner = "\K[^"]+' || true)
-              repo=$(echo "$block_info" | grep -oP 'repo = "\K[^"]+' || true)
-              old_sha=$(echo "$block_info" | grep -oP 'sha256 = "\K[^"]+' || true)
+              has_sparse=$(sed -n "${sha_line},$((sha_line+20))p" "$file" | grep -q 'sparseCheckout' && echo "yes" || true)
+              hash=""
 
-              if [[ -n "$owner" && -n "$repo" && -n "$rev" && -n "$old_sha" ]]; then
-                echo "Found: owner=$owner, repo=$repo, rev=$rev"
-                new_sha_base64=""
-                used_fake_hash=0
+              # Method 1: nix-prefetch-url (180s for normal, skip for sparse large repos)
+              if [ "$has_sparse" != "yes" ]; then
+                raw=$(timeout 180 nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>/dev/null || true)
+                if [ -n "$raw" ]; then
+                  hash=$(nix hash convert --hash-algo sha256 --to sri "$raw" 2>/dev/null || true)
+                  echo "  sha256: prefetch -> $hash"
+                fi
+              fi
 
-                # Method 1: nix-prefetch-url with 180s timeout
-                if prefetch_out=$(timeout 180 nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>&1); then
-                  # Validate: nix-prefetch-url should output a nix hash on the last line
-                  last_line=$(echo "$prefetch_out" | tail -1)
-                  if echo "$last_line" | grep -qP '^[0-9a-fA-F]{52,}$'; then
-                    new_sha_base64="sha256-$(nix hash convert --hash-algo sha256 --to base64 "$last_line" 2>/dev/null || echo "$last_line")"
-                    echo "Computed hash via nix-prefetch-url: $new_sha_base64"
-                  fi
+              # Method 2: fake hash + nix build to get hash from mismatch error
+              if [ -z "$hash" ]; then
+                echo "  sha256: falling back to nix build"
+                sed -i "${target_line}s|sha256 = \"[^\"]*\"|sha256 = \"$FAKE\"|" "$file"
+
+                got=$(timeout 600 nix build .#checks.x86_64-linux.pre-commit --no-link 2>&1 \
+                  | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+
+                if [ -z "$got" ]; then
+                  got=$(timeout 600 nix flake check --all-systems 2>&1 \
+                    | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
                 fi
 
-                # Method 2: set fake hash, then nix build to get the correct one from the error
-                if [[ -z "$new_sha_base64" ]]; then
-                  echo "nix-prefetch-url timed out or failed, falling back to nix build"
-                  fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-                  sha_line_num=$(grep -n "rev = \"$rev\"" "$file" | cut -d: -f1)
-                  next_sha_line=$(awk -v start="$sha_line_num" 'NR > start && /sha256 = / { print NR; exit }' "$file")
-
-                  if [[ -n "$next_sha_line" ]]; then
-                    # Temporarily set fake hash
-                    awk -v line="$next_sha_line" -v fake="$fake_hash" 'NR == line { sub(/sha256 = "sha256-[^"]*"/, "sha256 = \"" fake "\"") } { print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                    used_fake_hash=1
-
-                    # Try building the flake checks to trigger the hash mismatch error
-                    got_hash=$(timeout 600 nix build .#checks.x86_64-linux.pre-commit --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
-
-                    if [[ -z "$got_hash" ]]; then
-                      # Fallback: try nix flake check
-                      got_hash=$(timeout 600 nix flake check --all-systems 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
-                    fi
-
-                    if [[ -n "$got_hash" ]]; then
-                      new_sha_base64="sha256-$got_hash"
-                      echo "Got correct hash from nix build: $new_sha_base64"
-                    else
-                      echo "nix build fallback also failed, restoring original hash"
-                      awk -v line="$next_sha_line" -v old="$old_sha" 'NR == line { sub(/sha256 = "sha256-[^"]*"/, "sha256 = \"" old "\"") } { print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                    fi
-                  fi
+                if [ -n "$got" ]; then
+                  hash="sha256-$got"
+                  echo "  sha256: nix build -> $hash"
+                else
+                  sed -i "${target_line}s|sha256 = \"[^\"]*\"|sha256 = \"$old\"|" "$file"
+                  echo "  sha256: failed, keeping original"
                 fi
+              fi
 
-                if [[ -n "$new_sha_base64" && ( "$old_sha" != "$new_sha_base64" || "$used_fake_hash" -eq 1 ) ]]; then
-                  sha_line_num=$(grep -n "rev = \"$rev\"" "$file" | cut -d: -f1)
-                  next_sha_line=$(awk -v start="$sha_line_num" 'NR > start && /sha256 = / { print NR; exit }' "$file")
+              if [ -n "$hash" ] && [ "$hash" != "sha256-" ]; then
+                sed -i "${target_line}s|sha256 = \"[^\"]*\"|sha256 = \"$hash\"|" "$file"
+              fi
+            done
 
-                  if [[ -n "$next_sha_line" ]]; then
-                    awk -v line="$next_sha_line" -v new="$new_sha_base64" 'NR == line { sub(/sha256 = "sha256-[^"]*"/, "sha256 = \"" new "\"") } { print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                    echo "Updated sha256 on line $next_sha_line: $old_sha -> $new_sha_base64"
-                  fi
-                fi
+            # cargoHash/vendorHash: fake hash trick
+            [[ "$file" =~ ^packages/ ]] || continue
+            pkg=$(basename "$file" .nix)
+            for ht in cargoHash vendorHash; do
+              grep -q "$ht" "$file" || continue
+              original=$(grep -oP "$ht = \"\K[^\"]+" "$file" | head -1)
+              [ "$original" = "$FAKE" ] && continue
+
+              sed -i "s|$ht = \"[^\"]*\"|$ht = \"$FAKE\"|" "$file"
+              new=$(timeout 120 nix build .#$pkg --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+
+              if [ -n "$new" ]; then
+                sed -i "s|$ht = \"[^\"]*\"|$ht = \"sha256-$new\"|" "$file"
+                echo "  $ht: -> sha256-$new"
+              else
+                sed -i "s|$ht = \"[^\"]*\"|$ht = \"$original\"|" "$file"
+                echo "  $ht: failed, keeping original"
               fi
             done
           done
 
-      - name: Update cargoHash/vendorHash
+      - name: Commit and push changes
         run: |
-          changed_files=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- '*.nix')
-
-          fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-
-          for file in $changed_files; do
-            if grep -qE 'cargoHash|vendorHash' "$file"; then
-              echo "=== Updating cargoHash/vendorHash in $file ==="
-
-              if [[ "$file" =~ ^packages/ ]]; then
-                pkg_name=$(basename "$file" .nix)
-                build_target=".#$pkg_name"
-              else
-                echo "File not in packages/, skipping cargoHash/vendorHash update"
-                continue
-              fi
-
-              echo "Build target: $build_target"
-
-              if grep -q 'cargoHash' "$file"; then
-                original=$(grep -oP 'cargoHash = "\K[^"]+' "$file" | head -1)
-                awk -v new="$fake_hash" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-
-                new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
-
-                if [[ -n "$new_hash" ]]; then
-                  awk -v new="sha256-$new_hash" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated cargoHash: sha256-$new_hash"
-                else
-                  awk -v new="$original" '{ sub(/cargoHash = "sha256-[^"]*"/, "cargoHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Failed to calculate cargoHash, keeping original"
-                fi
-              fi
-
-              if grep -q 'vendorHash' "$file"; then
-                original=$(grep -oP 'vendorHash = "\K[^"]+' "$file" | head -1)
-                awk -v new="$fake_hash" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-
-                new_hash=$(timeout 120 nix build $build_target --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
-
-                if [[ -n "$new_hash" ]]; then
-                  awk -v new="sha256-$new_hash" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Updated vendorHash: sha256-$new_hash"
-                else
-                  awk -v new="$original" '{ sub(/vendorHash = "sha256-[^"]*"/, "vendorHash = \"" new "\""); print }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-                  echo "Failed to calculate vendorHash, keeping original"
-                fi
-              fi
-            fi
-          done
-
-      - name: Commit and push
-        run: |
-          if git diff --quiet; then
+          if [[ -z $(git status -s) ]]; then
             echo "No changes to commit"
             exit 0
           fi
-
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "fix: update nix hashes [skip ci]"
+          git commit -m "fix(automated): update nix hashes [skip ci]"
           git push

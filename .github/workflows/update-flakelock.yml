@@ -16,10 +16,10 @@ jobs:
         with:
           fetch-depth: 0
     
-      - name: Install Determinate Nix
-        uses: DeterminateSystems/nix-installer-action@v22
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
         with:
-          diagnostic-endpoint: ""
+          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Update flake.lock
         run: nix flake update
