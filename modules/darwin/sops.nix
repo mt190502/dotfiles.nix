@@ -22,9 +22,7 @@ let
         baseSecret cfg
         // lib.optionalAttrs (cfg ? mode) { inherit (cfg) mode; }
         // lib.optionalAttrs (cfg ? group) { group = if cfg.group == "root" then "wheel" else cfg.group; }
-        // lib.optionalAttrs (targetPath != null) { path = targetPath; }
-        // lib.optionalAttrs (cfg ? restartUnits) { inherit (cfg) restartUnits; }
-        // lib.optionalAttrs (cfg ? reloadUnits) { inherit (cfg) reloadUnits; };
+        // lib.optionalAttrs (targetPath != null) { path = targetPath; };
     }
   ) globalSecrets;
   globalAliases = lib.mapAttrs' (n: v: {
