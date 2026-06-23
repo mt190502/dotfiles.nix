@@ -36,12 +36,9 @@
     kernelParams = [
       "amd_iommu=on"
       "iommu=pt"
-      "amdgpu.dcdebugmask=0x610"
-      "amdgpu.ppfeaturemask=0xfffd3fff"
-      "acpi_osi=\"Linux\""
-      "acpi_osi=\"!Windows 2020\""
+      "acpi.ec_no_wakeup=1"
+      #"gpiolib_acpi.ignore_wake=AMDI0030:00@7"
       #"pcie_port_pm=off"
-      #"acpi.ec_no_wakeup=1"
     ];
   };
 }

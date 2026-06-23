@@ -17,9 +17,6 @@ rec {
       enableGraphical = true;
     };
   };
-  powerManagement = {
-    cpuFreqGovernor = "performance";
-  };
   services.udev = {
     extraHwdb = ''
       evdev:name:ThinkPad Extra Buttons:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:*
@@ -28,6 +25,9 @@ rec {
        KEYBOARD_KEY_45=playpause                        # Favorites
     '';
     extraRules = with pkgs; ''
+      ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
+      ACTION=="add", SUBSYSTEM=="pci", KERNEL=="0000:04:00.3", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:04:00.3/power/wakeup'"
+      ACTION=="add", SUBSYSTEM=="pci", KERNEL=="0000:04:00.4", RUN+="/bin/sh -c 'echo disabled > /sys/bus/pci/devices/0000:04:00.4/power/wakeup'"
       ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC1", RUN+="${writeShellScript "micmute-led-wrapper" ''
         exec ${lib.getExe' systemd "systemd-run"} --no-block --unit=micmute-led-setup ${writeShellScript "micmute-led-setup" ''
           ${lib.getExe' kmod "modprobe"} snd_ctl_led
