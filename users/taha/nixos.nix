@@ -78,6 +78,7 @@
       ++ (with sharing.profiles.home; [
         ai
         cloud
+        creative
         development
         mediaplayer
         neovim

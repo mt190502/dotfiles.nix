@@ -48,7 +48,6 @@
         bottles
         ffmpegthumbnailer
         gcolor3
-        gimp3
         gnome-calculator
         gnome-icon-theme
         gnome-tweaks
@@ -59,14 +58,12 @@
         kdePackages.dolphin-plugins
         kdePackages.ffmpegthumbs
         kdePackages.kdegraphics-thumbnailers
-        kdePackages.kdenlive
         kdePackages.kruler
         kdePackages.okular
         kdePackages.qt6ct
         kdePackages.qtstyleplugin-kvantum
         kdePackages.qtsvg
         kdePackages.qtwayland
-        krita
         libsForQt5.qt5ct
         libsForQt5.qtstyleplugin-kvantum
         libreoffice

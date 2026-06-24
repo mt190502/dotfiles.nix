@@ -27,7 +27,6 @@
         grc
         heimdall
         imagemagick
-        kdePackages.kdenlive
         lsd
         rclone
         scrcpy

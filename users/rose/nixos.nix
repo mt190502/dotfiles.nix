@@ -62,6 +62,7 @@
         ytdlp
       ])
       ++ (with sharing.profiles.home; [
+        creative
         plasma
       ]);
     };
