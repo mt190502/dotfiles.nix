@@ -11,6 +11,7 @@
     "docker"
     "evolution"
     "fontconfig"
+    "gpu-screen-recorder"
     "initrd-tools"
     "lanzaboote"
     "libvirt"

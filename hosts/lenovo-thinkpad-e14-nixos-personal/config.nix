@@ -10,6 +10,7 @@
     "docker"
     "evolution"
     "fontconfig"
+    "gpu-screen-recorder"
     "ihtc"
     "lanzaboote"
     "libvirt"
