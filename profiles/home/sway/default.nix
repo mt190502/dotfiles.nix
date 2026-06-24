@@ -35,6 +35,7 @@ in
     ./swaync.nix
     ./waybar.nix
     # ./wofi.nix
+    ./xdg-portal.nix
   ];
   config = {
     preferences = {
