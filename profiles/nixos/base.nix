@@ -108,6 +108,10 @@
       ];
     };
   };
+  services.fstrim = {
+    enable = true;
+    interval = "weekly";
+  };
   time = {
     hardwareClockInLocalTime = false;
     timeZone = "Europe/Istanbul";
