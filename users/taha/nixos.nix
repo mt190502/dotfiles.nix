@@ -58,6 +58,7 @@
         foot
         git
         gnome-keyring
+        gpu-screen-recorder
         gtk
         kdeconnect
         librewolf

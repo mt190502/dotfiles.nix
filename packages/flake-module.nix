@@ -45,22 +45,30 @@ let
   dirNames = builtins.attrNames dirs;
 in
 {
-  options.sharing.customPackages = lib.mkOption {
-    type = lib.types.attrsOf (
-      lib.types.submodule {
-        options = {
-          enable = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
+  options = {
+    sharing.customPackages = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            enable = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+            };
           };
-        };
-      }
-    );
-    default = lib.mapAttrs (_: _: { enable = true; }) discovered;
-  };
-  options.flake.homeModules = lib.mkOption {
-    type = lib.types.attrsOf lib.types.unspecified;
-    default = { };
+        }
+      );
+      default = lib.mapAttrs (_: _: { enable = true; }) discovered;
+    };
+    flake = {
+      homeModules = lib.mkOption {
+        type = lib.types.attrsOf lib.types.deferredModule;
+        default = { };
+      };
+      darwinModules = lib.mkOption {
+        type = lib.types.attrsOf lib.types.deferredModule;
+        default = { };
+      };
+    };
   };
   config = {
     sharing.customPackages = lib.mapAttrs (_: _: { enable = true; }) discovered;
@@ -114,7 +122,6 @@ in
           }
         ) dirNames
       );
-
     };
   };
 }
