@@ -158,7 +158,8 @@ in
         cat $targetfile > $oldfile_tmp
         echo "Watching $targetfile for changes. Press Ctrl+C to stop."
         while true
-          ${lib.getExe' pkgs.fswatch "fswatch"} --event Modified --one-event $targetfile >/dev/null
+          ${lib.getExe' pkgs.fswatch "fswatch"} --event Updated --one-event $targetfile >/dev/null
+          or break
           set newfile_tmp (mktemp)
           cat $targetfile > $newfile_tmp
           clear
@@ -170,6 +171,7 @@ in
           rm -f $oldfile_tmp
           set oldfile_tmp $newfile_tmp
         end
+        rm -f $oldfile_tmp $newfile_tmp 2>/dev/null
       '';
       workmode = ''
         set mode (test (count $argv) -gt 0; and echo $argv[1])
