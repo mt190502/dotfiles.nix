@@ -40,42 +40,10 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 CC_HOST = "api.commandcode.ai"
 CC_PATH = "/alpha/generate"
 VERSION = "0.28.1"
-# All models available through command-code's API.
-# Key = model ID sent to /alpha/generate, value = metadata for /v1/models.
-MODELS = {
-    # Anthropic
-    "anthropic:claude-sonnet-4-20250514": {"name": "Claude Sonnet 4 (2025-05-14)", "context": 1_000_000},
-    "anthropic:claude-sonnet-4-5-20250929": {"name": "Claude Sonnet 4.5", "context": 1_000_000},
-    "anthropic:claude-sonnet-4-6": {"name": "Claude Sonnet 4.6", "context": 1_000_000},
-    "anthropic:claude-opus-4-5-20251101": {"name": "Claude Opus 4.5", "context": 1_000_000},
-    "anthropic:claude-opus-4-6": {"name": "Claude Opus 4.6", "context": 1_000_000},
-    "anthropic:claude-opus-4-7": {"name": "Claude Opus 4.7", "context": 1_000_000},
-    "anthropic:claude-haiku-4-5-20251001": {"name": "Claude Haiku 4.5", "context": 200_000},
-    # OpenAI
-    "openai:gpt-5.3-codex": {"name": "GPT-5.3 Codex", "context": 400_000},
-    "openai:gpt-5.4": {"name": "GPT-5.4", "context": 400_000},
-    "openai:gpt-5.4-mini": {"name": "GPT-5.4 Mini", "context": 400_000},
-    "openai:gpt-5.5": {"name": "GPT-5.5"},
-    # Baseten / open-source
-    "baseten:moonshotai/Kimi-K2.5": {"name": "Kimi K2.5", "context": 256_000},
-    "baseten:moonshotai/Kimi-K2.6": {"name": "Kimi K2.6", "context": 256_000},
-    "baseten:zai-org/GLM-5": {"name": "GLM-5", "context": 200_000},
-    "baseten:zai-org/GLM-5.1": {"name": "GLM-5.1"},
-    "baseten:MiniMaxAI/MiniMax-M2.5": {"name": "MiniMax M2.5", "context": 200_000},
-    "baseten:MiniMaxAI/MiniMax-M2.7": {"name": "MiniMax M2.7"},
-    "baseten:MiniMaxAI/MiniMax-M3": {"name": "MiniMax M3", "context": 1_000_000},
-    "baseten:deepseek/deepseek-v4-pro": {"name": "DeepSeek V4 Pro", "context": 1_000_000},
-    "baseten:deepseek/deepseek-v4-flash": {"name": "DeepSeek V4 Flash", "context": 1_000_000},
-    "baseten:Qwen/Qwen3.6-Max-Preview": {"name": "Qwen 3.6 Max Preview"},
-    "baseten:Qwen/Qwen3.6-Plus": {"name": "Qwen 3.6 Plus"},
-    "baseten:Qwen/Qwen3.7-Max": {"name": "Qwen 3.7 Max", "context": 1_000_000},
-    "baseten:stepfun/Step-3.5-Flash": {"name": "Step 3.5 Flash", "context": 1_000_000},
-    "baseten:xiaomi/mimo-v2.5": {"name": "MiMo V2.5", "context": 1_000_000},
-    "baseten:xiaomi/mimo-v2.5-pro": {"name": "MiMo V2.5 Pro", "context": 1_000_000},
-    # Google
-    "google/gemini-3.5-flash": {"name": "Gemini 3.5 Flash", "context": 1_000_000},
-    "google/gemini-3.1-flash-lite": {"name": "Gemini 3.1 Flash Lite", "context": 1_000_000},
-}
+
+# Cached models list — fetched from upstream on startup.
+CACHED_MODELS = None  # Will hold {"object": "list", "data": [...]}
+CACHED_MODEL_IDS = set()  # Set of bare model IDs (without provider prefix)
 
 VERBOSE = False
 
@@ -83,6 +51,30 @@ VERBOSE = False
 def log(msg):
     if VERBOSE:
         print(f"[commandcode-proxy] {msg}", file=sys.stderr, flush=True)
+
+def fetch_models():
+    """Fetch models from upstream and cache them. Returns the cached data."""
+    global CACHED_MODELS, CACHED_MODEL_IDS
+    try:
+        conn = HTTPSConnection(CC_HOST, timeout=15)
+        conn.request("GET", "/provider/v1/models",
+                     headers={"User-Agent": f"commandcode-proxy/{VERSION}"})
+        r1 = conn.getresponse()
+        raw = json.loads(r1.read())
+        for m in raw.get("data", []):
+            m.pop("created", None)
+        CACHED_MODELS = raw
+        # Build set of allowed model IDs (bare, without provider prefix)
+        CACHED_MODEL_IDS = set()
+        for m in raw.get("data", []):
+            mid = m.get("id", "")
+            bare = mid.split(":", 1)[1] if ":" in mid else mid
+            CACHED_MODEL_IDS.add(bare)
+        log(f"Fetched {len(CACHED_MODEL_IDS)} models from upstream")
+    except Exception as e:
+        print(f"[commandcode-proxy] Warning: could not fetch models from upstream: {e}")
+        CACHED_MODELS = {"object": "list", "data": []}
+        CACHED_MODEL_IDS = set()
 
 
 def translate_tools(tools):
@@ -149,20 +141,9 @@ def build_request(body):
         model = model.split(":", 1)[1]
 
     # Models not on your plan get mapped to default
-    DEFAULT = "xiaomi/mimo-v2.5"
-    ALLOWED = {
-        "xiaomi/mimo-v2.5", "xiaomi/mimo-v2.5-pro",
-        "deepseek/deepseek-v4-pro", "deepseek/deepseek-v4-flash",
-        "moonshotai/Kimi-K2.5", "moonshotai/Kimi-K2.6",
-        "MiniMaxAI/MiniMax-M2.5", "MiniMaxAI/MiniMax-M2.7",
-        "zai-org/GLM-5", "zai-org/GLM-5.1",
-        "Qwen/Qwen3.7-Max", "stepfun/Step-3.5-Flash",
-        "google/gemini-3.5-flash", "google/gemini-3.1-flash-lite",
-        "claude-sonnet-4-6", "claude-opus-4-7",
-        "gpt-5.5", "gpt-5.4", "gpt-5.4-mini", "gpt-5.3-codex",
-    }
-    if model not in ALLOWED:
-        log(f"Model '{model}' not in allowed list, mapping to {DEFAULT}")
+    DEFAULT = "deepseek/deepseek-v4-pro"
+    if CACHED_MODEL_IDS and model not in CACHED_MODEL_IDS:
+        log(f"Model '{model}' not in upstream list, mapping to {DEFAULT}")
         model = DEFAULT
 
     system, messages = translate_messages(body.get("messages", []))
@@ -333,38 +314,17 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/v1/models":
-            log(f"GET /v1/models — proxying to upstream")
-            try:
-                conn = HTTPSConnection("api.commandcode.ai", timeout=15)
-                conn.request("GET", "/provider/v1/models",
-                             headers={"User-Agent": f"commandcode-proxy/{VERSION}"})
-                r1 = conn.getresponse()
-                raw = json.loads(r1.read())
-                for m in raw.get("data", []):
-                    m.pop("created", None)
-                body = json.dumps(raw).encode()
-                count = len(raw.get("data", []))
-                log(f"GET /v1/models — upstream {r1.status}, {count} models")
-                self.send_response(r1.status)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.end_headers()
-                self.wfile.write(body)
-            except Exception as e:
-                print(f"[commandcode-proxy] Error fetching upstream models: {e}")
-                # Fall back to hardcoded list
-                data = {
-                    "object": "list",
-                    "data": [
-                        {"id": mid, "object": "model", "created": 0, "owned_by": "command-code",
-                         "name": info.get("name", mid), "context_window": info.get("context")}
-                        for mid, info in MODELS.items()
-                    ],
-                }
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json")
-                self.end_headers()
-                self.wfile.write(json.dumps(data).encode())
+            log(f"GET /v1/models — returning cached models")
+            if CACHED_MODELS is None:
+                fetch_models()
+            body = json.dumps(CACHED_MODELS).encode()
+            count = len(CACHED_MODELS.get("data", []))
+            log(f"GET /v1/models — {count} models")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(body)
         else:
             self.send_error(404)
 
@@ -518,10 +478,12 @@ def main():
     global VERBOSE
     VERBOSE = args.verbose
 
+    print(f"commandcode-proxy v{VERSION} — fetching models from upstream...")
+    fetch_models()
     srv = ThreadingHTTPServer((args.host, args.port), Handler)
     srv.allow_reuse_address = True
     print(f"commandcode-proxy v{VERSION} on http://{args.host}:{args.port}")
-    print(f"Models: {len(MODELS)} available ({sum(1 for m in MODELS.values() if 'context' in m)} with context limits)")
+    print(f"Models: {len(CACHED_MODEL_IDS)} available from upstream")
     print()
     print("opencode config:")
     print(f'  "baseURL": "http://{args.host}:{args.port}/v1"')
