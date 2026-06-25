@@ -66,7 +66,6 @@
         kdePackages.qtwayland
         libsForQt5.qt5ct
         libsForQt5.qtstyleplugin-kvantum
-        libreoffice
         nvtopPackages.full
         nwg-look
         ocs-url

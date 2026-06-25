@@ -4,6 +4,7 @@
   environment.systemPackages = with pkgs; [
     gnome-text-editor
     gparted
+    libreoffice
     libva-utils
     loupe
     openboard
