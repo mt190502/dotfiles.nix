@@ -20,6 +20,7 @@ let
   home = config.home.homeDirectory;
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   rebuildCmd = if isDarwin then "darwin-rebuild" else "nixos-rebuild";
+  readlink = getExe' pkgs.coreutils "readlink";
 in
 {
   programs.fish = {
@@ -58,18 +59,24 @@ in
         echo "=== New/removed files in /etc (non-hash) ==="
         diff -rq $oldsys/etc $newsys/etc 2>/dev/null | grep -vE 'cachedir|nix/store' | head -40
         echo ""
+        ${
+          if isDarwin then
+            ""
+          else
+            ''
+              echo "=== Changed systemd units ==="
+              diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E 'home-manager|\.service$' | head -20
+              echo ""
 
-        echo "=== Changed systemd units ==="
-        diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E 'home-manager|\.service$' | head -20
-        echo ""
-
-        set -l old_hm (grep -oP '/nix/store/[a-z0-9]+-home-manager-generation' $oldsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
-        set -l new_hm (grep -oP '/nix/store/[a-z0-9]+-home-manager-generation' $newsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
-        if test -n "$old_hm" -a -n "$new_hm" -a "$old_hm" != "$new_hm"
-          echo "=== Home-manager files diff ==="
-          diff -rq $old_hm/home-files $new_hm/home-files 2>/dev/null | head -40
-          echo ""
-        end
+              set -l old_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $oldsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+              set -l new_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $newsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+              if test -n "$old_hm" -a -n "$new_hm" -a "$old_hm" != "$new_hm"
+                echo "=== Home-manager files diff ==="
+                diff -rq $old_hm/home-files $new_hm/home-files 2>/dev/null | head -40
+                echo ""
+              end
+            ''
+        }
       '';
       rebuild = ''
         set -l flake "${home}/.config/dotfiles.nix"
@@ -89,7 +96,7 @@ in
         end
         echo ""
 
-        set -l newsys (readlink -f result)
+        set -l newsys (${readlink} -f result)
         _rebuilddiff $newsys
         rm -f result
 
@@ -127,7 +134,7 @@ in
         end
         echo ""
 
-        set -l newsys (readlink -f result)
+        set -l newsys (${readlink} -f result)
         _rebuilddiff $newsys
         rm -f result
 
