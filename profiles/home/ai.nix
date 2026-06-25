@@ -97,296 +97,72 @@ in
       provider = {
         commandcode = {
           name = "CommandCode";
-          models = {
-            "MiniMaxAI/MiniMax-M2.7" = {
-              limit = {
-                context = 200000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "MiniMax M2.7";
-            };
-            "MiniMaxAI/MiniMax-M3" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "MiniMax M3";
-            };
-            "Qwen/Qwen3.7-Max" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "Qwen 3.7 Max";
-            };
-            "Qwen/Qwen3.7-Plus" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "Qwen 3.7 Plus";
-            };
-            "deepseek/deepseek-v4-flash" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "DeepSeek V4 Flash";
-            };
-            "deepseek/deepseek-v4-pro" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "DeepSeek V4 Pro";
-            };
-            "gpt-5.3-codex" = {
-              limit = {
-                context = 400000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "GPT-5.3 Codex";
-            };
-            "gpt-5.4" = {
-              limit = {
-                context = 400000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "GPT-5.4";
-            };
-            "gpt-5.4-mini" = {
-              limit = {
-                context = 400000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "GPT-5.4 Mini";
-            };
-            "gpt-5.5" = {
-              limit = {
-                context = 200000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "GPT-5.5";
-            };
-            "moonshotai/Kimi-K2.6" = {
-              limit = {
-                context = 256000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "Kimi K2.6";
-            };
-            "nvidia/nemotron-3-ultra-550b-a55b" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "Nemotron 3 Ultra";
-            };
-            "stepfun/Step-3.5-Flash" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "Step 3.5 Flash";
-            };
-            "stepfun/Step-3.7-Flash" = {
-              limit = {
-                context = 256000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "Step 3.7 Flash";
-            };
-            "xiaomi/mimo-v2.5" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "MiMo V2.5";
-            };
-            "xiaomi/mimo-v2.5-pro" = {
-              limit = {
-                context = 1000000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "MiMo V2.5 Pro";
-            };
-            "zai-org/GLM-5" = {
-              limit = {
-                context = 200000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "GLM-5";
-            };
-            "zai-org/GLM-5.1" = {
-              limit = {
-                context = 200000;
-                output = 16384;
-              };
-              modalities = {
-                input = [
-                  "text"
-                ];
-                output = [
-                  "text"
-                ];
-              };
-              name = "GLM-5.1";
-            };
-          };
           options = {
             baseURL = "http://127.0.0.1:8082/v1";
             apiKey = "{file:${config.sops.secrets."commandcode".path}}";
           };
         };
+        commandcode2 = {
+          name = "CommandCode Alt";
+          options = {
+            baseURL = "http://127.0.0.1:8082/v1";
+            apiKey = "{file:${config.sops.secrets."commandcode2".path}}";
+          };
+        };
       };
     };
   };
-  home.file.".config/opencode/plugin/terminal-bell.ts".text = ''
-    import type { Plugin } from "@opencode-ai/plugin"
-    export const TerminalBell: Plugin = async ({ project, client, $, directory, worktree }) => {
-      return {
-        event: async ({ event }) => {
-          if (event.type === "session.idle") {
-            await Bun.write(Bun.stdout, "\x07")
+  home.file = {
+    ".config/opencode/plugin/terminal-bell.ts".text = ''
+      import type { Plugin } from "@opencode-ai/plugin"
+      export const TerminalBell: Plugin = async ({ project, client, $, directory, worktree }) => {
+        return {
+          event: async ({ event }) => {
+            if (event.type === "session.idle") {
+              await Bun.write(Bun.stdout, "\x07")
+            }
           }
         }
       }
-    }
-  '';
+    '';
+    ".config/opencode/plugin/commandcode.ts".text = ''
+      import type { Plugin } from "@opencode-ai/plugin"
+
+      export default (async () => {
+        let models: Record<string, any> = {}
+
+        try {
+          const res = await fetch("http://127.0.0.1:8082/v1/models")
+          if (res.ok) {
+            const data = await res.json()
+            for (const model of data.data ?? []) {
+              models[model.id] = {
+                name: model.id.split("/").pop() ?? model.id,
+                limit: { context: 1000000, output: 16384 },
+                modalities: { input: ["text"], output: ["text"] },
+              }
+            }
+          }
+        } catch {
+          // proxy not running yet
+        }
+
+        return {
+          config: (cfg) => {
+            cfg.provider ??= {}
+            cfg.provider.commandcode ??= { models: {} }
+            cfg.provider.commandcode2 ??= { models: {} }
+            cfg.provider.commandcode.models = {
+              ...models,
+              ...(cfg.provider.commandcode.models ?? {}),
+            }
+            cfg.provider.commandcode2.models = {
+              ...models,
+              ...(cfg.provider.commandcode.models ?? {}),
+            }
+          },
+        }
+      }) satisfies Plugin
+    '';
+  };
 }
