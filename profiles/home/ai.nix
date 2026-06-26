@@ -71,6 +71,14 @@ in
     enable = true;
     enableMcpIntegration = true;
     package = pkgs-unstable.opencode;
+    context = ''
+      # NixOS Environment Disclaimer
+
+      - Some packages is NOT available system-wide like python3 etc.
+      - To use missing packages, find package name and run: `nix shell nixpkgs#<pkg> -c`
+        - For example, to use python3, run: `nix shell nixpkgs#python3 -c python3 --version`
+      - The same applies to other packages not installed system-wide.
+    '';
     settings = {
       # theme = "flexoki";
       plugin = [
@@ -91,8 +99,35 @@ in
           url = "https://mcp.exa.ai/mcp";
         };
       };
-      permission = {
-        bash = "ask";
+      agent = {
+        "build" = {
+          mode = "primary";
+          permission = {
+            bash = "ask";
+          };
+        };
+        "Write" = {
+          permission = {
+            bash = {
+              "*" = "allow";
+              "rm *" = "ask";
+              "sudo *" = "ask";
+              "dd *" = "ask";
+              "mkfs*" = "ask";
+              "chmod *" = "ask";
+              "chown *" = "ask";
+              "shutdown*" = "ask";
+              "reboot*" = "ask";
+              "kill*" = "ask";
+              "mv *" = "ask";
+              "tee *" = "ask";
+              "ln *" = "ask";
+              "cargo *" = "ask";
+              "pip *" = "ask";
+              "npm *" = "ask";
+            };
+          };
+        };
       };
       provider = {
         commandcode = {
