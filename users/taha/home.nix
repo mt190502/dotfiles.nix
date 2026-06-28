@@ -22,9 +22,11 @@
     packages =
       with inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
       [
-        jetbrains-toolbox
+        ark
         dolphin
         flameshot
+        jetbrains-toolbox
+        okular
       ]
       ++ (with pkgs; [
         #~ fonts ~#
@@ -54,12 +56,10 @@
         handbrake
         hicolor-icon-theme
         imagemagick
-        kdePackages.ark
         kdePackages.dolphin-plugins
         kdePackages.ffmpegthumbs
         kdePackages.kdegraphics-thumbnailers
         kdePackages.kruler
-        kdePackages.okular
         kdePackages.qt6ct
         kdePackages.qtstyleplugin-kvantum
         kdePackages.qtsvg
