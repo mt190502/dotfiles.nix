@@ -51,6 +51,7 @@
         ffmpegthumbnailer
         gcolor3
         gnome-calculator
+        gnome-clocks
         gnome-icon-theme
         gnome-tweaks
         handbrake
