@@ -32,52 +32,11 @@ in
           ${lsd}
         end
       '';
+      gitrestore = "${git} checkout $(${git} rev-list -n 1 HEAD -- $argv)^ -- $argv";
       mapscii = "${telnet} mapscii.me";
-      shell = "nix shell nixpkgs#$argv";
       neval = "nix eval --raw --impure --expr \"with import <nixpkgs> {}; lib.getExe pkgs.$argv\"";
-      nevalp = "nix eval nixpkgs#$argv.outPath";
       nevalcd = "cd $(nix eval --raw nixpkgs#$argv.outPath)";
-      _rebuilddiff = ''
-        set -l oldsys /run/current-system
-        set -l newsys $argv[1]
-        if test -z "$newsys"
-          echo "No system path provided"
-          return 1
-        end
-
-        echo "Diffing $oldsys -> $newsys"
-        echo ""
-
-        echo "=== nvd version diff ==="
-        ${getExe pkgs.nvd} diff $oldsys $newsys 2>/dev/null
-        echo ""
-
-        echo "=== Closure diff ==="
-        nix store diff-closures $oldsys $newsys 2>/dev/null
-        echo ""
-
-        echo "=== New/removed files in /etc (non-hash) ==="
-        diff -rq $oldsys/etc $newsys/etc 2>/dev/null | grep -vE 'cachedir|nix/store' | head -40
-        echo ""
-        ${
-          if isDarwin then
-            ""
-          else
-            ''
-              echo "=== Changed systemd units ==="
-              diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E 'home-manager|\.service$' | head -20
-              echo ""
-
-              set -l old_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $oldsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
-              set -l new_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $newsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
-              if test -n "$old_hm" -a -n "$new_hm" -a "$old_hm" != "$new_hm"
-                echo "=== Home-manager files diff ==="
-                diff -rq $old_hm/home-files $new_hm/home-files 2>/dev/null | head -40
-                echo ""
-              end
-            ''
-        }
-      '';
+      nevalp = "nix eval nixpkgs#$argv.outPath";
       rebuild = ''
         set -l flake "${home}/.config/dotfiles.nix"
         set -l cmd ${flakeName}
@@ -111,6 +70,7 @@ in
           echo "Aborted."
         end
       '';
+      shell = "nix shell nixpkgs#$argv";
       sysdup = ''
         set -l flake "${home}/.config/dotfiles.nix"
         set -l cmd ${flakeName}
@@ -207,6 +167,47 @@ in
           set -Ux fish_history "fish"
           tide reload
         end
+      '';
+      _rebuilddiff = ''
+        set -l oldsys /run/current-system
+        set -l newsys $argv[1]
+        if test -z "$newsys"
+          echo "No system path provided"
+          return 1
+        end
+
+        echo "Diffing $oldsys -> $newsys"
+        echo ""
+
+        echo "=== nvd version diff ==="
+        ${getExe pkgs.nvd} diff $oldsys $newsys 2>/dev/null
+        echo ""
+
+        echo "=== Closure diff ==="
+        nix store diff-closures $oldsys $newsys 2>/dev/null
+        echo ""
+
+        echo "=== New/removed files in /etc (non-hash) ==="
+        diff -rq $oldsys/etc $newsys/etc 2>/dev/null | grep -vE 'cachedir|nix/store' | head -40
+        echo ""
+        ${
+          if isDarwin then
+            ""
+          else
+            ''
+              echo "=== Changed systemd units ==="
+              diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E 'home-manager|\.service$' | head -20
+              echo ""
+
+              set -l old_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $oldsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+              set -l new_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $newsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+              if test -n "$old_hm" -a -n "$new_hm" -a "$old_hm" != "$new_hm"
+                echo "=== Home-manager files diff ==="
+                diff -rq $old_hm/home-files $new_hm/home-files 2>/dev/null | head -40
+                echo ""
+              end
+            ''
+        }
       '';
     };
     generateCompletions = false;
