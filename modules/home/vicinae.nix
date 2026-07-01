@@ -55,6 +55,43 @@ let
               }
             }
           },
+          "@isfeng/easydict-0": {
+             "preferences": {
+                "bingHost": "",
+                "deepLEndpoint": "",
+                "enableAppleTranslate": false,
+                "enableAutomaticPlayWordAudio": true,
+                "enableAutomaticQuerySelectedText": true,
+                "enableBaiduLanguageDetect": true,
+                "enableBaiduTranslate": false,
+                "enableBingTranslate": true,
+                "enableCaiyunTranslate": false,
+                "enableDeepLTranslate": true,
+                "enableDeepLXTranslate": false,
+                "enableDetectLanguageSpeedFirst": true,
+                "enableGeminiTranslate": false,
+                "enableGoogleTranslate": false,
+                "enableLingueeDictionary": false,
+                "enableOpenAITranslate": false,
+                "enableSelectTargetLanguage": true,
+                "enableSystemProxy": false,
+                "enableTencentTranslate": false,
+                "enableVolcanoTranslate": false,
+                "enableYoudaoDictionary": false,
+                "enableYoudaoTranslate": false,
+                "forceMaxCompletionTokens": false,
+                "geminiAPIURL": "https://generativelanguage.googleapis.com",
+                "geminiModel": "gemini-2.0-flash",
+                "language1": "en",
+                "language2": "tr",
+                "openAIAPIURL": "https://api.openai.com/v1/chat/completions",
+                "openAIModel": "gpt-4o-mini",
+                "servicesOrder": "",
+                "showOpenInEudicFirst": false,
+                "tencentSecretId": "",
+                "volcanoAccessKeyId": ""
+             }
+          },
           "@khasbilegt/1password": {
              "preferences": {
                 "cliPath": "${
@@ -125,49 +162,10 @@ let
     }
   '';
 
-  rayCli = pkgs.fetchurl {
-    url = "https://cli.raycast.com/1.86.0-alpha.65/linux/ray"; # ~ https://cli.raycast.com/latest_version.txt
-    sha256 = "sha256-UgDA2hIH7HwKl3j4UEGIlvh6eE+IWUlSML0wloHFPQw=";
-  };
-
   getVicinaeExtensions =
     names:
     map (name: inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}.${name}) names;
-  genRaycastExtensions =
-    with pkgs;
-    names:
-    let
-      raycastRepo = fetchFromGitHub {
-        owner = "raycast";
-        repo = "extensions";
-        rev = "06006ce095c0bce99b382867229126d6b7e480cc";
-        sha256 = "sha256-tas539fbOECSwywntSo4bT3BlmbcWD7ov579j8pW28o=";
-        sparseCheckout = map (name: "/extensions/${name}") names;
-      };
-    in
-    map (
-      name:
-      buildNpmPackage rec {
-        inherit name;
-        inherit (importNpmLock) npmConfigHook;
-        src = raycastRepo + "/extensions/${name}";
-        buildPhase = ''
-          runHook preBuild
-          mkdir -p node_modules/@raycast/api/bin/linux
-          cp ${rayCli} node_modules/@raycast/api/bin/linux/ray
-          chmod +x node_modules/@raycast/api/bin/linux/ray
-          npm run build
-          runHook postBuild
-        '';
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out/
-          cp -r /build/.config/*/extensions/${name}/* $out/
-          runHook postInstall
-        '';
-        npmDeps = importNpmLock { npmRoot = src; };
-      }
-    ) names;
+  raycastExtBuilder = inputs.self.legacyPackages.${pkgs.stdenv.hostPlatform.system}.raycastExtensions;
 in
 {
   config = {
@@ -186,14 +184,15 @@ in
           "ssh"
           "stocks"
         ])
-        ++ (genRaycastExtensions [
+        ++ (builtins.attrValues (raycastExtBuilder [
           "1password"
           "chatgpt"
           "deepcast"
+          # "easydict"
           "simple-dictionary"
           "tailscale"
           "word-count"
-        ]);
+        ]));
       themes = {
         stylix =
           with config.stylix;

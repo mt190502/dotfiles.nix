@@ -13,25 +13,28 @@ let
       processEntry =
         name:
         if entries.${name} == "directory" then
-          let
-            pkgPath = "${dir}/${name}/default.nix";
-          in
-          if builtins.pathExists pkgPath then
-            { ${name} = import pkgPath; }
+          if builtins.pathExists "${dir}/${name}/flake-module.nix" then
+            { }
           else
             let
-              subdir = builtins.readDir "${dir}/${name}";
-              isPkg = n: lib.hasSuffix ".nix" n && n != "module.nix" && n != "flake-module.nix";
-              subPkgs = builtins.foldl' (
-                acc: n:
-                let
-                  path = "${dir}/${name}/${n}";
-                  key = if n == "main.nix" then name else name + "-" + lib.removeSuffix ".nix" n;
-                in
-                if !isPkg n then acc else acc // { ${key} = import path; }
-              ) { } (builtins.attrNames subdir);
+              pkgPath = "${dir}/${name}/default.nix";
             in
-            subPkgs
+            if builtins.pathExists pkgPath then
+              { ${name} = import pkgPath; }
+            else
+              let
+                subdir = builtins.readDir "${dir}/${name}";
+                isPkg = n: lib.hasSuffix ".nix" n && n != "module.nix" && n != "flake-module.nix";
+                subPkgs = builtins.foldl' (
+                  acc: n:
+                  let
+                    path = "${dir}/${name}/${n}";
+                    key = if n == "main.nix" then name else name + "-" + lib.removeSuffix ".nix" n;
+                  in
+                  if !isPkg n then acc else acc // { ${key} = import path; }
+                ) { } (builtins.attrNames subdir);
+              in
+              subPkgs
         else if name == "flake-module.nix" then
           { }
         else if lib.hasSuffix ".nix" name then
@@ -43,8 +46,10 @@ let
   discovered = discoverPackages ./.;
   dirs = lib.filterAttrs (_: t: t == "directory") (builtins.readDir ./.);
   dirNames = builtins.attrNames dirs;
+  subModules = builtins.filter (n: builtins.pathExists "${./.}/${n}/flake-module.nix") dirNames;
 in
 {
+  imports = map (n: ./${n}/flake-module.nix) subModules;
   options = {
     sharing.customPackages = lib.mkOption {
       type = lib.types.attrsOf (
