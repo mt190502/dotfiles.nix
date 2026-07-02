@@ -30,93 +30,104 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
-          files=$(git diff --name-only $BASE_REF HEAD -- '*.nix')
-          [ -z "$files" ] && exit 0
+          changed=$(git diff --name-only "$BASE_REF" HEAD -- 'packages/**/*.nix')
+          [ -z "$changed" ] && { echo "No changed nix files in packages/"; exit 0; }
 
-          for file in $files; do
-            echo "=== $file ==="
-
-            # fetchFromGitHub sha256
-            for rev in $(git diff $BASE_REF HEAD -- "$file" | grep -oP '^\+.*rev = "\K[^"]+' || true); do
-              sha_line=$(grep -n "rev = \"$rev\"" "$file" | head -1 | cut -d: -f1)
-              target_line=$(awk -v s="$sha_line" 'NR>s && /sha256 = /{print NR; exit}' "$file")
-              [ -z "$target_line" ] && continue
-
-              old=$(sed -n "${target_line}p" "$file" | grep -oP 'sha256 = "\K[^"]+')
-              [ "$old" = "$FAKE" ] && continue
-
-              owner=$(grep -B5 "rev = \"$rev\"" "$file" | grep -oP 'owner = "\K[^"]+' | head -1)
-              repo=$(grep -B5 "rev = \"$rev\"" "$file" | grep -oP 'repo = "\K[^"]+' | head -1)
-              [ -z "$owner" ] || [ -z "$repo" ] && continue
-
-              has_sparse=$(sed -n "${sha_line},$((sha_line+20))p" "$file" | grep -q 'sparseCheckout' && echo "yes" || true)
-              hash=""
-
-              # Method 1: nix-prefetch-url (180s for normal, skip for sparse large repos)
-              if [ "$has_sparse" != "yes" ]; then
-                raw=$(timeout 180 nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz" 2>/dev/null || true)
-                if [ -n "$raw" ]; then
-                  hash=$(nix hash convert --hash-algo sha256 --to sri "$raw" 2>/dev/null || true)
-                  echo "  sha256: prefetch -> $hash"
-                fi
-              fi
-
-              # Method 2: fake hash + nix build to get hash from mismatch error
-              if [ -z "$hash" ]; then
-                echo "  sha256: falling back to nix build"
-                sed -i "${target_line}s|sha256 = \"[^\"]*\"|sha256 = \"$FAKE\"|" "$file"
-
-                got=$(timeout 600 nix build .#checks.x86_64-linux.pre-commit --no-link 2>&1 \
-                  | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
-
-                if [ -z "$got" ]; then
-                  got=$(timeout 600 nix flake check --all-systems 2>&1 \
-                    | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
-                fi
-
-                if [ -n "$got" ]; then
-                  hash="sha256-$got"
-                  echo "  sha256: nix build -> $hash"
-                else
-                  sed -i "${target_line}s|sha256 = \"[^\"]*\"|sha256 = \"$old\"|" "$file"
-                  echo "  sha256: failed, keeping original"
-                fi
-              fi
-
-              if [ -n "$hash" ] && [ "$hash" != "sha256-" ]; then
-                sed -i "${target_line}s|sha256 = \"[^\"]*\"|sha256 = \"$hash\"|" "$file"
-              fi
+          # Find every line in changed files that has a SRI sha256 value
+          # Returns: "<file>:<line>:<original_hash>" for each
+          find_all_hashes() {
+            for file in $changed; do
+              [ -f "$file" ] || continue
+              grep -nP '^\s*\w+\s*=\s*"sha256-' "$file" 2>/dev/null \
+                | sed -E 's/^([0-9]+):.*"sha256-([^"]+)".*/\1:sha256-\2/' \
+                | while IFS=: read -r ln hash; do
+                    [ "$hash" = "$FAKE" ] && continue
+                    echo "$file:$ln:$hash"
+                  done
             done
+          }
 
-            # cargoHash/vendorHash: fake hash trick
-            [[ "$file" =~ ^packages/ ]] || continue
-            pkg=$(basename "$file" .nix)
-            for ht in cargoHash vendorHash; do
-              grep -q "$ht" "$file" || continue
-              original=$(grep -oP "$ht = \"\K[^\"]+" "$file" | head -1)
-              [ "$original" = "$FAKE" ] && continue
+          # Extract correct hash from nix error output
+          extract_hash() {
+            grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true
+          }
 
-              sed -i "s|$ht = \"[^\"]*\"|$ht = \"$FAKE\"|" "$file"
-              new=$(timeout 120 nix build .#$pkg --no-link 2>&1 | grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true)
+          # Detect current system dynamically
+          SYSTEM="$(uname -m)-linux"
 
-              if [ -n "$new" ]; then
-                sed -i "s|$ht = \"[^\"]*\"|$ht = \"sha256-$new\"|" "$file"
-                echo "  $ht: -> sha256-$new"
-              else
-                sed -i "s|$ht = \"[^\"]*\"|$ht = \"$original\"|" "$file"
-                echo "  $ht: failed, keeping original"
+          # Discover all nixosConfiguration host names dynamically
+          get_hosts() {
+            nix eval --json .#nixosConfigurations --apply 'builtins.attrNames' 2>/dev/null \
+              | tr -d '[]" ' | tr ',' ' '
+          }
+
+          # Try to trigger the hash mismatch via targeted build
+          trigger_build() {
+            local file="$1"
+            local got=""
+
+            # Strategy 1: build the specific package directly by pname
+            # Skip if pname contains $ (template string, not a real name)
+            local pname=$(grep -oP 'pname\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1)
+            if [ -n "$pname" ] && [[ "$pname" != *'$'* ]]; then
+              local drv=""
+              drv=$(timeout 60 nix eval --raw .#legacyPackages."$SYSTEM"."$pname".drvPath 2>/dev/null) || \
+              drv=$(timeout 60 nix eval --raw .#packages."$SYSTEM"."$pname".drvPath 2>/dev/null)
+              if [ -n "$drv" ]; then
+                got=$(timeout 300 nix-store -r "$drv" 2>&1 | extract_hash)
               fi
-            done
+            fi
+
+            # Strategy 1.5: try all legacyPackages function attributes
+            # Discovers functions dynamically using only builtins, evaluates drvPath, then builds it
+            if [ -z "$got" ]; then
+              local ext_name=$(basename "$file" .nix)
+              local funcs=$(timeout 60 nix eval --json .#legacyPackages."$SYSTEM" --apply \
+                'attrs: builtins.concatMap (n: let v = builtins.tryEval (attrs.${n}); in if v.success && builtins.isFunction v.value then [n] else []) (builtins.attrNames attrs)' 2>/dev/null \
+                | tr -d '[]" ' | tr ',' ' ')
+              for func in $funcs; do
+                local drv=$(timeout 60 nix eval --raw .#legacyPackages."$SYSTEM"."$func" \
+                  --apply "f: (f [\"$ext_name\"]).\"$ext_name\".drvPath" 2>/dev/null)
+                if [ -n "$drv" ]; then
+                  got=$(timeout 300 nix-store -r "$drv" 2>&1 | extract_hash)
+                  [ -n "$got" ] && break
+                fi
+              done
+            fi
+
+            # Strategy 2: build first nixosConfiguration (forces home-manager → vicinae → raycastExtensions)
+            if [ -z "$got" ]; then
+              local first_host=$(get_hosts | awk '{print $1}')
+              if [ -n "$first_host" ]; then
+                got=$(timeout 300 nix build .#nixosConfigurations."$first_host".config.system.build.toplevel --no-link 2>&1 | extract_hash)
+              fi
+            fi
+
+            echo "$got"
+          }
+
+          # Process each hash: set FAKE → trigger build → write correct hash
+          find_all_hashes | while IFS=: read -r file ln original; do
+            echo "=== $file:$ln ==="
+            sed -i "${ln}s|sha256-[^\"]*|$FAKE|" "$file"
+
+            got=$(trigger_build "$file")
+
+            if [ -n "$got" ]; then
+              sed -i "${ln}s|sha256-[^\"]*|sha256-$got|" "$file"
+              echo "  -> sha256-$got"
+            else
+              sed -i "${ln}s|sha256-[^\"]*|$original|" "$file"
+              echo "  failed, keeping original"
+            fi
           done
 
-      - name: Commit and push changes
+      - name: Commit and push
         run: |
           if [[ -z $(git status -s) ]]; then
             echo "No changes to commit"
             exit 0
           fi
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "fix(automated): update nix hashes [skip ci]"
           git push

@@ -1,6 +1,7 @@
 {
   config,
   flakeName,
+  inputs,
   lib,
   pkgs,
   ...
@@ -21,6 +22,7 @@ let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   rebuildCmd = if isDarwin then "darwin-rebuild" else "nixos-rebuild";
   readlink = getExe' pkgs.coreutils "readlink";
+  fishPlugins = inputs.self.legacyPackages.${pkgs.stdenv.hostPlatform.system}.fishPlugins;
 in
 {
   programs.fish = {
@@ -211,26 +213,10 @@ in
       '';
     };
     generateCompletions = false;
-    plugins = [
-      {
-        name = "nvm";
-        src = pkgs.fetchFromGitHub {
-          owner = "jorgebucaran";
-          repo = "nvm.fish";
-          rev = "2.2.17";
-          sha256 = "sha256-GTEkCm+OtxMS3zJI5gnFvvObkrpepq1349/LcEPQRDo=";
-        };
-      }
-      {
-        name = "fisher";
-        src = pkgs.fetchFromGitHub {
-          owner = "jorgebucaran";
-          repo = "fisher";
-          rev = "4.4.8";
-          sha256 = "sha256-Sf671UGOQXtOMrqoEOIBG5TCt0p5fd+aKGF2ExImbbs=";
-        };
-      }
-    ];
+    plugins = map (name: {
+      inherit name;
+      src = fishPlugins.${name};
+    }) (builtins.attrNames fishPlugins);
     shellAliases = {
       #~ System
       cp = "cp -i";

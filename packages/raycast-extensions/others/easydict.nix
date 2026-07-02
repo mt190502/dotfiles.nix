@@ -2,7 +2,7 @@
 
 with pkgs;
 stdenv.mkDerivation {
-  pname = "easydict";
+  pname = "raycast-extension-easydict";
   version = "0";
   src =
     fetchFromGitHub {

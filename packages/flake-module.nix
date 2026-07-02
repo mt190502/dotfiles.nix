@@ -13,7 +13,7 @@ let
       processEntry =
         name:
         if entries.${name} == "directory" then
-          if builtins.pathExists "${dir}/${name}/flake-module.nix" then
+          if builtins.pathExists "${dir}/${name}/submodule.nix" then
             { }
           else
             let
@@ -24,7 +24,8 @@ let
             else
               let
                 subdir = builtins.readDir "${dir}/${name}";
-                isPkg = n: lib.hasSuffix ".nix" n && n != "module.nix" && n != "flake-module.nix";
+                isPkg =
+                  n: lib.hasSuffix ".nix" n && n != "module.nix" && n != "flake-module.nix" && n != "submodule.nix";
                 subPkgs = builtins.foldl' (
                   acc: n:
                   let
@@ -35,7 +36,7 @@ let
                 ) { } (builtins.attrNames subdir);
               in
               subPkgs
-        else if name == "flake-module.nix" then
+        else if name == "flake-module.nix" || name == "submodule.nix" then
           { }
         else if lib.hasSuffix ".nix" name then
           { ${lib.removeSuffix ".nix" name} = import "${dir}/${name}"; }
@@ -46,10 +47,10 @@ let
   discovered = discoverPackages ./.;
   dirs = lib.filterAttrs (_: t: t == "directory") (builtins.readDir ./.);
   dirNames = builtins.attrNames dirs;
-  subModules = builtins.filter (n: builtins.pathExists "${./.}/${n}/flake-module.nix") dirNames;
+  subModules = builtins.filter (n: builtins.pathExists "${./.}/${n}/submodule.nix") dirNames;
 in
 {
-  imports = map (n: ./${n}/flake-module.nix) subModules;
+  imports = map (n: ./${n}/submodule.nix) subModules;
   options = {
     sharing.customPackages = lib.mkOption {
       type = lib.types.attrsOf (
