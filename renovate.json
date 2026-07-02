@@ -22,30 +22,12 @@
       "format": "plain"
     }
   },
-  "packageRules": [
-    {
-      "matchDatasources": ["github-tags"],
-      "matchPackageNames": ["jorgebucaran/nvm.fish", "jorgebucaran/fisher"],
-      "groupName": "fish plugins"
-    },
-    {
-      "matchDatasources": ["github-tags"],
-      "matchPackageNames": ["szclsya/mpdris2-rs"],
-      "versioning": "semver-coerced"
-    },
-    {
-      "matchPackageNames": ["raycast/extensions"],
-      "matchManagers": ["custom.regex"],
-      "matchDatasources": ["github-tags"],
-      "enabled": false
-    }
-  ],
   "customManagers": [
     {
       "customType": "regex",
       "managerFilePatterns": ["**/*.nix"],
       "matchStrings": [
-        "src\\s*=\\s*pkgs\\.fetchFromGitHub\\s*\\{\\s+owner\\s*=\\s*\"(?<owner>[^\"]+)\";\\s+repo\\s*=\\s*\"(?<repo>[^\"]+)\";\\s+rev\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "owner\\s*=\\s*\"(?<owner>[^\"]+)\";\\s*repo\\s*=\\s*\"(?<repo>[^\"]+)\";\\s*rev\\s*=\\s*\"(?<currentValue>[^\"]*[^0-9a-f\"][^\"]*)\""
       ],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "{{{owner}}}/{{{repo}}}",
@@ -63,7 +45,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/vicinae.nix"],
+      "managerFilePatterns": ["**/*.nix"],
       "matchStrings": [
         "url\\s*=\\s*\"https://cli\\.raycast\\.com/(?<currentValue>[^\"]+)/linux/ray\""
       ],
@@ -73,7 +55,7 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["modules/home/vicinae.nix"],
+      "managerFilePatterns": ["**/*.nix"],
       "matchStrings": [
         "owner\\s*=\\s*\"raycast\";\\s*repo\\s*=\\s*\"extensions\";[\\s\\S]*?rev\\s*=\\s*\"(?<currentDigest>[a-f0-9]+)\""
       ],
@@ -81,6 +63,15 @@
       "packageNameTemplate": "https://github.com/raycast/extensions",
       "currentValueTemplate": "main",
       "depNameTemplate": "raycast/extensions"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["**/*.nix"],
+      "matchStrings": [
+        "fetchGit\\s*\\{[\\s\\S]*?url\\s*=\\s*\"(?<packageName>[^\"]+)\";\\s*rev\\s*=\\s*\"(?<currentDigest>[a-f0-9]+)\";\\s*ref\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "{{{packageName}}}"
     }
   ]
 }

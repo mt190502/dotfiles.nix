@@ -8,18 +8,22 @@ names:
 lib.genAttrs names (
   name:
   with pkgs;
-  buildNpmPackage rec {
-    inherit name;
-    inherit (importNpmLock) npmConfigHook;
-    src =
+  let
+    extSrc =
       fetchFromGitHub {
         owner = "raycast";
         repo = "extensions";
         rev = "06006ce095c0bce99b382867229126d6b7e480cc";
         sha256 = "sha256-3AOuysUdLOBS4LnysA9izcq9TfAGjwWfS+ioaQGPX38=";
-        sparseCheckout = map (name: "/extensions/${name}") names;
+        sparseCheckout = map (n: "/extensions/${n}") names;
       }
       + "/extensions/${name}";
+  in
+  buildNpmPackage {
+    pname = "raycast-extension-${name}";
+    version = "0";
+    inherit (importNpmLock) npmConfigHook;
+    src = extSrc;
     buildPhase = ''
       runHook preBuild
       mkdir -p node_modules/@raycast/api/bin/linux
@@ -34,6 +38,6 @@ lib.genAttrs names (
       cp -r /build/.config/*/extensions/${name}/* $out/
       runHook postInstall
     '';
-    npmDeps = importNpmLock { npmRoot = src; };
+    npmDeps = importNpmLock { npmRoot = extSrc; };
   }
 )
