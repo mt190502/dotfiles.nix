@@ -11,7 +11,10 @@
 }:
 
 {
-  programs.fish.enable = true;
+  programs = {
+    _1password-gui.polkitPolicyOwners = [ "taha" ];
+    fish.enable = true;
+  };
   users.users.taha = {
     shell = pkgs.fish;
     uid = 1000;
