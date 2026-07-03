@@ -164,12 +164,7 @@ let
 
   getVicinaeExtensions =
     names:
-    map (
-      name:
-      inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}.${name}.overrideAttrs (old: {
-        npmFlags = (old.npmFlags or [ ]) ++ [ "--legacy-peer-deps" ];
-      })
-    ) names;
+    map (name: inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}.${name}) names;
   raycastExtBuilder = inputs.self.legacyPackages.${pkgs.stdenv.hostPlatform.system}.raycastExtensions;
 in
 {
