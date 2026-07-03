@@ -24,7 +24,6 @@
             '';
           }
         );
-      polkitPolicyOwners = [ "taha" ];
     };
   };
   environment.etc."1password/custom_allowed_browsers" = {
