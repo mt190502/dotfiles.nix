@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     fetchFromGitHub {
       owner = "raycast";
       repo = "extensions";
-      rev = "06006ce095c0bce99b382867229126d6b7e480cc";
+      rev = "eb6d5bf5175c789b9f2455ba4730b4f476b7ce0b";
       sha256 = "sha256-f9dBacrE7Wtthk4tWHXiUVviYhznhSA+xilFzNmdnRQ=";
       sparseCheckout = [ "/extensions/easydict" ];
     }
