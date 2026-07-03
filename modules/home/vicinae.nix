@@ -46,7 +46,7 @@ let
          }
        },
        "providers": {
-          "@CT-7567/simple-dictionary": {
+          "@CT-7567/raycast-extension-simple-dictionary-0": {
             "entrypoints": {
               "search": {
                 "preferences": {
@@ -55,7 +55,7 @@ let
               }
             }
           },
-          "@isfeng/easydict-0": {
+          "@isfeng/raycast-extension-easydict-0": {
              "preferences": {
                 "bingHost": "",
                 "deepLEndpoint": "",
@@ -92,7 +92,7 @@ let
                 "volcanoAccessKeyId": ""
              }
           },
-          "@khasbilegt/1password": {
+          "@khasbilegt/raycast-extension-1password-0": {
              "preferences": {
                 "cliPath": "${
                   if osConfig != null then "/run/wrappers/bin/op" else "/usr/local/bin/op"
@@ -100,14 +100,39 @@ let
                 "zshPath": "${
                   if osConfig != null then "/run/current-system/sw/bin/fish" else "/usr/bin/fish"
                 }"
+             },
+             "entrypoints": {
+                "item-list": {
+                   "alias": "op"
+                }
              }
           },
-          "@leiserfg/ssh-0": {
+          "@knoopx/vicinae-extension-nix-0": {
+             "entrypoints": {
+                "home-manager-options": {
+                   "alias": "hm"
+                },
+                "options": {
+                   "alias": "nio"
+                },
+                "packages": {
+                   "alias": "nip"
+                }
+             }
+          },
+          "@itsmingjie/raycast-extension-word-count-0": {
+             "entrypoints": {
+                "count": {
+                   "alias": "wc"
+                }
+             }
+          },
+          "@leiserfg/raycast-extension-ssh-0": {
              "preferences": {
                 "terminal": "${config.preferences.terminal}"
              }
           },
-          "@mooxl/deepcast": {
+          "@mooxl/raycast-extension-deepcast-0": {
              "preferences": {
                 "closeRaycastAfterTranslation": false,
                 "defaultFormality": "default",
@@ -117,9 +142,14 @@ let
                 "showFormalityConfig": false,
                 "showTransliteration": "whenProvided",
                 "source": "selected"
+             },
+             "entrypoints": {
+                "index": {
+                   "alias": "deepl"
+                }
              }
           },
-          "@samlinville/tailscale": {
+          "@samlinville/raycast-extension-tailscale-0": {
              "preferences": {
                 "tailscalePath": "${lib.getExe pkgs.tailscale}"
              }
@@ -179,7 +209,6 @@ in
       };
       extensions =
         (getVicinaeExtensions [
-          "bluetooth"
           "nix"
           "ssh"
           "stocks"
