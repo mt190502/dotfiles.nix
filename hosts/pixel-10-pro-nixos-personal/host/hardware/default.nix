@@ -1,0 +1,3 @@
+{
+  avf.enableGraphics = false;
+}

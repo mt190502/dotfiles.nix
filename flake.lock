@@ -519,6 +519,27 @@
         "type": "github"
       }
     },
+    "nixos-avf": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783230170,
+        "narHash": "sha256-fVmJpEenIsDDId5BQJAsjPMgN34swyWgAYTWKhaeVcM=",
+        "owner": "yvt",
+        "repo": "nixos-avf",
+        "rev": "ee44dcedd3c9954a9c752ecff1a83906c58853fe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yvt",
+        "ref": "android-17",
+        "repo": "nixos-avf",
+        "type": "github"
+      }
+    },
     "nixos-images": {
       "inputs": {
         "nixos-stable": [
@@ -755,6 +776,7 @@
         "lanzaboote": "lanzaboote",
         "nix-darwin": "nix-darwin",
         "nix-flatpak": "nix-flatpak",
+        "nixos-avf": "nixos-avf",
         "nixos-raspberrypi": "nixos-raspberrypi",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",

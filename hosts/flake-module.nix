@@ -63,6 +63,7 @@ let
         system.stateVersion = cfg.stateVersion;
         users.mutableUsers = false;
       };
+      isAvf = cfg.platform == "avf";
     in
     nixosSystem {
       inherit pkgs;
@@ -72,13 +73,14 @@ let
         system = cfg.arch;
       };
       modules = [
-        inputs.disko.nixosModules.disko
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = homeModules;
         }
         ./${name}
       ]
+      ++ lib.optional (!isAvf) inputs.disko.nixosModules.disko
+      ++ lib.optional isAvf inputs.nixos-avf.nixosModules.avf
       ++ moduleConfigs
       ++ profileConfigs
       ++ userConfigs
@@ -167,6 +169,9 @@ in
       (builtins.mapAttrs (buildLinuxConfig inputs.nixpkgs.lib.nixosSystem) (getConfigsByPlatform "nixos"))
       // (builtins.mapAttrs (buildLinuxConfig inputs.nixos-raspberrypi.lib.nixosSystem) (
         getConfigsByPlatform "rpi"
+      ))
+      // (builtins.mapAttrs (buildLinuxConfig inputs.nixpkgs.lib.nixosSystem) (
+        getConfigsByPlatform "avf"
       ));
     darwinConfigurations = builtins.mapAttrs buildDarwinConfig (getConfigsByPlatform "darwin");
     homeConfigurations = builtins.mapAttrs buildHomeConfig (getConfigsByPlatform "home");

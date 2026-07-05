@@ -12,6 +12,10 @@
       url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-avf = {
+      url = "github:yvt/nixos-avf/android-17";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-raspberrypi = {
       url = "github:nvmd/nixos-raspberrypi/main";
       inputs.nixpkgs.follows = "nixpkgs";
