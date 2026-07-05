@@ -2,6 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
+    android-tools
     gnome-text-editor
     gparted
     libreoffice

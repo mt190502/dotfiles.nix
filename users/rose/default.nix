@@ -20,7 +20,6 @@
       with pkgs;
       [
         #~ packages ~#
-        android-tools
         aria2
         btop
         git
