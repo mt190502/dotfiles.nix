@@ -10,6 +10,7 @@
     loupe
     openboard
     seahorse
+    snapshot
     v4l-utils
     xdg-user-dirs
     xdg-user-dirs-gtk
