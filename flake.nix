@@ -37,7 +37,7 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     ihtc = {
-      url = "github:kreatoo/ihtc";
+      url = "git+https://src.krea.to/kreato/ihtc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lanzaboote = {

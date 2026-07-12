@@ -441,17 +441,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1783192574,
-        "narHash": "sha256-CX7Qq0MVnDjeYpce8+bxI+3ewRqvWUKKsN+LC19YoS8=",
-        "owner": "kreatoo",
-        "repo": "ihtc",
-        "rev": "c6cdd27f2b5c0243c2d2a28a9b52ce4ee005aabc",
-        "type": "github"
+        "lastModified": 1781643248,
+        "narHash": "sha256-WevLbLKuLqJr3qg+54GifTi957ZZRIumWKGzOU30oiA=",
+        "ref": "refs/heads/main",
+        "rev": "f94e85944bf09376c208ded2dd3c8d49bbce467c",
+        "revCount": 39,
+        "type": "git",
+        "url": "https://src.krea.to/kreato/ihtc"
       },
       "original": {
-        "owner": "kreatoo",
-        "repo": "ihtc",
-        "type": "github"
+        "type": "git",
+        "url": "https://src.krea.to/kreato/ihtc"
       }
     },
     "lanzaboote": {
