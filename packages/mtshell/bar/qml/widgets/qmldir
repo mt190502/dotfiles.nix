@@ -1,0 +1,18 @@
+singleton Base Base.qml
+Clock Clock.qml
+Mpd Mpd.qml
+Separator Separator.qml
+Window Window.qml
+Workspaces Workspaces.qml
+Weather Weather.qml
+Systray Systray.qml
+Memory Memory.qml
+IdleInhibitor IdleInhibitor.qml
+KeyboardLayout KeyboardLayout.qml
+Network Network.qml
+Bluetooth Bluetooth.qml
+Pulseaudio Pulseaudio.qml
+Battery Battery.qml
+Backlight Backlight.qml
+Powermenu Powermenu.qml
+Notifier Notifier.qml

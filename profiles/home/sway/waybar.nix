@@ -32,7 +32,7 @@ in
   config = lib.mkIf (lib.hasSuffix "linux" pkgs.stdenv.hostPlatform.system) {
     preferences.bar = lib.mkDefault "waybar";
     programs.waybar = {
-      enable = true;
+      enable = lib.mkIf (config.preferences.bar == "waybar") true;
       systemd = {
         enable = true;
         targets = [ "${config.preferences.desktopenv}-session.target" ];

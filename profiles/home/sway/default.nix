@@ -24,6 +24,9 @@ in
 {
   imports = [
     inputs.self.homeModules.theming
+    inputs.self.homeModules.mtshell
+    ./mtshell/bar.nix
+    ./mtshell/notifier.nix
     # ./cliphist.nix
     ./kde-apps-wm-fix.nix
     # ./mako.nix
@@ -33,7 +36,7 @@ in
     ./swaylock.nix
     ./swaynag.nix
     ./swaync.nix
-    ./waybar.nix
+    # ./waybar.nix
     # ./wofi.nix
     ./xdg-portal.nix
   ];

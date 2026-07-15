@@ -18,6 +18,7 @@
           background = withHashtag.base00;
           border = active;
           inactive = withHashtag.base01;
+          subtext = withHashtag.base04;
           text = withHashtag.base05;
           urgent = withHashtag.base08;
         };
@@ -26,6 +27,7 @@
           background = base00-hex;
           border = active;
           inactive = base01-hex;
+          subtext = base04-hex;
           text = base05-hex;
           urgent = base08-hex;
         };
@@ -34,6 +36,7 @@
           background = base00;
           border = active;
           inactive = base01;
+          subtext = base04;
           text = base05;
           urgent = base08;
         };

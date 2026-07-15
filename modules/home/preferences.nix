@@ -5,10 +5,11 @@
     bar = lib.mkOption {
       type = lib.types.enum [
         "waybar"
+        "mtshell"
         "none"
       ];
       default = "waybar";
-      description = "Preferred status bar: waybar or none";
+      description = "Preferred status bar: waybar, mtshell or none";
     };
     desktopenv = lib.mkOption {
       type = lib.types.enum [
