@@ -923,7 +923,7 @@ in
             clock = {
               inherit (cfg.bar.clock) format interval;
               calendar = {
-              inherit (cfg.bar.clock.calendar)
+                inherit (cfg.bar.clock.calendar)
                   enable
                   eventsCommand
                   openCommand

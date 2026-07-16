@@ -16,6 +16,7 @@ let
   pavucontrol = lib.getExe pkgs.pavucontrol;
   brightnessctl = lib.getExe pkgs.brightnessctl;
   home = config.home.homeDirectory;
+  powermenu = "${home}/.local/bin/powermenu";
   term =
     title: command:
     (
@@ -69,9 +70,9 @@ in
         clock = {
           format = "ddd dd MMM  HH:mm:ss";
           interval = 1000;
-        calendar = {
-          enable = true;
-          openCommand = "${lib.getExe pkgs.evolution} calendar:///?startdate=$(printf %s $1 | tr -d -)$(printf %s '&')enddate=$(printf %s $1 | tr -d -)";
+          calendar = {
+            enable = true;
+            openCommand = "${lib.getExe pkgs.evolution} calendar:///?startdate=$(printf %s $1 | tr -d -)$(printf %s '&')enddate=$(printf %s $1 | tr -d -)";
             bg = background;
             inherit
               text
@@ -185,12 +186,12 @@ in
           textHibernate = "Hibernate";
           textShutdown = "Shutdown";
           textReboot = "Reboot";
-          cmdLock = "loginctl lock-session";
-          cmdLogout = "loginctl terminate-user $USER";
-          cmdSuspend = "systemctl suspend";
-          cmdHibernate = "systemctl hibernate";
+          cmdLock = "${powermenu} --lock";
+          cmdLogout = "rm $XDG_RUNTIME_DIR/.autostart; loginctl terminate-user $USER";
+          cmdSuspend = "${powermenu} --suspend";
+          cmdHibernate = "${powermenu} --lock; systemctl hibernate";
           cmdShutdown = "systemctl poweroff";
-          cmdReboot = "systemctl reboot";
+          cmdReboot = "systemctl reboot -i";
         };
         notifier = {
           iconNotification = "";

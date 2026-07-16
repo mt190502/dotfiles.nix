@@ -14,6 +14,7 @@ Item {
     property string cmdReboot: "@powermenu-cmd-reboot@"
 
     property var menuItems: []
+    property int selectedIndex: -1
     property string iconLock: "@powermenu-icon-lock@"
     property string iconLogout: "@powermenu-icon-logout@"
     property string iconSuspend: "@powermenu-icon-suspend@"
@@ -108,6 +109,11 @@ Item {
         grabFocus: true
         color: Base.bg
 
+        onVisibleChanged: {
+            if (!visible)
+                root.selectedIndex = -1;
+        }
+
         Column {
             id: popupContent
             anchors.fill: parent
@@ -118,9 +124,10 @@ Item {
                 model: root.menuItems
                 delegate: Rectangle {
                     required property var modelData
+                    required property int index
                     width: popupContent.width
                     height: 36
-                    color: mouseArea.containsMouse ? Base.active : "transparent"
+                    color: root.selectedIndex === index ? Base.urgent : mouseArea.containsMouse ? Base.active : "transparent"
                     radius: Base.radius
 
                     Text {
@@ -128,7 +135,7 @@ Item {
                         anchors.leftMargin: 8
                         verticalAlignment: Text.AlignVCenter
                         text: modelData.icon + "  " + modelData.text
-                        color: mouseArea.containsMouse ? Base.bg : Base.text
+                        color: root.selectedIndex === index || mouseArea.containsMouse ? Base.bg : Base.text
                         font.pixelSize: Base.fontSize
                         font.family: Base.fontName
                     }
@@ -138,8 +145,13 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            Quickshell.execDetached(["sh", "-c", modelData.cmd]);
-                            powerPopup.visible = false;
+                            if (root.selectedIndex === index) {
+                                Quickshell.execDetached(["sh", "-c", modelData.cmd]);
+                                root.selectedIndex = -1;
+                                powerPopup.visible = false;
+                            } else {
+                                root.selectedIndex = index;
+                            }
                         }
                     }
                 }
