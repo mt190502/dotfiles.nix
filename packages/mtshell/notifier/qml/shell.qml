@@ -14,6 +14,16 @@ Scope {
   property bool ccVisible: false
   property int selectedPlayer: 0
 
+  function formatBody(notif) {
+    if (notif.appName === "Music Player Daemon" || notif.appName === "mpd" || notif.desktopEntry === "mpd") {
+      var stripped = (notif.body || "").replace(/<\/?b>/g, "")
+      var lines = stripped.split("\n").map(s => s.trim()).filter(s => s.length > 0)
+      if (lines.length >= 3)
+        return "<b>" + lines[0] + " (" + lines[2] + ")</b><br>" + lines[1]
+    }
+    return notif.body || ""
+  }
+
   readonly property int notifCount: server.trackedNotifications.values.length
   readonly property var notifications: {
       var arr = server.trackedNotifications.values.slice();
@@ -59,13 +69,6 @@ Scope {
 
     onNotification: notif => {
       notif.tracked = true
-
-      if (notif.appName === "mpd" || notif.desktopEntry === "mpd") {
-        var p = (notif.body || "").split(" - ")
-        if (p.length >= 3) {
-          notif.body = p[1] + " (" + p[2] + ") - " + p[0]
-        }
-      }
 
       if (!root.dnd) {
         var replaced = false
@@ -284,12 +287,13 @@ Scope {
 
             Text {
               width: popupTextCol.width
-              text: notif ? (notif.body || "").substring(0, 1500) + ((notif.body || "").length > 1500 ? "..." : "") : ""
+              text: notif ? root.formatBody(notif).substring(0, 1500) + (root.formatBody(notif).length > 1500 ? "..." : "") : ""
               color: "@cc-subtext@"
               font.pixelSize: @cc-font-size@ - 1
               font.family: "@cc-font-name@"
               wrapMode: Text.Wrap
-              visible: notif ? (notif.body ? notif.body.length > 0 : false) : false
+              textFormat: Text.RichText
+              visible: notif ? (root.formatBody(notif).length > 0) : false
             }
           }
 
@@ -770,12 +774,13 @@ Column {
 
                     Text {
                       width: parent.width
-                      text: (modelData.body || "").substring(0, 1500) + ((modelData.body || "").length > 1500 ? "..." : "")
+                      text: root.formatBody(modelData).substring(0, 1500) + (root.formatBody(modelData).length > 1500 ? "..." : "")
                       color: "@cc-subtext@"
                       font.pixelSize: @cc-font-size@ - 1
                       font.family: "@cc-font-name@"
                       wrapMode: Text.Wrap
-                      visible: modelData.body.length > 0
+                      textFormat: Text.RichText
+                      visible: root.formatBody(modelData).length > 0
                     }
                   }
                 }
