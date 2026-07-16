@@ -175,6 +175,16 @@ in
         calendar = {
           enable = lib.mkEnableOption "calendar popup on clock hover";
 
+          eventsCommand = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
+
+          openCommand = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
+
           bg = lib.mkOption {
             type = lib.types.str;
             default = "#1e1e2e";
@@ -913,8 +923,10 @@ in
             clock = {
               inherit (cfg.bar.clock) format interval;
               calendar = {
-                inherit (cfg.bar.clock.calendar)
+              inherit (cfg.bar.clock.calendar)
                   enable
+                  eventsCommand
+                  openCommand
                   bg
                   text
                   border

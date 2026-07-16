@@ -69,8 +69,9 @@ in
         clock = {
           format = "ddd dd MMM  HH:mm:ss";
           interval = 1000;
-          calendar = {
-            enable = true;
+        calendar = {
+          enable = true;
+          openCommand = "${lib.getExe pkgs.evolution} calendar:///?startdate=$(printf %s $1 | tr -d -)$(printf %s '&')enddate=$(printf %s $1 | tr -d -)";
             bg = background;
             inherit
               text
@@ -83,7 +84,7 @@ in
             width = 280;
             height = 260;
             pad = 10;
-            aboveBar = true;
+            aboveBar = false;
           };
         };
         mpd = {

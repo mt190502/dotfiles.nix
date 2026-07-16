@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 
 Item {
@@ -9,6 +10,10 @@ Item {
     property string format: "@clock-format@"
     property int interval: @clock-interval@
     property bool calendarEnabled: @calendar-enabled@
+    property string calEventsCommand: "@calendar-events-command@"
+    property string calOpenCommand: "@calendar-open-command@"
+    property var eventDays: []
+    property int eventsRevision: 0
     property string calBg: "@calendar-bg@"
     property string calText: "@calendar-text@"
     property string calBorder: "@calendar-border@"
@@ -23,7 +28,6 @@ Item {
     property bool hovered: false
     property bool popupHovered: false
     property real mouseX: 0
-    property bool cooldown: false
     property date currentDate: new Date()
     property int displayMonth: currentDate.getMonth()
     property int displayYear: currentDate.getFullYear()
@@ -50,10 +54,38 @@ Item {
         }
         root.displayMonth = m;
         root.displayYear = y;
+        root.refreshEvents();
+    }
+
+    function goToday() {
+        var now = new Date();
+        root.displayMonth = now.getMonth();
+        root.displayYear = now.getFullYear();
+        root.refreshEvents();
+    }
+
+    function dateString(year, month, day) {
+        return year.toString().padStart(4, "0") + "-" + (month + 1).toString().padStart(2, "0") + "-" + day.toString().padStart(2, "0");
+    }
+
+    function refreshEvents() {
+        if (!root.calendarEnabled || root.calEventsCommand.length === 0)
+            return;
+        var start = root.dateString(root.displayYear, root.displayMonth, 1);
+        var end = root.dateString(root.displayYear, root.displayMonth, root.daysInMonth(root.displayYear, root.displayMonth));
+        eventsProc.command = ["sh", "-c", root.calEventsCommand + " \"$1\" \"$2\"", "calendar", start, end];
+        eventsProc.running = true;
+    }
+
+    function openDate(year, month, day) {
+        if (root.calOpenCommand.length === 0)
+            return;
+        Quickshell.execDetached(["sh", "-c", root.calOpenCommand + " \"$1\"", "calendar", root.dateString(year, month, day)]);
     }
 
     implicitWidth: clockText.implicitWidth + Base.margin * 2
     implicitHeight: Base.height + Base.padTop + Base.padBottom
+    Component.onCompleted: root.refreshEvents()
 
     Rectangle {
         anchors.fill: parent
@@ -81,16 +113,11 @@ Item {
                 return root.mouseX = m.x;
             }
             onEntered: {
-                if (root.cooldown)
-                    return ;
-
-                exitTimer.stop();
-                root.hovered = true;
+              exitTimer.stop();
+              root.hovered = true;
             }
             onExited: {
-                exitTimer.restart();
-                root.cooldown = true;
-                cooldownTimer.restart();
+              exitTimer.restart();
             }
             propagateComposedEvents: true
         }
@@ -102,11 +129,15 @@ Item {
         color: "transparent"
         implicitWidth: root.calWidth
         implicitHeight: root.calHeight
+        onVisibleChanged: {
+            if (visible)
+                root.refreshEvents();
+        }
         anchor.item: root
-        anchor.edges: root.calendarAboveBar ? Edges.Bottom : Edges.Top
-        anchor.gravity: root.calendarAboveBar ? Edges.Top : Edges.Bottom
-        anchor.margins.top: 4
-        anchor.margins.bottom: 4
+        anchor.edges: Edges.Bottom
+        anchor.gravity: Edges.Bottom
+        anchor.rect.x: (implicitWidth - root.width) / 2
+        anchor.rect.y: root.height + 4
 
         Rectangle {
             id: calendarRoot
@@ -117,16 +148,13 @@ Item {
             border.width: 3
             radius: 0
 
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: {
-                    root.popupHovered = true;
-                    exitTimer.stop();
-                }
-                onExited: {
-                    root.popupHovered = false;
-                    exitTimer.restart();
+            HoverHandler {
+                onHoveredChanged: {
+                    root.popupHovered = hovered;
+                    if (hovered)
+                        exitTimer.stop();
+                    else
+                        exitTimer.restart();
                 }
             }
 
@@ -164,8 +192,8 @@ Item {
                         }
                     }
 
-                    Text {
-                        width: parent.width - 56
+                        Text {
+                            width: parent.width - 116
                         height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -176,11 +204,40 @@ Item {
                         color: root.calText
                         font.pixelSize: root.calFontSize
                         font.family: root.calFontName
-                        font.bold: true
-                    }
+                            font.bold: true
+                        }
 
-                    Rectangle {
-                        width: 28
+                        Rectangle {
+                            width: 56
+                            height: 28
+                            color: todayArea.containsMouse ? root.calActive : root.calBg
+                            border.color: root.calBorder
+                            border.width: 2
+                            radius: 0
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Today"
+                                color: todayArea.containsMouse ? root.calBg : root.calText
+                                font.pixelSize: root.calFontSize - 2
+                                font.family: root.calFontName
+                            }
+
+                            MouseArea {
+                                id: todayArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                onClicked: root.goToday()
+                            }
+                        }
+
+                        Item {
+                            width: 4
+                            height: 1
+                        }
+
+                        Rectangle {
+                            width: 28
                         height: 28
                         color: nextMonthArea.containsMouse ? root.calActive : root.calBg
                         border.color: root.calBorder
@@ -258,6 +315,8 @@ Item {
 
                         delegate: Rectangle {
                             required property var modelData
+                            property string cellDate: modelData.current ? root.dateString(root.displayYear, root.displayMonth, modelData.day) : ""
+                            property bool hasEvent: root.eventsRevision >= 0 && cellDate.length > 0 && root.eventDays.indexOf(cellDate) >= 0
                             width: (dayGrid.width - 12) / 7
                             height: (dayGrid.height - 10) / 6
                             color: {
@@ -289,13 +348,41 @@ Item {
                                 opacity: modelData.current ? 1 : 0.4
                             }
 
+                            Rectangle {
+                                visible: hasEvent
+                                width: 4
+                                height: 4
+                                radius: 2
+                                color: root.calActive
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 2
+                            }
+
                             MouseArea {
                                 id: dayCellArea
                                 anchors.fill: parent
                                 hoverEnabled: true
+                                onDoubleClicked: root.openDate(root.displayYear, root.displayMonth, modelData.day)
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    Process {
+        id: eventsProc
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    var parsed = JSON.parse(this.text.trim());
+                    root.eventDays = Array.isArray(parsed) ? parsed : [];
+                    root.eventsRevision++;
+                } catch (error) {
+                    root.eventDays = [];
+                    root.eventsRevision++;
                 }
             }
         }
@@ -313,15 +400,8 @@ Item {
     }
 
     Timer {
-        id: cooldownTimer
-        interval: 1000
-        repeat: false
-        onTriggered: root.cooldown = false
-    }
-
-    Timer {
         id: exitTimer
-        interval: 200
+        interval: 500
         repeat: false
         onTriggered: {
             if (!root.popupHovered)

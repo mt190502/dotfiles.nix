@@ -10,6 +10,61 @@
 let
   cfg = barConfig;
 
+  calendarPython = pkgs.python3.withPackages (ps: [ ps.pygobject3 ]);
+  calendar-events = pkgs.writeShellApplication {
+    name = "mtshell-calendar-events";
+    runtimeInputs = [
+      calendarPython
+      pkgs.evolution-data-server
+      pkgs.libical
+      pkgs.libxml2
+      pkgs.libsoup_3
+      pkgs.gobject-introspection
+      pkgs.json-glib
+    ];
+    text = ''
+      export GI_TYPELIB_PATH="${pkgs.evolution-data-server}/lib/girepository-1.0:${pkgs.libical}/lib/girepository-1.0:${pkgs.libxml2}/lib/girepository-1.0:${pkgs.libsoup_3}/lib/girepository-1.0:${pkgs.gobject-introspection}/lib/girepository-1.0:${pkgs.json-glib}/lib/girepository-1.0''${GI_TYPELIB_PATH:+:$GI_TYPELIB_PATH}"
+      exec ${calendarPython}/bin/python - "$@" <<'PYTHON'
+      import json
+      import sys
+      from datetime import date, datetime, timedelta
+
+      import gi
+
+      gi.require_version("ECal", "2.0")
+      gi.require_version("EDataServer", "1.2")
+      from gi.repository import ECal, EDataServer
+
+      start = date.fromisoformat(sys.argv[1])
+      end = date.fromisoformat(sys.argv[2])
+      start_time = datetime.combine(start - timedelta(days=1), datetime.min.time())
+      end_time = datetime.combine(end + timedelta(days=1), datetime.min.time())
+      sexp = ('(occur-in-time-range? (make-time "{}") (make-time "{}") "UTC")'
+              .format(start_time.strftime("%Y%m%dT%H%M%SZ"), end_time.strftime("%Y%m%dT%H%M%SZ")))
+
+      registry = EDataServer.SourceRegistry.new_sync(None)
+      days = set()
+      sources = registry.list_sources(EDataServer.SOURCE_EXTENSION_CALENDAR)
+      for source in sources:
+          client = ECal.Client.connect_sync(source, ECal.ClientSourceType.EVENTS, 1, None)
+          if client is None:
+              continue
+          success, components = client.get_object_list_as_comps_sync(sexp, None)
+          if not success:
+              continue
+          for component in components:
+              dtstart = component.get_dtstart()
+              if dtstart is None or dtstart.get_value() is None:
+                  continue
+              event_day = dtstart.get_value().get_date()
+              if event_day is not None:
+                  days.add("{:04d}-{:02d}-{:02d}".format(event_day[0], event_day[1], event_day[2]))
+
+      print(json.dumps(sorted(days)))
+      PYTHON
+    '';
+  };
+
   base = cfg.base or { };
   base-bg = base.bg or "#1e1e2e";
   base-text = base.text or "#cdd6f4";
@@ -50,6 +105,9 @@ let
 
   cal = cl.calendar or { };
   calendar-enabled = if (cal.enable or false) then "true" else "false";
+  calendar-events-command =
+    if (cal.eventsCommand or "") != "" then cal.eventsCommand else lib.getExe calendar-events;
+  calendar-open-command = cal.openCommand or "";
   calendar-bg = cal.bg or base-bg;
   calendar-text = cal.text or base-text;
   calendar-border = cal.border or base-border;
@@ -227,6 +285,8 @@ let
       clock-format
       clock-interval
       calendar-enabled
+      calendar-events-command
+      calendar-open-command
       calendar-bg
       calendar-text
       calendar-border
