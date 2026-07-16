@@ -137,13 +137,6 @@ in
             apiKey = "{file:${config.sops.secrets."commandcode".path}}";
           };
         };
-        commandcode2 = {
-          name = "CommandCode Alt";
-          options = {
-            baseURL = "http://127.0.0.1:8082/v1";
-            apiKey = "{file:${config.sops.secrets."commandcode2".path}}";
-          };
-        };
       };
     };
   };
@@ -186,12 +179,7 @@ in
           config: (cfg) => {
             cfg.provider ??= {}
             cfg.provider.commandcode ??= { models: {} }
-            cfg.provider.commandcode2 ??= { models: {} }
             cfg.provider.commandcode.models = {
-              ...models,
-              ...(cfg.provider.commandcode.models ?? {}),
-            }
-            cfg.provider.commandcode2.models = {
               ...models,
               ...(cfg.provider.commandcode.models ?? {}),
             }
