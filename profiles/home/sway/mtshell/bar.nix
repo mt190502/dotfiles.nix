@@ -12,6 +12,8 @@ let
   btop = lib.getExe pkgs.btop;
   swaymsg = lib.getExe' pkgs.sway "swaymsg";
   nmeditor = lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor";
+  blueman = lib.getExe pkgs.blueman;
+  programToggler = "${home}/.local/bin/program-toggler";
   wpctl = lib.getExe' pkgs.wireplumber "wpctl";
   pavucontrol = lib.getExe pkgs.pavucontrol;
   brightnessctl = lib.getExe pkgs.brightnessctl;
@@ -131,7 +133,7 @@ in
         bluetooth = {
           iconConnected = "";
           iconDisconnected = "";
-          onClick = "";
+          onClick = "${programToggler} ${blueman}";
         };
         pulseaudio = {
           icons = [
@@ -149,7 +151,9 @@ in
           scrollDown = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-";
         };
         battery = {
-          device = "BAT0";
+          chargingIcon = "󰚥";
+          chargingBackground = "#5baa00";
+          criticalBackground = "#bb0000";
           icons = [
             ""
             ""
@@ -158,10 +162,9 @@ in
             ""
           ];
           warning = 30;
-          critical = 1;
+          critical = 20;
         };
         backlight = {
-          device = "intel_backlight";
           icons = [
             "󰃞"
             "󰃝"

@@ -458,6 +458,21 @@ in
       };
 
       battery = {
+        chargingIcon = lib.mkOption {
+          type = lib.types.str;
+          default = "󰚥";
+        };
+
+        chargingBackground = lib.mkOption {
+          type = lib.types.str;
+          default = "#5baa00";
+        };
+
+        criticalBackground = lib.mkOption {
+          type = lib.types.str;
+          default = "#bb0000";
+        };
+
         device = lib.mkOption {
           type = lib.types.str;
           default = "BAT0";
@@ -488,7 +503,7 @@ in
       backlight = {
         device = lib.mkOption {
           type = lib.types.str;
-          default = "intel_backlight";
+          default = "";
         };
 
         icons = lib.mkOption {
@@ -1076,11 +1091,15 @@ in
             Description = "MTShell bar";
             PartOf = [ "graphical-session.target" ];
             After = [ "graphical-session.target" ];
+            StartLimitIntervalSec = "30s";
+            StartLimitBurst = 3;
           };
           Service = {
-            ExecStart = "${barPackage}/bin/mtshell-bar";
+            ExecStart = "${lib.getExe' pkgs.util-linux "flock"} --nonblock %t/mtshell-bar.lock ${barPackage}/bin/mtshell-bar";
             Restart = "on-failure";
-            RestartSec = "3s";
+            RestartSec = "5s";
+            RestartPreventExitStatus = 255;
+            KillMode = "control-group";
           };
           Install = {
             WantedBy = [ "graphical-session.target" ];

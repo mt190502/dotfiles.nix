@@ -21,6 +21,8 @@ Item {
     property bool sinkMuted: false
     property int sourceVolume: 0
     property bool sourceMuted: false
+    property bool rightButtonHeld: false
+    property bool rightWheelUsed: false
 
     readonly property int volumeIconIndex: {
         if (sinkVolume >= 67)
@@ -105,6 +107,12 @@ Item {
         actionProc.running = true;
     }
 
+    function scrollVolume(delta, source) {
+        var device = source ? "@DEFAULT_AUDIO_SOURCE@" : "@DEFAULT_AUDIO_SINK@";
+        var amount = delta > 0 ? "5%+" : "5%-";
+        root.execAction(root.wpctl + " set-volume " + device + " " + amount);
+    }
+
     implicitWidth: pulseText.implicitWidth + Base.margin * 2
     implicitHeight: Base.height + Base.padTop + Base.padBottom
 
@@ -131,6 +139,16 @@ Item {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
+            onPressed: mouse => {
+                if (mouse.button === Qt.RightButton) {
+                    root.rightButtonHeld = true;
+                    root.rightWheelUsed = false;
+                }
+            }
+            onReleased: mouse => {
+                if (mouse.button === Qt.RightButton)
+                    root.rightButtonHeld = false;
+            }
             onClicked: mouse => {
                 if (mouse.button === Qt.LeftButton) {
                     if (root.clickCmd.length > 0)
@@ -139,19 +157,23 @@ Item {
                     if (root.middleClickCmd.length > 0)
                         root.execAction(root.middleClickCmd);
                 } else if (mouse.button === Qt.RightButton) {
-                    if (root.rightClickCmd.length > 0)
+                    if (!root.rightWheelUsed && root.rightClickCmd.length > 0)
                         root.execAction(root.rightClickCmd);
                 }
             }
             onWheel: wheel => {
-                if (wheel.angleDelta.y > 0) {
-                    if (root.scrollUpCmd.length > 0)
-                        root.execAction(root.scrollUpCmd);
-                } else {
-                    if (root.scrollDownCmd.length > 0)
-                        root.execAction(root.scrollDownCmd);
+                wheel.accepted = true;
+                var delta = wheel.angleDelta.y !== 0 ? wheel.angleDelta.y : wheel.angleDelta.x;
+                if (root.rightButtonHeld) {
+                    root.rightWheelUsed = true;
+                    root.scrollVolume(delta, true);
+                } else if (delta > 0 && root.scrollUpCmd.length > 0) {
+                    root.execAction(root.scrollUpCmd);
+                } else if (delta < 0 && root.scrollDownCmd.length > 0) {
+                    root.execAction(root.scrollDownCmd);
                 }
             }
         }
+
     }
 }

@@ -10,13 +10,17 @@ Item {
     property string scrollUpCmd: '@backlight-scroll-up-cmd@'
     property string scrollDownCmd: '@backlight-scroll-down-cmd@'
     property string inotifywait: "@inotifywait-bin@"
+    property bool laptopDetected: false
 
     property bool hasBacklight: false
     property int brightness: 0
     property int maxBrightness: 1
-    visible: hasBacklight
-    implicitWidth: hasBacklight ? (backText.implicitWidth + Base.margin * 2) : 0
-    implicitHeight: hasBacklight ? (Base.height + Base.padTop + Base.padBottom) : 0
+    visible: laptopDetected && hasBacklight
+    implicitWidth: visible ? (backText.implicitWidth + Base.margin * 2) : 0
+    implicitHeight: visible ? (Base.height + Base.padTop + Base.padBottom) : 0
+
+    Component.onCompleted: if (root.laptopDetected) checkProc.running = true
+    onLaptopDetectedChanged: if (root.laptopDetected) checkProc.running = true
 
     function updateText() {
         backText.text = (root.icons[root.iconIndex] || "") + " " + root.percent + "%";
@@ -24,10 +28,11 @@ Item {
 
     Process {
         id: checkProc
-        command: ["sh", "-c", "test -d /sys/class/backlight/" + root.deviceName + " && echo yes || echo no"]
+        command: ["sh", "-c", "device='" + root.deviceName + "'; if [ -n \"$device\" ] && [ -d /sys/class/backlight/\"$device\" ]; then printf '%s\\n' \"$device\"; else for path in /sys/class/backlight/*; do if [ -d \"$path\" ]; then basename \"$path\"; break; fi; done; fi"]
         stdout: StdioCollector {
             onStreamFinished: {
-                root.hasBacklight = this.text.trim() === "yes";
+                root.deviceName = this.text.trim();
+                root.hasBacklight = root.deviceName.length > 0;
                 if (root.hasBacklight) {
                     maxProc.running = true;
                     root.refresh();
@@ -36,8 +41,6 @@ Item {
             }
         }
     }
-
-    Component.onCompleted: checkProc.running = true
 
     Process {
         id: watchProc

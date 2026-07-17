@@ -53,13 +53,6 @@ Item {
                     font.pixelSize: Base.fontSize
                     font.family: Base.fontName
                 }
-
-                Behavior on width {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.OutCubic
-                    }
-                }
             }
 
             Repeater {
@@ -86,9 +79,9 @@ Item {
                         anchors.centerIn: parent
                         source: trayItem.modelData.icon
                         implicitSize: root.itemSize - 4
-                        mipmap: true
-                        backer.sourceSize.width: 64
-                        backer.sourceSize.height: 64
+                        mipmap: false
+                        backer.sourceSize.width: root.itemSize - 4
+                        backer.sourceSize.height: root.itemSize - 4
                     }
 
                     QsMenuAnchor {
@@ -104,10 +97,10 @@ Item {
     }
 
     Behavior on implicitWidth {
-        enabled: compact
+        enabled: root.compact
         NumberAnimation {
-            duration: 300
-            easing.type: Easing.OutCubic
+            duration: 160
+            easing.type: Easing.OutQuad
         }
     }
 }

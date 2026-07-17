@@ -16,6 +16,7 @@ let
         else
           "⚪️"
       }] ${flakeName}", "message": "${message}", "priority": 5}' \
+      --connect-timeout 1 --max-time 2 \
       "$(cat ${config.sops.secrets."gotify".path})" || true
   '';
 in

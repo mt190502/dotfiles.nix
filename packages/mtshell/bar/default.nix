@@ -37,6 +37,7 @@ let
 
       start = date.fromisoformat(sys.argv[1])
       end = date.fromisoformat(sys.argv[2])
+      calendar_filter = sys.argv[3] if len(sys.argv) > 3 else ""
       start_time = datetime.combine(start - timedelta(days=1), datetime.min.time())
       end_time = datetime.combine(end + timedelta(days=1), datetime.min.time())
       sexp = ('(occur-in-time-range? (make-time "{}") (make-time "{}") "UTC")'
@@ -44,8 +45,14 @@ let
 
       registry = EDataServer.SourceRegistry.new_sync(None)
       days = set()
+      calendars = []
       sources = registry.list_sources(EDataServer.SOURCE_EXTENSION_CALENDAR)
       for source in sources:
+          uid = source.get_uid() or ""
+          name = source.get_display_name() or uid or "Calendar"
+          calendars.append({"uid": uid, "name": name})
+          if calendar_filter and calendar_filter not in (uid, name):
+              continue
           client = ECal.Client.connect_sync(source, ECal.ClientSourceType.EVENTS, 1, None)
           if client is None:
               continue
@@ -60,7 +67,7 @@ let
               if event_day is not None:
                   days.add("{:04d}-{:02d}-{:02d}".format(event_day[0], event_day[1], event_day[2]))
 
-      print(json.dumps(sorted(days)))
+      print(json.dumps({"days": sorted(days), "calendars": calendars}))
       PYTHON
     '';
   };
@@ -187,11 +194,15 @@ let
   pulseaudio-scroll-down-cmd = pa.scrollDown or "";
   wpctl-bin = "${pkgs.wireplumber}/bin/wpctl";
   inotifywait-bin = "${pkgs.inotify-tools}/bin/inotifywait";
+  upower-bin = "${pkgs.upower}/bin/upower";
   swaymsg-bin = "${pkgs.sway}/bin/swaymsg";
   pactl-bin = "${pkgs.pulseaudio}/bin/pactl";
 
   bat = cfg.battery or { };
-  battery-device = bat.device or "BAT0";
+  battery-device = bat.device or "";
+  battery-charging-icon = bat.chargingIcon or "󰚥";
+  battery-charging-background = bat.chargingBackground or "#365314";
+  battery-critical-background = bat.criticalBackground or "#7f1d1d";
   battery-icons =
     bat.icons or [
       ""
@@ -209,7 +220,7 @@ let
   battery-critical = bat.critical or 1;
 
   bl = cfg.backlight or { };
-  backlight-device = bl.device or "intel_backlight";
+  backlight-device = bl.device or "";
   backlight-icons =
     bl.icons or [
       "󰃞"
@@ -343,8 +354,12 @@ let
       pactl-bin
       wpctl-bin
       inotifywait-bin
+      upower-bin
       swaymsg-bin
       battery-device
+      battery-charging-icon
+      battery-charging-background
+      battery-critical-background
       battery-icon-0
       battery-icon-1
       battery-icon-2

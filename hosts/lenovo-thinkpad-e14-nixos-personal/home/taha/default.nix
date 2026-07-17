@@ -7,7 +7,7 @@
   #
   ########################################
   #~ custom modules ~#
-  waybar.enableLaptopOpts = true;
+  # waybar.enableLaptopOpts = true;
 
   ########################################
   #

@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Networking
+import Quickshell.Wayland
 import QtQuick
 
 Item {
@@ -11,6 +12,9 @@ Item {
     property string iconDisconnected: "@network-icon-disconnected@"
     property string textDisconnected: "@network-text-disconnected@"
     property string onClickCmd: '@network-on-click@'
+    property var pendingNetwork: null
+    property bool passwordPromptVisible: false
+    property string password: ""
 
     readonly property var wifiDevice: {
         for (const dev of Networking.devices.values) {
@@ -96,12 +100,15 @@ Item {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: mouse => {
+                if (root.passwordPromptVisible) {
+                    root.passwordPromptVisible = false;
+                    return;
+                }
                 if (mouse.button === Qt.LeftButton) {
-                    if (root.onClickCmd.length > 0) {
-                        Quickshell.execDetached(["sh", "-c", root.onClickCmd]);
-                    }
-                } else if (mouse.button === Qt.RightButton) {
                     networkPopup.visible = !networkPopup.visible;
+                } else if (mouse.button === Qt.RightButton) {
+                    if (root.onClickCmd.length > 0)
+                        Quickshell.execDetached(["sh", "-c", root.onClickCmd]);
                 }
             }
         }
@@ -113,7 +120,7 @@ Item {
         anchor.edges: Edges.Bottom
         anchor.gravity: Edges.Bottom
         implicitWidth: 250
-        implicitHeight: Math.min(popupContent.implicitHeight + 16, 400)
+        implicitHeight: root.passwordPromptVisible ? 140 : Math.min(popupContent.implicitHeight + 16, 400)
         visible: false
         grabFocus: true
         color: Base.bg
@@ -124,7 +131,16 @@ Item {
             }
             if (visible) {
                 root.refreshNetworks();
+                if (root.passwordPromptVisible)
+                    passwordFocusTimer.start();
             }
+        }
+
+        Timer {
+            id: passwordFocusTimer
+            interval: 80
+            repeat: false
+            onTriggered: passwordPanelInput.forceActiveFocus()
         }
 
         Connections {
@@ -137,6 +153,16 @@ Item {
             }
         }
 
+        Connections {
+            target: root.pendingNetwork
+            ignoreUnknownSignals: true
+            function onConnectionFailed(reason) {
+                if (reason === ConnectionFailReason.NoSecrets) {
+                    root.openPasswordPrompt(root.pendingNetwork);
+                }
+            }
+        }
+
         Column {
             id: popupContent
             anchors.fill: parent
@@ -144,7 +170,9 @@ Item {
             spacing: 4
 
             Text {
-                text: root.wiredConnected ? "Ethernet" : root.wifiDevice ? "WiFi Networks" : "Network"
+                text: root.passwordPromptVisible
+                    ? "Connect to " + (root.pendingNetwork ? root.pendingNetwork.name : "WiFi")
+                    : root.wiredConnected ? "Ethernet" : root.wifiDevice ? "WiFi Networks" : "Network"
                 color: Base.text
                 font.pixelSize: Base.fontSize
                 font.family: Base.fontName
@@ -177,6 +205,7 @@ Item {
                 height: contentHeight
                 interactive: false
                 visible: root.sortedNetworks.length > 0
+                    && !root.passwordPromptVisible
                 model: root.sortedNetworks
                 delegate: Rectangle {
                     required property var modelData
@@ -197,19 +226,85 @@ Item {
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: {
-                            if (!modelData.connected) {
-                                modelData.connect();
-                            }
-                            networkPopup.visible = false;
+                        onClicked: connectNetwork()
+
+                        function connectNetwork() {
+                            root.pendingNetwork = modelData;
+                            if (!modelData.connected)
+                                root.openPasswordPrompt(modelData);
                         }
+                    }
+                }
+            }
+
+            Column {
+                width: parent.width
+                spacing: 4
+                visible: false
+
+                Text {
+                    width: parent.width
+                    text: "Password"
+                    color: Base.text
+                    font.pixelSize: Base.fontSize
+                    font.family: Base.fontName
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: 32
+                    color: Base.inactive
+                    radius: Base.radius
+
+                    TextInput {
+                        id: passwordInput
+                        anchors.fill: parent
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 8
+                        focus: root.passwordPromptVisible
+                        onActiveFocusChanged: {
+                            if (root.passwordPromptVisible && !activeFocus)
+                                forceActiveFocus();
+                        }
+                        activeFocusOnPress: true
+                        verticalAlignment: TextInput.AlignVCenter
+                        color: Base.text
+                        font.pixelSize: Base.fontSize
+                        font.family: Base.fontName
+                        echoMode: TextInput.Password
+                        selectByMouse: true
+                        text: root.password
+                        onTextChanged: root.password = text
+                        onAccepted: root.submitPassword()
+                    }
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: 32
+                    color: Base.active
+                    radius: Base.radius
+
+                    Text {
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "Connect"
+                        color: Base.text
+                        font.pixelSize: Base.fontSize
+                        font.family: Base.fontName
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: root.submitPassword()
                     }
                 }
             }
 
             Text {
                 text: "No networks found"
-                visible: root.wifiDevice && root.sortedNetworks.length === 0 && !root.wiredConnected
+                visible: !root.passwordPromptVisible && root.wifiDevice && root.sortedNetworks.length === 0 && !root.wiredConnected
                 color: Base.inactive
                 font.pixelSize: Base.fontSize
                 font.family: Base.fontName
@@ -218,12 +313,133 @@ Item {
 
             Text {
                 text: "No WiFi device"
-                visible: !root.wifiDevice && !root.wiredConnected
+                visible: !root.passwordPromptVisible && !root.wifiDevice && !root.wiredConnected
                 color: Base.inactive
                 font.pixelSize: Base.fontSize
                 font.family: Base.fontName
                 width: parent.width
             }
         }
+    }
+
+    PanelWindow {
+        id: passwordPanel
+        screen: root.barWindow ? root.barWindow.screen : null
+        visible: root.passwordPromptVisible
+        focusable: true
+        WlrLayershell.layer: WlrLayer.Overlay
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+        WlrLayershell.exclusiveZone: 0
+        color: "transparent"
+
+        anchors {
+            top: true
+            left: true
+            right: true
+            bottom: true
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.passwordPromptVisible = false
+        }
+
+        Rectangle {
+            id: passwordCard
+            x: root.parent ? root.parent.x + root.x + root.width - width : 0
+            y: root.barWindow ? root.barWindow.height : 0
+            width: 280
+            height: 120
+            color: Base.bg
+            radius: Base.radius
+
+            Column {
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 4
+
+                Text {
+                    width: parent.width
+                    text: "Password for " + (root.pendingNetwork ? root.pendingNetwork.name : "WiFi")
+                    color: Base.text
+                    font.pixelSize: Base.fontSize
+                    font.family: Base.fontName
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: 32
+                    color: Base.inactive
+                    radius: Base.radius
+
+                    TextInput {
+                        id: passwordPanelInput
+                        anchors.fill: parent
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 8
+                        focus: root.passwordPromptVisible
+                        activeFocusOnPress: true
+                        verticalAlignment: TextInput.AlignVCenter
+                        color: Base.text
+                        font.pixelSize: Base.fontSize
+                        font.family: Base.fontName
+                        echoMode: TextInput.Password
+                        text: root.password
+                        onTextChanged: root.password = text
+                        onAccepted: root.submitPassword()
+                    }
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: 32
+                    color: Base.active
+                    radius: Base.radius
+
+                    Text {
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "Connect"
+                        color: Base.text
+                        font.pixelSize: Base.fontSize
+                        font.family: Base.fontName
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: root.submitPassword()
+                    }
+                }
+            }
+        }
+    }
+
+    function submitPassword() {
+        if (!root.pendingNetwork)
+            return;
+        if (root.isPasswordNetwork(root.pendingNetwork)) {
+            if (root.password.length === 0)
+                return;
+            root.pendingNetwork.connectWithPsk(root.password);
+        } else {
+            root.pendingNetwork.connect();
+        }
+        root.password = "";
+        root.passwordPromptVisible = false;
+    }
+
+    function isPasswordNetwork(network) {
+        return network.security === WifiSecurityType.WpaPsk
+            || network.security === WifiSecurityType.Wpa2Psk
+            || network.security === WifiSecurityType.Sae;
+    }
+
+    function openPasswordPrompt(network) {
+        root.pendingNetwork = network;
+        root.password = "";
+        root.passwordPromptVisible = true;
+        networkPopup.visible = false;
+        Qt.callLater(() => passwordPanelInput.forceActiveFocus());
     }
 }

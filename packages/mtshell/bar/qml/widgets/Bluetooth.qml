@@ -17,6 +17,9 @@ Item {
         return [...adapter.devices.values].filter(d => d.connected);
     }
     readonly property bool hasConnected: connectedDevices.length > 0
+    readonly property var connectedDevice: hasConnected ? connectedDevices[0] : null
+    readonly property bool hasBattery: connectedDevice ? connectedDevice.batteryAvailable : false
+    readonly property int batteryPercent: hasBattery ? Math.round(connectedDevice.battery * 100) : 0
 
     implicitWidth: btText.implicitWidth + Base.margin * 2
     implicitHeight: Base.height + Base.padTop + Base.padBottom
@@ -35,7 +38,9 @@ Item {
             anchors.rightMargin: Base.margin
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            text: root.hasConnected ? root.iconConnected : root.iconDisconnected
+            text: root.hasConnected
+                ? root.iconConnected + (root.hasBattery ? " " + root.batteryPercent + "%" : "")
+                : root.iconDisconnected
             color: root.adapterEnabled ? Base.text : Base.inactive
             font.pixelSize: Base.fontSize
             font.family: Base.fontName
