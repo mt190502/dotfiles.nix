@@ -274,7 +274,7 @@ in
         "${modifier}+q" = "kill";
 
         #~~~ other
-        "${modifier}+Return" = "exec ${term "bash -c \"${tmux} attach -t daemonmodetmux\""}";
+        "${modifier}+Return" = "exec ${term "bash -c \"${tmux} new-session -A -s daemonmodetmux\""}";
         "${modifier}+l" = "exec ${lock}";
         "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown.sh";
       }
@@ -400,12 +400,8 @@ in
         {
           command = "${swayidle} -w timeout 120 '${home}/.local/bin/powermenu --lock' timeout 140 '${swaymsg} output * dpms off' resume '${swaymsg} output * dpms on'";
         }
-        { command = "${tmux} new-session -ds daemonmodetmux"; }
+        { command = "${tmux} new-session -d -s daemonmodetmux"; }
         { command = "${wlsunset} -S '07:00' -s '19:00'"; }
-        {
-          command = "${home}/.local/bin/tmux-server";
-          always = true;
-        }
         {
           command = "${home}/.config/sway/scripts.d/workspace.sh init 1";
         }

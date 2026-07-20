@@ -19,7 +19,7 @@ fi
 if ! pgrep -f dropterminal; then
 	@swaymsg@ for_window "[app_id=\"$app_id\" title=\"dropterminal\"] move container to scratchpad"
 	sleep 0.15
-	$term_cmd @tmux@ attach-session -t dropterminaltmux &
+	$term_cmd @tmux@ new-session -A -s dropterminaltmux &
 	sleep 0.15
 fi
 @swaymsg@ "[app_id=\"$app_id\" title=\"dropterminal\"] scratchpad show, resize set 50ppt 50ppt, floating enable, move position $(((scrwidth * 25) / 100)) 0"

@@ -31,6 +31,10 @@ in
       set -ga update-environment  TERM
       set -ga update-environment  TERM_PROGRAM
 
+      #~ Keep the managed sessions alive without a polling watchdog.
+      set-hook -g session-created 'if-shell -F "#{||:#{==:#{session_name},daemonmodetmux},#{==:#{session_name},dropterminaltmux}}" "set-option remain-on-exit on"'
+      set-hook -g pane-died 'if-shell -F "#{||:#{==:#{session_name},daemonmodetmux},#{==:#{session_name},dropterminaltmux}}" "respawn-pane -k"'
+
       #~ session-based settings
       set -s  focus-events        on
 
