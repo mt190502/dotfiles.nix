@@ -54,7 +54,7 @@
           shellcheck
           sops
           testssl
-          yq
+          yq-go
           zola
         ]
         ++ (lib.optionals (lib.hasSuffix "linux" pkgs.stdenv.hostPlatform.system) [
