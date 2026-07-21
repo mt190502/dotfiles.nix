@@ -16,6 +16,8 @@ Item {
     property string scrollDownCmd: '@pulseaudio-scroll-down-cmd@'
     property string wpctl: "@wpctl-bin@"
     property string pactl: "@pactl-bin@"
+    property string osdIpc: "@osd-ipc@"
+    property string screenName: ""
 
     property int sinkVolume: 0
     property bool sinkMuted: false
@@ -23,6 +25,10 @@ Item {
     property bool sourceMuted: false
     property bool rightButtonHeld: false
     property bool rightWheelUsed: false
+    property bool osdPending: false
+    property int lastOsdVolume: -1
+    property bool lastOsdMuted: false
+    property bool hasOsdBaseline: false
 
     readonly property int volumeIconIndex: {
         if (sinkVolume >= 67)
@@ -43,6 +49,13 @@ Item {
         sourceProc.running = true;
     }
 
+    function showOsd() {
+        if (root.osdIpc.length > 0) {
+            osdProc.command = ["sh", "-c", root.osdIpc + " volume " + root.sinkVolume + " " + root.sinkMuted + " '" + root.screenName + "'"];
+            osdProc.running = true;
+        }
+    }
+
     Component.onCompleted: {
         root.refresh();
         watchProc.running = true;
@@ -53,14 +66,20 @@ Item {
         command: ["sh", "-c", root.pactl + " subscribe 2>/dev/null"]
         stdout: SplitParser {
             onRead: msg => {
-                if (msg.indexOf("Event 'change' on sink") >= 0 || msg.indexOf("Event 'change' on source") >= 0 || msg.indexOf("Event 'change' on card") >= 0) {
+                if (msg.indexOf("Event 'change' on sink") >= 0) {
                     root.refresh();
+                    root.osdPending = true;
                 }
             }
         }
         onExited: {
             watchProc.running = true;
         }
+    }
+
+    Process {
+        id: osdProc
+        stdout: StdioCollector {}
     }
 
     Process {
@@ -74,6 +93,14 @@ Item {
                     root.sinkVolume = Math.round(parseFloat(volMatch[1]) * 100);
                 root.sinkMuted = text.indexOf("[MUTED]") >= 0;
                 root.updateText();
+                if (root.osdPending) {
+                    root.osdPending = false;
+                    if (!root.hasOsdBaseline || root.sinkVolume !== root.lastOsdVolume || root.sinkMuted !== root.lastOsdMuted)
+                        root.showOsd();
+                }
+                root.lastOsdVolume = root.sinkVolume;
+                root.lastOsdMuted = root.sinkMuted;
+                root.hasOsdBaseline = true;
             }
         }
     }
@@ -174,6 +201,5 @@ Item {
                 }
             }
         }
-
     }
 }

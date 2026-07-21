@@ -9,6 +9,7 @@
 
 let
   cfg = barConfig;
+  osd-ipc = cfg.osdIpc or "";
 
   calendarPython = pkgs.python3.withPackages (ps: [ ps.pygobject3 ]);
   calendar-events = pkgs.writeShellApplication {
@@ -355,6 +356,7 @@ let
       wpctl-bin
       inotifywait-bin
       upower-bin
+      osd-ipc
       swaymsg-bin
       battery-device
       battery-charging-icon

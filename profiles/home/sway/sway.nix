@@ -45,6 +45,7 @@ let
   dolphin = getExe' inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dolphin "dolphin";
   mpv = getExe pkgs.mpv;
   pactl = getExe' pkgs.pulseaudio "pactl";
+  wpctl = getExe' pkgs.wireplumber "wpctl";
   playerctl = getExe pkgs.playerctl;
   swayidle = getExe pkgs.swayidle;
   swaymsg = getExe' pkgs.sway "swaymsg";
@@ -252,8 +253,8 @@ in
         "${modifier}+$altMod+4" = "exec ${home}/.config/sway/scripts.d/workspace.sh switch 8";
 
         #~~~ sound
-        "XF86AudioRaiseVolume" = "exec ${pactl} set-sink-volume @DEFAULT_SINK@ +5%";
-        "XF86AudioLowerVolume" = "exec ${pactl} set-sink-volume @DEFAULT_SINK@ -5%";
+        "XF86AudioRaiseVolume" = "exec ${wpctl} set-volume @DEFAULT_SINK@ 5%+ --limit 1.5";
+        "XF86AudioLowerVolume" = "exec ${wpctl} set-volume @DEFAULT_SINK@ 5%- --limit 1.5";
         "XF86AudioMute" = "exec ${pactl} set-sink-mute @DEFAULT_SINK@ toggle";
         "XF86AudioMicMute" = "exec ${pactl} set-source-mute @DEFAULT_SOURCE@ toggle";
 

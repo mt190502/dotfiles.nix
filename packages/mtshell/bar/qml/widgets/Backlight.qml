@@ -10,17 +10,31 @@ Item {
     property string scrollUpCmd: '@backlight-scroll-up-cmd@'
     property string scrollDownCmd: '@backlight-scroll-down-cmd@'
     property string inotifywait: "@inotifywait-bin@"
+    property string osdIpc: "@osd-ipc@"
+    property string screenName: ""
     property bool laptopDetected: false
 
     property bool hasBacklight: false
     property int brightness: 0
     property int maxBrightness: 1
+    property bool osdPending: false
+    property bool keyboardOsdPending: false
     visible: laptopDetected && hasBacklight
     implicitWidth: visible ? (backText.implicitWidth + Base.margin * 2) : 0
     implicitHeight: visible ? (Base.height + Base.padTop + Base.padBottom) : 0
 
-    Component.onCompleted: if (root.laptopDetected) checkProc.running = true
-    onLaptopDetectedChanged: if (root.laptopDetected) checkProc.running = true
+    Component.onCompleted: {
+        if (root.laptopDetected) {
+            checkProc.running = true;
+            keyboardWatch.running = true;
+        }
+    }
+    onLaptopDetectedChanged: {
+        if (root.laptopDetected) {
+            checkProc.running = true;
+            keyboardWatch.running = true;
+        }
+    }
 
     function updateText() {
         backText.text = (root.icons[root.iconIndex] || "") + " " + root.percent + "%";
@@ -46,7 +60,10 @@ Item {
         id: watchProc
         command: ["sh", "-c", root.inotifywait + " -m -e modify -e attrib /sys/class/backlight/" + root.deviceName + "/brightness 2>/dev/null"]
         stdout: SplitParser {
-            onRead: msg => root.refresh()
+            onRead: msg => {
+                root.osdPending = true;
+                root.refresh();
+            }
         }
         onExited: {
             if (root.hasBacklight)
@@ -54,10 +71,48 @@ Item {
         }
     }
 
+    Process {
+        id: keyboardWatch
+        command: ["sh", "-c", "for path in /sys/class/leds/*kbd_backlight; do [ -r \"$path/brightness\" ] || continue; read -r last < \"$path/brightness\"; while sleep 0.2; do read -r value < \"$path/brightness\"; if [ \"$value\" != \"$last\" ]; then printf '%s\\n' \"$value\"; last=\"$value\"; fi; done; done"]
+        stdout: SplitParser {
+            onRead: msg => {
+                root.keyboardOsdPending = true;
+                keyboardBrightProc.running = true;
+            }
+        }
+        onExited: if (root.hasBacklight)
+            keyboardWatch.running = true
+    }
+
     function refresh() {
         if (!root.hasBacklight)
             return;
         brightProc.running = true;
+    }
+
+    Process {
+        id: osdProc
+        stdout: StdioCollector {}
+    }
+
+    Process {
+        id: keyboardBrightProc
+        command: ["sh", "-c", "for path in /sys/class/leds/*kbd_backlight; do [ -r \"$path/brightness\" ] && [ -r \"$path/max_brightness\" ] || continue; cat \"$path/brightness\" \"$path/max_brightness\"; break; done"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const values = this.text.trim().split(/\s+/);
+                const brightness = parseInt(values[0]);
+                const maxBrightness = parseInt(values[1]);
+                if (!isNaN(brightness) && !isNaN(maxBrightness) && maxBrightness > 0 && root.keyboardOsdPending) {
+                    root.keyboardOsdPending = false;
+                    const percent = Math.round(brightness / maxBrightness * 100);
+                    if (root.osdIpc.length > 0) {
+                        osdProc.command = ["sh", "-c", root.osdIpc + " keyboard-brightness " + percent + " false '" + root.screenName + "'"];
+                        osdProc.running = true;
+                    }
+                }
+            }
+        }
     }
 
     Process {
@@ -81,6 +136,11 @@ Item {
                 if (!isNaN(val)) {
                     root.brightness = val;
                     root.updateText();
+                    if (root.osdPending && root.osdIpc.length > 0) {
+                        root.osdPending = false;
+                        osdProc.command = ["sh", "-c", root.osdIpc + " brightness " + root.percent + " false '" + root.screenName + "'"];
+                        osdProc.running = true;
+                    }
                 }
             }
         }

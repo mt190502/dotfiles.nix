@@ -38,9 +38,7 @@ Item {
             anchors.rightMargin: Base.margin
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            text: root.hasConnected
-                ? root.iconConnected + (root.hasBattery ? " " + root.batteryPercent + "%" : "")
-                : root.iconDisconnected
+            text: root.hasConnected ? root.iconConnected + (root.hasBattery ? " " + root.batteryPercent + "%" : "") : root.iconDisconnected
             color: root.adapterEnabled ? Base.text : Base.inactive
             font.pixelSize: Base.fontSize
             font.family: Base.fontName

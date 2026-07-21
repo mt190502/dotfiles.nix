@@ -27,6 +27,7 @@ in
     inputs.self.homeModules.mtshell
     ./mtshell/bar.nix
     ./mtshell/notifier.nix
+    ./mtshell/osd.nix
     # ./cliphist.nix
     ./kde-apps-wm-fix.nix
     # ./mako.nix

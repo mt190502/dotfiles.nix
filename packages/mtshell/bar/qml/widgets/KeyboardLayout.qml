@@ -8,6 +8,9 @@ Item {
     property string onClickCmd: '@keyboard-on-click@'
     property string format: '@keyboard-format@'
     property string swaymsg: "@swaymsg-bin@"
+    property string osdIpc: "@osd-ipc@"
+    property string screenName: ""
+    property bool osdPending: false
 
     implicitWidth: layoutText.implicitWidth + Base.margin * 2
     implicitHeight: Base.height + Base.padTop + Base.padBottom
@@ -88,7 +91,13 @@ Item {
             const inputs = JSON.parse(output);
             for (let i = 0; i < inputs.length; i++) {
                 if (inputs[i].type === "keyboard" && inputs[i].xkb_active_layout_name) {
-                    layoutText.text = root.formatLayout(inputs[i].xkb_active_layout_name);
+                    const layout = root.formatLayout(inputs[i].xkb_active_layout_name);
+                    layoutText.text = layout;
+                    if (root.osdPending && root.osdIpc.length > 0) {
+                        root.osdPending = false;
+                        osdProc.command = ["sh", "-c", root.osdIpc + " layout '" + layout + "' false '" + root.screenName + "'"];
+                        osdProc.running = true;
+                    }
                     return;
                 }
             }
@@ -99,8 +108,7 @@ Item {
         id: layoutProc
         command: ["sh", "-c", root.swaymsg + " -t get_inputs 2>/dev/null"]
         stdout: StdioCollector {
-            id: layoutStdout
-            onStreamFinished: root.parseLayout(layoutStdout.text)
+            onStreamFinished: root.parseLayout(this.text)
         }
     }
 
@@ -108,15 +116,21 @@ Item {
         id: subscribeProc
         command: ["sh", "-c", root.swaymsg + " -m -t subscribe '[\"input\"]' 2>/dev/null"]
         stdout: SplitParser {
-            onRead: msg => root.refresh()
+            onRead: msg => root.refresh(true)
         }
         onExited: {
             subscribeProc.running = true;
         }
     }
 
-    function refresh() {
+    function refresh(showOsd) {
+        root.osdPending = showOsd === true;
         layoutProc.running = true;
+    }
+
+    Process {
+        id: osdProc
+        stdout: StdioCollector {}
     }
 
     Component.onCompleted: {

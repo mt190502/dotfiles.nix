@@ -170,9 +170,7 @@ Item {
             spacing: 4
 
             Text {
-                text: root.passwordPromptVisible
-                    ? "Connect to " + (root.pendingNetwork ? root.pendingNetwork.name : "WiFi")
-                    : root.wiredConnected ? "Ethernet" : root.wifiDevice ? "WiFi Networks" : "Network"
+                text: root.passwordPromptVisible ? "Connect to " + (root.pendingNetwork ? root.pendingNetwork.name : "WiFi") : root.wiredConnected ? "Ethernet" : root.wifiDevice ? "WiFi Networks" : "Network"
                 color: Base.text
                 font.pixelSize: Base.fontSize
                 font.family: Base.fontName
@@ -204,8 +202,7 @@ Item {
                 width: parent.width
                 height: contentHeight
                 interactive: false
-                visible: root.sortedNetworks.length > 0
-                    && !root.passwordPromptVisible
+                visible: root.sortedNetworks.length > 0 && !root.passwordPromptVisible
                 model: root.sortedNetworks
                 delegate: Rectangle {
                     required property var modelData
@@ -430,9 +427,7 @@ Item {
     }
 
     function isPasswordNetwork(network) {
-        return network.security === WifiSecurityType.WpaPsk
-            || network.security === WifiSecurityType.Wpa2Psk
-            || network.security === WifiSecurityType.Sae;
+        return network.security === WifiSecurityType.WpaPsk || network.security === WifiSecurityType.Wpa2Psk || network.security === WifiSecurityType.Sae;
     }
 
     function openPasswordPrompt(network) {

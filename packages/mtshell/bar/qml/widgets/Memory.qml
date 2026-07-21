@@ -20,7 +20,7 @@ Item {
                 available = parseInt(lines[i].split(/\s+/)[1]);
         }
         if (total === 0)
-            return ;
+            return;
 
         const usedKB = total - available;
         const usedGB = usedKB / 1024 / 1024;
@@ -59,7 +59,7 @@ Item {
             anchors.fill: parent
             onClicked: {
                 if (root.onClickCmd.length > 0)
-                    Quickshell.execDetached(["sh", "-c", root.onClickCmd])
+                    Quickshell.execDetached(["sh", "-c", root.onClickCmd]);
             }
         }
     }

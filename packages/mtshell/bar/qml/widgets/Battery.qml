@@ -36,15 +36,13 @@ Item {
 
     function updateText() {
         var icon = root.isCharging ? root.chargingIcon : (root.icons[root.iconIndex] || "");
-        var remaining = root.remainingVisible && !root.isCharging && root.remainingTime.length > 0
-            ? " (" + root.remainingTime + ")"
-            : "";
+        var remaining = root.remainingVisible && !root.isCharging && root.remainingTime.length > 0 ? " (" + root.remainingTime + ")" : "";
         batText.text = icon + " " + root.capacity + "%" + remaining;
     }
 
     function refresh() {
         if (!root.hasBattery)
-            return ;
+            return;
         capProc.running = true;
         statusProc.running = true;
         estimateProc.running = true;
@@ -53,13 +51,15 @@ Item {
     visible: laptopDetected && hasBattery
     implicitWidth: visible ? (batText.implicitWidth + Base.margin * 2) : 0
     implicitHeight: visible ? (Base.height + Base.padTop + Base.padBottom) : 0
-    Component.onCompleted: if (root.laptopDetected) checkProc.running = true
-    onLaptopDetectedChanged: if (root.laptopDetected) checkProc.running = true
+    Component.onCompleted: if (root.laptopDetected)
+        checkProc.running = true
+    onLaptopDetectedChanged: if (root.laptopDetected)
+        checkProc.running = true
 
     Process {
         id: checkProc
         command: ["sh", "-c", "device='" + root.deviceName + "'; if [ -n \"$device\" ] && [ -d /sys/class/power_supply/\"$device\" ]; then printf '%s\\n' \"$device\"; else for path in /sys/class/power_supply/*; do if [ -f \"$path/capacity\" ]; then basename \"$path\"; break; fi; done; fi"]
-            stdout: StdioCollector {
+        stdout: StdioCollector {
             onStreamFinished: {
                 root.deviceName = this.text.trim();
                 root.hasBattery = root.deviceName.length > 0;
@@ -77,10 +77,9 @@ Item {
         onExited: {
             if (root.hasBattery)
                 watchProc.running = true;
-
         }
         stdout: SplitParser {
-            onRead: (msg) => {
+            onRead: msg => {
                 return root.refresh();
             }
         }
@@ -122,11 +121,11 @@ Item {
         }
     }
 
-        Rectangle {
-            anchors.fill: parent
-            anchors.topMargin: Base.padTop
-            anchors.bottomMargin: Base.padBottom
-            color: root.isCritical ? root.criticalBackground : root.isCharging ? root.chargingBackground : Base.bg
+    Rectangle {
+        anchors.fill: parent
+        anchors.topMargin: Base.padTop
+        anchors.bottomMargin: Base.padBottom
+        color: root.isCritical ? root.criticalBackground : root.isCharging ? root.chargingBackground : Base.bg
         radius: Base.radius
 
         Text {

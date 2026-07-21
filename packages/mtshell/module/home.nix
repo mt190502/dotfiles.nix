@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.programs.mtshell;
+  osdPackage = pkgs.callPackage ../osd { osdConfig = cfg.osd; };
 in
 {
   options.programs.mtshell = {
@@ -830,7 +831,66 @@ in
       };
     };
 
-    osd.enable = lib.mkEnableOption "MTShell OSD";
+    osd = {
+      enable = lib.mkEnableOption "MTShell OSD";
+
+      bg = lib.mkOption {
+        type = lib.types.str;
+        default = "#1e1e2e";
+      };
+
+      text = lib.mkOption {
+        type = lib.types.str;
+        default = "#cdd6f4";
+      };
+
+      accent = lib.mkOption {
+        type = lib.types.str;
+        default = "#89b4fa";
+      };
+
+      border = lib.mkOption {
+        type = lib.types.str;
+        default = "#89b4fa";
+      };
+
+      fontName = lib.mkOption {
+        type = lib.types.str;
+        default = "Sans";
+      };
+
+      volumeIcons = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          ""
+          ""
+          ""
+          ""
+          ""
+        ];
+      };
+
+      volumeMutedIcon = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
+
+      brightnessIcons = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "󰃞"
+          "󰃝"
+          "󰃟"
+          "󰃠"
+          "󰃚"
+        ];
+      };
+
+      keyboardIcon = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
+    };
   };
 
   config = lib.mkMerge [
@@ -896,6 +956,7 @@ in
         barPackage = pkgs.callPackage ../bar {
           iconThemePackage = cfg.bar.base.iconThemePackage;
           barConfig = {
+            osdIpc = lib.optionalString cfg.osd.enable "${pkgs.quickshell}/bin/qs -p ${osdPackage}/share/mtshell/osd/shell.qml ipc call -- osd show";
             inherit (cfg.bar)
               position
               height
@@ -1124,10 +1185,23 @@ in
       }
     ))
     (lib.mkIf cfg.osd.enable {
-      home.packages = [ (pkgs.callPackage ../osd { }) ];
+      home.packages = [ osdPackage ];
       xdg.configFile."mtshell/osd" = {
-        source = "${pkgs.callPackage ../osd { }}/share/mtshell/osd";
+        source = "${osdPackage}/share/mtshell/osd";
         recursive = true;
+      };
+      systemd.user.services.mtshell-osd = {
+        Unit = {
+          Description = "MTShell OSD";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+        Service = {
+          ExecStart = "${osdPackage}/bin/mtshell-osd";
+          Restart = "on-failure";
+          RestartSec = "3s";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
       };
     })
   ];

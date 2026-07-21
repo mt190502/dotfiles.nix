@@ -147,8 +147,8 @@ in
           click = "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle";
           middleClick = "${home}/.local/bin/program-toggler ${pavucontrol}";
           rightClick = "${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
-          scrollUp = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%+";
-          scrollDown = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+          scrollUp = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.5";
+          scrollDown = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%- --limit 1.5";
         };
         battery = {
           chargingIcon = "󰚥";

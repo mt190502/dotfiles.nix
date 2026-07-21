@@ -66,7 +66,7 @@ Item {
                     height: root.itemSize
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     hoverEnabled: true
-                    onClicked: (mouse) => {
+                    onClicked: mouse => {
                         if (mouse.button === Qt.LeftButton && !modelData.onlyMenu)
                             modelData.activate();
                         else if (modelData.hasMenu)

@@ -70,12 +70,12 @@ Item {
     }
 
     function daysInMonth(year, month) {
-    return new Date(year, month + 1, 0).getDate();
+        return new Date(year, month + 1, 0).getDate();
     }
 
     function firstDayOfWeek(year, month) {
-    var d = new Date(year, month, 1).getDay();
-    return d === 0 ? 6 : d - 1;
+        var d = new Date(year, month, 1).getDay();
+        return d === 0 ? 6 : d - 1;
     }
 
     function changeMonth(delta) {
@@ -124,7 +124,9 @@ Item {
     function selectCalendar(uid) {
         root.selectedCalendar = uid;
         persisted.selectedCalendar = uid;
-        calendarState.setText(JSON.stringify({ "uid": uid }));
+        calendarState.setText(JSON.stringify({
+            "uid": uid
+        }));
         root.refreshEvents();
     }
 
@@ -163,15 +165,15 @@ Item {
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
-            onPositionChanged: (m) => {
+            onPositionChanged: m => {
                 return root.mouseX = m.x;
             }
             onEntered: {
-              exitTimer.stop();
-              root.hovered = true;
+                exitTimer.stop();
+                root.hovered = true;
             }
             onExited: {
-              exitTimer.restart();
+                exitTimer.restart();
             }
             propagateComposedEvents: true
         }
@@ -246,8 +248,8 @@ Item {
                         }
                     }
 
-                        Text {
-                            width: parent.width - 116
+                    Text {
+                        width: parent.width - 116
                         height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -258,40 +260,40 @@ Item {
                         color: root.calText
                         font.pixelSize: root.calFontSize
                         font.family: root.calFontName
-                            font.bold: true
+                        font.bold: true
+                    }
+
+                    Rectangle {
+                        width: 56
+                        height: 28
+                        color: todayArea.containsMouse ? root.calActive : root.calBg
+                        border.color: root.calBorder
+                        border.width: 2
+                        radius: 0
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "Today"
+                            color: todayArea.containsMouse ? root.calBg : root.calText
+                            font.pixelSize: root.calFontSize - 2
+                            font.family: root.calFontName
                         }
 
-                        Rectangle {
-                            width: 56
-                            height: 28
-                            color: todayArea.containsMouse ? root.calActive : root.calBg
-                            border.color: root.calBorder
-                            border.width: 2
-                            radius: 0
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: "Today"
-                                color: todayArea.containsMouse ? root.calBg : root.calText
-                                font.pixelSize: root.calFontSize - 2
-                                font.family: root.calFontName
-                            }
-
-                            MouseArea {
-                                id: todayArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: root.goToday()
-                            }
+                        MouseArea {
+                            id: todayArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: root.goToday()
                         }
+                    }
 
-                        Item {
-                            width: 4
-                            height: 1
-                        }
+                    Item {
+                        width: 4
+                        height: 1
+                    }
 
-                        Rectangle {
-                            width: 28
+                    Rectangle {
+                        width: 28
                         height: 28
                         color: nextMonthArea.containsMouse ? root.calActive : root.calBg
                         border.color: root.calBorder
@@ -402,19 +404,22 @@ Item {
                             var offset = root.firstDayOfWeek(root.displayYear, root.displayMonth);
                             var total = root.daysInMonth(root.displayYear, root.displayMonth);
                             var prevTotal = root.daysInMonth(root.displayMonth === 0 ? root.displayYear - 1 : root.displayYear, root.displayMonth === 0 ? 11 : root.displayMonth - 1);
-                            for (var i = 0; i < offset; i++) days.push({
-                                "day": prevTotal - offset + i + 1,
-                                "current": false
-                            })
-                            for (var i = 1; i <= total; i++) days.push({
-                                "day": i,
-                                "current": true
-                            })
+                            for (var i = 0; i < offset; i++)
+                                days.push({
+                                    "day": prevTotal - offset + i + 1,
+                                    "current": false
+                                });
+                            for (var i = 1; i <= total; i++)
+                                days.push({
+                                    "day": i,
+                                    "current": true
+                                });
                             var next = 42 - days.length;
-                            for (var i = 1; i <= next; i++) days.push({
-                                "day": i,
-                                "current": false
-                            })
+                            for (var i = 1; i <= next; i++)
+                                days.push({
+                                    "day": i,
+                                    "current": false
+                                });
                             return days;
                         }
 
@@ -492,12 +497,18 @@ Item {
                     cache[key] = days;
                     root.eventCache = cache;
                     if (calendars.length > 0)
-                        root.calendarOptions = [{ "uid": "", "name": "All" }].concat(calendars);
-                    if (calendars.length > 0 && root.selectedCalendar !== ""
-                        && !calendars.some(calendar => calendar.uid === root.selectedCalendar)) {
+                        root.calendarOptions = [
+                            {
+                                "uid": "",
+                                "name": "All"
+                            }
+                        ].concat(calendars);
+                    if (calendars.length > 0 && root.selectedCalendar !== "" && !calendars.some(calendar => calendar.uid === root.selectedCalendar)) {
                         root.selectedCalendar = "";
                         persisted.selectedCalendar = "";
-                        calendarState.setText(JSON.stringify({ "uid": "" }));
+                        calendarState.setText(JSON.stringify({
+                            "uid": ""
+                        }));
                         root.refreshEvents();
                     }
                     if (key === root.selectedCalendar + "|" + root.dateString(root.displayYear, root.displayMonth, 1))

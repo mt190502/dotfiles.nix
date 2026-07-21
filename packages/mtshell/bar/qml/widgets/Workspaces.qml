@@ -18,7 +18,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onWheel: (wheel) => {
+            onWheel: wheel => {
                 if (wheel.angleDelta.y > 0)
                     I3.dispatch("workspace prev_on_output");
                 else
@@ -42,8 +42,8 @@ Item {
                     visible: onScreen
                     width: visible ? implicitWidth : 0
                     text: {
-                      var icon = modelData.focused ? "@ws-icon-focused@" : modelData.active ? "@ws-icon-active@" : "@ws-icon-inactive@"
-                      return icon.length > 0 ? icon : modelData.name
+                        var icon = modelData.focused ? "@ws-icon-focused@" : modelData.active ? "@ws-icon-active@" : "@ws-icon-inactive@";
+                        return icon.length > 0 ? icon : modelData.name;
                     }
                     color: modelData.focused ? "@ws-text-focused@" : modelData.active ? "@ws-text-active@" : "@ws-text-inactive@"
                     font.pixelSize: Base.fontSize
