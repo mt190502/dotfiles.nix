@@ -43,6 +43,7 @@ rec {
       kubectl-cnpg
       kubectl-df-pv
       kubectl-explore
+      kubectl-klock
       kubectl-neat
       kubernetes-helm
       kubetail
@@ -230,6 +231,13 @@ rec {
       #################################################
       if [ -n "$(command -v docker)" ]
         docker completion fish | source
+      end
+
+      #################################################
+      #### Python
+      #################################################
+      if [ -n "$(command -v uv)" ]
+        uv generate-shell-completion fish | source
       end
     '';
   };

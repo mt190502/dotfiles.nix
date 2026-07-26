@@ -3,6 +3,7 @@
 {
   environment.systemPackages = with pkgs; [
     android-tools
+    ethtool
     gnome-text-editor
     gparted
     libreoffice
