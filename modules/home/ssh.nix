@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  osConfig ? null,
   ...
 }:
 
@@ -55,7 +56,7 @@ in
       "Include" = "overrides/*.conf";
     };
     settings = {
-      "*" = {
+      "*" = lib.mkIf (osConfig != null && (osConfig.programs._1password.enable or false)) {
         IdentityAgent = "~/.1password/agent.sock";
       };
     }

@@ -1,6 +1,6 @@
 {
   networking = {
-    hostName = "190502";
+    hostName = "desktop-190502";
     firewall = {
       enable = true;
       allowedTCPPorts = [
