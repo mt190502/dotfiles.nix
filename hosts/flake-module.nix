@@ -118,6 +118,7 @@ let
       };
       modules = [
         inputs.home-manager.darwinModules.default
+        inputs.nix-index-database.darwinModules.nix-index
         {
           home-manager.sharedModules = homeModules;
         }
