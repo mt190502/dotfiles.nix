@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   programs.anki = {
@@ -35,5 +35,8 @@
     };
     style = "native";
     theme = "followSystem";
+    addons = with pkgs; [
+      ankiAddons.anki-connect
+    ];
   };
 }
