@@ -2,7 +2,6 @@
 
 import Quickshell
 import Quickshell.Io
-import Quickshell.I3
 import Quickshell.Wayland
 import QtQuick
 
@@ -10,10 +9,15 @@ Scope {
     id: root
 
     property string kind: ""
+    property string output: ""
+    property string swaymsg: "@osd-swaymsg@"
     property int value: 0
     property string label: ""
     property bool extra: false
     property bool active: false
+    property string pendingKind: ""
+    property string pendingValue: ""
+    property bool pendingMuted: false
     property var volumeIcons: ["@volume-icon-0@", "@volume-icon-1@", "@volume-icon-2@", "@volume-icon-3@", "@volume-icon-4@"]
     property string volumeMutedIcon: "@volume-muted-icon@"
     property var brightnessIcons: ["@brightness-icon-0@", "@brightness-icon-1@", "@brightness-icon-2@", "@brightness-icon-3@", "@brightness-icon-4@"]
@@ -43,12 +47,30 @@ Scope {
     }
 
     function show(kind, value, muted, output) {
-        root.kind = kind;
-        root.label = value;
-        root.value = Number(value) || 0;
-        root.extra = muted;
-        root.active = true;
-        hideTimer.restart();
+        root.pendingKind = kind;
+        root.pendingValue = value;
+        root.pendingMuted = muted;
+        focusProc.running = true;
+    }
+
+    function showOnFocusedOutput(text) {
+        try {
+            const outputs = JSON.parse(text);
+            for (let i = 0; i < outputs.length; i++) {
+                if (outputs[i].focused) {
+                    root.kind = root.pendingKind;
+                    root.label = root.pendingValue;
+                    root.value = Number(root.pendingValue) || 0;
+                    root.extra = root.pendingMuted;
+                    root.output = outputs[i].name;
+                    root.active = true;
+                    hideTimer.restart();
+                    return;
+                }
+            }
+        } catch (error) {
+            // Ignore resume-time Sway IPC output while outputs reconnect.
+        }
     }
 
     IpcHandler {
@@ -56,6 +78,14 @@ Scope {
 
         function show(kind: string, value: string, muted: bool, output: string): void {
             root.show(kind, value, muted, output);
+        }
+    }
+
+    Process {
+        id: focusProc
+        command: [root.swaymsg, "-t", "get_outputs"]
+        stdout: StdioCollector {
+            onStreamFinished: root.showOnFocusedOutput(this.text)
         }
     }
 
@@ -72,7 +102,7 @@ Scope {
             id: osdWindow
             required property var modelData
             screen: modelData
-            visible: root.active && I3.focusedMonitor && modelData.name === I3.focusedMonitor.name
+            visible: root.active && modelData.name === root.output
             color: "transparent"
             implicitHeight: 162
             WlrLayershell.layer: WlrLayer.Overlay

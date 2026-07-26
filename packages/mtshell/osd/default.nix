@@ -31,6 +31,7 @@ let
       "󰃚"
     ];
   keyboard-icon = cfg.keyboardIcon or "";
+  osd-swaymsg = lib.getExe' pkgs.sway "swaymsg";
 
   subs = {
     inherit
@@ -39,6 +40,7 @@ let
       osd-accent
       osd-border
       osd-font-name
+      osd-swaymsg
       ;
     volume-icon-0 = builtins.elemAt volume-icons 0;
     volume-icon-1 = builtins.elemAt volume-icons 1;

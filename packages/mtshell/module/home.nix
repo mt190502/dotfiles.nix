@@ -1156,6 +1156,7 @@ in
             StartLimitBurst = 3;
           };
           Service = {
+            ExecStartPre = "${lib.getExe' pkgs.bash "bash"} -c 'until ${lib.getExe' pkgs.systemd "busctl"} --system status org.freedesktop.NetworkManager >/dev/null 2>&1; do ${lib.getExe' pkgs.coreutils "sleep"} 1; done'";
             ExecStart = "${lib.getExe' pkgs.util-linux "flock"} --nonblock %t/mtshell-bar.lock ${barPackage}/bin/mtshell-bar";
             Restart = "on-failure";
             RestartSec = "5s";

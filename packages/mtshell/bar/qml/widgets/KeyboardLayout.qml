@@ -116,7 +116,14 @@ Item {
         id: subscribeProc
         command: ["sh", "-c", root.swaymsg + " -m -t subscribe '[\"input\"]' 2>/dev/null"]
         stdout: SplitParser {
-            onRead: msg => root.refresh(true)
+            onRead: msg => {
+                try {
+                    const event = JSON.parse(msg);
+                    root.refresh(event.change === "xkb_layout");
+                } catch (error) {
+                    root.refresh(false);
+                }
+            }
         }
         onExited: {
             subscribeProc.running = true;
