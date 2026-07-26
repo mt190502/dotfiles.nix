@@ -170,10 +170,12 @@ Item {
             }
             onEntered: {
                 exitTimer.stop();
-                root.hovered = true;
+                hoverTimer.restart();
             }
             onExited: {
-                exitTimer.restart();
+                hoverTimer.stop();
+                if (root.hovered)
+                    exitTimer.restart();
             }
             propagateComposedEvents: true
         }
@@ -530,6 +532,13 @@ Item {
             clockText.text = Qt.formatDateTime(now, root.format);
             root.currentDate = now;
         }
+    }
+
+    Timer {
+        id: hoverTimer
+        interval: 500
+        repeat: false
+        onTriggered: root.hovered = true
     }
 
     Timer {

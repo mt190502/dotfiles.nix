@@ -15,6 +15,7 @@ Scope {
     property bool dnd: false
     property bool ccVisible: false
     property int selectedPlayer: 0
+    property string wlCopy: "@wl-copy-bin@"
 
     function formatBody(notif) {
         if (notif.appName === "Music Player Daemon" || notif.appName === "mpd" || notif.desktopEntry === "mpd") {
@@ -24,6 +25,40 @@ Scope {
                 return "<b>" + lines[0] + " (" + lines[2] + ")</b><br>" + lines[1];
         }
         return notif.body || "";
+    }
+
+    function notificationActions(notif) {
+        return (notif.actions || []).filter(action => action.identifier !== "default");
+    }
+
+    function verificationCode(notif) {
+        var text = (notif.summary || "") + " " + root.formatBody(notif);
+        var match = text.match(/(?:^|[^0-9])([0-9]{4,6})(?![0-9])/);
+        return match ? match[1] : "";
+    }
+
+    function notificationButtons(notif) {
+        var buttons = notificationActions(notif).map(action => ({
+                    "action": action,
+                    "code": ""
+                }));
+        var code = verificationCode(notif);
+        if (code.length > 0)
+            buttons.push({
+                "action": null,
+                "code": code
+            });
+        return buttons;
+    }
+
+    function copyVerificationCode(code) {
+        copyProc.command = ["sh", "-c", "printf '%s' \"$1\" | " + root.wlCopy, "copy-code", code];
+        copyProc.running = true;
+    }
+
+    Process {
+        id: copyProc
+        stdout: StdioCollector {}
     }
 
     readonly property int notifCount: server.trackedNotifications.values.length
@@ -212,6 +247,9 @@ Scope {
                     required property var notif
                     required property int index
                     property bool hovered: false
+                    readonly property var actions: notif ? root.notificationActions(notif) : []
+                    readonly property string code: notif ? root.verificationCode(notif) : ""
+                    readonly property var buttons: notif ? root.notificationButtons(notif) : []
 
                     onNotifChanged: {
                         popupTimer.restart();
@@ -238,7 +276,7 @@ Scope {
                     border.color: "@cc-border@"
                     border.width: 3
                     radius: 0
-                    implicitHeight: Math.max(popupTextCol.implicitHeight + 4, popupIcon.height + 4) + 8 + 6
+                    implicitHeight: Math.max(popupTextCol.implicitHeight + 4, popupIcon.height + 4) + (popupActions.visible ? popupActions.implicitHeight + 6 : 0) + 8 + 6
 
                     MouseArea {
                         anchors.fill: parent
@@ -321,6 +359,70 @@ Scope {
                             wrapMode: Text.Wrap
                             textFormat: Text.RichText
                             visible: notif ? (root.formatBody(notif).length > 0) : false
+                        }
+                    }
+
+                    Column {
+                        id: popupActions
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 8
+                        anchors.topMargin: Math.max(popupTextCol.y + popupTextCol.height, popupIcon.y + popupIcon.height) + 6
+                        spacing: 4
+                        visible: popupRoot.buttons.length > 0
+
+                        Repeater {
+                            model: Math.ceil(popupRoot.buttons.length / 5)
+
+                            delegate: Row {
+                                required property int index
+                                property var rowButtons: popupRoot.buttons.slice(index * 5, index * 5 + 5)
+                                width: popupActions.width
+                                spacing: 4
+
+                                Repeater {
+                                    model: rowButtons
+
+                                    delegate: Rectangle {
+                                        required property var modelData
+                                        width: (parent.width - parent.spacing * (parent.rowButtons.length - 1)) / parent.rowButtons.length
+                                        height: 24
+                                        color: "@cc-bg@"
+                                        border.color: "@cc-active@"
+                                        border.width: 2
+                                        radius: 0
+
+                                        Text {
+                                            anchors.fill: parent
+                                            anchors.leftMargin: 5
+                                            anchors.rightMargin: 5
+                                            text: modelData.action ? (modelData.action.text || modelData.action.label || modelData.action.identifier) : "Copy \"" + modelData.code + "\""
+                                            color: buttonArea.containsMouse ? "@cc-active@" : "@cc-text@"
+                                            font.pixelSize: @cc-font-size@ - 2
+                                            font.family: "@cc-font-name@"
+                                            elide: Text.ElideRight
+                                            verticalAlignment: Text.AlignVCenter
+                                            horizontalAlignment: Text.AlignHCenter
+                                        }
+
+                                        MouseArea {
+                                            id: buttonArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            onClicked: {
+                                                if (modelData.action) {
+                                                    modelData.action.invoke();
+                                                    root.dismissPopup(popupRoot.index);
+                                                } else {
+                                                    root.copyVerificationCode(modelData.code);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -750,15 +852,22 @@ Scope {
                     boundsBehavior: Flickable.StopAtBounds
 
                     delegate: Rectangle {
+                        id: notifRoot
                         required property var modelData
+                        readonly property var notification: modelData
+                        readonly property var actions: root.notificationActions(notification)
+                        readonly property string code: root.verificationCode(notification)
+                        readonly property var buttons: root.notificationButtons(notification)
                         width: notifList.width
-                        implicitHeight: notifInner.implicitHeight + 16
+                        implicitHeight: notifInner.implicitHeight + (notifActions.visible ? notifActions.implicitHeight + 6 : 0) + 16
                         color: "@cc-border@"
                         border.color: "@cc-border@"
                         border.width: 3
                         radius: 0
 
                         Rectangle {
+                            id: notifCard
+                            z: 1
                             anchors.fill: parent
                             anchors.margins: 3
                             color: "@cc-bg@"
@@ -768,7 +877,9 @@ Scope {
 
                             Row {
                                 id: notifInner
-                                anchors.fill: parent
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
                                 anchors.margins: 6
                                 spacing: 8
 
@@ -825,10 +936,75 @@ Scope {
                                     }
                                 }
                             }
+
+                            Column {
+                                id: notifActions
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: notifInner.bottom
+                                anchors.leftMargin: 6
+                                anchors.rightMargin: 6
+                                anchors.topMargin: 6
+                                spacing: 4
+                                visible: notifRoot.buttons.length > 0
+
+                                Repeater {
+                                    model: Math.ceil(notifRoot.buttons.length / 5)
+
+                                    delegate: Row {
+                                        required property int index
+                                        property var rowButtons: notifRoot.buttons.slice(index * 5, index * 5 + 5)
+                                        width: notifActions.width
+                                        spacing: 4
+
+                                        Repeater {
+                                            model: rowButtons
+
+                                            delegate: Rectangle {
+                                                required property var modelData
+                                                width: (parent.width - parent.spacing * (parent.rowButtons.length - 1)) / parent.rowButtons.length
+                                                height: 24
+                                                color: "@cc-bg@"
+                                                border.color: "@cc-active@"
+                                                border.width: 2
+                                                radius: 0
+
+                                                Text {
+                                                    anchors.fill: parent
+                                                    anchors.leftMargin: 5
+                                                    anchors.rightMargin: 5
+                                                    text: modelData.action ? (modelData.action.text || modelData.action.label || modelData.action.identifier) : "Copy \"" + modelData.code + "\""
+                                                    color: buttonArea.containsMouse ? "@cc-active@" : "@cc-text@"
+                                                    font.pixelSize: @cc-font-size@ - 2
+                                                    font.family: "@cc-font-name@"
+                                                    elide: Text.ElideRight
+                                                    verticalAlignment: Text.AlignVCenter
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                }
+
+                                                MouseArea {
+                                                    id: buttonArea
+                                                    anchors.fill: parent
+                                                    hoverEnabled: true
+                                                    onClicked: {
+                                                        if (modelData.action) {
+                                                            modelData.action.invoke();
+                                                            root.dismissNotif(notifRoot.notification.id);
+                                                        } else {
+                                                            root.copyVerificationCode(modelData.code);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         MouseArea {
                             anchors.fill: parent
+                            z: 0
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: mouse => {
                                 if (mouse.button === Qt.RightButton) {

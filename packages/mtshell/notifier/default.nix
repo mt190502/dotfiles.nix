@@ -54,6 +54,7 @@ let
   popup-icon-size = pop.iconSize or 32;
   popup-duration = pop.duration or 5;
   popup-max = pop.maxVisible or 3;
+  wl-copy-bin = "${pkgs.wl-clipboard}/bin/wl-copy";
 
   base-icon-theme = (cfg.base or { }).iconTheme or "Papirus-Dark";
 
@@ -106,6 +107,7 @@ let
       popup-icon-size
       popup-duration
       popup-max
+      wl-copy-bin
       ;
   };
 
