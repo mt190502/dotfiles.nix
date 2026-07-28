@@ -11,6 +11,7 @@ let
   osd-bg = cfg.bg or "#1e1e2e";
   osd-text = cfg.text or "#cdd6f4";
   osd-accent = cfg.accent or "#89b4fa";
+  osd-urgent = cfg.urgent or "#f38ba8";
   osd-border = cfg.border or osd-accent;
   osd-font-name = cfg.fontName or "Sans";
   volume-icons =
@@ -38,6 +39,7 @@ let
       osd-bg
       osd-text
       osd-accent
+      osd-urgent
       osd-border
       osd-font-name
       osd-swaymsg

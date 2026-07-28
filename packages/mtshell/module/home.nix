@@ -849,6 +849,11 @@ in
         default = "#89b4fa";
       };
 
+      urgent = lib.mkOption {
+        type = lib.types.str;
+        default = "#f38ba8";
+      };
+
       border = lib.mkOption {
         type = lib.types.str;
         default = "#89b4fa";
@@ -1156,7 +1161,7 @@ in
             StartLimitBurst = 3;
           };
           Service = {
-            ExecStartPre = "${lib.getExe' pkgs.bash "bash"} -c 'until ${lib.getExe' pkgs.systemd "busctl"} --system status org.freedesktop.NetworkManager >/dev/null 2>&1; do ${lib.getExe' pkgs.coreutils "sleep"} 1; done'";
+            ExecStartPre = "${lib.getExe' pkgs.bash "bash"} -c 'for i in 1 2 3 4 5; do ${lib.getExe' pkgs.networkmanager "nmcli"} general status >/dev/null 2>&1 && exit 0; ${lib.getExe' pkgs.coreutils "sleep"} 1; done; exit 0'";
             ExecStart = "${lib.getExe' pkgs.util-linux "flock"} --nonblock %t/mtshell-bar.lock ${barPackage}/bin/mtshell-bar";
             Restart = "on-failure";
             RestartSec = "5s";

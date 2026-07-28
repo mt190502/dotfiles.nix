@@ -114,16 +114,13 @@ Item {
         }
     }
 
-    PopupWindow {
+    OverlayPopup {
         id: networkPopup
-        anchor.item: root
-        anchor.edges: Edges.Bottom
-        anchor.gravity: Edges.Bottom
-        implicitWidth: 250
-        implicitHeight: root.passwordPromptVisible ? 140 : Math.min(popupContent.implicitHeight + 16, 400)
+        anchorItem: root
+        screen: root.barWindow.screen
+        cardWidth: 250
+        cardHeight: Math.min(Math.max(popupContent.implicitHeight + 16, 120), 400)
         visible: false
-        grabFocus: true
-        color: Base.bg
 
         onVisibleChanged: {
             if (root.wifiDevice) {

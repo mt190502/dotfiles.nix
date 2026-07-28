@@ -16,3 +16,4 @@ Battery Battery.qml
 Backlight Backlight.qml
 Powermenu Powermenu.qml
 Notifier Notifier.qml
+OverlayPopup OverlayPopup.qml

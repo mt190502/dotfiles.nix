@@ -98,16 +98,13 @@ Item {
         }
     }
 
-    PopupWindow {
+    OverlayPopup {
         id: powerPopup
-        anchor.item: root
-        anchor.edges: Edges.Bottom
-        anchor.gravity: Edges.Bottom
-        implicitWidth: 180
-        implicitHeight: Math.min(popupContent.implicitHeight + 16, 400)
+        anchorItem: root
+        screen: root.barWindow.screen
+        cardWidth: 180
+        cardHeight: Math.min(popupContent.implicitHeight + 16, 400)
         visible: false
-        grabFocus: true
-        color: Base.bg
 
         onVisibleChanged: {
             if (!visible)

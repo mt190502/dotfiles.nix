@@ -161,10 +161,19 @@ Scope {
                             visible: root.kind !== "layout"
 
                             Rectangle {
-                                width: parent.width * Math.max(0, Math.min(100, root.value)) / 100
+                                width: parent.width * Math.max(0, Math.min(100, root.value)) / (root.kind === "volume" ? 150 : 100)
                                 height: parent.height
                                 radius: parent.radius
-                                color: "@osd-accent@"
+                                color: root.kind === "volume" ? "@osd-text@" : "@osd-accent@"
+                            }
+
+                            Rectangle {
+                                visible: root.kind === "volume" && root.value > 100
+                                x: parent.width * 100 / 150
+                                width: parent.width * Math.max(0, Math.min(150, root.value) - 100) / 150
+                                height: parent.height
+                                radius: parent.radius
+                                color: "@osd-urgent@"
                             }
                         }
                     }

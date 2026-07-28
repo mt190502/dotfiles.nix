@@ -86,6 +86,7 @@ Variants {
                     screenName: modelData.name
                 }
                 Pulseaudio {
+                    barWindow: barWindow
                     screenName: modelData.name
                 }
                 Notifier {
