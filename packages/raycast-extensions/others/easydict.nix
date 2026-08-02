@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     fetchFromGitHub {
       owner = "raycast";
       repo = "extensions";
-      rev = "e4093c5b2abc025c79e3796db7174b3b52e28149";
+      rev = "3b0c72bb82ddef684eeeb9a5d69cb278eecf3efe";
       sha256 = "sha256-f9dBacrE7Wtthk4tWHXiUVviYhznhSA+xilFzNmdnRQ=";
       sparseCheckout = [ "/extensions/easydict" ];
     }
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  outputHash = "sha256-joww8YaCuXAg6S8lkDmXgh5J2bYkjE/ynwnFMC57lH0=";
+  outputHash = "sha256-xI1KrQzpQa6fptL74CrmJpxPT8xO1HWpxZ6byGdgb+Q=";
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
 
