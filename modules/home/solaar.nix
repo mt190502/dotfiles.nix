@@ -33,6 +33,9 @@
       - KeyPress:
         - XF86_AudioPlay
         - click
+    - Rule:
+      - Key: [Host Switch Channel 2, pressed]
+      - Set: [E0434BF3, change-host, 1]
     ...
 
   '';
