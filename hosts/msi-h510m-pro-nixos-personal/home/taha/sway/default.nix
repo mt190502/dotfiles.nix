@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   osConfig,
   lib,
   pkgs,
@@ -10,7 +9,6 @@
 let
   inherit (config.wayland.windowManager.sway.config) modifier;
   onepass = lib.getExe' osConfig.programs._1password-gui.package "1password";
-  solaar = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.solaar-change-host;
 in
 {
   wayland.windowManager.sway.config = lib.mkIf (config.preferences.desktopenv == "sway") {
@@ -32,7 +30,7 @@ in
     };
     startup = [
       {
-        command = "${lib.getExe solaar} -w hide";
+        command = "${lib.getExe pkgs.solaar} -w hide";
       }
       {
         command = "${onepass} --silent";
