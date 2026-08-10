@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   version = "1.12.5";
   src = fetchGit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-ui";
-    rev = "2add3c6ba3fec438500314c93c7a473f35e35451";
+    rev = "4f3c121ef50e08d42a39c1b361bef2290529c57a";
     ref = "master";
     submodules = true;
   };
