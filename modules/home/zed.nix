@@ -25,31 +25,54 @@
     ];
     userSettings = {
       agent = {
-        dock = "right";
-        sidebar_side = "right";
         default_model = {
-          effort = "medium";
+          effort = "max";
           enable_thinking = true;
-          model = "gpt-5.2-codex";
-          provider = "copilot_chat";
+          model = "go/glm-5.2";
+          provider = "opencode";
         };
+        dock = "right";
         model_parameters = [ ];
+        sidebar_side = "right";
+        tool_permissions = {
+          tools = {
+            terminal = {
+              always_allow = [
+                {
+                  pattern = "^grep\\b";
+                }
+                {
+                  pattern = "^head\\b";
+                }
+                {
+                  pattern = "^wc\\b";
+                }
+              ];
+            };
+          };
+        };
       };
       agent_servers = {
         github-copilot-cli = {
           type = "registry";
         };
       };
+      auto_install_extensions = {
+        basher = true;
+        dockerfile = true;
+        html = true;
+        markdownlint = true;
+        "material-icon-theme" = true;
+        nix = true;
+        "rainbow-csv" = true;
+        terraform = true;
+      };
       autosave = {
         after_delay = {
           milliseconds = 1000;
         };
       };
-      buffer_font_fallbacks = [
-        "Fira Code"
-        "Droid Sans"
-        "Droid Sans Fallback"
-      ];
+      buffer_font_fallbacks = [ "Fira Code" ];
       buffer_font_family = "Iosevka Nerd Font";
       buffer_font_size = config.fontcfg.sizes.applications + 4.5;
       buffer_font_weight = 500;
@@ -68,11 +91,17 @@
           padding = 4;
         };
       };
-      features = {
-        edit_prediction_provider = "copilot";
+      edit_predictions = {
+        copilot = {
+          enable_next_edit_suggestions = true;
+        };
+        mode = "eager";
       };
       git_panel = {
         dock = "left";
+        group_by = "staging";
+        sort_by = "name";
+        tree_view = true;
       };
       gutter = {
         line_numbers = true;
@@ -85,6 +114,12 @@
         show_parameter_hints = true;
         show_type_hints = false;
         show_value_hints = true;
+      };
+      language_models = {
+        opencode = {
+          show_free_models = false;
+          show_zen_models = false;
+        };
       };
       languages = {
         Nix = {
@@ -139,11 +174,7 @@
       relative_line_numbers = "enabled";
       show_edit_predictions = true;
       terminal = {
-        font_fallbacks = [
-          "Fira Code"
-          "Droid Sans"
-          "Droid Sans Fallback"
-        ];
+        font_fallbacks = [ "Fira Code" ];
         font_family = config.fontcfg.monospace.name;
         font_size = config.fontcfg.sizes.terminal + 3.5;
       };
