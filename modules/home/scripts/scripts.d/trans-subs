@@ -1,0 +1,24 @@
+#!@bash@
+
+translate() {
+	in="$@"
+
+	echo -e "==================================================\n"
+
+	echo -e EN: "$in"
+	echo -e TR: """$(@translate-shell@ -b :tr "$in")\n"""
+	
+	#echo -e "\n=================================================="
+}
+
+case $1 in
+	--watch)
+		clear
+		while @inotifywait@ -e close_write ~/.cache/mpv_trans &>/dev/null; do
+			translate "$(cat ~/.cache/mpv_trans)"
+		done
+	;;
+	*)
+		echo "$@" > ~/.cache/mpv_trans
+	;;
+esac

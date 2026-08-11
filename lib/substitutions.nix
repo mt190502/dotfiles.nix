@@ -71,6 +71,9 @@ let
       pkg = "translate-shell";
       bin = "trans";
     };
+    "inotifywait" = {
+      pkg = "inotify-tools";
+    };
     "imv" = {
       pkg = "imv";
       bin = "imv-wayland";
