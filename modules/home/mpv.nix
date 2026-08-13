@@ -12,7 +12,7 @@ in
 {
   programs.mpv = {
     enable = true;
-    scripts = with pkgs.mpvScripts; [ mpvacious ];
+    scripts = lib.optionals pkgs.stdenv.hostPlatform.isLinux (with pkgs.mpvScripts; [ mpvacious ]);
 
     bindings = {
       "Shift+s" = "cycle secondary-sid";
