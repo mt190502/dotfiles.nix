@@ -23,7 +23,7 @@ in
   ## Packages
   #
   ########################################
-  home.packages = [ ];
+  home.packages = [ inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.prime-agent ];
 
   ########################################
   #

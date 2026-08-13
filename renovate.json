@@ -27,7 +27,7 @@
       "customType": "regex",
       "managerFilePatterns": ["**/*.nix"],
       "matchStrings": [
-        "version\\s*=\\s*\"(?<currentValue>[^\"]+)\";[\\s\\S]*?url\\s*=\\s*\"https://github\\.com/(?<packageName>[^/]+/[^/]+)/releases/download/[a-zA-Z]+-v"
+        "version\\s*=\\s*\"(?<currentValue>[^\"]+)\";[\\s\\S]*?url\\s*=\\s*\"https://github\\.com/(?<packageName>[^/]+/[^/]+)/releases/download/(?:[a-zA-Z]+-)?v"
       ],
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^(?:.*-)?v(?<version>.+)$"
