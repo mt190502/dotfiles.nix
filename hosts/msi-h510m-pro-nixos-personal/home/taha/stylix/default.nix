@@ -3,6 +3,6 @@
 {
   config.stylix = {
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/outrun-dark.yaml";
-    image = ../../../../../assets/wallpapers/wallpaper9.png;
+    image = ../../../../../assets/wallpapers/wallpaper7.png;
   };
 }
