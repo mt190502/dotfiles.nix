@@ -9,7 +9,7 @@ stdenv.mkDerivation {
       owner = "raycast";
       repo = "extensions";
       rev = "3ee21ae551631deec70dec760d5c7232c2344e17";
-      sha256 = "sha256-f9dBacrE7Wtthk4tWHXiUVviYhznhSA+xilFzNmdnRQ=";
+      sha256 = "sha256-Poz6IGWQXx0H0r+DUMN+CjkW+E+UTTTAmChGt5vu328=";
       sparseCheckout = [ "/extensions/easydict" ];
     }
     + "/extensions/easydict";
