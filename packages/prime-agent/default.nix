@@ -16,22 +16,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-vFRx8qYm1ye4ikXrdF//k7EMVUo8T8WRLyXYxkuYf14=";
   };
 
-  nativeBuildInputs = [
-    cacert
-    nodejs_24
-  ];
+  packageLock = fetchurl {
+    url = "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/v${version}/package-lock.json";
+    hash = "sha256-fnCNRz4B/j+ZLo4S4lxPgVKCoXYwOPHQ9lqKD217N+c=";
+  };
+
+  nativeBuildInputs = [ nodejs_24 ];
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  outputHash = "sha256-wzkfrf6EYnegIW13oaEGQac4CS+hy+5VAHtgbn2Mkjs=";
+  outputHash = "sha256-+wM81kLP5fHlP5YZ3mv6G6bSxfCZ5d3rUeCA2cHTT4E=";
   outputHashMode = "recursive";
   dontPatchShebangs = true;
 
   buildPhase = ''
     export HOME="$TMPDIR"
     export npm_config_cafile="$SSL_CERT_FILE"
-    npm install --omit=dev --ignore-scripts --no-audit --no-fund \
-      --fetch-retries=1 --fetch-timeout=60000
+    cp ${packageLock} package-lock.json
+    chmod u+w package-lock.json
+    npm install --omit=dev --ignore-scripts --no-audit --no-fund
   '';
 
   installPhase = ''
