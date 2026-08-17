@@ -7,7 +7,11 @@
   ...
 }:
 
-stdenv.mkDerivation rec {
+let
+  # npm selects different optional dependencies on macOS.
+  darwinOutputHash = "sha256-i7ji6CTwtys/4j7dn5ImWyoWba9xSZZRGP8pNlnHpsI=";
+in
+(stdenv.mkDerivation rec {
   pname = "prime-agent";
   version = "0.7.2";
 
@@ -51,4 +55,10 @@ stdenv.mkDerivation rec {
     mainProgram = "prime-agent";
     platforms = lib.platforms.all;
   };
-}
+}).overrideAttrs
+  (
+    _:
+    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      outputHash = darwinOutputHash;
+    }
+  )

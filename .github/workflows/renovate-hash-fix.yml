@@ -33,12 +33,14 @@ jobs:
           changed=$(git diff --name-only "$BASE_REF" HEAD -- 'packages/**/*.nix')
           [ -z "$changed" ] && { echo "No changed nix files in packages/"; exit 0; }
 
-          # Find every line in changed files that has a SRI sha256 value
+          # Find every Renovate-managed SRI sha256 value in changed files.
+          # darwinOutputHash is maintained manually because it cannot be built on Linux.
           # Returns: "<file>:<line>:<original_hash>" for each
           find_all_hashes() {
             for file in $changed; do
               [ -f "$file" ] || continue
               grep -nP '^\s*\w+\s*=\s*"sha256-' "$file" 2>/dev/null \
+                | grep -v 'darwinOutputHash' \
                 | sed -E 's/^([0-9]+):.*"sha256-([^"]+)".*/\1:sha256-\2/' \
                 | while IFS=: read -r ln hash; do
                     [ "$hash" = "$FAKE" ] && continue
