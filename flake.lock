@@ -807,7 +807,8 @@
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
-        "vicinae-extensions": "vicinae-extensions"
+        "vicinae-extensions": "vicinae-extensions",
+        "zmem": "zmem"
       }
     },
     "rust-overlay": {
@@ -1122,6 +1123,26 @@
       "original": {
         "owner": "vicinaehq",
         "repo": "extensions",
+        "type": "github"
+      }
+    },
+    "zmem": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787083134,
+        "narHash": "sha256-GyCrMqHC++wXGqvobwMEiYl6QfSYr1LHPZLIyINfYBg=",
+        "owner": "xeome",
+        "repo": "zmem",
+        "rev": "ee776a328a027bfcf496b34f1a3bdbb76f130eb1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xeome",
+        "repo": "zmem",
         "type": "github"
       }
     }

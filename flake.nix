@@ -80,6 +80,10 @@
       url = "github:vicinaehq/extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zmem = {
+      url = "github:xeome/zmem";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
