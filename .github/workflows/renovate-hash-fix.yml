@@ -25,33 +25,41 @@ jobs:
       - name: Fix hashes
         env:
           BASE_REF: origin/${{ github.base_ref }}
-          FAKE: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
-          changed=$(git diff --name-only "$BASE_REF" HEAD -- 'packages/**/*.nix')
-          [ -z "$changed" ] && { echo "No changed nix files in packages/"; exit 0; }
+          mapfile -t changed < <(git diff --name-only "$BASE_REF" HEAD -- 'packages/**/*.nix')
+          [ "${#changed[@]}" -eq 0 ] && { echo "No changed nix files in packages/"; exit 0; }
 
-          # Find every Renovate-managed SRI sha256 value in changed files.
+          # Find every Renovate-managed SRI sha256 value in a file.
           # darwinOutputHash is maintained manually because it cannot be built on Linux.
-          # Returns: "<file>:<line>:<original_hash>" for each
-          find_all_hashes() {
-            for file in $changed; do
-              [ -f "$file" ] || continue
-              grep -nP '^\s*\w+\s*=\s*"sha256-' "$file" 2>/dev/null \
-                | grep -v 'darwinOutputHash' \
-                | sed -E 's/^([0-9]+):.*"sha256-([^"]+)".*/\1:sha256-\2/' \
-                | while IFS=: read -r ln hash; do
-                    [ "$hash" = "$FAKE" ] && continue
-                    echo "$file:$ln:$hash"
-                  done
-            done
+          # Returns: "<line>:<original_hash>" for each.
+          find_hashes() {
+            local file="$1"
+            grep -nP '^\s*\w+\s*=\s*"sha256-' "$file" 2>/dev/null \
+              | grep -v 'darwinOutputHash' \
+              | sed -E 's/^([0-9]+):.*"(sha256-[^"]+)".*/\1:\2/'
           }
 
-          # Extract correct hash from nix error output
-          extract_hash() {
-            grep -oP 'got:    sha256-\K[0-9a-zA-Z+/=]+' | head -1 || true
+          # Each line gets a unique valid hash so a mismatch can be mapped back
+          # to the exact field that caused it.
+          make_fake_hash() {
+            local key="$1"
+            local hex
+            hex=$(printf '%s' "$key" | sha256sum | cut -d ' ' -f 1)
+            nix hash convert --hash-algo sha256 --to sri "$hex"
+          }
+
+          # Returns: "<specified_hash> <actual_hash>" for the first mismatch.
+          extract_mismatch() {
+            perl -ne '
+              if (/specified:\s+(sha256-\S+)/) { $specified = $1; }
+              if (defined $specified && /got:\s+(sha256-\S+)/) {
+                print "$specified $1\n";
+                exit;
+              }
+            '
           }
 
           # Detect current system dynamically
@@ -66,63 +74,102 @@ jobs:
           # Try to trigger the hash mismatch via targeted build
           trigger_build() {
             local file="$1"
-            local got=""
+            local mismatch=""
 
             # Strategy 1: build the specific package directly by pname
             # Skip if pname contains $ (template string, not a real name)
-            local pname=$(grep -oP 'pname\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1)
+            local pname
+            pname=$(grep -oP 'pname\s*=\s*"\K[^"]+' "$file" 2>/dev/null | head -1) || true
             if [ -n "$pname" ] && [[ "$pname" != *'$'* ]]; then
               local drv=""
               drv=$(timeout 60 nix eval --raw .#legacyPackages."$SYSTEM"."$pname".drvPath 2>/dev/null) || \
               drv=$(timeout 60 nix eval --raw .#packages."$SYSTEM"."$pname".drvPath 2>/dev/null)
               if [ -n "$drv" ]; then
-                got=$(timeout 300 nix-store -r "$drv" 2>&1 | extract_hash)
+                mismatch=$(timeout 300 nix-store -r "$drv" 2>&1 | extract_mismatch) || true
               fi
             fi
 
             # Strategy 1.5: try all legacyPackages function attributes
             # Discovers functions dynamically using only builtins, evaluates drvPath, then builds it
-            if [ -z "$got" ]; then
-              local ext_name=$(basename "$file" .nix)
-              local funcs=$(timeout 60 nix eval --json .#legacyPackages."$SYSTEM" --apply \
+            if [ -z "$mismatch" ]; then
+              local ext_name funcs
+              ext_name=$(basename "$file" .nix)
+              # shellcheck disable=SC2016 # ${n} belongs to the quoted Nix expression.
+              funcs=$(timeout 60 nix eval --json .#legacyPackages."$SYSTEM" --apply \
                 'attrs: builtins.concatMap (n: let v = builtins.tryEval (attrs.${n}); in if v.success && builtins.isFunction v.value then [n] else []) (builtins.attrNames attrs)' 2>/dev/null \
-                | tr -d '[]" ' | tr ',' ' ')
+                | tr -d '[]" ' | tr ',' ' ') || true
               for func in $funcs; do
-                local drv=$(timeout 60 nix eval --raw .#legacyPackages."$SYSTEM"."$func" \
-                  --apply "f: (f [\"$ext_name\"]).\"$ext_name\".drvPath" 2>/dev/null)
+                local drv
+                drv=$(timeout 60 nix eval --raw .#legacyPackages."$SYSTEM"."$func" \
+                  --apply "f: (f [\"$ext_name\"]).\"$ext_name\".drvPath" 2>/dev/null) || true
                 if [ -n "$drv" ]; then
-                  got=$(timeout 300 nix-store -r "$drv" 2>&1 | extract_hash)
-                  [ -n "$got" ] && break
+                  mismatch=$(timeout 300 nix-store -r "$drv" 2>&1 | extract_mismatch) || true
+                  [ -n "$mismatch" ] && break
                 fi
               done
             fi
 
             # Strategy 2: build first nixosConfiguration (forces home-manager → vicinae → raycastExtensions)
-            if [ -z "$got" ]; then
-              local first_host=$(get_hosts | awk '{print $1}')
+            if [ -z "$mismatch" ]; then
+              local first_host
+              first_host=$(get_hosts | awk '{print $1}') || true
               if [ -n "$first_host" ]; then
-                got=$(timeout 300 nix build .#nixosConfigurations."$first_host".config.system.build.toplevel --no-link 2>&1 | extract_hash)
+                mismatch=$(timeout 300 nix build .#nixosConfigurations."$first_host".config.system.build.toplevel --no-link 2>&1 | extract_mismatch) || true
               fi
             fi
 
-            echo "$got"
+            echo "$mismatch"
           }
 
-          # Process each hash: set FAKE → trigger build → write correct hash
-          find_all_hashes | while IFS=: read -r file ln original; do
-            echo "=== $file:$ln ==="
-            sed -i "${ln}s|sha256-[^\"]*|$FAKE|" "$file"
+          process_file() {
+            local file="$1"
+            local entry fake line original mismatch specified actual
+            local -a entries=()
+            declare -A originals=()
+            declare -A lines=()
 
-            got=$(trigger_build "$file")
+            mapfile -t entries < <(find_hashes "$file")
+            [ "${#entries[@]}" -eq 0 ] && return 0
 
-            if [ -n "$got" ]; then
-              sed -i "${ln}s|sha256-[^\"]*|sha256-$got|" "$file"
-              echo "  -> sha256-$got"
-            else
-              sed -i "${ln}s|sha256-[^\"]*|$original|" "$file"
-              echo "  failed, keeping original"
+            echo "=== $file ==="
+            for entry in "${entries[@]}"; do
+              IFS=: read -r line original <<< "$entry"
+              fake=$(make_fake_hash "$file:$line")
+              sed -i "${line}s|sha256-[^\"]*|$fake|" "$file"
+              originals["$fake"]="$original"
+              lines["$fake"]="$line"
+            done
+
+            while [ "${#lines[@]}" -gt 0 ]; do
+              mismatch=$(trigger_build "$file")
+              [ -z "$mismatch" ] && break
+              read -r specified actual <<< "$mismatch"
+              line="${lines[$specified]:-}"
+              [ -z "$line" ] && break
+
+              sed -i "${line}s|$specified|$actual|" "$file"
+              unset 'originals['"$specified"']'
+              unset 'lines['"$specified"']'
+              echo "  $file:$line -> $actual"
+            done
+
+            if [ "${#lines[@]}" -gt 0 ]; then
+              echo "Could not resolve every hash in $file; restoring original values" >&2
+              for fake in "${!lines[@]}"; do
+                line="${lines[$fake]}"
+                original="${originals[$fake]}"
+                sed -i "${line}s|$fake|$original|" "$file"
+              done
+              return 1
             fi
+          }
+
+          failed=0
+          for file in "${changed[@]}"; do
+            [ -f "$file" ] || continue
+            process_file "$file" || failed=1
           done
+          [ "$failed" -eq 0 ] || exit 1
 
       - name: Commit and push
         run: |
