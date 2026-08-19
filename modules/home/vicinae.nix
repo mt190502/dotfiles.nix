@@ -55,43 +55,6 @@ let
               }
             }
           },
-          "@isfeng/raycast-extension-easydict-0": {
-             "preferences": {
-                "bingHost": "",
-                "deepLEndpoint": "",
-                "enableAppleTranslate": false,
-                "enableAutomaticPlayWordAudio": true,
-                "enableAutomaticQuerySelectedText": true,
-                "enableBaiduLanguageDetect": true,
-                "enableBaiduTranslate": false,
-                "enableBingTranslate": true,
-                "enableCaiyunTranslate": false,
-                "enableDeepLTranslate": true,
-                "enableDeepLXTranslate": false,
-                "enableDetectLanguageSpeedFirst": true,
-                "enableGeminiTranslate": false,
-                "enableGoogleTranslate": false,
-                "enableLingueeDictionary": false,
-                "enableOpenAITranslate": false,
-                "enableSelectTargetLanguage": true,
-                "enableSystemProxy": false,
-                "enableTencentTranslate": false,
-                "enableVolcanoTranslate": false,
-                "enableYoudaoDictionary": false,
-                "enableYoudaoTranslate": false,
-                "forceMaxCompletionTokens": false,
-                "geminiAPIURL": "https://generativelanguage.googleapis.com",
-                "geminiModel": "gemini-2.0-flash",
-                "language1": "en",
-                "language2": "tr",
-                "openAIAPIURL": "https://api.openai.com/v1/chat/completions",
-                "openAIModel": "gpt-4o-mini",
-                "servicesOrder": "",
-                "showOpenInEudicFirst": false,
-                "tencentSecretId": "",
-                "volcanoAccessKeyId": ""
-             }
-          },
           "@khasbilegt/raycast-extension-1password-0": {
              "preferences": {
                 "cliPath": "${
@@ -217,7 +180,6 @@ in
           "1password"
           "chatgpt"
           "deepcast"
-          # "easydict"
           "simple-dictionary"
           "tailscale"
           "word-count"
