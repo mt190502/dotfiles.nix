@@ -1,22 +1,26 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    android-tools
-    ethtool
-    gnome-text-editor
-    gparted
-    libreoffice
-    libva-utils
-    loupe
-    openboard
-    seahorse
-    snapshot
-    v4l-utils
-    xdg-user-dirs
-    xdg-user-dirs-gtk
-    xdg-utils
-  ];
+  environment.systemPackages =
+    with pkgs;
+    [
+      android-tools
+      ethtool
+      gnome-text-editor
+      gparted
+      libreoffice
+      libva-utils
+      loupe
+      seahorse
+      snapshot
+      v4l-utils
+      xdg-user-dirs
+      xdg-user-dirs-gtk
+      xdg-utils
+    ]
+    ++ (with inputs.self.packages.${pkgs.stdenv.hostPlatform.system}; [
+      openboard
+    ]);
   programs = {
     nix-ld = {
       enable = true;
