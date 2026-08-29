@@ -13,7 +13,7 @@ let
 in
 (stdenv.mkDerivation rec {
   pname = "prime-agent";
-  version = "0.7.4";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}.tgz";
