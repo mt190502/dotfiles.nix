@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   version = "1.3.3";
   src = fetchGit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-notification";
-    rev = "8db381865f5d03212f51fdadcf0d357ed6ea4a60";
+    rev = "c2be6b9ecee27425e0a6235849e965f87e9eb0a4";
     ref = "master";
     submodules = true;
   };
