@@ -76,6 +76,9 @@ let
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = homeModules;
+          home-manager.extraSpecialArgs = {
+            hostPlatform = cfg.platform;
+          };
         }
         ./${name}
       ]
@@ -121,6 +124,9 @@ let
         inputs.nix-index-database.darwinModules.nix-index
         {
           home-manager.sharedModules = homeModules;
+          home-manager.extraSpecialArgs = {
+            hostPlatform = cfg.platform;
+          };
         }
         ./${name}
       ]
@@ -151,6 +157,7 @@ let
       extraSpecialArgs = {
         inherit inputs pkgs-unstable sharing;
         flakeName = name;
+        hostPlatform = cfg.platform;
         system = cfg.arch;
       };
       modules =

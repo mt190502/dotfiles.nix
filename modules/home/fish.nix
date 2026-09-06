@@ -1,6 +1,7 @@
 {
   config,
   flakeName,
+  hostPlatform,
   inputs,
   lib,
   pkgs,
@@ -21,7 +22,11 @@ let
   yt-dlp = getExe pkgs.yt-dlp;
   home = config.home.homeDirectory;
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
-  rebuildCmd = if isDarwin then "darwin-rebuild" else "nixos-rebuild";
+  rebuildCmd =
+    if isDarwin then
+      "darwin-rebuild"
+    else
+      "nixos-rebuild" + lib.optionalString (hostPlatform == "avf") " --max-jobs 2 --cores 2";
   readlink = getExe' pkgs.coreutils "readlink";
   fishPlugins = inputs.self.legacyPackages.${pkgs.stdenv.hostPlatform.system}.fishPlugins;
 in
