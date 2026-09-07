@@ -8,6 +8,7 @@
     "docker"
     "fontconfig"
     "homebrew"
+    "ihtc"
     "sops"
   ];
   profiles = [ ];
