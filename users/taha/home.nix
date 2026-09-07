@@ -29,7 +29,6 @@ in
       ark
       dolphin
       flameshot
-      harbor
       jetbrains-toolbox
       okular
     ])

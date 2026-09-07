@@ -119,7 +119,7 @@ in
       "identity.sync.tokenserver.uri" = "https://ffsync.mtaha.dev/1.0/sync/1.5";
       "network.trr.custom_uri" = "https://dns.adguard.com/dns-query";
       "network.trr.mode" = 2;
-      "network.trr.uri" = "https://dns.mtaha.dev/dns-query";
+      "network.trr.uri" = "https://dns.adguard.com/dns-query";
       "privacy.clearOnShutdown_v2.cache" = false;
       "privacy.clearOnShutdown_v2.cookiesAndStorage" = false;
       "privacy.resistFingerprinting" = false;
