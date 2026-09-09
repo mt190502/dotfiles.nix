@@ -7,8 +7,9 @@
   ];
   homebrew = {
     brews = [
-      "saml2aws"
       "ksops"
+      "saml2aws"
+      "strongswan"
       "turbot/tap/steampipe"
     ];
     casks = [
