@@ -7,6 +7,11 @@ Item {
 
     property var iconVolume: ["@pulseaudio-icon-volume-0@", "@pulseaudio-icon-volume-1@", "@pulseaudio-icon-volume-2@"]
     property string iconMuted: "@pulseaudio-icon-muted@"
+    property string iconHeadphones: "@pulseaudio-icon-headphones@"
+    property string iconHeadphonesMuted: "@pulseaudio-icon-headphones-muted@"
+    property string iconHeadset: "@pulseaudio-icon-headset@"
+    property string iconHeadsetMuted: "@pulseaudio-icon-headset-muted@"
+    property string iconOveramplified: "@pulseaudio-icon-overamplified@"
     property string iconMic: "@pulseaudio-icon-mic@"
     property string iconMicMuted: "@pulseaudio-icon-mic-muted@"
     property string middleClickCmd: '@pulseaudio-middle-click-cmd@'
@@ -39,6 +44,12 @@ Item {
     property string defaultSourceName: ""
     property string pendingVolumeCommand: ""
     property bool sliderDragging: false
+    property string activeSinkDeviceName: ""
+    property string activeSinkAddress: ""
+    property string activeSinkBus: ""
+    property bool activeSinkHeadphoneHint: false
+    property bool headphonesConnected: false
+    property bool headsetMicrophone: false
 
     readonly property int volumeIconIndex: {
         if (sinkVolume >= 67)
@@ -46,6 +57,18 @@ Item {
         if (sinkVolume >= 34)
             return 1;
         return 0;
+    }
+
+    readonly property string outputIcon: {
+        if (root.headphonesConnected && root.sinkMuted)
+            return root.headsetMicrophone ? root.iconHeadsetMuted : root.iconHeadphonesMuted;
+        if (root.headphonesConnected)
+            return root.headsetMicrophone ? root.iconHeadset : root.iconHeadphones;
+        if (root.sinkMuted)
+            return root.iconMuted;
+        if (root.sinkVolume > 100)
+            return root.iconOveramplified;
+        return root.iconVolume[root.volumeIconIndex];
     }
 
     function volumeIconIndexFor(percent) {
@@ -73,7 +96,10 @@ Item {
     }
 
     function updateText() {
-        var s = root.sinkMuted ? root.iconMuted : (root.iconVolume[root.volumeIconIndex] + " " + root.sinkVolume + "%");
+        var s = root.outputIcon;
+        if (!root.sinkMuted)
+            s += " " + root.sinkVolume + "%";
+
         var m = root.sourceMuted ? root.iconMicMuted : (root.iconMic + " " + root.sourceVolume + "%");
         pulseText.text = s + "  " + m;
     }
@@ -81,6 +107,8 @@ Item {
     function refresh() {
         sinkProc.running = true;
         sourceProc.running = true;
+        defaultSinkProc.running = true;
+        defaultSourceProc.running = true;
     }
 
     function refreshMixer() {
@@ -90,28 +118,93 @@ Item {
 
     function showOsd() {
         if (root.osdIpc.length > 0) {
-            osdProc.command = ["sh", "-c", root.osdIpc + " volume " + root.sinkVolume + " " + root.sinkMuted + " '" + root.screenName + "'"];
+            osdProc.command = ["sh", "-c", root.osdIpc + " volume " + root.sinkVolume + " " + root.sinkMuted + " '" + root.outputIcon + "'"];
             osdProc.running = true;
         }
+    }
+
+    function deviceHints(device) {
+        var props = device.properties || {};
+        var hints = [
+            device.name || "",
+            device.description || "",
+            device.active_port || "",
+            props["device.form_factor"] || "",
+            props["device.icon_name"] || "",
+            props["device.profile.name"] || "",
+            props["device.profile.description"] || ""
+        ];
+        var ports = device.ports || [];
+        for (var i = 0; i < ports.length; i++) {
+            if (!device.active_port || ports[i].name === device.active_port)
+                hints.push(ports[i].name || "", ports[i].description || "", ports[i].type || "");
+        }
+        return hints.join(" ").toLowerCase();
+    }
+
+    function sinkIsHeadphones(sink) {
+        return /(headphone|headset)/.test(root.deviceHints(sink));
+    }
+
+    function updateHeadsetMicrophone() {
+        var pairedExternalMicrophone = false;
+        var pairedHeadsetMicrophone = false;
+        var externalSink = root.activeSinkBus === "usb" || root.activeSinkBus === "bluetooth";
+
+        for (var i = 0; i < root.mixerSources.length; i++) {
+            var source = root.mixerSources[i];
+            var sameDevice = root.activeSinkDeviceName.length > 0 && source.deviceName === root.activeSinkDeviceName;
+            var sameAddress = root.activeSinkAddress.length > 0 && source.address === root.activeSinkAddress;
+            if (!sameDevice && !sameAddress)
+                continue;
+            if (externalSink)
+                pairedExternalMicrophone = true;
+            if (source.headsetHint || sameAddress)
+                pairedHeadsetMicrophone = true;
+        }
+
+        root.headphonesConnected = root.activeSinkHeadphoneHint || pairedExternalMicrophone;
+        root.headsetMicrophone = false;
+        if (!root.headphonesConnected)
+            return;
+        root.headsetMicrophone = pairedExternalMicrophone || pairedHeadsetMicrophone;
     }
 
     function parseSinks(text) {
         try {
             var data = JSON.parse(text);
             var sinks = [];
+            var activeSink = null;
             for (var i = 0; i < data.length; i++) {
                 var s = data[i];
                 var pct = root.pctOfVolume(s.volume);
+                var isDefault = s.name === root.defaultSinkName;
                 sinks.push({
                     index: s.index,
                     name: s.name,
                     description: s.description || s.name,
                     volume: pct || 0,
                     muted: s.mute,
-                    isDefault: s.name === root.defaultSinkName
+                    isDefault: isDefault
                 });
+                if (isDefault)
+                    activeSink = s;
             }
             root.mixerSinks = sinks;
+            if (activeSink) {
+                var props = activeSink.properties || {};
+                root.activeSinkDeviceName = props["device.name"] || "";
+                root.activeSinkAddress = props["api.bluez5.address"] || "";
+                root.activeSinkBus = props["device.bus"] || "";
+                root.activeSinkHeadphoneHint = root.sinkIsHeadphones(activeSink);
+            } else {
+                root.activeSinkDeviceName = "";
+                root.activeSinkAddress = "";
+                root.activeSinkBus = "";
+                root.activeSinkHeadphoneHint = false;
+            }
+            root.updateHeadsetMicrophone();
+            root.updateText();
             root.refreshMixerApps();
         } catch (e) {}
     }
@@ -193,16 +286,22 @@ Item {
                 if (s.name && s.name.indexOf(".monitor") >= 0)
                     continue;
                 var pct = root.pctOfVolume(s.volume);
+                var props = s.properties || {};
                 sources.push({
                     index: s.index,
                     name: s.name,
                     description: s.description || s.name,
                     volume: pct,
                     muted: s.mute,
-                    isDefault: s.name === root.defaultSourceName
+                    isDefault: s.name === root.defaultSourceName,
+                    deviceName: props["device.name"] || "",
+                    address: props["api.bluez5.address"] || "",
+                    headsetHint: /(headphone|headset)/.test(root.deviceHints(s))
                 });
             }
             root.mixerSources = sources;
+            root.updateHeadsetMicrophone();
+            root.updateText();
             root.refreshMixerInputApps();
         } catch (e) {}
     }
@@ -294,11 +393,11 @@ Item {
         command: ["sh", "-c", root.pactl + " subscribe 2>/dev/null"]
         stdout: SplitParser {
             onRead: msg => {
-                if (msg.indexOf("Event 'change' on sink") >= 0 || msg.indexOf("Event 'change' on sink-input") >= 0 || msg.indexOf("Event 'change' on source") >= 0 || msg.indexOf("Event 'change' on source-output") >= 0 || msg.indexOf("Event 'change' on server") >= 0) {
+                if (msg.indexOf(" on sink") >= 0 || msg.indexOf(" on source") >= 0 || msg.indexOf(" on server") >= 0) {
+                    root.osdPending = true;
                     root.refresh();
                     if (root.mixerPopupVisible && !root.sliderDragging)
                         root.refreshMixer();
-                    root.osdPending = true;
                 }
             }
         }

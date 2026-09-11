@@ -142,6 +142,11 @@ in
             " "
           ];
           iconMuted = "󰝟";
+          iconHeadphones = "";
+          iconHeadphonesMuted = "󰟎";
+          iconHeadset = "󰋎";
+          iconHeadsetMuted = "󰋐";
+          iconOveramplified = "󱄠";
           iconMic = "";
           iconMicMuted = "";
           click = "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle";

@@ -186,6 +186,11 @@ let
   pulseaudio-icon-volume-1 = builtins.elemAt pulseaudio-icons 1;
   pulseaudio-icon-volume-2 = builtins.elemAt pulseaudio-icons 2;
   pulseaudio-icon-muted = pa.iconMuted or "";
+  pulseaudio-icon-headphones = pa.iconHeadphones or "";
+  pulseaudio-icon-headphones-muted = pa.iconHeadphonesMuted or "";
+  pulseaudio-icon-headset = pa.iconHeadset or "";
+  pulseaudio-icon-headset-muted = pa.iconHeadsetMuted or "";
+  pulseaudio-icon-overamplified = pa.iconOveramplified or "";
   pulseaudio-icon-mic = pa.iconMic or "";
   pulseaudio-icon-mic-muted = pa.iconMicMuted or "";
   pulseaudio-click-cmd = pa.click or "";
@@ -345,6 +350,11 @@ let
       pulseaudio-icon-volume-1
       pulseaudio-icon-volume-2
       pulseaudio-icon-muted
+      pulseaudio-icon-headphones
+      pulseaudio-icon-headphones-muted
+      pulseaudio-icon-headset
+      pulseaudio-icon-headset-muted
+      pulseaudio-icon-overamplified
       pulseaudio-icon-mic
       pulseaudio-icon-mic-muted
       pulseaudio-click-cmd

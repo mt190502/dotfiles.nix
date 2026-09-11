@@ -422,6 +422,31 @@ in
           default = "";
         };
 
+        iconHeadphones = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+
+        iconHeadphonesMuted = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+
+        iconHeadset = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+
+        iconHeadsetMuted = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+
+        iconOveramplified = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+
         iconMic = lib.mkOption {
           type = lib.types.str;
           default = "";
@@ -1087,6 +1112,11 @@ in
               inherit (cfg.bar.pulseaudio)
                 icons
                 iconMuted
+                iconHeadphones
+                iconHeadphonesMuted
+                iconHeadset
+                iconHeadsetMuted
+                iconOveramplified
                 iconMic
                 iconMicMuted
                 click

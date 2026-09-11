@@ -82,6 +82,7 @@ let
       name: "cp ${substituteQml "${qmlSrc}/${name}"} $out/${name}"
     ) qmlFiles}
   '';
+
 in
 with pkgs;
 stdenv.mkDerivation {

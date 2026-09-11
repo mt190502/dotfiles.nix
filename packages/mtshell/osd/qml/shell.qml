@@ -18,6 +18,8 @@ Scope {
     property string pendingKind: ""
     property string pendingValue: ""
     property bool pendingMuted: false
+    property string pendingVolumeIcon: ""
+    property string volumeIcon: ""
     property var volumeIcons: ["@volume-icon-0@", "@volume-icon-1@", "@volume-icon-2@", "@volume-icon-3@", "@volume-icon-4@"]
     property string volumeMutedIcon: "@volume-muted-icon@"
     property var brightnessIcons: ["@brightness-icon-0@", "@brightness-icon-1@", "@brightness-icon-2@", "@brightness-icon-3@", "@brightness-icon-4@"]
@@ -25,6 +27,8 @@ Scope {
 
     readonly property string icon: {
         if (root.kind === "volume") {
+            if (root.volumeIcon.length > 0)
+                return root.volumeIcon;
             if (root.extra)
                 return root.volumeMutedIcon;
             return root.levelIcon(root.volumeIcons);
@@ -46,10 +50,11 @@ Scope {
         return icons[0];
     }
 
-    function show(kind, value, muted, output) {
+    function show(kind, value, muted, icon) {
         root.pendingKind = kind;
         root.pendingValue = value;
         root.pendingMuted = muted;
+        root.pendingVolumeIcon = kind === "volume" ? icon : "";
         focusProc.running = true;
     }
 
@@ -62,6 +67,7 @@ Scope {
                     root.label = root.pendingValue;
                     root.value = Number(root.pendingValue) || 0;
                     root.extra = root.pendingMuted;
+                    root.volumeIcon = root.pendingVolumeIcon;
                     root.output = outputs[i].name;
                     root.active = true;
                     hideTimer.restart();
@@ -76,8 +82,8 @@ Scope {
     IpcHandler {
         target: "osd"
 
-        function show(kind: string, value: string, muted: bool, output: string): void {
-            root.show(kind, value, muted, output);
+        function show(kind: string, value: string, muted: bool, icon: string): void {
+            root.show(kind, value, muted, icon);
         }
     }
 
