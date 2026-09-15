@@ -140,52 +140,56 @@ in
       };
     };
   };
-  home.file = {
-    ".config/opencode/plugin/terminal-bell.ts".text = ''
-      import type { Plugin } from "@opencode-ai/plugin"
-      export const TerminalBell: Plugin = async ({ project, client, $, directory, worktree }) => {
-        return {
-          event: async ({ event }) => {
-            if (event.type === "session.idle") {
-              await Bun.write(Bun.stdout, "\x07")
-            }
-          }
-        }
-      }
-    '';
-    ".config/opencode/plugin/commandcode.ts".text = ''
-      import type { Plugin } from "@opencode-ai/plugin"
-
-      export default (async () => {
-        let models: Record<string, any> = {}
-
-        try {
-          const res = await fetch("http://127.0.0.1:8082/v1/models")
-          if (res.ok) {
-            const data = await res.json()
-            for (const model of data.data ?? []) {
-              models[model.id] = {
-                name: model.id.split("/").pop() ?? model.id,
-                limit: { context: 1000000, output: 16384 },
-                modalities: { input: ["text"], output: ["text"] },
+  home = {
+    sessionVariables.OPENCODE_CONFIG_DIR = "${config.home.homeDirectory}/.config/opencode/config.d";
+    file = {
+      ".config/opencode/config.d/.keep".text = "";
+      ".config/opencode/plugin/terminal-bell.ts".text = ''
+        import type { Plugin } from "@opencode-ai/plugin"
+        export const TerminalBell: Plugin = async ({ project, client, $, directory, worktree }) => {
+          return {
+            event: async ({ event }) => {
+              if (event.type === "session.idle") {
+                await Bun.write(Bun.stdout, "\x07")
               }
             }
           }
-        } catch {
-          // proxy not running yet
         }
+      '';
+      ".config/opencode/plugin/commandcode.ts".text = ''
+        import type { Plugin } from "@opencode-ai/plugin"
 
-        return {
-          config: (cfg) => {
-            cfg.provider ??= {}
-            cfg.provider.commandcode ??= { models: {} }
-            cfg.provider.commandcode.models = {
-              ...models,
-              ...(cfg.provider.commandcode.models ?? {}),
+        export default (async () => {
+          let models: Record<string, any> = {}
+
+          try {
+            const res = await fetch("http://127.0.0.1:8082/v1/models")
+            if (res.ok) {
+              const data = await res.json()
+              for (const model of data.data ?? []) {
+                models[model.id] = {
+                  name: model.id.split("/").pop() ?? model.id,
+                  limit: { context: 1000000, output: 16384 },
+                  modalities: { input: ["text"], output: ["text"] },
+                }
+              }
             }
-          },
-        }
-      }) satisfies Plugin
-    '';
+          } catch {
+            // proxy not running yet
+          }
+
+          return {
+            config: (cfg) => {
+              cfg.provider ??= {}
+              cfg.provider.commandcode ??= { models: {} }
+              cfg.provider.commandcode.models = {
+                ...models,
+                ...(cfg.provider.commandcode.models ?? {}),
+              }
+            },
+          }
+        }) satisfies Plugin
+      '';
+    };
   };
 }
