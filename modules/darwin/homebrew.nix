@@ -25,7 +25,6 @@
       "libreoffice"
       "librewolf"
       "logi-options+"
-      "jordanbaird-ice@beta"
       "obs"
       "openvpn-connect"
       "parsec"
