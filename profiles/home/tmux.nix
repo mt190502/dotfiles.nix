@@ -37,6 +37,7 @@ in
       set-hook -g after-new-session 'if-shell -F "#{||:#{==:#{session_name},daemonmodetmux},#{==:#{session_name},dropterminaltmux}}" "set-option -p remain-on-exit on \; set-hook -p pane-died \"respawn-pane -k\""'
 
       #~ session-based settings
+      set -s  extended-keys       on
       set -s  focus-events        on
 
       #~ window-based settings
