@@ -78,7 +78,8 @@
     };
     stylix = {
       enable = lib.mkIf (lib.hasSuffix "linux" system) true;
-      # autoEnable = false;
+      autoEnable = false;
+      overlays.enable = false;
       cursor = {
         package = pkgs.adwaita-icon-theme;
         name = "Adwaita";
@@ -107,21 +108,37 @@
       };
       polarity = "dark";
       targets = {
+        anki.enable = true;
+        fish.enable = true;
+        font-packages.enable = true;
+        fontconfig.enable = true;
+        foot.enable = true;
+        gnome = {
+          enable = true;
+          colors.enable = false;
+          fonts.enable = false;
+          image.enable = false;
+          imageScalingMode.enable = false;
+        };
+        gtk.enable = true;
         hyprland.enable = false;
-        librewolf.profileNames = [ "main" ];
-        mangohud.enable = false;
-        k9s.enable = false;
         kde.enable = false;
-        neovim.enable = false;
-        nixvim.enable = false;
+        librewolf = {
+          enable = true;
+          profileNames = [ "main" ];
+        };
+        mpv.enable = true;
+        neovide.enable = true;
+        neovim.enable = true;
+        nixvim.enable = true;
+        opencode.enable = true;
         qt.enable = false;
         sway.enable = false;
         swaylock.enable = false;
         swaync.enable = false;
+        tmux.enable = true;
         waybar.enable = false;
-        vicinae.enable = false;
-        wofi.enable = false;
-        zed.enable = false;
+        yazi.enable = true;
       };
     };
   };
