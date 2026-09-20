@@ -96,38 +96,64 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.package ];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        home.packages = [ cfg.package ];
 
-    # Runs inside every home-manager activation, right after files/links are
-    # written. If sops (or anything else) left a SYMLINK at a live auth.json
-    # path, convert it into a real regular file (freshest of
-    # live/backup/seed/sops wins) so refreshed tokens can never be clobbered.
-    home.activation.codexAuthDetach = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      ${cfg.package}/bin/codex-auth-sync migrate || true
-    '';
+        # Runs inside every home-manager activation, right after files/links are
+        # written. If sops (or anything else) left a SYMLINK at a live auth.json
+        # path, convert it into a real regular file (freshest of
+        # live/backup/seed/sops wins) so refreshed tokens can never be clobbered.
+        home.activation.codexAuthDetach = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          ${cfg.package}/bin/codex-auth-sync migrate || true
+        '';
+      }
 
-    systemd.user.services.codex-auth-refresh = {
-      Unit = {
-        Description = "Refresh Codex/OpenAI OAuth tokens and mirror them into the sops repo";
-        After = [ "sops-nix.service" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/codex-auth-sync refresh";
-        Environment = [ "SOPS_AGE_KEY_FILE=${cfg.ageKeyFile}" ];
-      };
-    };
+      (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+        launchd.agents.codex-auth-refresh = {
+          enable = true;
+          config = {
+            ProgramArguments = [
+              "${cfg.package}/bin/codex-auth-sync"
+              "refresh"
+            ];
+            RunAtLoad = true;
+            StartInterval = 6 * 60 * 60;
+            ProcessType = "Background";
+            EnvironmentVariables = {
+              SOPS_AGE_KEY_FILE = cfg.ageKeyFile;
+            };
+            StandardOutPath = "${cfg.stateDir}/launchd.out.log";
+            StandardErrorPath = "${cfg.stateDir}/launchd.err.log";
+          };
+        };
+      })
 
-    systemd.user.timers.codex-auth-refresh = {
-      Unit.Description = "Periodically refresh Codex/OpenAI OAuth tokens";
-      Timer = {
-        OnBootSec = "10min";
-        OnUnitActiveSec = "6h";
-        RandomizedDelaySec = "20min";
-        Persistent = true;
-      };
-      Install.WantedBy = [ "timers.target" ];
-    };
-  };
+      (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+        systemd.user.services.codex-auth-refresh = {
+          Unit = {
+            Description = "Refresh Codex/OpenAI OAuth tokens and mirror them into the sops repo";
+            After = [ "sops-nix.service" ];
+          };
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${cfg.package}/bin/codex-auth-sync refresh";
+            Environment = [ "SOPS_AGE_KEY_FILE=${cfg.ageKeyFile}" ];
+          };
+        };
+
+        systemd.user.timers.codex-auth-refresh = {
+          Unit.Description = "Periodically refresh Codex/OpenAI OAuth tokens";
+          Timer = {
+            OnBootSec = "10min";
+            OnUnitActiveSec = "6h";
+            RandomizedDelaySec = "20min";
+            Persistent = true;
+          };
+          Install.WantedBy = [ "timers.target" ];
+        };
+      })
+    ]
+  );
 }
