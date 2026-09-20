@@ -36,6 +36,11 @@ Item {
     readonly property bool wiredConnected: wiredDevice ? wiredDevice.connected : false
     readonly property int wiredSpeed: wiredDevice && wiredDevice.linkSpeed ? wiredDevice.linkSpeed : 0
 
+    // Max WiFi list height: 400 card ceiling minus 8px top+bottom card margins,
+    // title height, column spacing, and the ethernet row (+ spacing) when visible.
+    readonly property int maxNetworkListHeight: Math.max(0, 384 - popupTitle.height - popupContent.spacing
+                 - (root.wiredConnected ? 32 + popupContent.spacing : 0))
+
     readonly property var activeNetwork: {
         if (wifiDevice && wifiDevice.networks) {
             for (const net of wifiDevice.networks.values) {
@@ -167,6 +172,7 @@ Item {
             spacing: 4
 
             Text {
+                id: popupTitle
                 text: root.passwordPromptVisible ? "Connect to " + (root.pendingNetwork ? root.pendingNetwork.name : "WiFi") : root.wiredConnected ? "Ethernet" : root.wifiDevice ? "WiFi Networks" : "Network"
                 color: Base.text
                 font.pixelSize: Base.fontSize
@@ -197,8 +203,10 @@ Item {
             ListView {
                 id: networkList
                 width: parent.width
-                height: contentHeight
-                interactive: false
+                height: Math.min(contentHeight, root.maxNetworkListHeight)
+                clip: true
+                interactive: true
+                boundsBehavior: Flickable.StopAtBounds
                 visible: root.sortedNetworks.length > 0 && !root.passwordPromptVisible
                 model: root.sortedNetworks
                 delegate: Rectangle {
@@ -211,7 +219,9 @@ Item {
                     Text {
                         anchors.fill: parent
                         anchors.leftMargin: 8
+                        anchors.rightMargin: 8
                         verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
                         text: modelData.name
                         color: Base.text
                         font.pixelSize: Base.fontSize

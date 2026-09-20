@@ -17,6 +17,9 @@ Scope {
     property int selectedPlayer: 0
     property string wlCopy: "@wl-copy-bin@"
 
+    // Incremented periodically so relative notification-age labels re-evaluate
+    property int timeTick: 0
+
     function formatBody(notif) {
         if (notif.appName === "Music Player Daemon" || notif.appName === "mpd" || notif.desktopEntry === "mpd") {
             var stripped = (notif.body || "").replace(/<\/?b>/g, "");
@@ -51,6 +54,27 @@ Scope {
         return buttons;
     }
 
+    // Reading root.timeTick inside the function makes every label binding that
+    // calls it depend on the tick timer, so ages refresh without imperative
+    // text assignment (same stale-binding problem Clock.qml works around).
+    function formatNotifTime(epochMs) {
+        var tick = root.timeTick;
+        if (!epochMs || epochMs <= 0)
+            return "";
+        var age = Date.now() - epochMs;
+        if (age < 0)
+            age = 0;
+        if (age < 30000)
+            return "Just now";
+        if (age < 60000)
+            return Math.floor(age / 1000) + "s ago";
+        if (age < 3600000)
+            return Math.floor(age / 60000) + "m ago";
+        if (age < 86400000)
+            return Math.floor(age / 3600000) + "h ago";
+        return Math.floor(age / 86400000) + "d ago";
+    }
+
     function copyVerificationCode(code) {
         copyProc.command = ["sh", "-c", "printf '%s' \"$1\" | " + root.wlCopy, "copy-code", code];
         copyProc.running = true;
@@ -59,6 +83,43 @@ Scope {
     Process {
         id: copyProc
         stdout: StdioCollector {}
+    }
+
+    // Persisted notification arrival times, keyed by "<id>|<appName>"
+    // (notification ids are client-local and collide across apps).
+    FileView {
+        id: receiptStore
+        path: Quickshell.statePath("notification-times.json")
+        blockLoading: true
+        watchChanges: true
+        printErrors: false
+        onFileChanged: reload()
+        onAdapterUpdated: saveTimer.restart()
+
+        JsonAdapter {
+            id: timesAdapter
+            property var times: ({})
+        }
+    }
+
+    Timer {
+        id: saveTimer
+        interval: 250
+        onTriggered: receiptStore.writeAdapter()
+    }
+
+    // Adaptive tick: one-shot, re-armed to fire exactly when the closest age
+    // boundary across all tracked notifications is crossed. Intervals grow
+    // with age: 1s in the seconds bucket, then per minute, per hour, per day.
+    // updateTickTimer() keeps it alive only while age labels are on screen.
+    Timer {
+        id: timeTickTimer
+        interval: 1000
+        repeat: false
+        onTriggered: {
+            root.timeTick++;
+            root.scheduleNextTick();
+        }
     }
 
     readonly property int notifCount: server.trackedNotifications.values.length
@@ -78,7 +139,70 @@ Scope {
         }
     }
 
-    onNotifCountChanged: ipc.statusChanged(root.notifCount + "|" + (root.dnd ? "1" : "0"))
+    // Drop stored arrival times for dismissed notifications and entries older
+    // than a week; gated on the store being loaded so an async startup load
+    // cannot be overwritten with an empty map.
+    function pruneTimes() {
+        if (!receiptStore.loaded)
+            return;
+        var keep = {};
+        var now = Date.now();
+        var tracked = server.trackedNotifications.values;
+        for (var i = 0; i < tracked.length; i++) {
+            var key = tracked[i].id + "|" + tracked[i].appName;
+            var t = timesAdapter.times[key];
+            if (t !== undefined && now - t < 604800000)
+                keep[key] = t;
+        }
+        timesAdapter.times = keep;
+    }
+
+    // Arm the tick timer exactly at the next label boundary across all
+    // tracked notifications; with nothing to update, leave it stopped.
+    function scheduleNextTick() {
+        var now = Date.now();
+        var next = Infinity;
+        var tracked = server.trackedNotifications.values;
+        for (var i = 0; i < tracked.length; i++) {
+            var e = timesAdapter.times[tracked[i].id + "|" + tracked[i].appName];
+            if (e === undefined)
+                e = now;
+            var age = now - e;
+            var boundary;
+            if (age < 30000)
+                boundary = e + 30000;
+            else if (age < 60000)
+                boundary = e + (Math.floor(age / 1000) + 1) * 1000;
+            else if (age < 3600000)
+                boundary = e + (Math.floor(age / 60000) + 1) * 60000;
+            else if (age < 86400000)
+                boundary = e + (Math.floor(age / 3600000) + 1) * 3600000;
+            else
+                boundary = e + (Math.floor(age / 86400000) + 1) * 86400000;
+            if (boundary < next)
+                next = boundary;
+        }
+        if (!isFinite(next)) {
+            timeTickTimer.stop();
+            return;
+        }
+        timeTickTimer.interval = Math.max(50, next - now + 50);
+        timeTickTimer.restart();
+    }
+
+    // Start the adaptive tick only when age labels are visible (CC or popups).
+    function updateTickTimer() {
+        if (root.ccVisible || activePopups.count > 0)
+            root.scheduleNextTick();
+        else
+            timeTickTimer.stop();
+    }
+
+    onNotifCountChanged: {
+        ipc.statusChanged(root.notifCount + "|" + (root.dnd ? "1" : "0"));
+        root.pruneTimes();
+        root.updateTickTimer();
+    }
     onDndChanged: ipc.statusChanged(root.notifCount + "|" + (root.dnd ? "1" : "0"))
 
     IpcHandler {
@@ -94,6 +218,7 @@ Scope {
                 activePopups.clear();
                 popupQueue = [];
             }
+            root.updateTickTimer();
         }
         function clearAll(): void {
             var notifs = server.trackedNotifications.values.slice();
@@ -120,6 +245,13 @@ Scope {
 
         onNotification: notif => {
             notif.tracked = true;
+
+            var arrivalKey = notif.id + "|" + notif.appName;
+            if (!(notif.lastGeneration && timesAdapter.times[arrivalKey] !== undefined)) {
+                var stamped = Object.assign({}, timesAdapter.times);
+                stamped[arrivalKey] = Date.now();
+                timesAdapter.times = stamped;
+            }
 
             if (!root.dnd) {
                 var replaced = false;
@@ -185,6 +317,7 @@ Scope {
                 notif: n
             });
         }
+        root.updateTickTimer();
     }
 
     function dismissPopup(idx) {
@@ -197,6 +330,7 @@ Scope {
             activePopups.clear();
             popupQueue = [];
         }
+        root.updateTickTimer();
     }
 
     function popupIconSource(data) {
@@ -247,6 +381,9 @@ Scope {
                     required property var notif
                     required property int index
                     property bool hovered: false
+                    // real (64-bit) on purpose: Date.now() overflows a 32-bit int
+                    property real createdMs: Date.now()
+                    readonly property real notifEpoch: notif ? (timesAdapter.times[notif.id + "|" + notif.appName] || createdMs) : 0
                     readonly property var actions: notif ? root.notificationActions(notif) : []
                     readonly property string code: notif ? root.verificationCode(notif) : ""
                     readonly property var buttons: notif ? root.notificationButtons(notif) : []
@@ -341,7 +478,7 @@ Scope {
                         width: @popup-width@ - @popup-margin@ * 2 - 6 - 8 - @popup-icon-size@ - 16
 
                         Text {
-                            width: popupTextCol.width
+                            width: popupTextCol.width - 48
                             text: notif ? (notif.appName + " - " + notif.summary) : ""
                             color: "@cc-text@"
                             font.pixelSize: @cc-font-size@
@@ -424,6 +561,17 @@ Scope {
                                 }
                             }
                         }
+                    }
+
+                    Text {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.topMargin: 8
+                        anchors.rightMargin: 11
+                        text: notif ? root.formatNotifTime(popupRoot.notifEpoch) : ""
+                        color: "@cc-subtext@"
+                        font.pixelSize: @cc-font-size@ - 2
+                        font.family: "@cc-font-name@"
                     }
 
                     Rectangle {
@@ -587,37 +735,46 @@ Scope {
                     width: parent.width
                     spacing: 8
 
-                    Row {
+                    Flickable {
                         width: parent.width
-                        spacing: 4
+                        height: 24
+                        clip: true
+                        contentWidth: mprisTabs.implicitWidth
+                        contentHeight: mprisTabs.height
+                        boundsBehavior: Flickable.StopAtBounds
                         visible: Mpris.players.values.length > 1
 
-                        Repeater {
-                            model: Mpris.players
+                        Row {
+                            id: mprisTabs
+                            spacing: 4
 
-                            delegate: Rectangle {
-                                required property var modelData
-                                required property int index
-                                width: tabText.implicitWidth + 12
-                                height: 24
-                                color: index === root.selectedPlayer ? "@cc-active@" : "@cc-bg@"
-                                border.color: "@cc-border@"
-                                border.width: 2
-                                radius: 0
+                            Repeater {
+                                model: Mpris.players
 
-                                Text {
-                                    id: tabText
-                                    anchors.centerIn: parent
-                                    text: modelData.identity || "?"
-                                    color: index === root.selectedPlayer ? "@cc-bg@" : "@cc-text@"
-                                    font.pixelSize: @cc-font-size@ - 2
-                                    font.family: "@cc-font-name@"
-                                    elide: Text.ElideRight
-                                }
+                                delegate: Rectangle {
+                                    required property var modelData
+                                    required property int index
+                                    width: tabText.implicitWidth + 12
+                                    height: 24
+                                    color: index === root.selectedPlayer ? "@cc-active@" : "@cc-bg@"
+                                    border.color: "@cc-border@"
+                                    border.width: 2
+                                    radius: 0
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: root.selectedPlayer = index
+                                    Text {
+                                        id: tabText
+                                        anchors.centerIn: parent
+                                        text: modelData.identity || "?"
+                                        color: index === root.selectedPlayer ? "@cc-bg@" : "@cc-text@"
+                                        font.pixelSize: @cc-font-size@ - 2
+                                        font.family: "@cc-font-name@"
+                                        elide: Text.ElideRight
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: root.selectedPlayer = index
+                                    }
                                 }
                             }
                         }
@@ -845,7 +1002,7 @@ Scope {
                 ListView {
                     id: notifList
                     width: parent.width
-                    height: ccContent.height - titleRow.height - mprisSection.height - ccContent.spacing * 3 - 5
+                    height: Math.max(0, ccContent.height - titleRow.height - mprisSection.height - ccContent.spacing * 3 - 5)
                     clip: true
                     model: root.notifications
                     spacing: 5
@@ -855,6 +1012,9 @@ Scope {
                         id: notifRoot
                         required property var modelData
                         readonly property var notification: modelData
+                        // real (64-bit) on purpose: Date.now() overflows a 32-bit int
+                        property real createdMs: Date.now()
+                        readonly property real notifEpoch: modelData ? (timesAdapter.times[modelData.id + "|" + modelData.appName] || createdMs) : 0
                         readonly property var actions: root.notificationActions(notification)
                         readonly property string code: root.verificationCode(notification)
                         readonly property var buttons: root.notificationButtons(notification)
@@ -915,7 +1075,7 @@ Scope {
                                     spacing: 2
 
                                     Text {
-                                        width: parent.width
+                                        width: parent.width - 56
                                         text: modelData.appName + " - " + modelData.summary
                                         color: "@cc-text@"
                                         font.pixelSize: @cc-font-size@
@@ -935,6 +1095,17 @@ Scope {
                                         visible: root.formatBody(modelData).length > 0
                                     }
                                 }
+                            }
+
+                            Text {
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                anchors.topMargin: 6
+                                anchors.rightMargin: 6
+                                text: root.formatNotifTime(notifRoot.notifEpoch)
+                                color: "@cc-subtext@"
+                                font.pixelSize: @cc-font-size@ - 2
+                                font.family: "@cc-font-name@"
                             }
 
                             Column {
