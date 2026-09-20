@@ -3,5 +3,5 @@
   mode = "0400";
   group = "root";
   excludeHosts = [ "*-server" ];
-  homeTarget = ".local/share/opencode/auth.json";
+  homeTarget = ".local/state/codex-auth/opencode.json";
 }
