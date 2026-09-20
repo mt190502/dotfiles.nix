@@ -4,58 +4,13 @@
 {
   config,
   inputs,
-  lib,
-  osConfig ? null,
   pkgs,
   pkgs-unstable,
   ...
 }:
 
-let
-  commandcode-proxy-bin = "${
-    inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.commandcode-proxy
-  }/bin/commandcode-proxy";
-in
-
 {
   imports = [ inputs.self.homeModules.prime-agent ];
-
-  ########################################
-  #
-  ## CommandCode Proxy Server
-  #
-  ########################################
-  systemd.user.services.commandcode-proxy = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-    Unit = {
-      Description = "CommandCode Proxy Server";
-      After = [ "network.target" ];
-    };
-
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-    Service = {
-      ExecStart = commandcode-proxy-bin;
-      Restart = "always";
-      RestartSec = 5;
-      StandardOutput = "journal";
-      StandardError = "journal";
-    };
-  };
-
-  launchd.agents.commandcode-proxy =
-    lib.mkIf (osConfig != null && pkgs.stdenv.hostPlatform.isDarwin)
-      {
-        enable = true;
-        config = {
-          ProgramArguments = [ commandcode-proxy-bin ];
-          RunAtLoad = true;
-          KeepAlive = true;
-          WorkingDirectory = config.home.homeDirectory;
-          StandardOutPath = "${config.home.homeDirectory}/Library/Logs/commandcode-proxy.log";
-          StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/commandcode-proxy.log";
-        };
-      };
 
   ########################################
   #
@@ -315,40 +270,63 @@ in
       '';
       "commandcode.ts" = ''
         import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
+        import * as fs from "fs"
 
         interface CommandCodeModel {
           id: string
           context_length?: number
+          supported_endpoints?: string[]
+        }
+
+        function inputModalities(id: string): ("text" | "image")[] {
+          const lower = id.toLowerCase()
+          const vision =
+            lower.startsWith("z-ai/") ||
+            lower.includes("vision") ||
+            lower.includes("gemini") ||
+            lower.includes("kimi") ||
+            lower.includes("minimax") ||
+            lower.includes("mimo") ||
+            lower.includes("inkling") ||
+            lower.includes("stepfun") ||
+            (lower.includes("gpt-5") && !lower.includes("codex"))
+          return vision ? ["text", "image"] : ["text"]
         }
 
         export default async function (pi: ExtensionAPI) {
           try {
-            const res = await fetch("http://127.0.0.1:8082/v1/models", {
-              signal: AbortSignal.timeout(2000),
+            const res = await fetch("https://api.commandcode.ai/provider/v1/models", {
+              signal: AbortSignal.timeout(10000),
             })
             if (!res.ok) return
 
             const data = (await res.json()) as { data?: CommandCodeModel[] }
-            const models = (data.data ?? []).map((model) => ({
-              id: model.id,
-              name: model.id.split("/").pop() ?? model.id,
-              reasoning: false,
-              input: ["text"] as ("text" | "image")[],
-              cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-              contextWindow: model.context_length ?? 1000000,
-              maxTokens: 16384,
-            }))
+            const models = (data.data ?? [])
+              .filter((model) => (model.supported_endpoints ?? []).includes("/chat/completions"))
+              .map((model) => ({
+                id: model.id,
+                name: model.id.split("/").pop() ?? model.id,
+                reasoning: model.id.toLowerCase().includes("r1") || model.id.toLowerCase().includes("reasoning"),
+                input: inputModalities(model.id),
+                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+                contextWindow: model.context_length ?? 1000000,
+                maxTokens: 16384,
+                compat: {
+                  supportsDeveloperRole: false,
+                  maxTokensField: "max_tokens",
+                },
+              }))
             if (models.length === 0) return
 
             pi.registerProvider("commandcode", {
               name: "CommandCode",
-              baseUrl: "http://127.0.0.1:8082/v1",
-              apiKey: "!cat ${config.sops.secrets."commandcode".path}",
+              baseUrl: "https://api.commandcode.ai/provider/v1",
+              apiKey: fs.readFileSync("${config.sops.secrets."commandcode".path}", "utf8").trim(),
               api: "openai-completions",
               models,
             })
           } catch {
-            // proxy not running yet
+            // API not reachable yet
           }
         }
       '';
@@ -434,8 +412,9 @@ in
       provider = {
         commandcode = {
           name = "CommandCode";
+          npm = "@ai-sdk/openai-compatible";
           options = {
-            baseURL = "http://127.0.0.1:8082/v1";
+            baseURL = "https://api.commandcode.ai/provider/v1";
             apiKey = "{file:${config.sops.secrets."commandcode".path}}";
           };
         };
@@ -461,23 +440,30 @@ in
       ".config/opencode/plugin/commandcode.ts".text = ''
         import type { Plugin } from "@opencode-ai/plugin"
 
+        interface CommandCodeModel {
+          id: string
+          context_length?: number
+          supported_endpoints?: string[]
+        }
+
         export default (async () => {
           let models: Record<string, any> = {}
 
           try {
-            const res = await fetch("http://127.0.0.1:8082/v1/models")
+            const res = await fetch("https://api.commandcode.ai/provider/v1/models")
             if (res.ok) {
-              const data = await res.json()
+              const data = (await res.json()) as { data?: CommandCodeModel[] }
               for (const model of data.data ?? []) {
+                if (!(model.supported_endpoints ?? []).includes("/chat/completions")) continue
                 models[model.id] = {
                   name: model.id.split("/").pop() ?? model.id,
-                  limit: { context: 1000000, output: 16384 },
+                  limit: { context: model.context_length ?? 1000000, output: 16384 },
                   modalities: { input: ["text"], output: ["text"] },
                 }
               }
             }
           } catch {
-            // proxy not running yet
+            // API not reachable yet
           }
 
           return {
