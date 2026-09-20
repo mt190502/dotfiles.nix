@@ -29,7 +29,7 @@ in
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  outputHash = "sha256-irrkEx6mpea5jjOR4Y1aVjAIdTdLGvCW4UHIUMQL2YI=";
+  outputHash = "sha256-fJUDQzXGiCpiseD1ylO9sxpnsb0FLvxFzxnKnhcrPZ8=";
   outputHashMode = "recursive";
   dontPatchShebangs = true;
 
@@ -44,6 +44,7 @@ in
   installPhase = ''
     mkdir -p "$out/bin" "$out/libexec"
     cp -r . "$out/libexec/prime-agent"
+    chmod +x "$out/libexec/prime-agent/dist/bundle/cli.js"
     ln -s ../libexec/prime-agent/dist/bundle/cli.js "$out/bin/prime-agent"
   '';
 
