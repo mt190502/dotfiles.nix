@@ -28,7 +28,6 @@
     };
     plugins = {
       colorizer.enable = true;
-      copilot-lua.enable = true;
       dashboard.enable = true;
       web-devicons.enable = true;
       cmp = {
