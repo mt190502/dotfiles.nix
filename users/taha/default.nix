@@ -1,5 +1,13 @@
-{ pkgs, pkgs-unstable, ... }:
+{
+  inputs,
+  pkgs,
+  pkgs-unstable,
+  ...
+}:
 
+let
+  arch = pkgs.stdenv.hostPlatform.system;
+in
 {
   programs.home-manager.enable = true;
   home = {
@@ -16,38 +24,39 @@
     ## Packages
     #
     ########################################
-    packages =
-      with pkgs;
-      [
-        #~ packages ~#
-        aria2
-        bat
-        bat-extras.batman
-        bc
-        btop
-        fd
-        git
-        grc
-        heimdall
-        imagemagick
-        lsd
-        mpc
-        pipes-rs
-        r2modman
-        rclone
-        ripgrep-all
-        rsync
-        scrcpy
-        tesseract
-        tmux
-        translate-shell
-        trash-cli
-        tree
-        unrar
-        unzip
-        yt-dlp
-      ]
-      ++ (with pkgs-unstable; [ ]);
+    packages = [
+      inputs.dnsglobe.packages.${arch}.dnsglobe
+    ]
+    ++ (with pkgs; [
+      #~ packages ~#
+      aria2
+      bat
+      bat-extras.batman
+      bc
+      btop
+      fd
+      git
+      grc
+      heimdall
+      imagemagick
+      lsd
+      mpc
+      pipes-rs
+      r2modman
+      rclone
+      ripgrep-all
+      rsync
+      scrcpy
+      tesseract
+      tmux
+      translate-shell
+      trash-cli
+      tree
+      unrar
+      unzip
+      yt-dlp
+    ])
+    ++ (with pkgs-unstable; [ ]);
 
     ########################################
     #
