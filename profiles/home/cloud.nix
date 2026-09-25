@@ -147,7 +147,11 @@ rec {
             aws configure list-profiles
             return 1
           end
-          set -Ux AWS_PROFILE $argv[1]
+          if set -q CUSTOMER
+            cenv AWS_PROFILE $argv[1]
+          else
+            set -gx AWS_PROFILE $argv[1]
+          end
           if [ "$argv[2]" = "saml" ]
             saml2aws login -a "$AWS_PROFILE" -p "$AWS_PROFILE"
           end
