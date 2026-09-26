@@ -9,7 +9,7 @@
 
 let
   # npm selects different optional dependencies on macOS.
-  darwinOutputHash = "sha256-j7MSRknsBu4h5hpdavtpd1kle97dpvsSWpFw2u+EgzY=";
+  darwinOutputHash = "sha256-YOyDrpD4JaV+lLbNFyj/isLqP6w5EymDvxrQLY2aIMc=";
 in
 (stdenv.mkDerivation rec {
   pname = "prime-agent";
