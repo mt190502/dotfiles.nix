@@ -101,6 +101,9 @@
     };
     optimise.automatic = true;
     settings = {
+      auto-optimise-store = true;
+      min-free = 5 * 1000 * 1000 * 1000; # ~ 5GiB
+      max-free = 10 * 1000 * 1000 * 1000; # ~ 10GiB
       substituters = [
         "https://cache.nixos.org"
         "https://nixos-raspberrypi.cachix.org"

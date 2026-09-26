@@ -178,6 +178,69 @@ in
           tide reload
         end
       '';
+      _rebuilddiff_paths = ''
+        # Args: 1=old path-list file, 2=new path-list file, [3]=old system path, [4]=new system path
+        set -l tmp_old $argv[1]
+        set -l tmp_new $argv[2]
+        set -l added_n (comm -13 $tmp_old $tmp_new | wc -l | string trim)
+        set -l removed_n (comm -23 $tmp_old $tmp_new | wc -l | string trim)
+
+        if test $added_n -eq 0 -a $removed_n -eq 0
+          echo "No path changes (closures are identical)."
+          return
+        end
+
+        # narSize per path (individual size, NOT closure size) via compact JSON
+        set -l bytes (comm -13 $tmp_old $tmp_new | xargs -r nix path-info --json 2>/dev/null | grep -oE '"narSize":[0-9]+' | grep -oE '[0-9]+' | awk '{s+=$1} END{print s+0}')
+        set -l size_note ""
+        if test -n "$bytes" -a "$bytes" -gt 0
+          set size_note ", "(numfmt --to=iec-i --suffix=B $bytes)" new store data"
+        end
+        echo "New paths: $added_n$size_note"
+        echo "Removed paths: $removed_n"
+
+        if test (count $argv) -ge 4
+          set -l sz_old (nix path-info -S $argv[3] 2>/dev/null | awk '{print $2}')
+          set -l sz_new (nix path-info -S $argv[4] 2>/dev/null | awk '{print $2}')
+          if test -n "$sz_old" -a -n "$sz_new" -a "$sz_new" != "$sz_old"
+            set -l d (math -- $sz_new - $sz_old)
+            set -l dsign "+"
+            set -l dabs $d
+            if test $d -lt 0
+              set dsign "-"
+              set dabs (math -- 0 - $d)
+            end
+            echo "Closure size: "(numfmt --to=iec-i --suffix=B $sz_old)" -> "(numfmt --to=iec-i --suffix=B $sz_new)" (delta $dsign"(numfmt --to=iec-i --suffix=B $dabs)")"
+          end
+        end
+
+        set -l tmp_anames (mktemp)
+        set -l tmp_rnames (mktemp)
+        comm -13 $tmp_old $tmp_new | sed -E 's|.*/[a-z0-9]{32}-||' | sort -u > $tmp_anames
+        comm -23 $tmp_old $tmp_new | sed -E 's|.*/[a-z0-9]{32}-||' | sort -u > $tmp_rnames
+        set -l rebuilt (comm -12 $tmp_anames $tmp_rnames)
+        set -l rebuilt_n (count $rebuilt)
+        rm -f $tmp_anames $tmp_rnames
+
+        if test $rebuilt_n -gt 0
+          echo "Rebuilt WITHOUT version change (invisible to version diff): $rebuilt_n"
+          set -l pkg_rebuilt (printf '%s\n' $rebuilt | grep -E -- '-[0-9]')
+          set -l pkg_n (count $pkg_rebuilt)
+          if test $pkg_n -gt 0
+            for p in $pkg_rebuilt[1..15]
+              echo "  - $p"
+            end
+            if test $pkg_n -gt 15
+              echo "  ... and "(math $pkg_n - 15)" more"
+            end
+          end
+          set -l artifacts (math $rebuilt_n - $pkg_n)
+          if test $artifacts -gt 0
+            echo "  (+ $artifacts config/build artifacts not shown)"
+          end
+        end
+      '';
+
       _rebuilddiff = ''
         set -l oldsys /run/current-system
         set -l newsys $argv[1]
@@ -186,15 +249,24 @@ in
           return 1
         end
 
+        set -l tmp_old (mktemp)
+        set -l tmp_new (mktemp)
+        nix path-info -r $oldsys 2>/dev/null | sort > $tmp_old
+        nix path-info -r $newsys 2>/dev/null | sort > $tmp_new
+
         echo "Diffing $oldsys -> $newsys"
         echo ""
-
-        echo "=== nvd version diff ==="
-        ${getExe pkgs.nvd} diff $oldsys $newsys 2>/dev/null
+        echo "=== Summary ==="
+        _rebuilddiff_paths $tmp_old $tmp_new $oldsys $newsys
         echo ""
 
-        echo "=== Closure diff ==="
-        nix store diff-closures $oldsys $newsys 2>/dev/null
+        echo "=== Package version changes ==="
+        set -l vdiff (nix store diff-closures $oldsys $newsys 2>/dev/null)
+        if test -n "$vdiff"
+          printf '%s\n' $vdiff
+        else
+          echo "None."
+        end
         echo ""
 
         echo "=== New/removed files in /etc (non-hash) ==="
@@ -206,11 +278,11 @@ in
           else
             ''
               echo "=== Changed systemd units ==="
-              diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E 'home-manager|\.service$' | head -20
+              diff -rq $oldsys/etc/systemd $newsys/etc/systemd 2>/dev/null | grep -E '\.service($| )' | grep -v 'home-manager' | head -20
               echo ""
 
-              set -l old_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $oldsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
-              set -l new_hm (grep -oE '/nix/store/[a-z0-9]+-home-manager-generation' $newsys/etc/systemd/system/home-manager-*.service 2>/dev/null | head -1)
+              set -l old_hm (find $oldsys/etc/systemd/system -maxdepth 1 -name 'home-manager-*.service' 2>/dev/null | head -1 | xargs -r grep -hoE '/nix/store/[a-z0-9]+-home-manager-generation' 2>/dev/null | head -1)
+              set -l new_hm (find $newsys/etc/systemd/system -maxdepth 1 -name 'home-manager-*.service' 2>/dev/null | head -1 | xargs -r grep -hoE '/nix/store/[a-z0-9]+-home-manager-generation' 2>/dev/null | head -1)
               if test -n "$old_hm" -a -n "$new_hm" -a "$old_hm" != "$new_hm"
                 echo "=== Home-manager files diff ==="
                 diff -rq $old_hm/home-files $new_hm/home-files 2>/dev/null | head -40
@@ -218,6 +290,7 @@ in
               end
             ''
         }
+        rm -f $tmp_old $tmp_new
       '';
     };
     generateCompletions = false;

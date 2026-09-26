@@ -11,6 +11,7 @@
     boot.lanzaboote = {
       enable = true;
       pkiBundle = "/var/lib/sbctl";
+      configurationLimit = 10;
       # settings = {
       #   default = "@saved";
       # };
