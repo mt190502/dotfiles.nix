@@ -17,19 +17,19 @@ in
 
   src = fetchurl {
     url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}.tgz";
-    hash = "sha256-NJ8WgseQlVCELxsEpxupWBQ0GxNkdK3nNt+T+OwAaHY=";
+    hash = "sha256-5b8ONJ5Vs/dceeZgBsmTsQxR7Ryb8VhjsGZY/K8CMrI=";
   };
 
   packageLock = fetchurl {
     url = "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/v${version}/package-lock.json";
-    hash = "sha256-9KJfgdWUe/tEWQhpWfWD+m5nuLwuu1osVpCmagFGDxw=";
+    hash = "sha256-378cskyOB+y8eR2pR+uFaBNPowYnV9U4TOSJ7SfVvcs=";
   };
 
   nativeBuildInputs = [ nodejs_24 ];
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  outputHash = "sha256-fJUDQzXGiCpiseD1ylO9sxpnsb0FLvxFzxnKnhcrPZ8=";
+  outputHash = "sha256-k8FOZOyYzLdp90wIts+voSA8a39k4tCjCNhTf/LEPO8=";
   outputHashMode = "recursive";
   dontPatchShebangs = true;
 
