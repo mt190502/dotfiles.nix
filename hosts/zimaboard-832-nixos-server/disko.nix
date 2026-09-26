@@ -3,7 +3,7 @@
     disk = {
       SSD = {
         type = "disk";
-        device = "/dev/sda";
+        device = "/dev/disk/by-id/ata-KIOXIA-EXCERIA_SATA_SSD_Y1OB70GUKFV4";
         content = {
           type = "gpt";
           partitions = {
@@ -24,7 +24,6 @@
               };
             };
             ROOT = {
-              device = "/dev/sda2";
               size = "100%";
               content = {
                 type = "luks";
@@ -44,12 +43,11 @@
       };
       DATASSD = {
         type = "disk";
-        device = "/dev/sdb";
+        device = "/dev/disk/by-id/ata-KIOXIA-EXCERIA_SATA_SSD_Y31B83C8K0Z5";
         content = {
           type = "gpt";
           partitions = {
             PART1 = {
-              device = "/dev/sdb1";
               size = "512G";
               content = {
                 type = "luks";
@@ -65,7 +63,6 @@
               };
             };
             PART2 = {
-              device = "/dev/sdb2";
               size = "100%";
               content = {
                 type = "luks";
