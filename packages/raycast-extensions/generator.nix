@@ -14,7 +14,7 @@ lib.genAttrs names (
         owner = "raycast";
         repo = "extensions";
         rev = "1f5ae5c0b551b397eb73c169628717e2818c8a87";
-        sha256 = "sha256-QLXCu8Ctca3PjIIgWIN+mZGrBk7TtZS43LbQN01heIE=";
+        sha256 = "sha256-4Mjzy8DzK88u//UlCgHbt14YDacC5jAr05IElvwzNLA=";
         sparseCheckout = map (n: "/extensions/${n}") names;
       }
       + "/extensions/${name}";
