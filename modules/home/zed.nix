@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   pkgs-unstable,
   ...
@@ -28,8 +29,12 @@
         default_model = {
           effort = "max";
           enable_thinking = true;
-          model = "go/glm-5.2";
-          provider = "opencode";
+          model = "z-ai/glm-5.3-flash";
+          provider = "CommandCode";
+        };
+        commit_message_model = {
+          model = "z-ai/glm-5.3-flash";
+          provider = "CommandCode";
         };
         dock = "right";
         model_parameters = [ ];
@@ -53,6 +58,9 @@
         };
       };
       agent_servers = {
+        codex-acp = {
+          type = "registry";
+        };
         github-copilot-cli = {
           type = "registry";
         };
@@ -117,7 +125,6 @@
       };
       language_models = {
         opencode = {
-          show_free_models = false;
           show_zen_models = false;
         };
       };
@@ -317,4 +324,48 @@
       }
     ];
   };
+  home.activation.zedCommandCodeModels = lib.hm.dag.entryAfter [ "zedSettingsActivation" ] ''
+    settings="${config.xdg.configHome}/zed/settings.json"
+    [ -f "$settings" ] || exit 0
+
+    if ! response="$(${lib.getExe pkgs.curl} -fsS --connect-timeout 3 --max-time 10 \
+      https://api.commandcode.ai/provider/v1/models)"; then
+      exit 0
+    fi
+
+    if ! models="$(${lib.getExe pkgs.jq} -ce '
+      [
+        .data[]
+        | select((.supported_endpoints // []) | index("/chat/completions"))
+        | {
+            name: .id,
+            display_name: (.name // .id),
+            max_tokens: (.context_length // 131072)
+          }
+      ]
+    ' <<<"$response")"; then
+      exit 0
+    fi
+
+    [ "$(${lib.getExe pkgs.jq} 'length' <<<"$models")" -gt 0 ] || exit 0
+
+    tmp="$(${lib.getExe' pkgs.coreutils "mktemp"} "$settings.XXXXXX")"
+    trap '${lib.getExe' pkgs.coreutils "rm"} -f "$tmp"' EXIT
+    if ! ${lib.getExe pkgs.jq} --argjson models "$models" '
+      .language_models //= {}
+      | .language_models.openai_compatible //= {}
+      | .language_models.openai_compatible.CommandCode = {
+          api_url: "https://api.commandcode.ai/provider/v1",
+          available_models: $models
+        }
+    ' "$settings" >"$tmp"; then
+      exit 0
+    fi
+
+    if ! ${lib.getExe' pkgs.coreutils "cmp"} -s "$settings" "$tmp"; then
+      ${lib.getExe' pkgs.coreutils "chmod"} --reference="$settings" "$tmp"
+      ${lib.getExe' pkgs.coreutils "mv"} "$tmp" "$settings"
+    fi
+    trap - EXIT
+  '';
 }

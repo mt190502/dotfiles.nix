@@ -39,6 +39,7 @@ in
       #~ session-based settings
       set -s  extended-keys       on
       set -s  focus-events        on
+      set -as terminal-features  'xterm*:extkeys'
 
       #~ window-based settings
       setw -g xterm-keys          on
@@ -47,17 +48,18 @@ in
       #################################################
       #### Keybindings
       #################################################
-      bind-key -n S-Left     split-pane    -h
-      bind-key -n S-Right    split-pane    -h
-      bind-key -n S-Up       split-pane    -v
-      bind-key -n S-Down     split-pane    -v
-      bind-key -n C-S-Left   select-pane   -L
-      bind-key -n C-S-Right  select-pane   -R
-      bind-key -n C-S-Up     select-pane   -U
-      bind-key -n C-S-Down   select-pane   -D
+      bind-key -n C-S-Left   split-pane    -h
+      bind-key -n C-S-Right  split-pane    -h
+      bind-key -n C-S-Up     split-pane    -v
+      bind-key -n C-S-Down   split-pane    -v
       bind-key -n Home       send Escape   "OH"
       bind-key -n End        send Escape   "OF"
       bind-key -n C-t        new-window
+      bind-key -n C-w        kill-window
+      bind-key -n C-Tab      next-window
+      bind-key -n C-S-Tab    previous-window
+      bind-key -n C-PageUp   previous-window
+      bind-key -n C-PageDown next-window
 
       bind s setw            synchronize-panes on
       bind S setw            synchronize-panes off
