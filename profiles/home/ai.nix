@@ -53,6 +53,10 @@
             type = "http";
             url = "https://mcp.exa.ai/mcp";
           };
+          roberto = {
+            type = "http";
+            url = "http://silverbullet-mcp.silverbullet.svc.cluster.local:8765/mcp";
+          };
         };
       };
       keybindings = {
@@ -388,6 +392,10 @@
           exa = {
             type = "remote";
             url = "https://mcp.exa.ai/mcp";
+          };
+          roberto = {
+            type = "remote";
+            url = "http://silverbullet-mcp.silverbullet.svc.cluster.local:8765/mcp";
           };
         };
         agent = {
