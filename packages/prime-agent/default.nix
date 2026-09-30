@@ -13,23 +13,23 @@ let
 in
 (stdenv.mkDerivation rec {
   pname = "prime-agent";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}.tgz";
-    hash = "sha256-1pbyY2zXeA0tZylhQrwdE9cpYMi+Tlz64Lu6gvnYcH0=";
+    hash = "sha256-17cnhRGe/Ci/vKjsSn9Hofzc9H/NjOvbYL/6p54+EnQ=";
   };
 
   packageLock = fetchurl {
     url = "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/v${version}/package-lock.json";
-    hash = "sha256-TDBUZKvO+GmtH4EoNSCf6ceu053KQrckKWxPTtHJzVE=";
+    hash = "sha256-PoBCK7KBz5OVk37xK/Q9A42S2Svx8/cFlrY9Wjry3nQ=";
   };
 
   nativeBuildInputs = [ nodejs_24 ];
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  outputHash = "sha256-Q9w2t0FhrqtotgKJ/jgj540pMdncNlQXpZwQ2LidOyk=";
+  outputHash = "sha256-epIi7N13V4VWmY0NMUCBCGCoGNYnSqE82PuBJnaUp3c=";
   outputHashMode = "recursive";
   dontPatchShebangs = true;
 
