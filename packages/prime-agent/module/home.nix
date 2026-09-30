@@ -10,6 +10,12 @@ let
   jsonFormat = pkgs.formats.json { };
   settingsJson = builtins.toJSON cfg.settings;
   keybindingsJson = builtins.toJSON cfg.keybindings;
+  substitutionScript = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (p: f: ''
+      ${pkgs.jq}/bin/jq --arg value "$(cat ${f})" 'walk(if type == "string" then (split("${p}") | join($value)) else . end)' "$temporary" > "$temporary.substituted"
+      mv -f "$temporary.substituted" "$temporary"
+    '') cfg.substitutions
+  );
 in
 {
   options.programs.prime-agent = {
@@ -32,6 +38,16 @@ in
       inherit (jsonFormat) type;
       default = { };
       description = "Prime Agent settings written to ~/.prime/agent/settings.json.";
+    };
+
+    substitutions = lib.mkOption {
+      type = lib.types.attrsOf lib.types.path;
+      default = { };
+      description = ''
+        Placeholder strings in settings, replaced with the trimmed contents of the
+        given files during activation (e.g. sops-nix secrets). Placeholders must
+        not contain quotes or backslashes.
+      '';
     };
 
     keybindings = lib.mkOption {
@@ -71,6 +87,7 @@ in
           cat >"$temporary" <<'EOF'
           ${settingsJson}
           EOF
+          ${substitutionScript}
           mv -f "$temporary" "$target"
         '';
 

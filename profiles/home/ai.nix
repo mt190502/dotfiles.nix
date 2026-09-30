@@ -57,7 +57,17 @@
             type = "http";
             url = "http://silverbullet-mcp.silverbullet.svc.cluster.local:8765/mcp";
           };
+          roberto-ext = {
+            type = "http";
+            url = "https://md.mtaha.dev/mcp";
+            headers = {
+              Authorization = "Bearer __ROBERTO_TOKEN__";
+            };
+          };
         };
+      };
+      substitutions = {
+        __ROBERTO_TOKEN__ = config.sops.secrets."roberto".path;
       };
       keybindings = {
         "tui.editor.cursorLeft" = [
@@ -396,6 +406,13 @@
           roberto = {
             type = "remote";
             url = "http://silverbullet-mcp.silverbullet.svc.cluster.local:8765/mcp";
+          };
+          roberto-ext = {
+            type = "remote";
+            url = "https://md.mtaha.dev/mcp";
+            headers = {
+              Authorization = "Bearer {file:${config.sops.secrets."roberto".path}}";
+            };
           };
         };
         agent = {
