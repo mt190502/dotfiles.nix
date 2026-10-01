@@ -1,17 +1,30 @@
-{ lib, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   xdg = {
     portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-wlr
-      ];
+      extraPortals =
+        with pkgs;
+        with inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
+        [
+          xdg-desktop-portal-kde
+          xdg-desktop-portal-gtk
+          xdg-desktop-portal-wlr
+        ];
       config = {
         common.default = "*";
         sway = {
           default = [ "gtk" ];
+          "org.freedesktop.impl.portal.FileChooser" = [
+            "kde"
+            "gtk"
+          ];
           "org.freedesktop.impl.portal.Screenshot" = "wlr";
           "org.freedesktop.impl.portal.ScreenCast" = "wlr";
         };
