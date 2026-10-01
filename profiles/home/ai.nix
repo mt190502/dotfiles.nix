@@ -13,6 +13,7 @@
   imports = [
     inputs.self.homeModules.prime-agent
     inputs.self.homeModules.codex-auth-sync
+    inputs.self.homeModules.work-mcp
   ];
 
   programs = {
