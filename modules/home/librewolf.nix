@@ -77,8 +77,8 @@ in
         settings = {
           "browser.download.autohideButton" = true;
           "browser.newtabpage.activity-stream.feeds.topsites" = true;
+          "browser.nova.enabled" = false;
           "browser.search.suggest.enabled" = true;
-          "browser.urlbar.suggest.searches" = true;
           "browser.search.suggest.enabled.private" = true;
           "browser.startup.homepage" = "https://red.mtaha.dev";
           "browser.startup.page" = 3;
@@ -87,12 +87,13 @@ in
           #"browser.uiCustomization.state" = "{\"placements\":{\"widget-overflow-fixed-list\":[],\"unified-extensions-area\":[\"sponsorblocker_ajay_app-browser-action\",\"_aecec67f-0d10-4fa7-b7c7-609a2db280cf_-browser-action\",\"_92e6fe1c-6e1d-44e1-8bc6-d309e59406af_-browser-action\",\"_a6c4a591-f1b2-4f03-b3ff-767e5bedf4e7_-browser-action\",\"firefox-extension_deepl_com-browser-action\",\"_21f1ba12-47e1-4a9b-ad4e-3a0260bbeb26_-browser-action\",\"_9a41dee2-b924-4161-a971-7fb35c053a4a_-browser-action\",\"enhancerforyoutube_maximerf_addons_mozilla_org-browser-action\",\"contaner-proxy_bekh-ivanov_me-browser-action\"],\"nav-bar\":[\"sidebar-button\",\"back-button\",\"forward-button\",\"stop-reload-button\",\"home-button\",\"library-button\",\"_c607c8df-14a7-4f28-894f-29e8722976af_-browser-action\",\"developer-button\",\"customizableui-special-spring1\",\"vertical-spacer\",\"urlbar-container\",\"search-container\",\"customizableui-special-spring2\",\"downloads-button\",\"popupwindow_ettoolong-browser-action\",\"tab-session-manager_sienori-browser-action\",\"_testpilot-containers-browser-action\",\"firerss_mtaha_dev-browser-action\",\"simple-translate_sienori-browser-action\",\"_7a7a4a92-a2a0-41d1-9fd7-1e92480d612d_-browser-action\",\"addon_darkreader_org-browser-action\",\"_73a6fe31-595d-460b-a920-fcc0f8843232_-browser-action\",\"jid1-mnnxcxisbpnsxq_jetpack-browser-action\",\"ublock0_raymondhill_net-browser-action\",\"_d634138d-c276-4fc8-924b-40a0ea21d284_-browser-action\",\"unified-extensions-button\",\"fxa-toolbar-menu-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[],\"vertical-tabs\":[\"tabbrowser-tabs\"],\"PersonalToolbar\":[\"personal-bookmarks\"]},\"seen\":[\"developer-button\",\"screenshot-button\",\"ublock0_raymondhill_net-browser-action\",\"_d634138d-c276-4fc8-924b-40a0ea21d284_-browser-action\",\"_aecec67f-0d10-4fa7-b7c7-609a2db280cf_-browser-action\",\"_92e6fe1c-6e1d-44e1-8bc6-d309e59406af_-browser-action\",\"jid1-mnnxcxisbpnsxq_jetpack-browser-action\",\"_a6c4a591-f1b2-4f03-b3ff-767e5bedf4e7_-browser-action\",\"firefox-extension_deepl_com-browser-action\",\"firerss_mtaha_dev-browser-action\",\"addon_darkreader_org-browser-action\",\"tab-session-manager_sienori-browser-action\",\"_73a6fe31-595d-460b-a920-fcc0f8843232_-browser-action\",\"_21f1ba12-47e1-4a9b-ad4e-3a0260bbeb26_-browser-action\",\"_9a41dee2-b924-4161-a971-7fb35c053a4a_-browser-action\",\"_c607c8df-14a7-4f28-894f-29e8722976af_-browser-action\",\"_7a7a4a92-a2a0-41d1-9fd7-1e92480d612d_-browser-action\",\"popupwindow_ettoolong-browser-action\",\"sponsorblocker_ajay_app-browser-action\",\"_testpilot-containers-browser-action\",\"enhancerforyoutube_maximerf_addons_mozilla_org-browser-action\",\"simple-translate_sienori-browser-action\",\"contaner-proxy_bekh-ivanov_me-browser-action\"],\"dirtyAreaCache\":[\"nav-bar\",\"vertical-tabs\",\"toolbar-menubar\",\"TabsToolbar\",\"PersonalToolbar\",\"unified-extensions-area\"],\"currentVersion\":23,\"newElementCount\":4}";
           "browser.urlbar.placeholderName" = "DuckDuckGo";
           "browser.urlbar.placeholderName.private" = "DuckDuckGo";
+          "browser.urlbar.suggest.searches" = true;
           "font.name.serif.x-western" = config.fontcfg.serif.name;
           "font.size.variable.x-western" = lib.mkForce (config.fontcfg.sizes.applications + 6);
-          "media.eme.enabled" = true;
-          "media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled" = true;
           "general.autoScroll" = true;
           "general.smoothScroll" = false;
+          "media.eme.enabled" = true;
+          "media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled" = true;
           "sidebar.main.tools" = "syncedtabs,history,bookmarks,firefox-extension@deepl.com";
           "sidebar.verticalTabs" = true;
         };
