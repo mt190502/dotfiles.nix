@@ -64,6 +64,11 @@ PUBLIC_HOSTS = [
 PORT = int(os.getenv("WORK_MCP_PORT", "8776"))
 BIND_HOST = os.getenv("WORK_MCP_BIND_HOST", "127.0.0.1")
 TOKEN = os.getenv("WORK_MCP_TOKEN", "")
+EXCLUDED = {
+    name.strip()
+    for name in os.getenv("WORK_MCP_EXCLUDE", "").split(",")
+    if name.strip()
+}
 CUSTOMER_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._-]*$")
 
 # ---------------------------------------------------------------------------
@@ -104,6 +109,12 @@ CUSTOMER_RULES = (
     "page tool is called for a customer that has none. Never ask the user "
     "for permission to create space folders and never create them by hand "
     "outside the page tools.\n"
+    "\n"
+    "list_customers marks plain folders that are NOT customers with "
+    "excluded=true (the machine configuration excludes them). Never pass an "
+    "excluded folder as customer: page tools refuse it. If your working "
+    "directory is inside an excluded folder, no customer matches the cwd; "
+    "ask the user which customer applies.\n"
     "\n"
     "Directory layout inside a space (note the order: category, then a "
     "folder named after the title, then the dated file):\n"
@@ -216,6 +227,7 @@ def list_customers() -> dict:
                 "workRoot": os.path.abspath(WORK_ROOT),
                 "spaceFolder": SPACE_DIR,
                 "space": os.path.isdir(os.path.join(path, SPACE_DIR)),
+                "excluded": entry in EXCLUDED,
             }
         )
     return {"mode": "per-customer", "count": len(customers), "customers": customers}
@@ -240,7 +252,7 @@ def bootstrap_spaces() -> list[str]:
         return created
     for entry in sorted(os.listdir(WORK_ROOT)):
         path = os.path.join(WORK_ROOT, entry)
-        if entry.startswith(".") or not os.path.isdir(path):
+        if entry.startswith(".") or entry in EXCLUDED or not os.path.isdir(path):
             continue
         space = os.path.join(path, SPACE_DIR)
         if not os.path.isdir(space):
@@ -263,6 +275,12 @@ def resolve_space(customer: str) -> str:
         )
     if not CUSTOMER_RE.fullmatch(name):
         raise page_error(f"invalid customer name: {name}")
+    if name in EXCLUDED:
+        raise page_error(
+            f"customer '{name}' is excluded (not a customer folder; see "
+            + "excluded=true in list_customers). Ask the user which customer "
+            + "applies instead"
+        )
     space = os.path.join(WORK_ROOT, name, SPACE_DIR)
     ensure_space(space)
     return space

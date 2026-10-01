@@ -17,6 +17,7 @@ let
     WORK_MCP_BIND_HOST = cfg.listenHost;
     WORK_MCP_TOKEN = cfg.token;
     WORK_MCP_ALLOWED_HOSTS = lib.concatStringsSep "," cfg.allowedHosts;
+    WORK_MCP_EXCLUDE = lib.concatStringsSep "," cfg.excludeCustomers;
     WORK_MCP_INSTRUCTIONS = cfg.instructions;
   };
 
@@ -61,6 +62,21 @@ in
         the service runs with --no-customer-discovery and serves a single
         shared space at <workRoot>/.mcp/; no customer name is ever needed or
         asked for.
+      '';
+    };
+
+    excludeCustomers = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "archive"
+        "internal-docs"
+      ];
+      description = ''
+        Folder names directly under workRoot that are NOT customers, matched
+        exactly and case-sensitively. Excluded folders get no .mcp space at
+        server startup, appear in list_customers flagged excluded=true, and
+        every page tool rejects them as customer.
       '';
     };
 

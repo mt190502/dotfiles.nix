@@ -18,6 +18,7 @@
       enable = true;
       customerDiscovery = lib.mkDefault true;
       workRoot = "${config.home.homeDirectory}/Projects/work";
+      excludeCustomers = [ ".shell" ];
     };
 
     prime-agent.settings.mcpServers.work-mcp = {

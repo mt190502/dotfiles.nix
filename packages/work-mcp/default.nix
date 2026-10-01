@@ -6,13 +6,28 @@
   pkgs-unstable,
   ...
 }:
-
 let
   # The SDK needs httpx2>=2.5.0 (mcp 2.x imports it even at startup) while
   # stable nixpkgs ships 2.3.0, so the whole interpreter env comes from
   # nixpkgs-unstable. Both the flake perSystem callPackage and the home
   # module inject pkgs-unstable here.
-  python3 = pkgs-unstable.python3;
+  inherit (pkgs-unstable) python3;
+
+  inherit (python3.pkgs)
+    anyio
+    cryptography
+    httpx2
+    jsonschema
+    opentelemetry-api
+    pydantic
+    pyjwt
+    python-multipart
+    sse-starlette
+    starlette
+    typing-extensions
+    typing-inspection
+    uvicorn
+    ;
 
   # mcp Python SDK pinned to the 2.x line the server code targets (PEP 723
   # pin in mcp_server.py). nixpkgs does not ship the 2.x SDK (nor its
@@ -26,10 +41,12 @@ let
       url = "https://files.pythonhosted.org/packages/8f/d7/6ffba5d8cd5dd9b8a19478875c50e04945314ba5074e84d749283f27f62d/mcp_types-2.2.0-py3-none-any.whl";
       hash = "sha256-6kdrc+6GcJq1q8lFI4XtNswFkH5YI1ViLilFlcmgTxM=";
     };
-    propagatedBuildInputs = with python3.pkgs; [
+
+    propagatedBuildInputs = [
       pydantic
       typing-extensions
     ];
+
     meta = {
       license = lib.licenses.mit;
     };
@@ -44,7 +61,7 @@ let
       hash = "sha256-vemCWJRzoGCuFF40BumlMz/lOMlyKbqEH1p/kr4AT4E=";
     };
 
-    propagatedBuildInputs = with python3.pkgs; [
+    propagatedBuildInputs = [
       anyio
       cryptography
       httpx2
@@ -68,7 +85,6 @@ let
 
   pythonEnv = python3.withPackages (_: [ mcpSdk ]);
 in
-
 stdenv.mkDerivation {
   pname = "work-mcp";
   version = "1.0.0";
