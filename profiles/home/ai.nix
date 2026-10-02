@@ -367,16 +367,7 @@
     opencode = {
       enable = true;
       enableMcpIntegration = true;
-      package = pkgs-unstable.opencode.overrideAttrs (old: {
-        postPatch = (old.postPatch or "") + ''
-                  substituteInPlace packages/core/src/filesystem/search.ts \
-                    --replace-fail 'import { FileSystem } from "../filesystem"' \
-                      'import type { FileSystem } from "../filesystem"
-          import { Entry, Match } from "@opencode-ai/schema/filesystem"' \
-                    --replace-fail "FileSystem.Entry.make" "Entry.make" \
-                    --replace-fail "FileSystem.Match.make" "Match.make"
-        '';
-      });
+      package = pkgs-unstable.opencode;
       context = ''
         # NixOS Environment Disclaimer
 
