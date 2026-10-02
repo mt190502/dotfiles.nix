@@ -56,6 +56,13 @@ if not WORK_ROOT:
     raise SystemExit("WORK_MCP_ROOT is required (set by the home module's programs.work-mcp.workRoot)")
 SPACE_DIR = ".mcp"
 DEFAULT_CATEGORIES = ["Templates", "RCA", "AGENTS", "SKILLS", "RUNBOOKS", "SCRIPTS"]
+STANDARD_CATEGORIES = frozenset({"AGENTS", "RCA", "RUNBOOKS", "SKILLS"})
+STANDARD_ROOT_FILES = frozenset({"CONFIG.md"})
+_TOPIC_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+_PAGE_FILE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.md$")
+_SCRIPT_FILE_RE = re.compile(
+    r"^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+$"
+)
 PUBLIC_HOSTS = [
     host.strip()
     for host in os.getenv("WORK_MCP_ALLOWED_HOSTS", "").split(",")
@@ -164,6 +171,19 @@ WORKFLOW_PROMPT = (
     "2. When the user asks you to create something, run list_pages first and "
     "check Templates/ for that category's template file. Prefer existing "
     "category folders from the listing when one matches the topic.\n"
+    "Strict path policy: writable paths must match exactly one of these forms: "
+    "CONFIG.md; Templates/<CATEGORY>.md; "
+    "<CATEGORY>/<topic>/YYYY-MM-DD-title.md where CATEGORY is AGENTS, RCA, "
+    "RUNBOOKS, or SKILLS; or SCRIPTS/<topic>/YYYY-MM-DD-title.<ext>. Never "
+    "create AGENTS/topic.md, any other two-level category path, a new "
+    "top-level folder, or a filename without the YYYY-MM-DD- prefix. Any "
+    "path outside this layout is rejected by the server; stop and ask the "
+    "user instead.\n"
+    "Language policy: all new and updated page content must be written in "
+    "English. Translate Turkish user content to English before saving. Keep "
+    "commands, paths, code, identifiers, proper names, and quoted error "
+    "messages unchanged unless translation is explicitly requested. Never "
+    "save Turkish prose.\n"
     "3. If the template exists, write the filled-in page as "
     "<CATEGORY>/<title>/YYYY-MM-DD-<detailed-title>.md (for example "
     "RCA/talos/2026-09-29-talos-linux-upgrade-error.md): the folder is named "
@@ -293,17 +313,55 @@ def ensure_space(space: str) -> None:
 
 
 def clean_page_path(path: str) -> str:
-    cleaned = (path or "").strip().lstrip("/")
-    parts = cleaned.split("/") if cleaned != "." else []
+    """Validate a path against the fixed writable space layout.
+
+    This is intentionally strict and runs before every filesystem operation.
+    In particular, ``AGENTS/topic.md`` is rejected; category pages must have
+    a topic directory and a date-prefixed filename.
+    """
+    if not isinstance(path, str):
+        raise page_error("invalid page path: path must be a string")
+    cleaned = path.strip()
+    parts = cleaned.split("/") if cleaned else []
     if (
         not cleaned
+        or cleaned.startswith("/")
         or cleaned.endswith("/")
         or ".." in parts
         or any(part in ("", ".", "..") for part in parts)
         or any(part.startswith(".") for part in parts)
     ):
         raise page_error("invalid page path")
-    return cleaned
+
+    if cleaned in STANDARD_ROOT_FILES:
+        return cleaned
+
+    if len(parts) == 2 and parts[0] == "Templates":
+        template_name = parts[1]
+        if template_name in {f"{category}.md" for category in STANDARD_CATEGORIES}:
+            return cleaned
+
+    if len(parts) == 3 and _TOPIC_RE.fullmatch(parts[1]):
+        category, _, filename = parts
+        if category in STANDARD_CATEGORIES and _PAGE_FILE_RE.fullmatch(filename):
+            return cleaned
+        if category == "SCRIPTS" and _SCRIPT_FILE_RE.fullmatch(filename):
+            return cleaned
+
+    raise page_error(
+        "path violates the standard space layout; allowed paths are "
+        "CONFIG.md, Templates/<CATEGORY>.md, "
+        "<CATEGORY>/<topic>/YYYY-MM-DD-title.md, or "
+        "SCRIPTS/<topic>/YYYY-MM-DD-title.<ext>"
+    )
+
+
+def _is_standard_path(path: str) -> bool:
+    try:
+        clean_page_path(path)
+    except ToolError:
+        return False
+    return True
 
 
 def page_target(space: str, path: str) -> str:
@@ -334,11 +392,14 @@ def list_pages(customer: str = "") -> dict:
             if not file.endswith(".md"):
                 continue
             try:
-                st = os.stat(os.path.join(base, file))
                 full = os.path.join(base, file)
+                name = os.path.relpath(full, space).replace(os.sep, "/")
+                if not _is_standard_path(name):
+                    continue
+                st = os.stat(full)
                 pages.append(
                     {
-                        "name": os.path.relpath(full, space).replace(os.sep, "/"),
+                        "name": name,
                         "size": st.st_size,
                         "lastModified": st.st_mtime_ns // 1_000_000,
                     }
