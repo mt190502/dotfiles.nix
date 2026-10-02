@@ -34,27 +34,88 @@ in
   xdg.configFile."yt-dlp/music/modify-and-trim-nonstandard-characters.sh" = {
     text = ''
       #!${bash}
-      OLDIFS=$IFS
-      IFS=$'\n'
+      set -u
+
+      ROOT='${home}/Music/Artists'
       YELLOW='\033[1;33m'
-      GREEN='\033[0;32m'
+      RED='\033[0;31m'
       NC='\033[0m'
 
-      for f in $(find ${home}/Music -depth -name '*[ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ⧸？&]*'); do
-        new=$(echo "$f" | awk -F '/' '{print $NF}' | sed 's/&/feat./g; s/？//g; s/⧸/-/g')
-        new=$(basename "$new" | sed 'y/ğüşıöçĞÜŞİÖÇâîûêôÂÎÛÊÔ/gusiocGUSIOCaiueoAIUEO/')
-        new_filename=$(echo "$f" | sed "s/$(basename "$f")/$new/")
-        if [[ -d "$new_filename" ]]; then
-          cp -R "$f"/* "$new_filename"/
-          [[ "$?" == "0" ]] && rm -rf "$f"
-          [[ -d "$new_filename" ]] && echo -e "''${YELLOW}Merged contents of \"$f\" to \"$new_filename\"''${NC}"
-        elif [[ "$new_filename" != "$f" ]] && [[ ! -f "$new_filename" ]]; then
-          mv "$f" "$new_filename"
-          [[ -f "$new_filename" ]] && echo -e "''${YELLOW}Renamed \"$f\" to \"$new_filename\"''${NC}"
+      normalize_component() {
+        local value="$1"
+        value=$(printf '%s' "$value" \
+          | sed -e 's/，/,/g; s/：/:/g; s/＂/"/g; s/（/(/g; s/）/)/g; s/；/;/g; s/＆/\&/g; s/⧸/-/g' \
+          | iconv -f UTF-8 -t ASCII//TRANSLIT 2>/dev/null \
+          | sed -e 's/&/feat./g' -e 's#[\/:*?"<>|]#-#g' \
+                -e 's/[[:cntrl:]]//g' -e 's/[[:space:]][[:space:]]*/ /g' \
+                -e 's/^[ .-]*//; s/[ .-]*$//')
+        printf '%s' "$value"
+      }
+
+      same_file() {
+        [[ -f "$1" && -f "$2" ]] && cmp -s -- "$1" "$2"
+      }
+
+      move_file() {
+        local source="$1" target="$2"
+        [[ "$source" == "$target" ]] && return 0
+        mkdir -p -- "$(dirname -- "$target")"
+        if [[ -e "$target" || -L "$target" ]]; then
+          if same_file "$source" "$target"; then
+            rm -f -- "$source"
+            printf '%bRemoved identical duplicate: %s%b\n' "$YELLOW" "$source" "$NC"
+            return 0
+          fi
+          printf '%bCollision, kept source: %s -> %s%b\n' "$RED" "$source" "$target" "$NC" >&2
+          return 1
         fi
+        mv -- "$source" "$target"
+        printf '%bRenamed: %s -> %s%b\n' "$YELLOW" "$source" "$target" "$NC"
+      }
+
+      [[ $# -ge 1 ]] || exit 0
+      file="$1"
+      [[ -e "$file" || -L "$file" ]] || exit 0
+      case "$file" in
+        "$ROOT"/*) ;;
+        *) exit 0 ;;
+      esac
+
+      parent=$(dirname -- "$file")
+      name=$(basename -- "$file")
+      normalized=$(normalize_component "$name")
+      if [[ "$normalized" != "$name" ]]; then
+        target="$parent/$normalized"
+        move_file "$file" "$target" || exit 0
+        file="$target"
+      fi
+
+      parent=$(dirname -- "$file")
+      while [[ "$parent" != "$ROOT" && "$parent" == "$ROOT"/* ]]; do
+        name=$(basename -- "$parent")
+        normalized=$(normalize_component "$name")
+        grandparent=$(dirname -- "$parent")
+        if [[ "$normalized" == "$name" ]]; then
+          parent="$grandparent"
+          continue
+        fi
+
+        target_dir="$grandparent/$normalized"
+        target_file="$target_dir/$(basename -- "$file")"
+        if [[ -d "$target_dir" ]]; then
+          move_file "$file" "$target_file" || exit 0
+          rmdir -- "$parent" 2>/dev/null || true
+          file="$target_file"
+        elif [[ ! -e "$target_dir" && ! -L "$target_dir" ]]; then
+          mv -- "$parent" "$target_dir"
+          printf '%bRenamed directory: %s -> %s%b\n' "$YELLOW" "$parent" "$target_dir" "$NC"
+          file="$target_file"
+        else
+          printf '%bCollision, kept directory: %s -> %s%b\n' "$RED" "$parent" "$target_dir" "$NC" >&2
+          exit 0
+        fi
+        parent=$(dirname -- "$file")
       done
-      IFS=$OLDIFS
-      echo -e "''${GREEN}Renaming process finished.''${NC}"
     '';
     executable = true;
   };
