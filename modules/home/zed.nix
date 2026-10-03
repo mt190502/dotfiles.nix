@@ -362,7 +362,7 @@
       exit 0
     fi
 
-    if ! ${lib.getExe' pkgs.coreutils "cmp"} -s "$settings" "$tmp"; then
+    if ! ${lib.getExe' pkgs.diffutils "cmp"} -s "$settings" "$tmp"; then
       ${lib.getExe' pkgs.coreutils "chmod"} --reference="$settings" "$tmp"
       ${lib.getExe' pkgs.coreutils "mv"} "$tmp" "$settings"
     fi
