@@ -28,10 +28,10 @@
       "obs"
       "openvpn-connect"
       "parsec"
-      "raycast"
       "shottr"
       "tailscale-app"
       "the-unarchiver"
+      "vicinae"
       "vivaldi"
       "whatsapp"
     ];
