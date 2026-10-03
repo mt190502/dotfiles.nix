@@ -9,6 +9,11 @@
 }:
 
 let
+  inherit (import "${inputs.self}/lib/substitutions.nix" { inherit lib pkgs pkgs-unstable; })
+    resolveTag
+    ;
+  systemctl = resolveTag "systemctl";
+  lockHandler = resolveTag "systemd-lock-handler";
   settings = ''
     {
        "close_on_focus_loss": false,
@@ -223,6 +228,39 @@ in
                 };
               };
           };
+      };
+    };
+    systemd.user = lib.mkIf (osConfig != null && pkgs.stdenv.isLinux) {
+      packages = with pkgs; [ systemd-lock-handler ];
+      services = {
+        systemd-lock-handler = {
+          Unit = {
+            Description = "Logind lock event to systemd target translation";
+            Documentation = [ "https://sr.ht/~whynothugo/systemd-lock-handler" ];
+          };
+          Service = {
+            Slice = "session.slice";
+            ExecStart = lockHandler;
+            Type = "notify";
+            Restart = "on-failure";
+            RestartSec = 10;
+          };
+          Install.WantedBy = [ "default.target" ];
+        };
+        vicinae-resume = {
+          Unit = {
+            Description = "Reconnect Vicinae clipboard after resume";
+            After = [ "sleep.target" ];
+            PartOf = [ "sleep.target" ];
+          };
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${systemctl} --user is-active vicinae.service";
+            ExecStop = "${systemctl} --user restart vicinae.service";
+            RemainAfterExit = true;
+          };
+          Install.WantedBy = [ "sleep.target" ];
+        };
       };
     };
     home.activation.vicinaeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

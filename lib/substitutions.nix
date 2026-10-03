@@ -59,6 +59,10 @@ let
     "systemctl" = {
       pkg = "systemd";
     };
+    "systemd-lock-handler" = {
+      pkg = "systemd-lock-handler";
+      path = "lib/systemd-lock-handler";
+    };
     "vicinae" = {
       pkg = "vicinae";
       unstable = true;
@@ -92,7 +96,10 @@ let
         else
           pkgs.${pkgName};
     in
-    getExe' pkg binName;
+    if override != null && builtins.hasAttr "path" override then
+      "${pkg}/${override.path}"
+    else
+      getExe' pkg binName;
 
   extractTags =
     fileContents:
@@ -105,7 +112,7 @@ let
     lib.unique tags;
 in
 {
-  inherit extractTags;
+  inherit extractTags resolveTag;
   mkSubstitutions =
     {
       files,
