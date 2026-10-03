@@ -5,6 +5,7 @@
   osConfig ? null,
   pkgs,
   pkgs-unstable,
+  system,
   ...
 }:
 
@@ -20,12 +21,17 @@ let
        "pop_to_root_on_close": true,
        "favicon_service": "google",
        "search_files_in_root": true,
-       "theme": {
-          "dark": {
-             "name": "stylix",
-             "icon_theme": "${config.iconthemecfg.dark}"
-          }
+       "global_shortcuts": {
+          "toggle": "${if lib.hasSuffix "-darwin" system then "alt+d" else "alt+space"}"
        },
+       ${lib.optionalString (lib.hasSuffix "-linux" system) ''
+         "theme": {
+            "dark": {
+               "name": "stylix",
+               "icon_theme": "${config.iconthemecfg.dark}"
+            }
+         },
+       ''}
        "favorites": [
           "applications:org.kde.dolphin",
           "applications:org.equicord.equibop",
@@ -164,31 +170,32 @@ let
     names:
     map (name: inputs.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system}.${name}) names;
   raycastExtBuilder = inputs.self.legacyPackages.${pkgs.stdenv.hostPlatform.system}.raycastExtensions;
+  extensionPackages =
+    (getVicinaeExtensions [
+      "nix"
+      "ssh"
+      "stocks"
+    ])
+    ++ (builtins.attrValues (raycastExtBuilder [
+      "1password"
+      "chatgpt"
+      "deepcast"
+      "simple-dictionary"
+      "tailscale"
+      "word-count"
+    ]));
 in
 {
   config = {
     preferences.menu = lib.mkDefault "vicinae";
-    programs.vicinae = {
+    programs.vicinae = lib.mkIf (lib.hasSuffix "-linux" system) {
       enable = true;
       package = pkgs-unstable.vicinae;
       systemd = {
         enable = true;
         autoStart = true;
       };
-      extensions =
-        (getVicinaeExtensions [
-          "nix"
-          "ssh"
-          "stocks"
-        ])
-        ++ (builtins.attrValues (raycastExtBuilder [
-          "1password"
-          "chatgpt"
-          "deepcast"
-          "simple-dictionary"
-          "tailscale"
-          "word-count"
-        ]));
+      extensions = extensionPackages;
       themes = {
         stylix =
           with config.stylix;
@@ -230,7 +237,15 @@ in
           };
       };
     };
-    systemd.user = lib.mkIf (osConfig != null && pkgs.stdenv.isLinux) {
+    xdg.dataFile = lib.mkIf (lib.hasSuffix "-darwin" system) (
+      builtins.listToAttrs (
+        map (item: {
+          name = "vicinae/extensions/${item.name}";
+          value.source = item;
+        }) extensionPackages
+      )
+    );
+    systemd.user = lib.mkIf (osConfig != null && (lib.hasSuffix "-linux" system)) {
       packages = with pkgs; [ systemd-lock-handler ];
       services = {
         systemd-lock-handler = {

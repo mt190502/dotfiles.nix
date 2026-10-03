@@ -42,6 +42,7 @@ rec {
         mpv
         ssh
         theming
+        vicinae
         ytdlp
         zed
       ])
