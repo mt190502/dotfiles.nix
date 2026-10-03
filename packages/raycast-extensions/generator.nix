@@ -35,7 +35,7 @@ lib.genAttrs names (
     installPhase = ''
       runHook preInstall
       mkdir -p $out/
-      cp -r /build/.config/*/extensions/${name}/* $out/
+      cp -r "$HOME/.config/raycast/extensions/${name}/." "$out/"
       runHook postInstall
     '';
     npmDeps = importNpmLock { npmRoot = extSrc; };
