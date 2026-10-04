@@ -9,6 +9,94 @@
   ...
 }:
 
+let
+  commonContext = ''
+    # NixOS Environment
+
+    - Some packages may not be installed system-wide, such as `python3`.
+    - Prefer the repository's documented environment. If a command is unavailable, use `nix shell nixpkgs#<package> -c <command>` instead of installing into an unrelated environment.
+
+    # Repository Research and Change Workflow
+
+    Use this workflow for repository work. It applies to both Prime Agent and OpenCode.
+
+    # Skills and Research Sources
+
+    - Before inventing a procedure, inspect the repository's local skill directories: `.opencode/skills`, `.prime/agent/skills`, and `.agents/skills`, plus any configured global skill directories. Reuse the most specific existing skill that matches the task.
+    - For repository or domain research, query `roberto` first. If it is unavailable, fails, or has no relevant result, fall back to `roberto-ext`.
+    - For work-owned repositories or work-specific knowledge, use `work-mcp` when it is configured. Do not repeat broad research after the repository owner, conventions, and relevant history are established.
+    - Record useful research findings in the working plan or final summary.
+
+    ## 1. Establish scope and constraints
+
+    - Restate the requested outcome in concrete terms.
+    - Identify safety-sensitive actions: activation, deployment, destructive commands, external writes, service restarts, credentials, or production changes.
+    - Separate facts already verified from assumptions and questions.
+    - Preserve user changes. Never reset, clean, checkout, or overwrite work you did not create.
+
+    ## 2. Research before editing
+
+    For a new or unfamiliar repository:
+
+    1. Inspect the working directory, repository root, Git status, recent history, and relevant diffs.
+    2. Read local instructions and documentation: `AGENTS.md`, `CLAUDE.md`, `README`, `CONTRIBUTING`, build files, and nearby module documentation.
+    3. Identify the repository owner and ask focused questions about purpose, architecture, conventions, operational hazards, and prior art. Query `roberto` first; if it is unavailable, fails, or has no relevant result, fall back to `roberto-ext`. For work-owned repositories or work-specific knowledge, use `work-mcp` when configured.
+    4. Search the repository for analogous implementations before inventing a new pattern.
+    5. Find the native environment and commands. Prefer the project's own package manager, formatter, linter, test runner, build system, and deployment tooling.
+    6. For external systems such as Kubernetes, Terraform, APIs, or services, inspect live state through the appropriate MCP or native client when access is available. Do not infer live state from stale files.
+
+    Do not repeat broad research after the repository's ownership, conventions, and relevant history are established. Record the useful findings in the working plan or final summary.
+
+    ## 3. Plan the smallest change
+
+    - Define the files and behavior that must change.
+    - Prefer an existing module, resource, helper, or convention over a new abstraction.
+    - Keep unrelated cleanup, renames, formatting churn, and refactors out of the patch.
+    - For configuration, check generated output and dependency/activation semantics, not only source syntax.
+    - For visual or rendering issues, reproduce first and inspect screenshots, pixels, DOM, CSS, computed styles, font loading, or logs as appropriate.
+    - Before risky activation, deployment, or external writes, explain the impact and ask for approval when the environment requires it.
+
+    ## 4. Implement safely
+
+    - Make one focused edit at a time.
+    - Re-read the changed region and inspect the diff after each logical change.
+    - Use exact, targeted edits when possible.
+    - Never expose or copy credentials into source, logs, prompts, or command output.
+    - On NixOS, if a command is unavailable system-wide, use the project's documented environment or `nix shell nixpkgs#<package> -c <command>`; do not install ad hoc packages into an unrelated environment.
+
+    ## 5. Validate incrementally
+
+    Run the narrowest relevant check first, then broaden it:
+
+    1. Syntax, parse, format, or generated-config checks.
+    2. Focused unit, integration, or behavior tests.
+    3. Build, type, lint, or evaluation checks required by the repository.
+    4. A final status and diff review, including `git diff --check` where applicable.
+
+    For a failed check, diagnose the cause, fix only the relevant issue, and rerun the check. Do not claim success from an unrun or unrelated check. Distinguish dry-run/build validation from activation, deployment, or live verification.
+
+    ## 6. Commit only when requested
+
+    - Do not create a commit unless the user requests it or the task explicitly requires one.
+    - Before committing, inspect `git status`, the unstaged diff, and the staged diff. Stage only files belonging to the requested change; never include unrelated user changes.
+    - Run `git diff --cached --check` and the repository's required checks before committing. Follow the repository's existing commit-message style.
+    - Treat signing, authentication, and pre-commit-hook failures as real blockers. Do not bypass them silently; report the exact failure and leave the changes available for retry.
+    - After committing, verify the commit with `git log -1 --oneline` and confirm the remaining `git status`. A commit does not activate, deploy, or restart anything.
+
+    ## 7. Finish with a useful handoff
+
+    Report:
+
+    - what changed and why;
+    - files changed, including generated or linked files;
+    - research sources and important repository conventions discovered;
+    - validation commands and their results;
+    - unresolved uncertainty or limitations;
+    - any activation, restart, deployment, or manual verification still required.
+
+    If the task is blocked, state the exact blocker and the smallest next action instead of guessing.
+  '';
+in
 {
   imports = [
     inputs.self.homeModules.prime-agent
@@ -32,15 +120,9 @@
     prime-agent = {
       enable = true;
       package = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.prime-agent;
-      context = ''
-        # NixOS Environment Disclaimer
-
-        - Some packages is NOT available system-wide like python3 etc.
-        - To use missing packages, find package name and run: `nix shell nixpkgs#<pkg> -c`
-          - For example, to use python3, run: `nix shell nixpkgs#python3 -c python3 --version`
-        - The same applies to other packages not installed system-wide.
-      '';
+      context = commonContext;
       settings = {
+        skills = [ "${config.home.homeDirectory}/.config/opencode/skills" ];
         mcpServers = {
           context7 = {
             type = "http";
@@ -368,14 +450,8 @@
       enable = true;
       enableMcpIntegration = true;
       package = pkgs-unstable.opencode;
-      context = ''
-        # NixOS Environment Disclaimer
-
-        - Some packages is NOT available system-wide like python3 etc.
-        - To use missing packages, find package name and run: `nix shell nixpkgs#<pkg> -c`
-          - For example, to use python3, run: `nix shell nixpkgs#python3 -c python3 --version`
-        - The same applies to other packages not installed system-wide.
-      '';
+      context = commonContext;
+      skills = { };
       settings = {
         # theme = "flexoki";
         plugin = [
@@ -454,6 +530,8 @@
     sessionVariables.OPENCODE_CONFIG_DIR = "${config.home.homeDirectory}/.config/opencode/config.d";
     file = {
       ".config/opencode/config.d/.keep".text = "";
+      ".config/opencode/config.d/AGENTS.md".text = commonContext;
+      ".config/opencode/skills/.keep".text = "";
       ".config/opencode/plugin/terminal-bell.ts".text = ''
         import type { Plugin } from "@opencode-ai/plugin"
         export const TerminalBell: Plugin = async ({ project, client, $, directory, worktree }) => {
