@@ -65,32 +65,18 @@
       hide-keyboard-layout = true;
     };
   };
-  systemd.user.services = {
-    session-lock = {
-      Unit = {
-        Description = "Session Lock";
-        Before = [
-          "suspend.target"
-          "sleep.target"
-          "hibernate.target"
-        ];
-        Wants = [
-          "suspend.target"
-          "sleep.target"
-          "hibernate.target"
-        ];
-      };
-      Service = {
-        Type = "forking";
-        ExecStart = "${config.home.homeDirectory}/.config/sway/scripts.d/blurlock";
-      };
-      Install = {
-        WantedBy = [
-          "sleep.target"
-          "suspend.target"
-          "hibernate.target"
-        ];
-      };
+  systemd.user.services.session-lock = {
+    Unit = {
+      Description = "Session Lock";
+      Before = [
+        "suspend.target"
+        "sleep.target"
+        "hibernate.target"
+      ];
+    };
+    Service = {
+      Type = "forking";
+      ExecStart = "${config.home.homeDirectory}/.config/sway/scripts.d/blurlock";
     };
   };
 }
