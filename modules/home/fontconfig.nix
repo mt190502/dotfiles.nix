@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   fonts.fontconfig.enable = true;
@@ -7,6 +7,14 @@
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
       <fontconfig>
+          <match target="pattern">
+              <test name="family" qual="any" compare="eq">
+                  <string>Roboto</string>
+              </test>
+              <edit name="family" mode="prepend" binding="strong">
+                  <string>${config.fontcfg.sansSerif.name}</string>
+              </edit>
+          </match>
           <match target="font">
               <edit name="antialias" mode="assign">
                   <bool>true</bool>
