@@ -248,6 +248,21 @@ in
           "alt+shift+\\"
         ];
       };
+      providers = {
+        nano-gpt = {
+          name = "NanoGPT";
+          baseUrl = "https://api.nano-gpt.com/api/v1";
+          detailed = true;
+          keyFile = config.sops.secrets."nanogpt".path;
+        };
+        commandcode = {
+          name = "CommandCode";
+          baseUrl = "https://api.commandcode.ai/provider/v1";
+          requiredEndpoints = [ "/chat/completions" ];
+          defaultContextWindow = 1000000;
+          keyFile = config.sops.secrets."commandcode".path;
+        };
+      };
       extensions = {
         "permission-modes.ts" = ''
           import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent"
@@ -376,68 +391,6 @@ in
             })
           }
         '';
-        "commandcode.ts" = ''
-          import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
-          import * as fs from "fs"
-
-          interface CommandCodeModel {
-            id: string
-            context_length?: number
-            supported_endpoints?: string[]
-          }
-
-          function inputModalities(id: string): ("text" | "image")[] {
-            const lower = id.toLowerCase()
-            const vision =
-              lower.startsWith("z-ai/") ||
-              lower.includes("vision") ||
-              lower.includes("gemini") ||
-              lower.includes("kimi") ||
-              lower.includes("minimax") ||
-              lower.includes("mimo") ||
-              lower.includes("inkling") ||
-              lower.includes("stepfun") ||
-              (lower.includes("gpt-5") && !lower.includes("codex"))
-            return vision ? ["text", "image"] : ["text"]
-          }
-
-          export default async function (pi: ExtensionAPI) {
-            try {
-              const res = await fetch("https://api.commandcode.ai/provider/v1/models", {
-                signal: AbortSignal.timeout(10000),
-              })
-              if (!res.ok) return
-
-              const data = (await res.json()) as { data?: CommandCodeModel[] }
-              const models = (data.data ?? [])
-                .filter((model) => (model.supported_endpoints ?? []).includes("/chat/completions"))
-                .map((model) => ({
-                  id: model.id,
-                  name: model.id.split("/").pop() ?? model.id,
-                  reasoning: model.id.toLowerCase().includes("r1") || model.id.toLowerCase().includes("reasoning"),
-                  input: inputModalities(model.id),
-                  cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-                  contextWindow: model.context_length ?? 1000000,
-                  maxTokens: 16384,
-                  compat: {
-                    supportsDeveloperRole: false,
-                    maxTokensField: "max_tokens",
-                  },
-                }))
-              if (models.length === 0) return
-
-              pi.registerProvider("commandcode", {
-                name: "CommandCode",
-                baseUrl: "https://api.commandcode.ai/provider/v1",
-                apiKey: fs.readFileSync("${config.sops.secrets."commandcode".path}", "utf8").trim(),
-                api: "openai-completions",
-                models,
-              })
-            } catch {
-              // API not reachable yet
-            }
-          }
-        '';
       };
     };
 
@@ -514,6 +467,14 @@ in
           };
         };
         provider = {
+          "nano-gpt" = {
+            name = "NanoGPT";
+            npm = "@ai-sdk/openai-compatible";
+            options = {
+              baseURL = "https://api.nano-gpt.com/api/v1";
+              apiKey = "{file:${config.sops.secrets."nanogpt".path}}";
+            };
+          };
           commandcode = {
             name = "CommandCode";
             npm = "@ai-sdk/openai-compatible";
