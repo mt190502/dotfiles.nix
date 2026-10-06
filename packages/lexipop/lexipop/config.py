@@ -51,6 +51,7 @@ DEFAULTS: dict[str, Any] = {
         "onEverySelection": True,
         "hideWhenFocusChanges": True,
         "hideWhenSelectionCleared": True,
+        "closeOnOutsideClick": True,
         "hideAfterSeconds": 0,
         "settleMs": 250,
         "pollSelectionMs": 300,

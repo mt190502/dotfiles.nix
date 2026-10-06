@@ -44,6 +44,7 @@ FOCUS_POLL_MS = 400
 #: sway IPC: magic, GET_TREE message type, socket timeout.
 SWAY_IPC_MAGIC = b"i3-ipc"
 SWAY_GET_TREE = 4
+SWAY_GET_OUTPUTS = 3
 SWAY_IPC_TIMEOUT = 0.4
 
 #: Fallbacks for the configurable popup labels (same values as config.py).
@@ -109,16 +110,30 @@ POINTER_PROBE_TIMEOUT_MS = 250
 POINTER_PROBE_MAX_SURFACES = 4
 #: sway only reports the pointer to a newly mapped surface on the NEXT pointer
 #: event, so the compositor is asked for a zero-delta pointer move right after
-#: the probe is mapped (two attempts, then the timeout guard).  The delta is 0,
-#: so the user's cursor does not move; the compositor just re-issues the
-#: current position to the probe surface.
-POINTER_PROBE_REBASE_MS = (50, 95, 145, 195)
-#: sway IPC command that triggers the pointer rebase.
+#: the probe is mapped.  With a STATIONARY cursor that rebase sometimes produced
+#: no motion at all (the popup then fell back to a stale xdotool position and
+#: landed in a corner), so the last attempts move the pointer by ONE pixel and
+#: immediately back: two guaranteed motion events and a net-zero displacement.
+POINTER_PROBE_REBASE_MS = (50, 95)
+POINTER_PROBE_JITTER_MS = (140, 185)
+#: sway IPC commands that trigger a pointer rebase: the zero-delta move first,
+#: then the one-pixel round trip.
 POINTER_PROBE_REBASE_COMMAND = "seat - cursor move 0 0"
+POINTER_PROBE_JITTER_COMMAND = "seat - cursor move 1 0; seat - cursor move -1 0"
 SWAY_RUN_COMMAND = 0
 #: Nearly transparent: a surface that is fully invisible may stop receiving
 #: pointer events on some compositors, so a tiny alpha is kept.
 POINTER_PROBE_OPACITY = 0.01
+
+#: Outside-click catcher (``popup.closeOnOutsideClick``): one invisible layer
+#: surface per monitor that owns the pointer while the popup is visible.  The
+#: Wayland protocol never reports a click that landed on another surface, so the
+#: only way to observe an outside click without raw device access is to receive
+#: it -- and the surface that receives a click also consumes it.
+CLICK_CATCHER_NAMESPACE = "lexipop-catcher"
+#: The same reason as the probe: a fully invisible surface may stop receiving
+#: pointer events, so a tiny alpha is kept.
+CLICK_CATCHER_OPACITY = 0.01
 
 #: Control socket: how long a client may take to send its one-line request.
 CONTROL_SOCKET_TIMEOUT = 5.0
@@ -381,8 +396,17 @@ def _recv_exact(conn: Any, length: int) -> Optional[bytes]:
     return b"".join(chunks)
 
 
-def _sway_get_tree(socket_path: Optional[str] = None) -> Optional[dict]:
-    """Send GET_TREE over the sway IPC socket.  Returns None on any failure."""
+def _sway_request(
+    message_type: int,
+    body: bytes = b"",
+    socket_path: Optional[str] = None,
+) -> Any:
+    """Send one sway IPC request and return the decoded reply (None on failure).
+
+    The frame is the 6-byte magic, a uint32 payload length and a uint32 message
+    type; the reply header is 14 bytes long, so its length lives at ``[6:10]``
+    and its type at ``[10:14]``.
+    """
     path = socket_path or _sway_socket_path()
     if not path:
         return None
@@ -391,8 +415,7 @@ def _sway_get_tree(socket_path: Optional[str] = None) -> Optional[dict]:
         conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         conn.settimeout(SWAY_IPC_TIMEOUT)
         conn.connect(path)
-        body = b""
-        conn.sendall(SWAY_IPC_MAGIC + struct.pack("=II", len(body), SWAY_GET_TREE) + body)
+        conn.sendall(SWAY_IPC_MAGIC + struct.pack("=II", len(body), message_type) + body)
         header = _recv_exact(conn, 14)
         if header is None or len(header) < 14 or not header.startswith(SWAY_IPC_MAGIC):
             return None
@@ -400,9 +423,9 @@ def _sway_get_tree(socket_path: Optional[str] = None) -> Optional[dict]:
         payload = _recv_exact(conn, payload_len) if payload_len else b""
         if payload is None:
             return None
-        tree = json.loads(payload.decode("utf-8", "replace"))
+        return json.loads(payload.decode("utf-8", "replace"))
     except Exception as exc:  # never crash, never log a traceback
-        LOGGER.debug("sway GET_TREE failed: %s", exc)
+        LOGGER.debug("sway IPC request %d failed: %s", message_type, exc)
         return None
     finally:
         if conn is not None:
@@ -410,38 +433,25 @@ def _sway_get_tree(socket_path: Optional[str] = None) -> Optional[dict]:
                 conn.close()
             except OSError:
                 pass
+
+
+def _sway_get_tree(socket_path: Optional[str] = None) -> Optional[dict]:
+    """Send GET_TREE over the sway IPC socket.  Returns None on any failure."""
+    tree = _sway_request(SWAY_GET_TREE, b"", socket_path)
     return tree if isinstance(tree, dict) else None
+
+
+def _sway_get_outputs(socket_path: Optional[str] = None) -> list:
+    """Send GET_OUTPUTS over the sway IPC socket (``[]`` on any failure)."""
+    outputs = _sway_request(SWAY_GET_OUTPUTS, b"", socket_path)
+    return outputs if isinstance(outputs, list) else []
 
 
 def _sway_command(socket_path: Optional[str] = None, command: str = "") -> bool:
     """Send one RUN_COMMAND to sway.  Returns True when sway accepted it."""
-    path = socket_path or _sway_socket_path()
-    if not path or not command:
+    if not command:
         return False
-    conn = None
-    try:
-        conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        conn.settimeout(SWAY_IPC_TIMEOUT)
-        conn.connect(path)
-        body = command.encode("utf-8")
-        conn.sendall(SWAY_IPC_MAGIC + struct.pack("=II", len(body), SWAY_RUN_COMMAND) + body)
-        header = _recv_exact(conn, 14)
-        if header is None or len(header) < 14 or not header.startswith(SWAY_IPC_MAGIC):
-            return False
-        payload_len, _msg_type = struct.unpack("=II", header[6:14])
-        payload = _recv_exact(conn, payload_len) if payload_len else b""
-        if payload is None:
-            return False
-        reply = json.loads(payload.decode("utf-8", "replace"))
-    except Exception as exc:  # never crash, never log a traceback
-        LOGGER.debug("sway RUN_COMMAND failed: %s", exc)
-        return False
-    finally:
-        if conn is not None:
-            try:
-                conn.close()
-            except OSError:
-                pass
+    reply = _sway_request(SWAY_RUN_COMMAND, command.encode("utf-8"), socket_path)
     if isinstance(reply, list):
         return all(bool(item.get("success")) for item in reply if isinstance(item, dict))
     return bool(reply)
@@ -456,6 +466,17 @@ def _sway_rebase_pointer(socket_path: Optional[str] = None) -> bool:
     probe surface receives the real position.  The cursor itself does not move.
     """
     return _sway_command(socket_path, POINTER_PROBE_REBASE_COMMAND)
+
+
+def _sway_jitter_pointer(socket_path: Optional[str] = None) -> bool:
+    """Rebase the pointer with a one-pixel round trip (net-zero displacement).
+
+    The zero-delta move alone is not always enough: with a stationary cursor and
+    a freshly mapped surface sway can swallow it, which left the popup without a
+    pointer sample.  Moving one pixel and back emits two real motion events, so
+    the probe gets its sample; the cursor ends where it started.
+    """
+    return _sway_command(socket_path, POINTER_PROBE_JITTER_COMMAND)
 
 
 def _sway_focused_app_id(socket_path: Optional[str] = None) -> Optional[str]:
@@ -480,6 +501,126 @@ def _sway_focused_rect(socket_path: Optional[str] = None) -> Optional[tuple]:
     if tree is None:
         return None
     return _focused_rect(tree)
+
+
+def _sway_focused_output(socket_path: Optional[str] = None) -> Optional[str]:
+    """Connector name of the focused sway output (``DP-2``), or None."""
+    for output in _sway_get_outputs(socket_path):
+        if isinstance(output, dict) and output.get("focused"):
+            name = output.get("name")
+            if name:
+                return str(name)
+    return None
+
+
+# --------------------------------------------------------------------------
+# monitors (the popup must land on the output the pointer/selection is on)
+# --------------------------------------------------------------------------
+def _monitors(display) -> list:
+    """Every ``GdkMonitor`` of *display* (an empty list when unavailable)."""
+    if display is None:
+        return []
+    try:
+        model = display.get_monitors()
+    except Exception:
+        LOGGER.debug("cannot list the monitors", exc_info=True)
+        return []
+    monitors: list = []
+    try:
+        for index in range(int(model.get_n_items())):
+            monitors.append(model.get_item(index))
+    except Exception:
+        LOGGER.debug("cannot read the monitor list", exc_info=True)
+        return []
+    return monitors
+
+
+def _monitor_geometry(monitor):
+    """Geometry of *monitor*, or None when it cannot be read."""
+    try:
+        return monitor.get_geometry()
+    except Exception:
+        LOGGER.debug("cannot read the monitor geometry", exc_info=True)
+        return None
+
+
+def _monitor_key(monitor) -> Optional[str]:
+    """Identity of *monitor*: its connector name, else its geometry.
+
+    The connector (``DP-2``, ``HDMI-A-4``) is the name sway and the user see;
+    GDK exposes it only on newer GTK versions, so the geometry tuple of
+    ``x,y+WxH`` is the fallback identity.
+    """
+    if monitor is None:
+        return None
+    connector = None
+    try:
+        connector = monitor.get_connector()
+    except Exception:
+        connector = None
+    if connector:
+        return str(connector)
+    geometry = _monitor_geometry(monitor)
+    if geometry is None:
+        return None
+    return "%d,%d+%dx%d" % (geometry.x, geometry.y, geometry.width, geometry.height)
+
+
+def _monitor_contains(monitor, x: float, y: float) -> bool:
+    """True when the logical point ``(x, y)`` lies inside *monitor*."""
+    geometry = _monitor_geometry(monitor)
+    if geometry is None:
+        return False
+    return (
+        geometry.x <= x < geometry.x + geometry.width
+        and geometry.y <= y < geometry.y + geometry.height
+    )
+
+
+def _nearest_monitor(monitors: list, x: float, y: float):
+    """Monitor whose centre is closest to ``(x, y)`` (points outside any rect)."""
+    best = None
+    best_distance = None
+    for monitor in monitors:
+        geometry = _monitor_geometry(monitor)
+        if geometry is None:
+            continue
+        dx = (geometry.x + geometry.width / 2.0) - x
+        dy = (geometry.y + geometry.height / 2.0) - y
+        distance = dx * dx + dy * dy
+        if best_distance is None or distance < best_distance:
+            best, best_distance = monitor, distance
+    return best if best is not None else monitors[0]
+
+
+def _monitor_at_point(monitors: list, point: Optional[tuple]):
+    """Monitor that contains *point*, else the nearest one, else the first.
+
+    ``Gdk.Display.get_monitor_at_point`` does NOT exist on the Wayland backend
+    (only ``get_monitor_at_surface`` does), so the lookup is done here over the
+    monitor geometries.  Both the pointer sample and these rectangles are in the
+    same logical coordinate space, so a plain rectangle test is exact; the
+    nearest-centre rule only matters for a point in a gap between outputs.
+    """
+    if not monitors:
+        return None
+    if point is None:
+        return monitors[0]
+    x, y = float(point[0]), float(point[1])
+    for monitor in monitors:
+        if _monitor_contains(monitor, x, y):
+            return monitor
+    return _nearest_monitor(monitors, x, y)
+
+
+def _monitor_by_key(monitors: list, key: Optional[str]):
+    """Monitor whose :func:`_monitor_key` equals *key* (None when unmatched)."""
+    if not key:
+        return None
+    for monitor in monitors:
+        if _monitor_key(monitor) == key:
+            return monitor
+    return None
 
 
 def _place_popup(
@@ -647,12 +788,15 @@ class _PointerProbe:
         callback,
         timeout_ms: int = POINTER_PROBE_TIMEOUT_MS,
         rebase: Optional[Callable[..., bool]] = None,
+        jitter: Optional[Callable[..., bool]] = None,
     ) -> None:
         self.gtk = gtk
         self.callback = callback
         self.timeout_ms = max(1, int(timeout_ms))
         #: How the compositor is asked to re-issue the pointer position.
         self.rebase = rebase or _sway_rebase_pointer
+        #: The one-pixel round trip used when the zero-delta move is ignored.
+        self.jitter = jitter or _sway_jitter_pointer
         self.windows: list = []
         self._timeout_id = None
         self._rebase_ids: list = []
@@ -713,6 +857,7 @@ class _PointerProbe:
         # sway will not report the pointer to this fresh surface until a
         # pointer event happens, so ask the compositor for a zero-delta move.
         self._arm_rebase(socket_path)
+        self._arm_rebase(socket_path, jitter=True)
         try:
             self._timeout_id = self.gtk.GLib.timeout_add(self.timeout_ms, self._on_timeout)
         except Exception:
@@ -720,18 +865,25 @@ class _PointerProbe:
             self.finish(None)
         return True
 
-    def _arm_rebase(self, socket_path: Optional[str] = None) -> None:
-        """Schedule the zero-delta pointer moves that make sway report us."""
-        for delay in POINTER_PROBE_REBASE_MS:
+    def _arm_rebase(self, socket_path: Optional[str] = None, jitter: bool = False) -> None:
+        """Schedule the pointer moves that make sway report the pointer to us.
+
+        The first attempts use a zero-delta move (the cursor does not move at
+        all); the later ones move the pointer one pixel and back, which always
+        produces motion events when the cursor has been stationary.
+        """
+        rebase = self.jitter if jitter else self.rebase
+        delays = POINTER_PROBE_JITTER_MS if jitter else POINTER_PROBE_REBASE_MS
+        for delay in delays:
             state: dict = {"id": None}
             self._rebase_ids.append(state)
 
-            def fire(state=state):
+            def fire(state=state, rebase=rebase):
                 if state in self._rebase_ids:
                     self._rebase_ids.remove(state)
                 if not self._done:
                     try:
-                        accepted = bool(self.rebase(socket_path))
+                        accepted = bool(rebase(socket_path))
                     except Exception:
                         LOGGER.debug("the pointer rebase failed", exc_info=True)
                         accepted = False
@@ -830,6 +982,121 @@ class _PointerProbe:
         self._timeout_id = None
         self.finish(None)
         return False
+
+
+# --------------------------------------------------------------------------
+# outside-click catcher (invisible layer-shell surfaces that own the pointer)
+# --------------------------------------------------------------------------
+class _ClickCatcher:
+    """Turn a click outside the popup into a dismissal, without raw input access.
+
+    Wayland never reports a click that landed on another surface, and a client
+    cannot observe global button presses, so the only way to *see* an outside
+    click without reading ``/dev/input`` is to own the pointer while the popup is
+    visible: one nearly transparent, fullscreen surface per monitor on the TOP
+    layer.  The popup lives on OVERLAY (above TOP), so a click on the popup
+    reaches the popup and never a catcher surface; every other click lands on a
+    catcher and dismisses the popup.
+
+    Inherent trade-off: the surface that observes a click also consumes it, so
+    the first click outside the popup closes the popup instead of reaching the
+    application below it.  ``pointerClicks`` (raw input devices) stays available
+    for anyone who prefers the click to pass through.
+    """
+
+    def __init__(self, gtk: "_Gtk", callback, opacity: float = CLICK_CATCHER_OPACITY) -> None:
+        self.gtk = gtk
+        self.callback = callback
+        self.opacity = opacity
+        self.windows: list = []
+
+    # -- lifecycle ---------------------------------------------------------
+    def show(self, monitors: list) -> bool:
+        """Map one catcher surface per monitor; False when it cannot be used."""
+        if self.windows:
+            return True
+        layer_shell = self.gtk.layer_shell
+        if layer_shell is None:
+            LOGGER.debug("outside-click catcher unusable: no layer shell")
+            return False
+        if not monitors:
+            LOGGER.debug("outside-click catcher unusable: no monitors")
+            return False
+        for monitor in monitors:
+            try:
+                window = self._make_window(monitor)
+            except Exception:
+                LOGGER.debug("cannot create an outside-click catcher surface", exc_info=True)
+                continue
+            if window is not None:
+                self.windows.append(window)
+        if not self.windows:
+            LOGGER.debug("outside-click catcher unusable: no surface could be created")
+            return False
+        for window in self.windows:
+            try:
+                window.set_visible(True)
+            except Exception:
+                LOGGER.debug("cannot show an outside-click catcher surface", exc_info=True)
+        LOGGER.debug("outside-click catcher mapped on %d monitor(s)", len(self.windows))
+        return True
+
+    def hide(self) -> None:
+        """Destroy every catcher surface (safe when none was ever mapped)."""
+        windows, self.windows = self.windows, []
+        for window in windows:
+            try:
+                window.set_visible(False)
+            except Exception:
+                pass
+            try:
+                window.destroy()
+            except Exception:
+                LOGGER.debug("cannot destroy an outside-click catcher surface", exc_info=True)
+
+    # -- widgets -----------------------------------------------------------
+    def _make_window(self, monitor):
+        """One fullscreen, non-focusable, nearly transparent catcher surface."""
+        Gtk = self.gtk.Gtk
+        layer_shell = self.gtk.layer_shell
+        window = Gtk.Window()
+        window.set_decorated(False)
+        window.set_can_focus(False)
+        window.add_css_class("lexipop-click-catcher")
+        try:
+            window.set_opacity(self.opacity)
+        except Exception:
+            LOGGER.debug("click catcher opacity is not supported", exc_info=True)
+        # A mapped child keeps the surface input region non-empty: receiving the
+        # button press is the whole point of this surface.
+        area = Gtk.DrawingArea()
+        area.set_hexpand(True)
+        area.set_vexpand(True)
+        window.set_child(area)
+        gesture = Gtk.GestureClick()
+        gesture.connect("pressed", self._on_pressed, monitor)
+        window.add_controller(gesture)
+        layer_shell.init_for_window(window)
+        layer_shell.set_namespace(window, CLICK_CATCHER_NAMESPACE)
+        # TOP sits above every normal window but below OVERLAY, where the popup
+        # lives: a click on the popup can never reach a catcher surface.
+        layer_shell.set_layer(window, layer_shell.Layer.TOP)
+        layer_shell.set_keyboard_mode(window, layer_shell.KeyboardMode.NONE)
+        # The output of a layer surface is fixed when the surface is created.
+        layer_shell.set_monitor(window, monitor)
+        for edge_name in ("TOP", "BOTTOM", "LEFT", "RIGHT"):
+            layer_shell.set_anchor(window, Gtk4Edge(self.gtk, edge_name), True)
+        return window
+
+    def _on_pressed(self, _gesture, _n_press, x, y, monitor) -> None:
+        """Report one outside click; the caller hides the popup and the catcher."""
+        LOGGER.debug(
+            "outside click at %.1f,%.1f (monitor %s)", float(x), float(y), _monitor_key(monitor)
+        )
+        try:
+            self.callback()
+        except Exception:
+            LOGGER.debug("the outside-click callback failed", exc_info=True)
 
 
 # --------------------------------------------------------------------------
@@ -1229,6 +1496,12 @@ class _DaemonController:
         self._click_grace_id = None
         #: ``lexipop ocr`` control socket (None until :meth:`attach`).
         self._control_socket: Optional[_ControlSocket] = None
+        #: Invisible layer-shell surfaces that report a click outside the popup.
+        self._click_catcher = None
+        #: Whether the catcher was reported once in the log (it is not per show).
+        self._click_catcher_reported = False
+        #: Monitor identity the current popup window was created for.
+        self._popup_monitor_key: Optional[str] = None
 
     # -- wiring ------------------------------------------------------------
     def attach(self, app) -> None:
@@ -1250,6 +1523,7 @@ class _DaemonController:
         self._stopped = True
         self._stop_control_socket()
         self._stop_pointer_clicks()
+        self._hide_click_catcher()
         self._finish_pointer_probe()
         self._stop_selection_poll()
         if self.watcher is not None:
@@ -1637,9 +1911,31 @@ class _DaemonController:
         return False
 
     # -- popup -------------------------------------------------------------
-    def _ensure_popup(self):
-        if self.popup is not None:
+    def _ensure_popup(self, monitor=None):
+        """Return the popup window for *monitor*, creating it when needed.
+
+        A layer surface keeps the output it was created on, so the popup window
+        is cached per monitor identity: the first show on a monitor creates the
+        surface there, later shows reuse it, and a target on ANOTHER monitor
+        replaces the window instead of silently reusing a surface that is pinned
+        to the wrong output (which is how a selection on the left screen used to
+        pop up on the right one).
+        """
+        key = _monitor_key(monitor)
+        if self.popup is not None and (key is None or self._popup_monitor_key == key):
             return self.popup
+        if self.popup is not None:
+            previous, self.popup = self.popup, None
+            LOGGER.debug(
+                "the popup target monitor changed (%s -> %s), replacing its layer surface",
+                self._popup_monitor_key,
+                key,
+            )
+            try:
+                previous.set_visible(False)
+                previous.destroy()
+            except Exception:
+                LOGGER.debug("cannot destroy the previous popup window", exc_info=True)
         Gtk = self.gtk.Gtk
         window = Gtk.Window()
         window.set_title("lexipop")
@@ -1799,18 +2095,25 @@ class _DaemonController:
         gesture.connect("pressed", self._on_popup_button_pressed)
         window.add_controller(gesture)
 
-        self._apply_layer_shell(window)
-        # This is the ONE popup window of the process: it is created here, once,
-        # and reused for the whole daemon lifetime.  Should it ever be destroyed,
-        # the references are dropped so a later show path may recreate it once.
+        self._apply_layer_shell(window, monitor)
+        # The window is created for one monitor and reused while that monitor
+        # stays the target: the references are dropped on destroy, so a later
+        # show path recreates the window for whatever monitor is current then.
         window.connect("destroy", self._on_popup_destroyed)
         self.popup = window
+        self._popup_monitor_key = key
         return window
 
-    def _on_popup_destroyed(self, *_args) -> None:
+    def _on_popup_destroyed(self, window=None, *_args) -> None:
         """Forget the popup widgets after the popup window was destroyed."""
+        if window is not None and self.popup is not None and self.popup is not window:
+            # A window that was replaced (monitor change) was destroyed: the
+            # current popup and its widget references must stay intact.
+            LOGGER.debug("a replaced popup window was destroyed, keeping the current one")
+            return
         LOGGER.debug("popup window destroyed, it will be recreated on demand")
         self.popup = None
+        self._popup_monitor_key = None
         self.popup_labels = None
         self.popup_content = None
         self.popup_detail_label = None
@@ -1829,7 +2132,13 @@ class _DaemonController:
         self.popup_save_button = None
         self.popup_save_popover = None
 
-    def _apply_layer_shell(self, window) -> None:
+    def _apply_layer_shell(self, window, monitor=None) -> None:
+        """Make *window* a layer-shell surface, pinned to *monitor*.
+
+        Every call here (the output included) must happen BEFORE the window is
+        first shown: a layer surface cannot change its output afterwards, which
+        is why the monitor is passed at creation time and not at show time.
+        """
         layer_shell = self.gtk.layer_shell
         if layer_shell is None:
             return
@@ -1838,6 +2147,8 @@ class _DaemonController:
             layer_shell.set_namespace(window, LAYER_NAMESPACE)
             layer_shell.set_layer(window, layer_shell.Layer.OVERLAY)
             layer_shell.set_keyboard_mode(window, layer_shell.KeyboardMode.NONE)
+            if monitor is not None:
+                layer_shell.set_monitor(window, monitor)
         except Exception:
             LOGGER.exception("Gtk4LayerShell setup failed, using a plain window")
 
@@ -1852,14 +2163,15 @@ class _DaemonController:
                 pass
         return POPUP_WIDTH
 
-    def _popup_size(self) -> tuple[int, int]:
+    def _popup_size(self, window=None) -> tuple[int, int]:
         """MEASURE the popup ``(width, height)`` before it is shown.
 
         The width is measured first because the height depends on the width the
         window will actually get; the old fixed estimates let a long selection
         overflow the monitor.  A measurement failure falls back to the estimate.
         """
-        window = self.popup
+        if window is None:
+            window = self.popup
         width = self._popup_width()
         height = 0
         if window is not None:
@@ -1874,18 +2186,19 @@ class _DaemonController:
                 measured = 0
             if measured > 0:
                 width = measured
-            height = self._popup_height(width)
+            height = self._popup_height(width, window)
         if height <= 1:
             height = POPUP_ESTIMATED_HEIGHT
         return max(1, int(width)), int(height)
 
-    def _popup_height(self, width: Optional[int] = None) -> int:
+    def _popup_height(self, width: Optional[int] = None, window=None) -> int:
         """MEASURE the popup height before it is shown, else use the estimate.
 
         The position chain needs the real height: a wrong (too small) value let
         a long selection overflow the bottom of the monitor.
         """
-        window = self.popup
+        if window is None:
+            window = self.popup
         if window is not None:
             requested = max(1, int(width or self._popup_width()))
             measured = 0
@@ -1921,22 +2234,51 @@ class _DaemonController:
             LOGGER.debug("cannot read the pointer position", exc_info=True)
             return None
 
-    def _position_popup(self, window, probe_position: Optional[tuple] = None) -> None:
-        """Place the popup at the mouse, near the marked text.
+    def _monitor_for_pointer(self, position: Optional[tuple], focus_rect: Optional[tuple] = None):
+        """Pick the monitor the popup belongs on.
 
-        Source chain: the layer-shell pointer probe, then ``xdotool``, then the
-        focused sway window's rect, then the monitor top-right corner.  The
-        chosen source is logged so the journal proves which one ran.
+        Order: the output containing the pointer sample; without a sample, the
+        output of the focused sway window; then the sway-focused output by
+        connector name; then the first monitor.  GDK's own monitor lookup is not
+        used because ``Gdk.Display.get_monitor_at_point`` does not exist on the
+        Wayland backend -- asking for it raised AttributeError, the old code
+        swallowed that and always fell back to ``monitors[0]``, which is why a
+        selection on HDMI-A-4 opened the popup on DP-2.
+        """
+        display = None
+        try:
+            display = self.gtk.Gdk.Display.get_default()
+        except Exception:
+            display = None
+        monitors = _monitors(display)
+        if not monitors:
+            return None
+        point = position
+        if point is None and focus_rect is not None:
+            point = (
+                int(focus_rect[0]) + int(focus_rect[2]) // 2,
+                int(focus_rect[1]) + int(focus_rect[3]) // 2,
+            )
+        if point is not None:
+            return _monitor_at_point(monitors, point)
+        monitor = _monitor_by_key(monitors, _sway_focused_output())
+        if monitor is not None:
+            return monitor
+        return monitors[0]
+
+    def _position_popup(
+        self, window, monitor=None, probe_position: Optional[tuple] = None
+    ) -> None:
+        """Place the popup at the mouse, on *monitor*, near the marked text.
+
+        Source chain for the point: the layer-shell pointer probe, then
+        ``xdotool``, then the focused sway window's rect, then the monitor
+        top-right corner.  Both the source and the monitor are logged, so the
+        journal proves which output the popup went to.
         """
         layer_shell = self.gtk.layer_shell
         if layer_shell is None:
             return  # a plain window is placed by the compositor
-        Gdk = self.gtk.Gdk
-        display = None
-        try:
-            display = Gdk.Display.get_default()
-        except Exception:
-            display = None
         # Prefer the probe: it samples the real Wayland pointer, which xdotool
         # cannot see while the pointer is over a Wayland-native client.
         source = None
@@ -1947,34 +2289,6 @@ class _DaemonController:
             position = self._pointer_position()
             if position is not None:
                 source = "pointer-xdotool"
-        monitor = None
-        if display is not None and position is not None:
-            try:
-                monitor = display.get_monitor_at_point(position[0], position[1])
-            except Exception:
-                monitor = None
-        if monitor is None and display is not None:
-            try:
-                monitors = display.get_monitors()
-                if monitors.get_n_items():
-                    monitor = monitors.get_item(0)
-            except Exception:
-                monitor = None
-        geometry = None
-        try:
-            geometry = monitor.get_geometry() if monitor is not None else None
-        except Exception:
-            geometry = None
-        try:
-            if monitor is not None:
-                layer_shell.set_monitor(window, monitor)
-        except Exception:
-            LOGGER.debug("layer shell monitor could not be set")
-
-        origin_x = int(geometry.x) if geometry is not None else 0
-        origin_y = int(geometry.y) if geometry is not None else 0
-        width = int(geometry.width) if geometry is not None else 0
-        height = int(geometry.height) if geometry is not None else 0
 
         focus_rect = None
         if position is None:
@@ -1986,7 +2300,13 @@ class _DaemonController:
                 focus_rect = None
             LOGGER.debug("pointer unknown, focus rect=%s", focus_rect)
 
-        popup_width, popup_height = self._popup_size()
+        geometry = _monitor_geometry(monitor)
+        origin_x = int(geometry.x) if geometry is not None else 0
+        origin_y = int(geometry.y) if geometry is not None else 0
+        width = int(geometry.width) if geometry is not None else 0
+        height = int(geometry.height) if geometry is not None else 0
+
+        popup_width, popup_height = self._popup_size(window)
         LOGGER.debug("measured popup size: %dx%d px", popup_width, popup_height)
         x, y, placement = _place_popup(
             position,
@@ -2003,7 +2323,13 @@ class _DaemonController:
         else:
             # ``_place_popup`` says focus-window or corner here.
             detail = placement
-        LOGGER.info("popup position x=%d y=%d (%s)", int(x), int(y), detail)
+        LOGGER.info(
+            "popup position x=%d y=%d monitor=%s (%s)",
+            int(x),
+            int(y),
+            _monitor_key(monitor),
+            detail,
+        )
         try:
             for edge, anchor in (
                 (Gtk4Edge(self.gtk, "TOP"), True),
@@ -2069,8 +2395,23 @@ class _DaemonController:
             self.popup_translation_label.set_text("(no translation)")
 
     def _show_popup(self, result: dict) -> None:
-        window = self._ensure_popup()
+        """Begin a show: sample the pointer first, then fill and place the popup.
+
+        The window is deliberately NOT created here.  A layer surface is pinned
+        to the output it was created on, so the surface is created only once the
+        target monitor is known -- and that is known after the pointer probe
+        answers (``_finish_show_popup``).
+        """
         self.state = result
+        # Sample the TRUE pointer position on the main loop first; the probe
+        # answers through the first motion event or through the timeout guard.
+        epoch = self._show_epoch
+        if self._start_pointer_probe(result, epoch):
+            return
+        self._finish_show_popup(result, None, epoch)
+
+    def _fill_popup(self, result: dict, window) -> None:
+        """Write *result* into the widgets of *window* (content, not placement)."""
         labels = _popup_labels(self.config)
         kind = str(result.get("kind") or "")
         detail = "%s %s · %s" % (
@@ -2084,12 +2425,6 @@ class _DaemonController:
         self._set_popup_status(None)
         self.popup_ai_button.set_sensitive(self._ai_available())
         self._rebuild_save_menu(result)
-        # Sample the TRUE pointer position on the main loop first; the probe
-        # answers through the first motion event or through the timeout guard.
-        epoch = self._show_epoch
-        if self._start_pointer_probe(result, epoch):
-            return
-        self._finish_show_popup(result, window, None, epoch)
 
     def _start_pointer_probe(self, result: dict, epoch: int) -> bool:
         """Map the invisible pointer probe; False when it is not usable."""
@@ -2114,10 +2449,7 @@ class _DaemonController:
         if self.state is not result:
             LOGGER.debug("the pointer probe result is stale, ignoring it")
             return
-        window = self.popup
-        if window is None:
-            return
-        self._finish_show_popup(result, window, position, epoch)
+        self._finish_show_popup(result, position, epoch)
 
     def _finish_pointer_probe(self) -> None:
         """Destroy a probe surface that is still mapped."""
@@ -2129,15 +2461,16 @@ class _DaemonController:
             except Exception:
                 LOGGER.debug("could not finish the pointer probe", exc_info=True)
 
-    def _finish_show_popup(
-        self, result: dict, window, position: Optional[tuple], epoch: int
-    ) -> None:
-        """Position and show the popup that was already filled with *result*."""
+    def _finish_show_popup(self, result: dict, position: Optional[tuple], epoch: int) -> None:
+        """Build (or reuse) the window for the pointer's monitor, fill and show it."""
         try:
             if self._show_epoch != epoch or self.state is not result:
                 LOGGER.debug("the popup was hidden or replaced before it was shown")
                 return
-            self._position_popup(window, probe_position=position)
+            monitor = self._monitor_for_pointer(position)
+            window = self._ensure_popup(monitor)
+            self._fill_popup(result, window)
+            self._position_popup(window, monitor, probe_position=position)
             self._pointer_inside = False
             LOGGER.info(
                 "popup for lang=%s kind=%s deck=%s",
@@ -2146,6 +2479,7 @@ class _DaemonController:
                 result.get("deck"),
             )
             window.set_visible(True)
+            self._show_click_catcher()
             self._arm_timeout()
             self._start_focus_watch()
             self._start_selection_poll()
@@ -2440,6 +2774,7 @@ class _DaemonController:
             self._close_target_popover()
             if self.popup is not None:
                 self.popup.set_visible(False)
+            self._hide_click_catcher()
             if self.watcher is not None:
                 self.watcher.reset()
             LOGGER.info("popup hidden (%s)", reason if reason is not None else "requested")
@@ -2447,17 +2782,84 @@ class _DaemonController:
             LOGGER.debug("could not hide the popup", exc_info=True)
         return False
 
+    # -- popup closing: outside-click catcher ------------------------------
+    def _close_on_outside_click_enabled(self) -> bool:
+        """``popup.closeOnOutsideClick`` (older configs lack it): default True."""
+        popup = _cfg_get(self.config, "popup", None)
+        if popup is None:
+            return True
+        return bool(_cfg_get(popup, "closeOnOutsideClick", True))
+
+    def _click_catcher_monitors(self) -> list:
+        """Monitors the catcher must cover (all of them: a click anywhere closes)."""
+        display = None
+        try:
+            display = self.gtk.Gdk.Display.get_default()
+        except Exception:
+            display = None
+        return _monitors(display)
+
+    def _show_click_catcher(self) -> None:
+        """Own the pointer while the popup is visible, so an outside click closes it.
+
+        No device group, no udev rule and no re-login are needed: the catcher is
+        an ordinary layer-shell surface.  The price is that the click it observes
+        is also consumed, so the application below does not receive that one
+        click.  When it cannot be mapped the raw ``pointerClicks`` path (if
+        enabled) still works.
+        """
+        if not self._close_on_outside_click_enabled():
+            return
+        if self._click_catcher is None:
+            self._click_catcher = _ClickCatcher(self.gtk, self._on_outside_click)
+        monitors = self._click_catcher_monitors()
+        if self._click_catcher.show(monitors):
+            if not self._click_catcher_reported:
+                self._click_catcher_reported = True
+                LOGGER.info(
+                    "outside-click dismissal uses the layer-shell catcher on %d monitor(s)",
+                    len(monitors),
+                )
+            return
+        # The catcher is the preferred path (no device group, no udev rule), but
+        # it can fail to map; when that happens, arm the raw pointer listener as
+        # the fallback instead of leaving the popup with no click dismissal.
+        LOGGER.debug("the outside-click catcher could not be mapped, falling back")
+        self._start_pointer_clicks(force=True)
+
+    def _hide_click_catcher(self) -> None:
+        """Destroy the catcher surfaces (safe when none was ever mapped)."""
+        if self._click_catcher is not None:
+            self._click_catcher.hide()
+
+    def _on_outside_click(self) -> None:
+        """A catcher surface received a click: it is an outside click."""
+        self._hide_popup("click-outside")
+
     # -- popup closing: raw pointer clicks ---------------------------------
     def _pointer_clicks_enabled(self) -> bool:
         """``pointerClicks`` (older configs lack it): read defensively."""
         return bool(_cfg_get(self.config, "pointerClicks", False))
 
-    def _start_pointer_clicks(self) -> None:
-        """Start the raw pointer listener when the option is enabled."""
+    def _start_pointer_clicks(self, force: bool = False) -> None:
+        """Start the raw pointer listener when the option is enabled.
+
+        *force* is used by the outside-click catcher as a fallback when its layer
+        surfaces cannot be mapped: the listener is then started even though the
+        catcher option is on.
+        """
         if self._pointer_listener is not None:
             return
         if not self._pointer_clicks_enabled():
             LOGGER.debug("pointer-click dismiss is disabled in the configuration")
+            return
+        if self._close_on_outside_click_enabled() and not force:
+            # The layer-shell catcher already owns the dismiss path and needs no
+            # device group, so the raw listener would only duplicate the work.
+            LOGGER.info(
+                "pointerClicks is on but the outside-click catcher serves dismiss; "
+                "the raw pointer listener stays off"
+            )
             return
         listener = _PointerClickListener(self._on_raw_pointer_press)
         if not listener.start():
@@ -2481,6 +2883,7 @@ class _DaemonController:
 
     def _on_popup_button_pressed(self, *_args) -> None:
         """Record that one of our own surfaces received a button press."""
+        LOGGER.debug("the popup surface received a button press")
         self._popup_click_ms = _monotonic_ms()
 
     def _watch_own_clicks(self, widget) -> None:

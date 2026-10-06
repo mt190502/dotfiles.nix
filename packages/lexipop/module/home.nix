@@ -50,6 +50,7 @@ let
           onEverySelection
           hideWhenFocusChanges
           hideWhenSelectionCleared
+          closeOnOutsideClick
           hideAfterSeconds
           settleMs
           pollSelectionMs
@@ -213,6 +214,20 @@ in
         type = lib.types.bool;
         default = true;
         description = "Hide the popup when the primary selection becomes empty.";
+      };
+      closeOnOutsideClick = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Close the popup when a click lands outside it.
+
+          The dismiss is observed with an invisible fullscreen layer-shell
+          surface per monitor (the "click catcher"), so no device group, udev
+          rule or re-login is needed -- unlike pointerClicks. The surface that
+          observes the click also consumes it, so that one click does not reach
+          the application below. Set this to false to disable it, or leave
+          pointerClicks to handle dismissals without consuming the click.
+        '';
       };
       hideAfterSeconds = lib.mkOption {
         type = lib.types.ints.unsigned;
