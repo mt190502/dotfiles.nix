@@ -14,7 +14,6 @@ let
   inherit (lib) getExe';
 
   guiScripts = [
-    "easy-tesseract"
     "mako-dnd-toggle"
     "powermenu"
     "wofimoji"

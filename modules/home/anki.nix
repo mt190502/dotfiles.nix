@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
 let
   #~ Addon source: an __init__.py that hooks into Anki's profile_did_open
@@ -65,43 +70,94 @@ let
   });
 in
 {
-  programs.anki = {
-    enable = true;
-    language = "en_US";
-    answerKeys = [
-      {
-        ease = 1;
-        key = "left";
-      }
-      {
-        ease = 2;
-        key = "up";
-      }
-      {
-        ease = 3;
-        key = "right";
-      }
-      {
-        ease = 4;
-        key = "down";
-      }
-    ];
-    profiles."User 1" = {
-      default = true;
-      sync = {
-        autoSync = true;
-        autoSyncMediaMinutes = 10;
-        syncMedia = true;
-        url = "https://anki.mtaha.dev";
-        usernameFile = config.sops.secrets."anki/username".path;
-        keyFile = config.sops.secrets."anki/key".path;
+  imports = [ inputs.self.homeModules.lexipop ];
+
+  programs = {
+    ########################################
+    #
+    ## lexipop: simple translator
+    #
+    ########################################
+    lexipop = {
+      enable = true;
+      package = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.lexipop;
+      ai = {
+        enable = true;
+        apiKeyFile = config.sops.secrets."nanogpt".path;
+        endpoint = "https://api.nano-gpt.com/api/v1";
+        model = "deepseek/deepseek-v4.1-flash";
       };
+      excludeApps = [ "dev.zed.Zed" ];
+      languageNames = {
+        en = "English";
+        de = "German";
+        tr = "Türkçe";
+      };
+      languages = {
+        en = {
+          words = "English::00: Collection::Words";
+          sentences = "English::00: Collection::Sentence Mining";
+        };
+        de = {
+          words = "Deutsch::00: Collection::Words";
+          sentences = "Deutsch::00: Collection::Sentence Mining";
+        };
+      };
+      pointerClicks = true;
+      popup = {
+        onEverySelection = true;
+        hideAfterSeconds = 0;
+      };
+      translationTargets = [
+        "tr"
+        "en"
+        "de"
+      ];
     };
-    style = "native";
-    theme = "followSystem";
-    addons = with pkgs; [
-      ankiAddons.anki-connect
-      bootstrapAddon
-    ];
+
+    ########################################
+    #
+    ## anki: spaced repetition flashcards
+    #
+    ########################################
+    anki = {
+      enable = true;
+      language = "en_US";
+      answerKeys = [
+        {
+          ease = 1;
+          key = "left";
+        }
+        {
+          ease = 2;
+          key = "up";
+        }
+        {
+          ease = 3;
+          key = "right";
+        }
+        {
+          ease = 4;
+          key = "down";
+        }
+      ];
+      profiles."User 1" = {
+        default = true;
+        sync = {
+          autoSync = true;
+          autoSyncMediaMinutes = 10;
+          syncMedia = true;
+          url = "https://anki.mtaha.dev";
+          usernameFile = config.sops.secrets."anki/username".path;
+          keyFile = config.sops.secrets."anki/key".path;
+        };
+      };
+      style = "native";
+      theme = "followSystem";
+      addons = with pkgs; [
+        ankiAddons.anki-connect
+        bootstrapAddon
+      ];
+    };
   };
 }

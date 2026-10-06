@@ -14,6 +14,7 @@
     "gpu-screen-recorder"
     "initrd-tools"
     "lanzaboote"
+    "lexipop"
     "libvirt"
     "mate-polkit"
     "onepassword"

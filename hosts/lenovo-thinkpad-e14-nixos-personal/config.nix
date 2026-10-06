@@ -13,6 +13,7 @@
     "gpu-screen-recorder"
     "ihtc"
     "lanzaboote"
+    "lexipop"
     "libvirt"
     "mate-polkit"
     "onepassword"

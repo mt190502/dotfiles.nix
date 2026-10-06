@@ -200,7 +200,8 @@ in
           "${modifier}+r" = "mode 'default'";
         };
         screenshot = {
-          "${modifier}+shift+s" = "exec ${home}/.config/sway/scripts.d/grimshot -r; mode 'default'";
+          "${modifier}+shift+s" =
+            "exec ${home}/.local/bin/program-toggler ${home}/.config/sway/scripts.d/grimshot -r; mode 'default'";
           "a" = " exec ${home}/.config/sway/scripts.d/grimshot -a; mode 'default'";
           "f" = " exec ${home}/.config/sway/scripts.d/grimshot -f; mode 'default'";
           "Return" = "mode 'default'";
@@ -277,6 +278,9 @@ in
         "${modifier}+Return" = "exec ${term "bash -c \"${tmux} new-session -A -s daemonmodetmux\""}";
         "${modifier}+l" = "exec ${lock}";
         "ctrl+period" = "exec ${home}/.config/sway/scripts.d/dropdown.sh";
+
+        #~~~ ocr
+        "${modifier}+shift+d" = "exec ${home}/.local/bin/program-toggler lexipop ocr";
       }
       // (
         if config.preferences.menu == "wofi" then
@@ -288,10 +292,6 @@ in
             #~~~ others
             "${modifier}+d" = "exec ${home}/.local/bin/program-toggler ${menu}";
             "${modifier}+period" = "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/wofimoji";
-            "${modifier}+shift+d" =
-              "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -e";
-            "${modifier}+shift+f" =
-              "exec ${home}/.local/bin/program-toggler ${home}/.local/bin/easy-tesseract -t";
           }
         else if config.preferences.menu == "vicinae" then
           {
