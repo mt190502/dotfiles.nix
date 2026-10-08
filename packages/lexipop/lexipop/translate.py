@@ -97,7 +97,7 @@ def identify(
     """
     if not text or not text.strip():
         return None
-    argv = [trans_bin, "-identify", "-no-ansi", text]
+    argv = [trans_bin, "-identify", "-no-ansi", "-no-browser", text]
     try:
         proc = _run(argv, timeout)
     except TransError:
@@ -131,7 +131,7 @@ def translate(
     """
     if not text or not text.strip():
         raise TransError("cannot translate empty text")
-    argv = [trans_bin, "-brief", "-no-ansi"]
+    argv = [trans_bin, "-brief", "-no-ansi", "-no-browser"]
     if source:
         argv += ["-s", source]
     argv += [f":{target}", text]
