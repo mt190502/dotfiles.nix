@@ -72,11 +72,10 @@ POPUP_WIDTH = 380
 #: Hard cap for the popup width once the top-right target box is shown.
 POPUP_MAX_WIDTH = 520
 POPUP_ESTIMATED_HEIGHT = 200
-#: The popup height is bounded: the labels are line-capped with ellipsization
-#: and the content box cannot grow past this many pixels.
+#: The popup viewport is bounded, but its source and translation labels keep
+#: ALL text.  Long paragraphs scroll inside this height instead of being
+#: truncated with an ellipsis.
 POPUP_MAX_CONTENT_HEIGHT = 420
-MAX_SELECTION_LINES = 3
-MAX_TRANSLATION_LINES = 5
 POPUP_EDGE_MARGIN = 8
 #: Small offsets that keep the popup just below-right of the marked text.
 POPUP_CURSOR_X_OFFSET = 12
@@ -697,24 +696,6 @@ def _set_break_anywhere(label) -> None:
         label.set_wrap_mode(Pango.WrapMode.CHAR)
     except Exception:
         LOGGER.debug("cannot set the label wrap mode", exc_info=True)
-
-
-def _limit_label_lines(label, lines: int) -> None:
-    """Cap a popup label to *lines* wrapped lines with a trailing ellipsis.
-
-    The DISPLAY is truncated only: the popup still saves and edits the full
-    text, which is kept in the popup state.
-    """
-    try:
-        label.set_lines(int(lines))
-    except Exception:
-        LOGGER.debug("cannot cap a label to %d lines", lines, exc_info=True)
-    try:
-        from gi.repository import Pango
-
-        label.set_ellipsize(Pango.EllipsizeMode.END)
-    except Exception:
-        LOGGER.debug("cannot ellipsize a popup label", exc_info=True)
 
 
 def _make_scrolled_text_view(gtk: _Gtk, min_height: int):
@@ -2019,8 +2000,8 @@ class _DaemonController:
         # identifier): without this the label MINIMUM width is the whole token,
         # which pushed the popup off-screen horizontally.  See _BREAK_ANYWHERE.
         _set_break_anywhere(self.popup_text_label)
-        # A very long selection must not grow the popup: cap the display.
-        _limit_label_lines(self.popup_text_label, MAX_SELECTION_LINES)
+        # Keep the COMPLETE selection visible.  Long paragraphs are bounded by
+        # the enclosing Gtk.ScrolledWindow and can be read by scrolling.
         # Row 3 (dim): a plain "translation -> target language" caption again.
         self.popup_caption_label = Gtk.Label(xalign=0)
         self.popup_caption_label.set_wrap(True)
@@ -2030,9 +2011,9 @@ class _DaemonController:
         self.popup_translation_label = Gtk.Label(xalign=0)
         self.popup_translation_label.set_wrap(True)
         self.popup_translation_label.set_max_width_chars(48)
-        # Same for a very long translation: break anywhere, cap the display.
+        # Keep the COMPLETE translation too; the shared content viewport handles
+        # long paragraphs without discarding display text.
         _set_break_anywhere(self.popup_translation_label)
-        _limit_label_lines(self.popup_translation_label, MAX_TRANSLATION_LINES)
         for label in (
             row1,
             self.popup_text_label,
@@ -2073,6 +2054,9 @@ class _DaemonController:
         # taller up to the cap) so a huge selection cannot grow the window.
         content = Gtk.ScrolledWindow()
         content.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        # Make overflow explicit: with overlay scrolling the thumb disappears
+        # until pointer motion, making a long paragraph look truncated again.
+        content.set_overlay_scrolling(False)
         content.set_can_focus(False)
         content.set_min_content_height(0)
         content.set_max_content_height(POPUP_MAX_CONTENT_HEIGHT)
