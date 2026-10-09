@@ -271,6 +271,8 @@ let
   notifier-shell-path = cfg.notifier-shell-path or "";
 
   subs = {
+    cpupower-bin = "${pkgs.linuxPackages.cpupower}/bin/cpupower";
+    systemctl-bin = "${pkgs.systemd}/bin/systemctl";
     inherit
       base-bg
       base-text
@@ -487,7 +489,15 @@ stdenv.mkDerivation {
     #!${runtimeShell}
     export XDG_DATA_DIRS="${iconThemeConf}:${iconThemePackage}/share:$XDG_DATA_DIRS"
     export XDG_CURRENT_DESKTOP="KDE"
-    exec ${lib.getExe quickshell} -p ${placeholder "out"}/share/mtshell/bar/shell.qml "$@"
+    exec ${
+      lib.getExe (
+        quickshell.overrideAttrs (old: {
+          patches =
+            (old.patches or [ ])
+            ++ lib.optional (old.version == "0.3.0") ./quickshell-networkmanager-reconnect.patch;
+        })
+      )
+    } -p ${placeholder "out"}/share/mtshell/bar/shell.qml "$@"
     SCRIPT
     chmod +x $out/bin/mtshell-bar
 

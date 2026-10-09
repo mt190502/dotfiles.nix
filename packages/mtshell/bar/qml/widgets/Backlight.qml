@@ -15,8 +15,9 @@ Item {
     property bool laptopDetected: false
 
     property bool hasBacklight: false
-    property int brightness: 0
-    property int maxBrightness: 1
+    property var brightnessReading: ({ brightness: 0, maximum: 1 })
+    readonly property real brightness: brightnessReading.brightness
+    readonly property real maxBrightness: brightnessReading.maximum
     property bool osdPending: false
     property bool keyboardOsdPending: false
     visible: laptopDetected && hasBacklight
@@ -36,8 +37,21 @@ Item {
         }
     }
 
-    function updateText() {
-        backText.text = (root.icons[root.iconIndex] || "") + " " + root.percent + "%";
+    function parseReading(text) {
+        const values = text.trim().split(/\s+/);
+        if (values.length !== 2 || !/^\d+$/.test(values[0]) || !/^\d+$/.test(values[1]))
+            return null;
+        const current = Number(values[0]);
+        const maximum = Number(values[1]);
+        if (!isFinite(current) || !isFinite(maximum) || maximum <= 0)
+            return null;
+        return { brightness: current, maximum: maximum };
+    }
+
+    function boundedPercent(current, maximum) {
+        if (!isFinite(current) || !isFinite(maximum) || maximum <= 0)
+            return 0;
+        return Math.round(Math.max(0, Math.min(1, current / maximum)) * 100);
     }
 
     Process {
@@ -48,7 +62,6 @@ Item {
                 root.deviceName = this.text.trim();
                 root.hasBacklight = root.deviceName.length > 0;
                 if (root.hasBacklight) {
-                    maxProc.running = true;
                     root.refresh();
                     watchProc.running = true;
                 }
@@ -100,12 +113,10 @@ Item {
         command: ["sh", "-c", "for path in /sys/class/leds/*kbd_backlight; do [ -r \"$path/brightness\" ] && [ -r \"$path/max_brightness\" ] || continue; cat \"$path/brightness\" \"$path/max_brightness\"; break; done"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const values = this.text.trim().split(/\s+/);
-                const brightness = parseInt(values[0]);
-                const maxBrightness = parseInt(values[1]);
-                if (!isNaN(brightness) && !isNaN(maxBrightness) && maxBrightness > 0 && root.keyboardOsdPending) {
+                const reading = root.parseReading(this.text);
+                if (reading && root.keyboardOsdPending) {
                     root.keyboardOsdPending = false;
-                    const percent = Math.round(brightness / maxBrightness * 100);
+                    const percent = root.boundedPercent(reading.brightness, reading.maximum);
                     if (root.osdIpc.length > 0) {
                         osdProc.command = ["sh", "-c", root.osdIpc + " keyboard-brightness " + percent + " false '" + root.screenName + "'"];
                         osdProc.running = true;
@@ -116,26 +127,13 @@ Item {
     }
 
     Process {
-        id: maxProc
-        command: ["sh", "-c", "cat /sys/class/backlight/" + root.deviceName + "/max_brightness 2>/dev/null"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                var val = parseInt(this.text.trim());
-                if (!isNaN(val) && val > 0)
-                    root.maxBrightness = val;
-            }
-        }
-    }
-
-    Process {
         id: brightProc
-        command: ["sh", "-c", "cat /sys/class/backlight/" + root.deviceName + "/brightness 2>/dev/null"]
+        command: ["cat", "/sys/class/backlight/" + root.deviceName + "/brightness", "/sys/class/backlight/" + root.deviceName + "/max_brightness"]
         stdout: StdioCollector {
             onStreamFinished: {
-                var val = parseInt(this.text.trim());
-                if (!isNaN(val)) {
-                    root.brightness = val;
-                    root.updateText();
+                const reading = root.parseReading(this.text);
+                if (reading) {
+                    root.brightnessReading = reading;
                     if (root.osdPending && root.osdIpc.length > 0) {
                         root.osdPending = false;
                         osdProc.command = ["sh", "-c", root.osdIpc + " brightness " + root.percent + " false '" + root.screenName + "'"];
@@ -160,7 +158,7 @@ Item {
         actionProc.running = true;
     }
 
-    readonly property int percent: Math.round(brightness / maxBrightness * 100)
+    readonly property int percent: boundedPercent(brightnessReading.brightness, brightnessReading.maximum)
 
     readonly property int iconIndex: {
         if (percent >= 80)
@@ -188,7 +186,7 @@ Item {
             anchors.rightMargin: Base.margin
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            text: ""
+            text: (root.icons[root.iconIndex] || "") + " " + root.percent + "%"
             color: Base.text
             font.pixelSize: Base.fontSize
             font.family: Base.fontName

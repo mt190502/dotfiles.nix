@@ -79,6 +79,7 @@ Variants {
                 }
                 Bluetooth {}
                 Battery {
+                    barWindow: barWindow
                     laptopDetected: barWindow.isLaptop
                 }
                 Backlight {

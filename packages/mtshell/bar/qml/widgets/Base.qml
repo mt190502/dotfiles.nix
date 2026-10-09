@@ -17,4 +17,21 @@ QtObject {
     readonly property int padTop: @base-pad-top@
     readonly property int padBottom: @base-pad-bottom@
     property bool idleInhibited: false
+
+    property var activePopup: null
+    property var notifierController: null
+
+    function claimPopup(popup) {
+        if (activePopup === popup)
+            return;
+        var previous = activePopup;
+        activePopup = popup;
+        if (previous)
+            previous.closePopup();
+    }
+
+    function releasePopup(popup) {
+        if (activePopup === popup)
+            activePopup = null;
+    }
 }

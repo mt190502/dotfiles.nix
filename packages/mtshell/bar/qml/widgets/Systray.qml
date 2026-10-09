@@ -13,6 +13,25 @@ Item {
     readonly property int expandedWidth: trayRow.implicitWidth + Base.margin * 2
     readonly property int collapsedWidth: Base.fontSize + Base.margin * 2
     property bool hovered: false
+    property int openMenus: 0
+
+    Timer {
+        id: collapseTimer
+        interval: 750
+        onTriggered: {
+            if (!hoverHandler.hovered && root.openMenus === 0)
+                root.hovered = false;
+        }
+    }
+
+    onOpenMenusChanged: {
+        if (openMenus > 0) {
+            collapseTimer.stop();
+            root.hovered = true;
+        } else if (!hoverHandler.hovered) {
+            collapseTimer.restart();
+        }
+    }
 
     visible: hasItems
     implicitWidth: compact ? (hovered ? expandedWidth : collapsedWidth) : expandedWidth
@@ -28,7 +47,14 @@ Item {
 
         HoverHandler {
             id: hoverHandler
-            onHoveredChanged: root.hovered = hovered
+            onHoveredChanged: {
+                if (hovered) {
+                    collapseTimer.stop();
+                    root.hovered = true;
+                } else if (root.openMenus === 0) {
+                    collapseTimer.restart();
+                }
+            }
         }
 
         Row {
@@ -86,6 +112,28 @@ Item {
 
                     QsMenuAnchor {
                         id: trayMenu
+                        property bool countedOpen: false
+                        function closePopup() { close(); }
+                        onVisibleChanged: {
+                            if (visible) {
+                                if (!countedOpen) {
+                                    countedOpen = true;
+                                    root.openMenus++;
+                                }
+                                Base.claimPopup(trayMenu);
+                            } else {
+                                if (countedOpen) {
+                                    countedOpen = false;
+                                    root.openMenus--;
+                                }
+                                Base.releasePopup(trayMenu);
+                            }
+                        }
+                        Component.onDestruction: {
+                            if (countedOpen)
+                                root.openMenus--;
+                            Base.releasePopup(trayMenu);
+                        }
                         menu: trayItem.modelData.menu
                         anchor.item: trayItem
                         anchor.edges: Edges.Bottom

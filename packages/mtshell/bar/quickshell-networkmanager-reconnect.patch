@@ -1,0 +1,136 @@
+From 0f9939ca4fac3a1db3653c51a3c23ca9812e2946 Mon Sep 17 00:00:00 2001
+From: Carson Powers <me@carsonp.net>
+Date: Mon, 24 Aug 2026 10:42:40 -0500
+Subject: [PATCH] networking: add NetworkManager service watcher
+
+Backport for Quickshell 0.3.0. Omit the upstream changelog-only hunk.
+Upstream: https://github.com/quickshell-mirror/quickshell/commit/0f9939ca4fac3a1db3653c51a3c23ca9812e2946
+
+diff --git a/src/network/nm/backend.cpp b/src/network/nm/backend.cpp
+index cda1be460..d1dbeff7b 100644
+--- a/src/network/nm/backend.cpp
++++ b/src/network/nm/backend.cpp
+@@ -6,6 +6,7 @@
+ #include <qdbusmetatype.h>
+ #include <qdbuspendingcall.h>
+ #include <qdbuspendingreply.h>
++#include <qdbusservicewatcher.h>
+ #include <qlist.h>
+ #include <qlogging.h>
+ #include <qloggingcategory.h>
+@@ -42,6 +43,17 @@ NetworkManager::NetworkManager(QObject* parent): NetworkBackend(parent) {
+ 		return;
+ 	}
+ 
++	// clang-format off
++  QObject::connect(&this->serviceWatcher, &QDBusServiceWatcher::serviceRegistered, this, &NetworkManager::onServiceRegistered);
++  QObject::connect(&this->serviceWatcher, &QDBusServiceWatcher::serviceUnregistered, this, &NetworkManager::onServiceUnregistered);
++	// clang-format on
++
++	this->serviceWatcher.setWatchMode(
++	    QDBusServiceWatcher::WatchForRegistration | QDBusServiceWatcher::WatchForUnregistration
++	);
++	this->serviceWatcher.addWatchedService("org.freedesktop.NetworkManager");
++	this->serviceWatcher.setConnection(bus);
++
+ 	this->proxy = new DBusNetworkManagerProxy(
+ 	    "org.freedesktop.NetworkManager",
+ 	    "/org/freedesktop/NetworkManager",
+@@ -49,25 +61,20 @@ NetworkManager::NetworkManager(QObject* parent): NetworkBackend(parent) {
+ 	    this
+ 	);
+ 
+-	if (!this->proxy->isValid()) {
+-		qCDebug(
+-		    logNetworkManager
+-		) << "NetworkManager is not currently running. This network backend will not work";
+-	} else {
+-		this->init();
+-	}
+-}
+-
+-void NetworkManager::init() {
+ 	// clang-format off
+ 	QObject::connect(this->proxy, &DBusNetworkManagerProxy::DeviceAdded, this, &NetworkManager::onDevicePathAdded);
+ 	QObject::connect(this->proxy, &DBusNetworkManagerProxy::DeviceRemoved, this, &NetworkManager::onDevicePathRemoved);
+ 	// clang-format on
+ 
+ 	this->dbusProperties.setInterface(this->proxy);
+-	this->dbusProperties.updateAllViaGetAll();
+ 
+-	this->registerDevices();
++	if (!this->proxy->isValid()) {
++		qCDebug(
++		    logNetworkManager
++		) << "NetworkManager is not currently running. This network backend will not work";
++	} else {
++		this->onServiceRegistered();
++	}
+ }
+ 
+ void NetworkManager::checkConnectivity() {
+@@ -230,6 +237,27 @@ void NetworkManager::setWifiEnabled(bool enabled) {
+ 	this->pWifiEnabled.write();
+ }
+ 
++void NetworkManager::onServiceRegistered() {
++	qCDebug(logNetworkManager) << "NetworkManager service registered";
++	this->dbusProperties.updateAllViaGetAll();
++	this->registerDevices();
++}
++
++void NetworkManager::onServiceUnregistered() {
++	qCDebug(logNetworkManager) << "NetworkManager service unregistered";
++
++	// Clear all remaining devices
++	const auto devices = this->mDevices;
++	this->mDevices.clear();
++
++	for (auto* device: devices) {
++		if (!device) continue;
++		qCDebug(logNetworkManager) << "Device removed:" << device->path();
++		emit this->deviceRemoved(device->frontend());
++		delete device;
++	}
++}
++
+ bool NetworkManager::isAvailable() const { return this->proxy && this->proxy->isValid(); };
+ 
+ } // namespace qs::network
+diff --git a/src/network/nm/backend.hpp b/src/network/nm/backend.hpp
+index a4f7d1718..e48298a99 100644
+--- a/src/network/nm/backend.hpp
++++ b/src/network/nm/backend.hpp
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <qdbusextratypes.h>
++#include <qdbusservicewatcher.h>
+ #include <qhash.h>
+ #include <qobject.h>
+ #include <qproperty.h>
+@@ -59,6 +60,8 @@ public slots:
+ private slots:
+ 	void onDevicePathAdded(const QDBusObjectPath& path);
+ 	void onDevicePathRemoved(const QDBusObjectPath& path);
++	void onServiceRegistered();
++	void onServiceUnregistered();
+ 	void activateConnection(const QDBusObjectPath& connPath, const QDBusObjectPath& devPath);
+ 	void addAndActivateConnection(
+ 	    const NMSettingsMap& settings,
+@@ -67,7 +70,6 @@ private slots:
+ 	);
+ 
+ private:
+-	void init();
+ 	void registerDevices();
+ 	void registerDevice(const QString& path);
+ 
+@@ -88,6 +90,7 @@ private slots:
+ 	QS_DBUS_PROPERTY_BINDING(NetworkManager, pConnectivityCheckEnabled, bConnectivityCheckEnabled, dbusProperties, "ConnectivityCheckEnabled");
+ 	// clang-format on
+ 	DBusNetworkManagerProxy* proxy = nullptr;
++	QDBusServiceWatcher serviceWatcher;
+ };
+ 
+ } // namespace qs::network

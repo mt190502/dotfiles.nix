@@ -51,18 +51,27 @@ Item {
         return null;
     }
 
-    property var sortedNetworks: []
-
-    function refreshNetworks() {
-        if (!wifiDevice || !wifiDevice.networks) {
-            root.sortedNetworks = [];
-            return;
-        }
-        root.sortedNetworks = [...wifiDevice.networks.values].sort((a, b) => {
+    readonly property var sortedNetworks: {
+        if (!wifiDevice || !wifiDevice.networks)
+            return [];
+        return [...wifiDevice.networks.values].sort((a, b) => {
             if (a.connected !== b.connected)
                 return b.connected - a.connected;
             return b.signalStrength - a.signalStrength;
         });
+    }
+
+    onWifiDeviceChanged: {
+        root.pendingNetwork = null;
+        root.password = "";
+        root.passwordPromptVisible = false;
+    }
+
+    Binding {
+        target: root.wifiDevice
+        property: "scannerEnabled"
+        value: networkPopup.visible
+        when: root.wifiDevice !== null
     }
 
     function formatSpeed(mbps) {
@@ -128,14 +137,8 @@ Item {
         visible: false
 
         onVisibleChanged: {
-            if (root.wifiDevice) {
-                root.wifiDevice.scannerEnabled = visible;
-            }
-            if (visible) {
-                root.refreshNetworks();
-                if (root.passwordPromptVisible)
-                    passwordFocusTimer.start();
-            }
+            if (visible && root.passwordPromptVisible)
+                passwordFocusTimer.start();
         }
 
         Timer {
@@ -143,16 +146,6 @@ Item {
             interval: 80
             repeat: false
             onTriggered: passwordPanelInput.forceActiveFocus()
-        }
-
-        Connections {
-            target: root.wifiDevice
-            ignoreUnknownSignals: true
-            function onScannerEnabledChanged() {
-                if (networkPopup.visible) {
-                    root.refreshNetworks();
-                }
-            }
         }
 
         Connections {
@@ -330,6 +323,16 @@ Item {
         id: passwordPanel
         screen: root.barWindow ? root.barWindow.screen : null
         visible: root.passwordPromptVisible
+        function closePopup() {
+            root.passwordPromptVisible = false;
+        }
+        onVisibleChanged: {
+            if (visible)
+                Base.claimPopup(passwordPanel);
+            else
+                Base.releasePopup(passwordPanel);
+        }
+        Component.onDestruction: Base.releasePopup(passwordPanel)
         focusable: true
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand

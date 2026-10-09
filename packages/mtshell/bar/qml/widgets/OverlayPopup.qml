@@ -10,6 +10,21 @@ PanelWindow {
     property int cardHeight: 180
     default property alias contentData: card.data
 
+    function closePopup() {
+        root.visible = false;
+    }
+
+    Connections {
+        target: root
+        function onVisibleChanged() {
+            if (root.visible)
+                Base.claimPopup(root);
+            else
+                Base.releasePopup(root);
+        }
+    }
+    Component.onDestruction: Base.releasePopup(root)
+
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.exclusiveZone: 0
     color: "transparent"

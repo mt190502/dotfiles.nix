@@ -187,10 +187,21 @@ Item {
         color: "transparent"
         implicitWidth: root.calWidth
         implicitHeight: root.calHeight
-        onVisibleChanged: {
-            if (visible)
-                root.refreshEvents();
+        function closePopup() {
+            hoverTimer.stop();
+            exitTimer.stop();
+            root.popupHovered = false;
+            root.hovered = false;
         }
+        onVisibleChanged: {
+            if (visible) {
+                Base.claimPopup(calendarPopup);
+                root.refreshEvents();
+            } else {
+                Base.releasePopup(calendarPopup);
+            }
+        }
+        Component.onDestruction: Base.releasePopup(calendarPopup)
         anchor.item: root
         anchor.edges: Edges.Bottom
         anchor.gravity: Edges.Bottom

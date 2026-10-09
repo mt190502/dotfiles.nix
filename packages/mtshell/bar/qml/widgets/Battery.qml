@@ -5,6 +5,35 @@ import Quickshell.Io
 Item {
     id: root
 
+    required property var barWindow
+    property string cpupower: "@cpupower-bin@"
+    property var availableProfiles: []
+    property string activeProfile: ""
+    property string profileError: ""
+    property string currentGovernors: ""
+    property string balancedGovernor: ""
+    property bool tlpActive: false
+    readonly property bool profileBusy: profilesProc.running || setProfileProc.running
+
+    function refreshProfiles() {
+        if (!tlpStatusProc.running)
+            tlpStatusProc.running = true;
+        if (!root.profileBusy)
+            profilesProc.running = true;
+    }
+
+    function selectProfile(profile) {
+        if (root.profileBusy || root.activeProfile === profile || root.availableProfiles.indexOf(profile) < 0)
+            return;
+        root.profileError = "";
+        powerPopup.visible = false;
+        var governor = profile === "performance" ? "performance" : profile === "power-saver" ? "powersave" : root.balancedGovernor;
+        if (["performance", "powersave", "schedutil", "ondemand"].indexOf(governor) < 0)
+            return;
+        setProfileProc.command = ["pkexec", root.cpupower, "--cpu", "all", "frequency-set", "--governor", governor];
+        setProfileProc.running = true;
+    }
+
     property string deviceName: "@battery-device@"
     property string chargingIcon: "@battery-charging-icon@"
     property string chargingBackground: "@battery-charging-background@"
@@ -55,6 +84,75 @@ Item {
         checkProc.running = true
     onLaptopDetectedChanged: if (root.laptopDetected)
         checkProc.running = true
+
+    Timer {
+        interval: 3000
+        repeat: true
+        running: powerPopup.visible
+        onTriggered: root.refreshProfiles()
+    }
+
+    Process {
+        id: tlpStatusProc
+        command: ["@systemctl-bin@", "is-active", "--quiet", "tlp.service"]
+        stdout: StdioCollector {}
+        stderr: StdioCollector {}
+        onExited: (exitCode, exitStatus) => root.tlpActive = exitCode === 0 && exitStatus === 0
+    }
+
+    Process {
+        id: profilesProc
+        command: ["sh", "-c", "found=0; for policy in /sys/devices/system/cpu/cpufreq/policy[0-9]*; do [ -d \"$policy\" ] || continue; IFS= read -r available < \"$policy/scaling_available_governors\" || exit 1; IFS= read -r current < \"$policy/scaling_governor\" || exit 1; printf '%s|%s\\n' \"$available\" \"$current\"; found=1; done; [ \"$found\" = 1 ]"]
+        stdout: StdioCollector { id: profilesOutput }
+        stderr: StdioCollector { id: profilesError }
+        onExited: (exitCode, exitStatus) => {
+            var common = [];
+            var governors = [];
+            var valid = exitCode === 0 && exitStatus === 0 && profilesOutput.text.trim().length > 0;
+            if (valid) {
+                var lines = profilesOutput.text.trim().split("\n");
+                for (var i = 0; i < lines.length; i++) {
+                    var fields = lines[i].split("|");
+                    if (fields.length !== 2 || !fields[0].trim() || !fields[1].trim()) {
+                        valid = false;
+                        break;
+                    }
+                    var available = fields[0].trim().split(/\s+/);
+                    common = i === 0 ? available : common.filter(value => available.indexOf(value) >= 0);
+                    var current = fields[1].trim();
+                    if (governors.indexOf(current) < 0)
+                        governors.push(current);
+                }
+            }
+            if (!valid) {
+                common = [];
+                governors = [];
+            }
+            var balanced = common.indexOf("schedutil") >= 0 ? "schedutil" : common.indexOf("ondemand") >= 0 ? "ondemand" : "";
+            var mapping = { performance: "performance", balanced: balanced, "power-saver": "powersave" };
+            var profiles = ["performance", "balanced", "power-saver"].filter(profile => mapping[profile] && common.indexOf(mapping[profile]) >= 0);
+            root.availableProfiles = profiles;
+            root.activeProfile = governors.length === 1 ? profiles.find(profile => mapping[profile] === governors[0]) || "" : "";
+            root.currentGovernors = governors.join(", ");
+            root.balancedGovernor = balanced;
+            if (!valid)
+                root.profileError = "CPU governors unavailable.\n" + profilesError.text.trim();
+            else if (root.profileError.indexOf("CPU governors unavailable.") === 0)
+                root.profileError = "";
+        }
+    }
+
+    Process {
+        id: setProfileProc
+        stdout: StdioCollector {}
+        stderr: StdioCollector { id: setProfileError }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0 || exitStatus !== 0)
+                root.profileError = "Could not change CPU governor. Authorization may have been denied or cancelled.\n" + setProfileError.text.trim();
+            profilesProc.running = true;
+            powerPopup.visible = true;
+        }
+    }
 
     Process {
         id: checkProc
@@ -143,9 +241,129 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: {
-                root.remainingVisible = !root.remainingVisible;
-                root.updateText();
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: mouse => {
+                if (mouse.button === Qt.LeftButton) {
+                    powerPopup.visible = !powerPopup.visible;
+                } else {
+                    root.remainingVisible = !root.remainingVisible;
+                    root.updateText();
+                }
+            }
+        }
+    }
+
+    OverlayPopup {
+        id: powerPopup
+        anchorItem: root
+        visible: false
+        screen: root.barWindow.screen
+        cardWidth: 280
+        cardHeight: popupContent.implicitHeight + 24
+
+        onVisibleChanged: {
+            if (visible) {
+                root.refresh();
+                root.refreshProfiles();
+            }
+        }
+
+        Column {
+            id: popupContent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 12
+            spacing: 8
+
+            Text {
+                text: "Battery · " + root.capacity + "%"
+                color: Base.text
+                font.pixelSize: Base.fontSize
+                font.family: Base.fontName
+                font.bold: true
+            }
+
+            Text {
+                width: parent.width
+                text: root.status + (root.remainingTime ? " · " + root.remainingTime + " remaining" : "")
+                color: Base.text
+                font.pixelSize: Base.fontSize - 1
+                font.family: Base.fontName
+                wrapMode: Text.WordWrap
+            }
+
+            Repeater {
+                model: [
+                    { profile: "performance", label: "Performance" },
+                    { profile: "balanced", label: "Balanced" },
+                    { profile: "power-saver", label: "Powersave" }
+                ]
+
+                delegate: Rectangle {
+                    id: profileRow
+                    required property var modelData
+                    readonly property bool supported: root.availableProfiles.indexOf(modelData.profile) >= 0
+                    readonly property bool selected: supported && root.activeProfile === modelData.profile
+                    width: popupContent.width
+                    height: 38
+                    color: selected || profileMouse.containsMouse ? Base.inactive : "transparent"
+                    border.color: selected ? Base.active : Base.border
+                    border.width: selected ? 2 : 1
+                    opacity: supported ? 1 : 0.45
+
+                    Text {
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        verticalAlignment: Text.AlignVCenter
+                        text: (profileRow.selected ? "● " : "○ ") + profileRow.modelData.label + (!profileRow.supported ? " (unavailable)" : "")
+                        color: Base.text
+                        font.pixelSize: Base.fontSize
+                        font.family: Base.fontName
+                        elide: Text.ElideRight
+                    }
+
+                    MouseArea {
+                        id: profileMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        enabled: profileRow.supported && !root.profileBusy
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.selectProfile(profileRow.modelData.profile)
+                    }
+                }
+            }
+
+            Text {
+                width: parent.width
+                text: "Current: " + (root.currentGovernors || "Unknown") + (root.availableProfiles.indexOf("balanced") < 0 ? "\nBalanced requires schedutil or ondemand." : "\nBalanced: " + root.balancedGovernor)
+                color: Base.active
+                font.pixelSize: Base.fontSize - 1
+                font.family: Base.fontName
+                wrapMode: Text.Wrap
+            }
+
+            Text {
+                width: parent.width
+                visible: root.profileError.length > 0
+                text: root.profileError
+                textFormat: Text.PlainText
+                color: Base.urgent
+                font.pixelSize: Base.fontSize - 1
+                font.family: Base.fontName
+                wrapMode: Text.Wrap
+                maximumLineCount: 5
+                elide: Text.ElideRight
+            }
+
+            Text {
+                width: parent.width
+                visible: root.tlpActive
+                text: "TLP is active; power-source changes may reset this setting."
+                color: Base.inactive
+                font.pixelSize: Math.max(9, Base.fontSize - 2)
+                font.family: Base.fontName
+                wrapMode: Text.WordWrap
             }
         }
     }

@@ -14,6 +14,12 @@ Scope {
 
     property bool dnd: false
     property bool ccVisible: false
+    property real centerRevision: Date.now()
+
+    function statusText() {
+        return root.notifCount + "|" + (root.dnd ? "1" : "0")
+            + "|" + (root.ccVisible ? "1" : "0") + "|" + root.centerRevision;
+    }
     property int selectedPlayer: 0
     property string wlCopy: "@wl-copy-bin@"
 
@@ -199,11 +205,11 @@ Scope {
     }
 
     onNotifCountChanged: {
-        ipc.statusChanged(root.notifCount + "|" + (root.dnd ? "1" : "0"));
+        ipc.statusChanged(root.statusText());
         root.pruneTimes();
         root.updateTickTimer();
     }
-    onDndChanged: ipc.statusChanged(root.notifCount + "|" + (root.dnd ? "1" : "0"))
+    onDndChanged: ipc.statusChanged(root.statusText())
 
     IpcHandler {
         id: ipc
@@ -211,6 +217,14 @@ Scope {
 
         function toggle(): void {
             root.ccVisible = !root.ccVisible;
+        }
+        function show(): string {
+            root.ccVisible = true;
+            return root.statusText();
+        }
+        function hide(): string {
+            root.ccVisible = false;
+            return root.statusText();
         }
         function toggleDnd(): void {
             root.dnd = !root.dnd;
@@ -229,7 +243,7 @@ Scope {
             root.dismissNotif(id);
         }
         function getStatus(): string {
-            return root.notifCount + "|" + (root.dnd ? "1" : "0");
+            return root.statusText();
         }
 
         signal statusChanged(status: string)
@@ -326,6 +340,8 @@ Scope {
     }
 
     onCcVisibleChanged: {
+        root.centerRevision = Math.max(Date.now(), root.centerRevision + 1);
+        ipc.statusChanged(root.statusText());
         if (ccVisible) {
             activePopups.clear();
             popupQueue = [];
