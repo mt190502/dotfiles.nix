@@ -22,6 +22,7 @@
         #~ packages ~#
         aria2
         btop
+        firefox-bin
         git
         grc
         heimdall
