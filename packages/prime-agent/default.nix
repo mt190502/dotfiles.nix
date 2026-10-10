@@ -8,23 +8,23 @@
 }:
 
 let
-  version = "0.10.0";
+  version = "0.9.8";
   sources = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-wWvSr153tT9JuRSkR0LEz2pnxe1QAAQUMLeNvUw7y+w=";
+      hash = "sha256-g/sJEpv3jj5gJoISzXCTIWZZGxUYjKpwwbDvvMdiNeI=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-88qzUwpNfKQ9vvgyG/E/Jg0boF2LXd4FcWWiC9T2dcQ=";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-r0hmtbqC80GblkKQ4/Aj3bm5mVionhbuhWliuQHsD8Y=";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-5Bi99i/LAAJ3e/OsQ7zBNlErJnY/KrXFAHkvJuNylOU=";
+      hash = "sha256-B4yavVGZeO8n9kBDZ+N6KYEmfbR/G5W2CUDqf+bq2Lk=";
     };
   };
 in
@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Coding agent CLI with IPython-backed tools and session management";
-    homepage = "https://app.primeintellect.ai/prime-agent";
+    homepage = "https://github.com/PrimeIntellect-ai/prime-agent";
     changelog = "https://github.com/PrimeIntellect-ai/prime-agent/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "prime-agent";

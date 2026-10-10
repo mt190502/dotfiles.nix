@@ -17,27 +17,149 @@ let
     '') cfg.substitutions
   );
 
-  modelsConfig = pkgs.writeText "prime-agent-model-sources.json" (
-    builtins.toJSON {
-      target = "${config.home.homeDirectory}/.prime/agent/models.json";
-      providers = lib.mapAttrs (_: provider: {
-        inherit (provider)
-          name
-          baseUrl
-          api
-          modelsUrl
-          detailed
-          requiredEndpoints
-          visionMarkers
-          defaultContextWindow
-          defaultMaxTokens
-          compat
-          ;
-        keyFile = if provider.keyFile != null then toString provider.keyFile else null;
-        inherit (provider) apiKey;
-      }) cfg.providers;
+  registerProviderCall =
+    name: provider:
+    let
+      keyExpr =
+        if provider.keyFile != null then
+          ''fs.readFileSync("${provider.keyFile}", "utf8").trim()''
+        else if provider.apiKey != null then
+          builtins.toJSON provider.apiKey
+        else
+          "undefined";
+      modelsUrl =
+        if provider.modelsUrl != null then
+          provider.modelsUrl
+        else
+          "${provider.baseUrl}/models" + (if provider.detailed then "?detailed=true" else "");
+      filterExpr =
+        if provider.requiredEndpoints != [ ] then
+          "(model.supported_endpoints ?? []).some((endpoint) => ${builtins.toJSON provider.requiredEndpoints}.includes(endpoint))"
+        else
+          "model.capabilities?.tool_calling !== false";
+      compatJson = {
+        supportsDeveloperRole = false;
+        maxTokensField = "max_tokens";
+      }
+      // provider.compat;
+      modelExpr =
+        if provider.detailed then
+          ''
+            {
+              id: model.id,
+              name: model.name ?? model.id,
+              reasoning: model.capabilities?.reasoning === true,
+              thinkingLevelMap: thinkingLevelMap(model.reasoning_efforts),
+              input: model.architecture?.input_modalities?.includes("image")
+                ? ["text", "image"]
+                : ["text"],
+              cost: {
+                input: model.pricing?.prompt ?? 0,
+                output: model.pricing?.completion ?? 0,
+                cacheRead: (model.pricing?.cacheReadInputPer1kTokens ?? 0) * 1000,
+                cacheWrite: 0,
+              },
+              contextWindow: model.context_length ?? ${toString provider.defaultContextWindow},
+              maxTokens: model.max_output_tokens ?? ${toString provider.defaultMaxTokens},
+              compat: ${builtins.toJSON compatJson},
+            }
+          ''
+        else
+          ''
+            {
+              id: model.id,
+              name: model.id.split("/").pop() ?? model.id,
+              reasoning:
+                model.id.toLowerCase().includes("r1")
+                || model.id.toLowerCase().includes("reasoning"),
+              input: inputModalities(model.id, ${builtins.toJSON provider.visionMarkers}),
+              cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+              contextWindow: model.context_length ?? ${toString provider.defaultContextWindow},
+              maxTokens: ${toString provider.defaultMaxTokens},
+              compat: ${builtins.toJSON compatJson},
+            }
+          '';
+    in
+    ''
+      try {
+        const apiKey = ${keyExpr}
+        if (apiKey) {
+          const models = (await fetchModels(${builtins.toJSON modelsUrl}))
+            .filter((model) => ${filterExpr})
+            .map((model) => (${modelExpr}))
+          if (models.length > 0) {
+            pi.registerProvider(${builtins.toJSON name}, {
+              name: ${builtins.toJSON provider.name},
+              baseUrl: ${builtins.toJSON provider.baseUrl},
+              apiKey,
+              api: ${builtins.toJSON provider.api},
+              models,
+            })
+          }
+        }
+      } catch {
+        // provider catalog not reachable yet
+      }
+    '';
+
+  providerExtension = lib.optionalString (cfg.providers != { }) ''
+    import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
+    import * as fs from "fs"
+
+    interface CatalogModel {
+      id: string
+      name?: string
+      context_length?: number
+      max_output_tokens?: number | null
+      architecture?: {
+        input_modalities?: string[]
+      }
+      capabilities?: {
+        reasoning?: boolean
+        tool_calling?: boolean
+      }
+      reasoning_efforts?: string[]
+      supported_endpoints?: string[]
+      pricing?: {
+        prompt?: number
+        completion?: number
+        cacheReadInputPer1kTokens?: number
+      }
     }
-  );
+
+    function thinkingLevelMap(efforts?: string[]) {
+      if (!efforts?.length) return undefined
+      const supports = (level: string) => efforts.includes(level)
+      return {
+        off: supports("none") ? "none" : null,
+        minimal: supports("minimal") ? "minimal" : supports("low") ? "low" : null,
+        low: supports("low") ? "low" : supports("medium") ? "medium" : null,
+        medium: supports("medium") ? "medium" : supports("high") ? "high" : null,
+        high: supports("high") ? "high" : supports("xhigh") ? "xhigh" : null,
+        xhigh: supports("xhigh") ? "xhigh" : supports("max") ? "max" : null,
+        max: supports("max") ? "max" : supports("xhigh") ? "xhigh" : null,
+      }
+    }
+
+    function inputModalities(id: string, markers: string[]): ("text" | "image")[] {
+      const lower = id.toLowerCase()
+      const vision =
+        markers.some((marker) => lower.includes(marker)) ||
+        (lower.includes("gpt-5") && !lower.includes("codex"))
+      return vision ? ["text", "image"] : ["text"]
+    }
+
+    async function fetchModels(url: string): Promise<CatalogModel[]> {
+      const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
+      if (!res.ok) return []
+      const data = (await res.json()) as { data?: CatalogModel[] }
+      return data.data ?? []
+    }
+
+    export default async function (pi: ExtensionAPI) {
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList registerProviderCall cfg.providers)}
+    }
+  '';
 in
 {
   options.programs.prime-agent = {
@@ -81,7 +203,7 @@ in
     extensions = lib.mkOption {
       type = lib.types.attrsOf lib.types.lines;
       default = { };
-      description = "Legacy TypeScript extensions preserved for reference; Prime Agent v0.10 Rust does not execute them.";
+      description = "Prime Agent extension files, keyed by paths relative to ~/.prime/agent/extensions/.";
     };
 
     providers = lib.mkOption {
@@ -166,8 +288,9 @@ in
       );
       default = { };
       description = ''
-        OpenAI-compatible providers whose public catalogs are synced into
-        Prime Agent's Rust models.json during Home Manager activation.
+        OpenAI-compatible providers registered through a generated dynamic-providers
+        extension. Each entry fetches its model catalog at agent startup and calls
+        registerProvider with the discovered models.
       '';
     };
   };
@@ -185,15 +308,12 @@ in
           lib.nameValuePair ".prime/agent/extensions/${name}" {
             inherit text;
           }
-        ) cfg.extensions;
+        ) cfg.extensions
+        // lib.optionalAttrs (cfg.providers != { }) {
+          ".prime/agent/extensions/dynamic-providers.ts".text = providerExtension;
+        };
 
       activation = {
-        primeAgentModels = lib.hm.dag.entryAfter [ "writeBoundary" ] (
-          lib.optionalString (cfg.providers != { }) ''
-            ${pkgs.python3}/bin/python3 ${./update-models.py} ${modelsConfig} || echo "prime-agent: model catalog update failed; keeping existing models.json" >&2
-          ''
-        );
-
         primeAgentSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
           target="${config.home.homeDirectory}/.prime/agent/settings.json"
           temporary="$target.home-manager-tmp"
