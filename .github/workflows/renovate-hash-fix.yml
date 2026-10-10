@@ -62,6 +62,52 @@ jobs:
             '
           }
 
+          # Per-platform source maps (sources.<system> blocks holding platform +
+          # hash pairs, e.g. the Rust prime-agent package): the build-mismatch
+          # trick only exercises the runner's own platform, so foreign-platform
+          # hashes never mismatch and must be resolved by prefetching each
+          # platform tarball directly instead.
+          has_platform_map() {
+            grep -qE 'platform\s*=\s*"' "$1" && grep -q 'hostPlatform.system' "$1"
+          }
+
+          fix_platform_map() {
+            python3 - "$1" <<'PYEOF'
+          import json, re, subprocess, sys
+
+          path = sys.argv[1]
+          src = open(path).read()
+
+          version = re.search(r'version\s*=\s*"([^"]+)"', src).group(1)
+          url_tpl = re.search(r'url\s*=\s*"([^"]*v\$\{version\}[^"]*)"', src).group(1)
+          placeholder = re.search(r'\$\{\s*sources\..*?\.platform\s*\}', url_tpl).group(0)
+          block_re = re.compile(
+              r'(?P<system>[A-Za-z0-9_-]+)\s*=\s*\{\s*'
+              r'platform\s*=\s*"(?P<platform>[^"]+)";\s*'
+              r'hash\s*=\s*"(?P<hash>sha256-[^"]+)";\s*\};'
+          )
+
+          for m in block_re.finditer(src):
+              platform = m.group("platform")
+              old_hash = m.group("hash")
+              url = url_tpl.replace("${version}", version).replace(placeholder, platform)
+              proc = subprocess.run(
+                  ["nix", "store", "prefetch-file", "--json", url],
+                  capture_output=True, text=True,
+              )
+              if proc.returncode != 0:
+                  print(f"prefetch failed for {platform}: {proc.stderr.strip()}", file=sys.stderr)
+                  sys.exit(1)
+              real = json.loads(proc.stdout)["hash"]
+              if not re.fullmatch(r"sha256-[A-Za-z0-9+/=]{40,}", real):
+                  print(f"unexpected hash from prefetch for {platform}: {real}", file=sys.stderr)
+                  sys.exit(1)
+              src = src.replace(old_hash, real)
+              print(f"  {path}: {platform} -> {real}")
+
+          open(path, "w").write(src)
+          PYEOF
+          }
           # Detect current system dynamically
           SYSTEM="$(uname -m)-linux"
 
@@ -152,6 +198,16 @@ jobs:
               unset 'lines['"$specified"']'
               echo "  $file:$line -> $actual"
             done
+
+            if [ "${#lines[@]}" -gt 0 ] && has_platform_map "$file"; then
+              fix_platform_map "$file" || true
+              local fake still
+              still=0
+              for fake in "${!lines[@]}"; do
+                grep -qF "$fake" "$file" && still=$((still + 1))
+              done
+              [ "$still" -eq 0 ] && lines=()
+            fi
 
             if [ "${#lines[@]}" -gt 0 ]; then
               echo "Could not resolve every hash in $file; restoring original values" >&2

@@ -1,51 +1,59 @@
 {
   lib,
-  stdenv,
-  cacert,
+  stdenvNoCC,
   fetchurl,
-  nodejs_24,
+  makeWrapper,
+  uv,
   ...
 }:
 
 let
-  # npm selects different optional dependencies on macOS.
-  darwinOutputHash = "sha256-poF+onvJx/tspMM8XN4Auls216fS+YSWgSgJGxr9q/A=";
-in
-(stdenv.mkDerivation rec {
-  pname = "prime-agent";
   version = "0.10.0";
+  sources = {
+    x86_64-linux = {
+      platform = "linux-x64";
+      hash = "sha256-wWvSr153tT9JuRSkR0LEz2pnxe1QAAQUMLeNvUw7y+w=";
+    };
+    aarch64-linux = {
+      platform = "linux-arm64";
+      hash = "sha256-88qzUwpNfKQ9vvgyG/E/Jg0boF2LXd4FcWWiC9T2dcQ=";
+    };
+    x86_64-darwin = {
+      platform = "darwin-x64";
+      hash = "sha256-r0hmtbqC80GblkKQ4/Aj3bm5mVionhbuhWliuQHsD8Y=";
+    };
+    aarch64-darwin = {
+      platform = "darwin-arm64";
+      hash = "sha256-5Bi99i/LAAJ3e/OsQ7zBNlErJnY/KrXFAHkvJuNylOU=";
+    };
+  };
+in
+stdenvNoCC.mkDerivation {
+  pname = "prime-agent";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}.tgz";
-    hash = "sha256-17cnhRGe/Ci/vKjsSn9Hofzc9H/NjOvbYL/6p54+EnQ=";
+    url = "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v${version}/prime-agent-${version}-${
+      sources.${stdenvNoCC.hostPlatform.system}.platform
+    }.tar.gz";
+    hash = sources.${stdenvNoCC.hostPlatform.system}.hash;
   };
 
-  packageLock = fetchurl {
-    url = "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/v${version}/package-lock.json";
-    hash = "sha256-PoBCK7KBz5OVk37xK/Q9A42S2Svx8/cFlrY9Wjry3nQ=";
-  };
+  nativeBuildInputs = [ makeWrapper ];
 
-  nativeBuildInputs = [ nodejs_24 ];
-
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  outputHash = "sha256-epIi7N13V4VWmY0NMUCBCGCoGNYnSqE82PuBJnaUp3c=";
-  outputHashMode = "recursive";
-  dontPatchShebangs = true;
-
-  buildPhase = ''
-    export HOME="$TMPDIR"
-    export npm_config_cafile="$SSL_CERT_FILE"
-    cp ${packageLock} package-lock.json
-    chmod u+w package-lock.json
-    npm install --omit=dev --ignore-scripts --no-audit --no-fund
-  '';
+  sourceRoot = ".";
+  dontConfigure = true;
+  dontBuild = true;
+  dontStrip = true;
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/libexec"
-    cp -r . "$out/libexec/prime-agent"
-    chmod +x "$out/libexec/prime-agent/dist/bundle/cli.js"
-    ln -s ../libexec/prime-agent/dist/bundle/cli.js "$out/bin/prime-agent"
+    runHook preInstall
+    mkdir -p $out/share/prime-agent $out/bin
+    cp -r . $out/share/prime-agent
+    chmod +x $out/share/prime-agent/prime-agent
+    makeWrapper $out/share/prime-agent/prime-agent $out/bin/prime-agent \
+      --prefix PATH : ${lib.makeBinPath [ uv ]}
+    runHook postInstall
   '';
 
   meta = {
@@ -54,12 +62,6 @@ in
     changelog = "https://github.com/PrimeIntellect-ai/prime-agent/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "prime-agent";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}).overrideAttrs
-  (
-    _:
-    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      outputHash = darwinOutputHash;
-    }
-  )
+}
