@@ -100,17 +100,17 @@ in
 {
   imports = [
     inputs.self.homeModules.prime-agent
-    inputs.self.homeModules.codex-auth-sync
+    inputs.self.homeModules.api-auth-sync
     inputs.self.homeModules.work-mcp
   ];
 
   programs = {
     ########################################
     #
-    ## Codex OAuth auto-refresh
+    ## API OAuth auto-refresh
     #
     ########################################
-    codex-auth-sync.enable = true;
+    api-auth-sync.enable = true;
 
     ########################################
     #

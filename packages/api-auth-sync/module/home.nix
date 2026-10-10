@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.programs.codex-auth-sync;
+  cfg = config.programs.api-auth-sync;
 
   entrySubmodule = {
     options = {
@@ -20,34 +20,42 @@ let
       };
       key = lib.mkOption {
         type = lib.types.str;
-        description = "Provider key inside the JSON doc that holds the Codex OAuth triple.";
+        description = "Provider key inside the JSON doc that holds the API OAuth triple.";
       };
-      secret = lib.mkOption {
-        type = lib.types.str;
-        description = "Absolute path of the sops-encrypted seed/sync mirror in the dotfiles repo.";
+      provider = lib.mkOption {
+        type = lib.types.enum [
+          "openai"
+          "anthropic"
+        ];
+        default = "openai";
+        description = "OAuth token endpoint to use for refresh.";
+      };
+      optional = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Skip refresh when the user has not logged in to this provider yet.";
       };
     };
   };
 
-  configFile = pkgs.writeText "codex-auth-sync.json" (
+  configFile = pkgs.writeText "api-auth-sync.json" (
     builtins.toJSON {
-      dotfiles = cfg.dotfilesRepo;
       state_dir = cfg.stateDir;
-      age_key_file = cfg.ageKeyFile;
       entries = map (e: {
         inherit (e)
           name
           live
           key
-          secret
+          provider
+          optional
           ;
       }) cfg.entries;
     }
   );
 in
 {
-  options.programs.codex-auth-sync = {
-    enable = lib.mkEnableOption "Codex/OpenAI OAuth auto-refresh for opencode and prime-agent";
+  options.programs.api-auth-sync = {
+    enable = lib.mkEnableOption "API OAuth auto-refresh for opencode and prime-agent";
 
     package = lib.mkOption {
       type = lib.types.package;
@@ -55,25 +63,13 @@ in
         inherit configFile;
       };
       defaultText = lib.literalExpression "pkgs.callPackage ../default.nix { inherit configFile; }";
-      description = "The codex-auth-sync package, wrapped with the generated JSON config.";
-    };
-
-    dotfilesRepo = lib.mkOption {
-      type = lib.types.str;
-      default = "${config.home.homeDirectory}/.config/dotfiles.nix";
-      description = "Absolute path of the dotfiles (sops) repository used for seed/sync.";
+      description = "The api-auth-sync package, wrapped with the generated JSON config.";
     };
 
     stateDir = lib.mkOption {
       type = lib.types.str;
       default = "${config.home.homeDirectory}/.local/state/codex-auth";
-      description = "Directory for sops seeds, backups and the refresh lock.";
-    };
-
-    ageKeyFile = lib.mkOption {
-      type = lib.types.str;
-      default = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-      description = "Age key file used by sops when the sync job re-encrypts refreshed tokens.";
+      description = "Directory for sops-nix-deployed seeds, backups and the refresh lock (the sops-nix homeTarget path stays here so deployed seeds remain discoverable).";
     };
 
     entries = lib.mkOption {
@@ -83,16 +79,21 @@ in
           name = "opencode";
           live = "${config.home.homeDirectory}/.local/share/opencode/auth.json";
           key = "openai";
-          secret = "${cfg.dotfilesRepo}/secrets/${config.home.username}/opencode/secret.txt";
         }
         {
           name = "prime-agent";
           live = "${config.home.homeDirectory}/.prime/agent/auth.json";
           key = "openai-codex";
-          secret = "${cfg.dotfilesRepo}/secrets/${config.home.username}/prime-agent/secret.txt";
+        }
+        {
+          name = "prime-agent-anthropic";
+          live = "${config.home.homeDirectory}/.prime/agent/auth.json";
+          key = "anthropic";
+          provider = "anthropic";
+          optional = true;
         }
       ];
-      description = "Credential entries managed by codex-auth-sync.";
+      description = "Provider credential entries managed by api-auth-sync.";
     };
   };
 
@@ -105,25 +106,22 @@ in
         # written. If sops (or anything else) left a SYMLINK at a live auth.json
         # path, convert it into a real regular file (freshest of
         # live/backup/seed/sops wins) so refreshed tokens can never be clobbered.
-        home.activation.codexAuthDetach = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          ${cfg.package}/bin/codex-auth-sync migrate || true
+        home.activation.apiAuthDetach = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          ${cfg.package}/bin/api-auth-sync migrate || echo "api-auth-sync: migration needs attention; inspect credentials before using AI tools" >&2
         '';
       }
 
       (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-        launchd.agents.codex-auth-refresh = {
+        launchd.agents.api-auth-refresh = {
           enable = true;
           config = {
             ProgramArguments = [
-              "${cfg.package}/bin/codex-auth-sync"
+              "${cfg.package}/bin/api-auth-sync"
               "refresh"
             ];
             RunAtLoad = true;
             StartInterval = 6 * 60 * 60;
             ProcessType = "Background";
-            EnvironmentVariables = {
-              SOPS_AGE_KEY_FILE = cfg.ageKeyFile;
-            };
             StandardOutPath = "${cfg.stateDir}/launchd.out.log";
             StandardErrorPath = "${cfg.stateDir}/launchd.err.log";
           };
@@ -131,20 +129,19 @@ in
       })
 
       (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-        systemd.user.services.codex-auth-refresh = {
+        systemd.user.services.api-auth-refresh = {
           Unit = {
-            Description = "Refresh Codex/OpenAI OAuth tokens and mirror them into the sops repo";
+            Description = "Refresh API OAuth tokens";
             After = [ "sops-nix.service" ];
           };
           Service = {
             Type = "oneshot";
-            ExecStart = "${cfg.package}/bin/codex-auth-sync refresh";
-            Environment = [ "SOPS_AGE_KEY_FILE=${cfg.ageKeyFile}" ];
+            ExecStart = "${cfg.package}/bin/api-auth-sync refresh";
           };
         };
 
-        systemd.user.timers.codex-auth-refresh = {
-          Unit.Description = "Periodically refresh Codex/OpenAI OAuth tokens";
+        systemd.user.timers.api-auth-refresh = {
+          Unit.Description = "Periodically refresh API OAuth tokens";
           Timer = {
             OnBootSec = "10min";
             OnUnitActiveSec = "6h";
