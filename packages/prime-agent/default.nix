@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.9.8";
+  version = "0.10.0";
   sources = {
     x86_64-linux = {
       platform = "linux-x64";
