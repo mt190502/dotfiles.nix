@@ -26,6 +26,7 @@ import sys
 import threading
 import time
 from typing import Any, Callable, Optional
+from urllib.parse import urlsplit
 
 from . import ocr, pointer, selection
 
@@ -236,6 +237,20 @@ def _wl_paste_available(binary: str = "wl-paste") -> bool:
 
 def _display_available() -> bool:
     return bool(os.environ.get("WAYLAND_DISPLAY") or os.environ.get("DISPLAY"))
+
+
+def _is_only_link(text: str) -> bool:
+    """Ignore a standalone web URL, not prose containing a link."""
+    value = text.strip()
+    if not value or any(char.isspace() for char in value):
+        return False
+    if value.lower().startswith("www."):
+        value = "https://" + value
+    try:
+        parsed = urlsplit(value)
+    except ValueError:  # malformed IPv6 URL, etc.
+        return False
+    return parsed.scheme in ("http", "https") and bool(parsed.hostname)
 
 
 def _raw(value: Any) -> dict:
@@ -1842,6 +1857,12 @@ class _DaemonController:
         return select_deck(lang, kind, languages, fallback)
 
     def _lookup_worker(self, text: str, generation: int) -> None:
+        if _is_only_link(text):
+            self.gtk.GLib.idle_add(
+                self._finish_lookup, {"generation": generation, "skip_reason": "link-only"}
+            )
+            return
+
         from .classify import classify
         from .translate import translate as trans_translate
 
@@ -1885,6 +1906,14 @@ class _DaemonController:
             if result.get("generation") != self._generation:
                 return False
             if self._suppress_if_own_window():
+                return False
+            translation = result.get("translation")
+            reason = result.get("skip_reason")
+            if reason is None and isinstance(translation, str):
+                if translation.strip() == str(result.get("text") or "").strip():
+                    reason = "unchanged-translation"
+            if reason is not None:
+                self._hide_popup(reason)
                 return False
             self._show_popup(result)
         except Exception:
