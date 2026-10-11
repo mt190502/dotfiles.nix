@@ -7,7 +7,7 @@ on:
 
 jobs:
   fix-hash:
-    if: github.actor == 'renovate[bot]'
+    if: github.actor == 'renovate[bot]' || github.actor == 'm-taha-s-renovate-bot[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: write
