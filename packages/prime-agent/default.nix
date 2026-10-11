@@ -12,19 +12,19 @@ let
   sources = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-g/sJEpv3jj5gJoISzXCTIWZZGxUYjKpwwbDvvMdiNeI=";
+      hash = "sha256-wWvSr153tT9JuRSkR0LEz2pnxe1QAAQUMLeNvUw7y+w=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-88qzUwpNfKQ9vvgyG/E/Jg0boF2LXd4FcWWiC9T2dcQ=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-r0hmtbqC80GblkKQ4/Aj3bm5mVionhbuhWliuQHsD8Y=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-B4yavVGZeO8n9kBDZ+N6KYEmfbR/G5W2CUDqf+bq2Lk=";
+      hash = "sha256-5Bi99i/LAAJ3e/OsQ7zBNlErJnY/KrXFAHkvJuNylOU=";
     };
   };
 in
