@@ -51,6 +51,7 @@
         ./home.nix
       ]
       ++ (with inputs.self.homeModules; [
+        adwaita-gtk2-stylix
         anki
         cnf
         delta
