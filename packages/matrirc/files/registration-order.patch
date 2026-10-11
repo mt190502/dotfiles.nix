@@ -1,0 +1,23 @@
+diff --git a/src/ircd/login.rs b/src/ircd/login.rs
+--- a/src/ircd/login.rs
++++ b/src/ircd/login.rs
+@@ -28,10 +28,7 @@
+         match event.command {
+             Command::NICK(nick) => client_nick = Some(nick),
+             Command::PASS(pass) => client_pass = Some(pass),
+-            Command::USER(user, _, _) => {
+-                client_user = Some(user);
+-                break;
+-            }
++            Command::USER(user, _, _) => client_user = Some(user),
+             Command::PING(server, server2) => stream.send(proto::pong(server, server2)).await?,
+             Command::CAP(_, _, Some(code), _) => {
+                 // required for recent-ish versions of irssi
+@@ -41,4 +38,7 @@
+             }
+             _ => (), // ignore
+         }
++        if client_nick.is_some() && client_user.is_some() && client_pass.is_some() {
++            break;
++        }
+     }

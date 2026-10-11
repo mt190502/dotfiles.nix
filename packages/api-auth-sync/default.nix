@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   version = "1.0.0";
 
   src = lib.fileset.toSource {
-    root = ./.;
-    fileset = ./api-auth-sync.py;
+    root = ./files;
+    fileset = ./files/api-auth-sync.py;
   };
 
   dontBuild = true;

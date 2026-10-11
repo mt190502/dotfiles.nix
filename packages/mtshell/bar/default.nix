@@ -428,7 +428,7 @@ let
       );
     };
 
-  qmlSrc = ./qml;
+  qmlSrc = ./files/qml;
   qmlFiles =
     builtins.concatMap
       (
@@ -494,7 +494,7 @@ stdenv.mkDerivation {
         quickshell.overrideAttrs (old: {
           patches =
             (old.patches or [ ])
-            ++ lib.optional (old.version == "0.3.0") ./quickshell-networkmanager-reconnect.patch;
+            ++ lib.optional (old.version == "0.3.0") ./files/quickshell-networkmanager-reconnect.patch;
         })
       )
     } -p ${placeholder "out"}/share/mtshell/bar/shell.qml "$@"

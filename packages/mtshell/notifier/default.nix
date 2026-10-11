@@ -124,7 +124,7 @@ let
       );
     };
 
-  qmlSrc = ./qml;
+  qmlSrc = ./files/qml;
   qmlFiles = builtins.concatMap (
     dir:
     let

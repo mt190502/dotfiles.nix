@@ -89,7 +89,7 @@ stdenv.mkDerivation {
   pname = "work-mcp";
   version = "1.0.0";
 
-  src = ./.;
+  src = ./files;
   dontBuild = true;
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pythonEnv ];

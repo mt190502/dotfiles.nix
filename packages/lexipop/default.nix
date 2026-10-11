@@ -39,7 +39,7 @@ in
 stdenv.mkDerivation {
   pname = "lexipop";
   version = "0.1.0";
-  src = ./.;
+  src = ./files;
   dontBuild = true;
   nativeBuildInputs = [
     makeWrapper
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/lib $out/bin
-    cp -r lexipop $out/lib/lexipop
+    cp -r . $out/lib/lexipop
     rm -rf $out/lib/lexipop/__pycache__
     makeWrapper ${pythonEnv}/bin/python3 $out/bin/lexipop \
       --add-flags "-m lexipop" \

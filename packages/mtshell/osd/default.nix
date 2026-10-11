@@ -71,7 +71,7 @@ let
       );
     };
 
-  qmlSrc = ./qml;
+  qmlSrc = ./files/qml;
   qmlFiles = builtins.filter (name: lib.hasSuffix ".qml" name) (
     builtins.attrNames (builtins.readDir qmlSrc)
   );

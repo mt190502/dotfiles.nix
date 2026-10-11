@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "commandcode-proxy";
   version = "1.0.0";
 
-  src = ./.;
+  src = ./files;
   dontBuild = true;
   nativeBuildInputs = [ python3 ];
   buildInputs = [ python3 ];
