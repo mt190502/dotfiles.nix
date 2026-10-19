@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   fetchurl,
+  git,
   pkgs-unstable,
   ...
 }:
@@ -98,7 +99,12 @@ stdenv.mkDerivation {
     runHook preInstall
     install -Dm0755 mcp_server.py $out/bin/work-mcp
     wrapProgram $out/bin/work-mcp \
-      --prefix PATH : ${lib.makeBinPath [ pythonEnv ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          pythonEnv
+          git
+        ]
+      }
     runHook postInstall
   '';
 
@@ -112,7 +118,10 @@ stdenv.mkDerivation {
       working directory (<workRoot>/<customer>/) or by asking the user,
       and every write goes to <customer>/.mcp/ with ETag-guarded concurrency
       semantics copied from the SilverBullet sidecar. With discovery disabled
-      a single shared space at <workRoot>/.mcp/ is used instead.
+      a single shared space at <workRoot>/.mcp/ is used instead. Each space is
+      a git repository and the server commits server-side after every
+      successful write or delete, keeping a full space history (git is added
+      to the wrapped PATH for this).
     '';
     license = lib.licenses.mit;
     mainProgram = "work-mcp";

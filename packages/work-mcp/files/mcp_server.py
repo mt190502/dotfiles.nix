@@ -17,7 +17,9 @@ category folders are created on demand. This server is the
 filesystem-backed replacement for the cluster-sidecar variant: instead of
 proxying the SilverBullet /.fs API it answers from local files with
 equivalent JSON shapes, ETag-based concurrency and status-code vocabulary
-(404/412/...).
+(404/412/...). Each space is a git repository: the server commits after every
+successful write/delete, so every space keeps a full server-side history
+(author "work-mcp <work-mcp@localhost>"); the agent never runs git itself.
 """
 
 import argparse
@@ -25,6 +27,8 @@ import hmac
 import os
 import re
 import stat as stat_module
+import subprocess
+from datetime import datetime
 
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -77,6 +81,87 @@ EXCLUDED = {
     if name.strip()
 }
 CUSTOMER_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._-]*$")
+
+# Server-side git: every space (the .mcp folder) is a git repository. The
+# server commits after every successful write_page/delete_page so each space
+# keeps a full server-side history. The agent never runs git here: it works
+# only through the page tools (see WORKFLOW_PROMPT).
+GIT_AUTHOR_NAME = os.getenv("WORK_MCP_GIT_AUTHOR_NAME", "work-mcp")
+GIT_AUTHOR_EMAIL = os.getenv("WORK_MCP_GIT_AUTHOR_EMAIL", "work-mcp@localhost")
+GIT_COMMIT_TIMEOUT = 10
+
+
+def commit_message(verb: str, page: str) -> str:
+    """Commit message: '<VERB> | <local-ISO-timestamp> | <page>'.
+
+    The timestamp is the server's local time with its UTC offset (for example
+    2026-10-19T14:00:00+0300), captured at commit time.
+    """
+    stamp = datetime.now().astimezone().strftime("%Y-%m-%dT%H:%M:%S%z")
+    return f"{verb} | {stamp} | {page}"
+
+
+def git_commit(space: str, message: str) -> str | None:
+    """Stage and commit all space changes; return the commit hash or None.
+
+    Best effort: a failure to commit (no git binary, transient git error)
+    never fails the page operation that already succeeded; the caller gets
+    commit=null in that case.
+    """
+    env = dict(os.environ)
+    env.update(
+        {
+            "GIT_AUTHOR_NAME": GIT_AUTHOR_NAME,
+            "GIT_AUTHOR_EMAIL": GIT_AUTHOR_EMAIL,
+            "GIT_COMMITTER_NAME": GIT_AUTHOR_NAME,
+            "GIT_COMMITTER_EMAIL": GIT_AUTHOR_EMAIL,
+        }
+    )
+    try:
+        if not os.path.isdir(os.path.join(space, ".git")):
+            subprocess.run(
+                ["git", "init", "-q"],
+                cwd=space,
+                env=env,
+                check=True,
+                timeout=GIT_COMMIT_TIMEOUT,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        subprocess.run(
+            ["git", "add", "-A", "."],
+            cwd=space,
+            env=env,
+            check=True,
+            timeout=GIT_COMMIT_TIMEOUT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        result = subprocess.run(
+            ["git", "commit", "-q", "-m", message],
+            cwd=space,
+            env=env,
+            timeout=GIT_COMMIT_TIMEOUT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        if result.returncode != 0:
+            # git commit exits 1 when there is nothing to commit; treat that
+            # as a no-op rather than an error.
+            return None
+        committed = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=space,
+            env=env,
+            check=True,
+            timeout=GIT_COMMIT_TIMEOUT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+        return committed.stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return None
 
 # ---------------------------------------------------------------------------
 # Method switches. Flip to False and the matching capability disappears from
@@ -168,6 +253,12 @@ WORKFLOW_PROMPT = (
     "write_page, delete_page). Direct disk access bypasses customer "
     "resolution, path validation, ETag concurrency and the category layout, "
     "and is not allowed.\n"
+    "\n"
+    "Git history is managed entirely by the server: every successful "
+    "write_page and delete_page is committed server-side inside the space "
+    "repository, and the write/delete result includes the resulting commit "
+    "hash. Never run git commands against the space and never create commits "
+    "by hand.\n"
     "\n"
     "Structured page workflow (skills, agents, runbooks, RCA, and similar "
     "categories):\n"
@@ -309,6 +400,7 @@ def ensure_space(space: str) -> None:
     os.makedirs(space, exist_ok=True)
     for category in DEFAULT_CATEGORIES:
         os.makedirs(os.path.join(space, category), exist_ok=True)
+    git_commit(space, "chore: initialize space")
 
 
 def clean_page_path(path: str) -> str:
@@ -468,6 +560,7 @@ def write_page(
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
             handle.write(content)
         status = 201
+        verb = "CREATE"
     else:
         try:
             st = os.stat(target)
@@ -483,11 +576,14 @@ def write_page(
             handle.write(content)
         os.replace(tmp, target)
         status = 200
+        verb = "UPDATE"
     st = os.stat(target)
+    commit = git_commit(space, commit_message(verb, page))
     return {
         "path": page,
         "status": status,
         "etag": page_etag(st),
+        "commit": commit,
     }
 
 
@@ -510,7 +606,8 @@ def delete_page(
     if expected_etag and page_etag(st) != expected_etag:
         raise page_error(f"HTTP 412 for {page}: page was modified since you read it")
     os.unlink(target)
-    return {"path": page, "status": 200}
+    commit = git_commit(space, commit_message("DELETE", page))
+    return {"path": page, "status": 200, "commit": commit}
 
 
 mcp = MCPServer(
