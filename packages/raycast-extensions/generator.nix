@@ -13,7 +13,7 @@ lib.genAttrs names (
       fetchFromGitHub {
         owner = "raycast";
         repo = "extensions";
-        rev = "3b812d1e153a1862df29bc8ec34e170c728512ea";
+        rev = "81204758dba63548a62aeb7fc8ecd314986686fa";
         sha256 = "sha256-NASCJMjS0ideoSsk/a6iYZfxJY4PhQpRiIXYISczUhY=";
         sparseCheckout = map (n: "/extensions/${n}") names;
       }
