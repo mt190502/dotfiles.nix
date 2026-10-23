@@ -68,9 +68,10 @@ stdenv.mkDerivation {
   meta = {
     description = "System-wide selection-to-Anki capture popup (GTK4/Wayland) using trans and AnkiConnect";
     longDescription = ''
-      lexipop watches the primary selection, shows a GTK4 layer-shell popup near
-      the pointer with the translation from translate-shell, and saves the card
-      to Anki through AnkiConnect. An optional OpenAI-compatible AI button
+      lexipop watches the primary selection and shows a small translate button
+      near the pointer. A click on the button opens a GTK4 layer-shell popup
+      with the translation from translate-shell, and the card can be saved to
+      Anki through AnkiConnect. An optional OpenAI-compatible AI button
       produces coloured word alignments.
     '';
     license = lib.licenses.mit;

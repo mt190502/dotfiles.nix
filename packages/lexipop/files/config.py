@@ -49,6 +49,8 @@ DEFAULTS: dict[str, Any] = {
     "popup": {
         "enabled": True,
         "onEverySelection": True,
+        "trigger": "button",
+        "buttonHideAfterSeconds": 4,
         "hideWhenFocusChanges": True,
         "hideWhenSelectionCleared": True,
         "closeOnOutsideClick": True,
@@ -72,6 +74,8 @@ DEFAULTS: dict[str, Any] = {
             "preview": "Preview",
             "reset": "Reset",
             "coloursHint": "Colours appear after an AI translation.",
+            "translateButton": "󰗊",
+            "translateButtonTooltip": "Translate",
         },
     },
     "languageNames": {},

@@ -67,6 +67,9 @@ DEFAULT_LABELS: dict = {
     "preview": "Preview",
     "reset": "Reset",
     "coloursHint": "Colours appear after an AI translation.",
+    # Mini translate button (popup.trigger = "button").
+    "translateButton": "󰗊",
+    "translateButtonTooltip": "Translate",
 }
 
 POPUP_WIDTH = 380
@@ -134,6 +137,15 @@ CLICK_CATCHER_NAMESPACE = "lexipop-catcher"
 #: The same reason as the probe: a fully invisible surface may stop receiving
 #: pointer events, so a tiny alpha is kept.
 CLICK_CATCHER_OPACITY = 0.01
+
+#: Mini translate button (``popup.trigger = "button"``): a small layer-shell
+#: surface near the pointer.  The translation starts only when it is clicked.
+SELECTION_BUTTON_NAMESPACE = "lexipop-button"
+SELECTION_BUTTON_SIZE = 30
+#: Default value of ``popup.buttonHideAfterSeconds``.
+SELECTION_BUTTON_HIDE_SECONDS = 4
+#: Valid values of ``popup.trigger``.
+POPUP_TRIGGERS = ("button", "auto")
 
 #: Control socket: how long a client may take to send its one-line request.
 CONTROL_SOCKET_TIMEOUT = 5.0
@@ -1498,6 +1510,16 @@ class _DaemonController:
         self._click_catcher_reported = False
         #: Monitor identity the current popup window was created for.
         self._popup_monitor_key: Optional[str] = None
+        #: Mini translate button (``popup.trigger = "button"``).
+        self._button_window = None
+        #: Selection text the visible (or pending) mini button belongs to.
+        self._button_text: Optional[str] = None
+        #: Pointer position sampled for the mini button; reused for the popup.
+        self._button_position: Optional[tuple] = None
+        #: Bumped on every button show/hide so a late probe result is ignored.
+        self._button_token = 0
+        self._button_timeout_id = None
+        self._button_pointer_inside = False
 
     # -- wiring ------------------------------------------------------------
     def attach(self, app) -> None:
@@ -1520,6 +1542,7 @@ class _DaemonController:
         self._stop_control_socket()
         self._stop_pointer_clicks()
         self._hide_click_catcher()
+        self._hide_selection_button(None)
         self._finish_pointer_probe()
         self._stop_selection_poll()
         if self.watcher is not None:
@@ -1588,18 +1611,30 @@ class _DaemonController:
                 # No popup, no translation, no popup log line for this app.
                 LOGGER.info("selection ignored (excluded app: %s)", excluded)
                 return False
-            self._generation += 1
-            generation = self._generation
-            thread = threading.Thread(
-                target=self._lookup_worker,
-                args=(text, generation),
-                name="lexipop-lookup",
-                daemon=True,
-            )
-            thread.start()
+            if self._button_trigger_enabled():
+                # Do not translate yet: offer the mini button near the pointer.
+                self._offer_selection_button(text)
+                return False
+            self._start_lookup(text)
         except Exception:  # the daemon must survive every UI error
             LOGGER.exception("selection handling failed")
         return False
+
+    def _start_lookup(self, text: str, position: Optional[tuple] = None) -> None:
+        """Translate *text* in a worker thread; the result opens the popup.
+
+        *position* is a pointer sample that is already known (the mini button
+        sampled it), so the popup does not need a second pointer probe.
+        """
+        self._generation += 1
+        generation = self._generation
+        thread = threading.Thread(
+            target=self._lookup_worker,
+            args=(text, generation, position),
+            name="lexipop-lookup",
+            daemon=True,
+        )
+        thread.start()
 
     def _on_selection_cleared(self) -> None:
         """Called from the watcher thread when the selection became empty."""
@@ -1609,6 +1644,7 @@ class _DaemonController:
         try:
             if not self._popup_gate("hideWhenSelectionCleared"):
                 return False
+            self._hide_selection_button("selection-cleared")
             if self.popup is None or not self.popup.get_visible():
                 return False
             self._hide_popup("selection-cleared")
@@ -1856,7 +1892,9 @@ class _DaemonController:
         fallback = _cfg_get(self.config, "fallbackDeck", None)
         return select_deck(lang, kind, languages, fallback)
 
-    def _lookup_worker(self, text: str, generation: int) -> None:
+    def _lookup_worker(
+        self, text: str, generation: int, position: Optional[tuple] = None
+    ) -> None:
         if _is_only_link(text):
             self.gtk.GLib.idle_add(
                 self._finish_lookup, {"generation": generation, "skip_reason": "link-only"}
@@ -1898,6 +1936,7 @@ class _DaemonController:
                 "translation": translation,
                 "error": error,
                 "ai": None,
+                "position": position,
             },
         )
 
@@ -2416,9 +2455,14 @@ class _DaemonController:
         answers (``_finish_show_popup``).
         """
         self.state = result
+        epoch = self._show_epoch
+        known = result.get("position")
+        if known is not None:
+            # The mini button already sampled the pointer for this selection.
+            self._finish_show_popup(result, known, epoch)
+            return
         # Sample the TRUE pointer position on the main loop first; the probe
         # answers through the first motion event or through the timeout guard.
-        epoch = self._show_epoch
         if self._start_pointer_probe(result, epoch):
             return
         self._finish_show_popup(result, None, epoch)
@@ -2582,6 +2626,10 @@ class _DaemonController:
                 # a nearly transparent background keeps pointer events coming.
                 ".lexipop-pointer-probe { background-color: rgba(0, 0, 0, 0.010);"
                 " box-shadow: none; border: none; }",
+                # Mini translate button: a small rounded chip near the pointer.
+                ".lexipop-button-window { border-radius: 8px; }",
+                ".lexipop-translate-button { min-width: 0; min-height: 0;"
+                " padding: 2px 6px; border-radius: 8px; font-size: 15px; }",
             ]
         )
 
@@ -2795,6 +2843,249 @@ class _DaemonController:
             LOGGER.debug("could not hide the popup", exc_info=True)
         return False
 
+    # -- mini translate button (popup.trigger = "button") -------------------
+    def _popup_trigger(self) -> str:
+        """``popup.trigger``: ``button`` (default) or ``auto`` (old behaviour)."""
+        popup = _raw(_cfg_get(self.config, "popup", {}))
+        value = str(popup.get("trigger", "button") or "button").strip().lower()
+        return value if value in POPUP_TRIGGERS else "button"
+
+    def _button_trigger_enabled(self) -> bool:
+        """True when a selection must first show the mini translate button."""
+        if self._popup_trigger() != "button":
+            return False
+        if self.gtk.layer_shell is None:
+            # A plain window would take the focus (and the selection) away, so
+            # without layer shell the popup opens directly, as before.
+            return False
+        return True
+
+    def _button_hide_after_seconds(self) -> int:
+        """``popup.buttonHideAfterSeconds``: 0 keeps the button until dismissed."""
+        popup = _raw(_cfg_get(self.config, "popup", {}))
+        try:
+            seconds = int(popup.get("buttonHideAfterSeconds", SELECTION_BUTTON_HIDE_SECONDS))
+        except (TypeError, ValueError):
+            return SELECTION_BUTTON_HIDE_SECONDS
+        return max(0, seconds)
+
+    def _offer_selection_button(self, text: str) -> None:
+        """Show the mini button for *text*; nothing is translated yet."""
+        if _is_only_link(text):
+            LOGGER.debug("selection ignored: link-only text, no translate button")
+            self._hide_selection_button("link-only")
+            return
+        # A new selection replaces the popup and any previous button.
+        if self.popup is not None and self.popup.get_visible():
+            self._hide_popup("new-selection")
+        self._hide_selection_button(None, reset=False)
+        self._button_token += 1
+        token = self._button_token
+        self._button_text = text
+        self._finish_pointer_probe()
+        probe = None
+        try:
+            self._install_target_css()  # this provider also carries the button CSS
+            probe = _PointerProbe(
+                self.gtk, lambda position: self._on_button_probe(token, position)
+            )
+            started = probe.start()
+        except Exception:
+            LOGGER.debug("the pointer probe could not start for the button", exc_info=True)
+            started = False
+        if started:
+            if token == self._button_token and not probe._done:
+                self._pointer_probe = probe
+            return
+        self._on_button_probe(token, None)
+
+    def _on_button_probe(self, token: int, position: Optional[tuple]) -> None:
+        """Pointer sample for the button arrived (or the probe gave up)."""
+        if token != self._button_token:
+            LOGGER.debug("the button pointer sample is stale, ignoring it")
+            return
+        self._pointer_probe = None
+        if position is None:
+            position = self._pointer_position()
+        text = self._button_text
+        if not text:
+            return
+        if position is None:
+            # Without a pointer position the button has no useful place, so
+            # keep the old behaviour and open the popup directly.
+            LOGGER.info("pointer unknown, opening the popup without the translate button")
+            self._button_text = None
+            self._start_lookup(text)
+            return
+        self._show_selection_button(token, position)
+
+    def _show_selection_button(self, token: int, position: tuple) -> None:
+        """Create the button surface on the pointer's monitor and map it."""
+        try:
+            monitor = self._monitor_for_pointer(position)
+            window = self._make_selection_button(monitor)
+            geometry = _monitor_geometry(monitor)
+            origin_x = int(geometry.x) if geometry is not None else 0
+            origin_y = int(geometry.y) if geometry is not None else 0
+            area_width = int(geometry.width) if geometry is not None else 0
+            area_height = int(geometry.height) if geometry is not None else 0
+            x, y, _placement = _place_popup(
+                position,
+                SELECTION_BUTTON_SIZE,
+                SELECTION_BUTTON_SIZE,
+                origin_x=origin_x,
+                origin_y=origin_y,
+                area_width=area_width,
+                area_height=area_height,
+            )
+            layer_shell = self.gtk.layer_shell
+            for edge, anchor in (
+                (Gtk4Edge(self.gtk, "TOP"), True),
+                (Gtk4Edge(self.gtk, "LEFT"), True),
+                (Gtk4Edge(self.gtk, "BOTTOM"), False),
+                (Gtk4Edge(self.gtk, "RIGHT"), False),
+            ):
+                layer_shell.set_anchor(window, edge, anchor)
+            layer_shell.set_margin(window, Gtk4Edge(self.gtk, "LEFT"), max(0, int(x - origin_x)))
+            layer_shell.set_margin(window, Gtk4Edge(self.gtk, "TOP"), max(0, int(y - origin_y)))
+            self._button_window = window
+            self._button_position = (int(position[0]), int(position[1]))
+            self._button_pointer_inside = False
+            window.set_visible(True)
+            self._arm_button_timeout()
+            if self._pointer_listener is None:
+                # No raw listener (pointerClicks off or no device access): the
+                # catcher is the only way to see an outside click.  It consumes
+                # that one click, like it does for the popup.
+                self._show_click_catcher()
+            LOGGER.info(
+                "translate button x=%d y=%d monitor=%s", int(x), int(y), _monitor_key(monitor)
+            )
+        except Exception:
+            LOGGER.exception("cannot show the translate button")
+            self._hide_selection_button(None, reset=False)
+
+    def _make_selection_button(self, monitor):
+        """One small, non-focusable OVERLAY layer surface with the button."""
+        Gtk = self.gtk.Gtk
+        layer_shell = self.gtk.layer_shell
+        window = Gtk.Window()
+        window.set_title("lexipop")
+        window.set_decorated(False)
+        window.set_can_focus(False)
+        window.add_css_class("lexipop-button-window")
+        if self.app is not None:
+            try:
+                window.set_application(self.app)
+            except Exception:
+                LOGGER.debug("button window is not managed by the application")
+        button = Gtk.Button(label=_label(self.config, "translateButton"))
+        # Keyboard mode NONE: the button must not take keyboard focus either.
+        button.set_can_focus(False)
+        button.set_focus_on_click(False)
+        button.add_css_class("flat")
+        button.add_css_class("lexipop-translate-button")
+        button.set_size_request(SELECTION_BUTTON_SIZE, SELECTION_BUTTON_SIZE)
+        tooltip = _label(self.config, "translateButtonTooltip")
+        if tooltip:
+            button.set_tooltip_text(tooltip)
+        button.connect("clicked", self._on_selection_button_clicked)
+        window.set_child(button)
+        # Record presses on the button (capture phase: the Gtk.Button claims
+        # the press), so the raw listener does not treat them as outside.
+        gesture = Gtk.GestureClick()
+        try:
+            gesture.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
+        except Exception:
+            LOGGER.debug("cannot set the button gesture phase", exc_info=True)
+        gesture.connect("pressed", self._on_popup_button_pressed)
+        window.add_controller(gesture)
+        motion = Gtk.EventControllerMotion()
+        motion.connect("enter", self._on_button_pointer_enter)
+        motion.connect("leave", self._on_button_pointer_leave)
+        window.add_controller(motion)
+        layer_shell.init_for_window(window)
+        layer_shell.set_namespace(window, SELECTION_BUTTON_NAMESPACE)
+        layer_shell.set_layer(window, layer_shell.Layer.OVERLAY)
+        layer_shell.set_keyboard_mode(window, layer_shell.KeyboardMode.NONE)
+        if monitor is not None:
+            layer_shell.set_monitor(window, monitor)
+        return window
+
+    def _on_selection_button_clicked(self, *_args) -> None:
+        """The user asked for this selection: translate it and open the popup."""
+        text = self._button_text
+        position = self._button_position
+        self._hide_selection_button("clicked", reset=False)
+        if not text:
+            return
+        try:
+            self._start_lookup(text, position)
+        except Exception:
+            LOGGER.exception("cannot start the lookup from the translate button")
+
+    def _hide_selection_button(self, reason: Any = None, reset: bool = True) -> None:
+        """Destroy the button (and forget a pending one).  Never raises."""
+        try:
+            self._button_token += 1
+            self._cancel_button_timeout()
+            window, self._button_window = self._button_window, None
+            self._button_text = None
+            self._button_position = None
+            self._button_pointer_inside = False
+            if window is None:
+                return
+            try:
+                window.set_visible(False)
+                window.destroy()
+            except Exception:
+                LOGGER.debug("cannot destroy the translate button", exc_info=True)
+            if self.popup is None or not self.popup.get_visible():
+                self._hide_click_catcher()
+            if reset and self.watcher is not None:
+                # Let the same text show the button again when it is re-selected.
+                self.watcher.reset()
+            if reason is not None:
+                LOGGER.info("translate button hidden (%s)", reason)
+        except Exception:
+            LOGGER.debug("could not hide the translate button", exc_info=True)
+
+    def _cancel_button_timeout(self) -> None:
+        if self._button_timeout_id is not None:
+            try:
+                self.gtk.GLib.source_remove(self._button_timeout_id)
+            except Exception:
+                LOGGER.debug("could not remove the button hide timer")
+            self._button_timeout_id = None
+
+    def _arm_button_timeout(self) -> None:
+        self._cancel_button_timeout()
+        seconds = self._button_hide_after_seconds()
+        if seconds <= 0:
+            return
+        try:
+            self._button_timeout_id = self.gtk.GLib.timeout_add_seconds(
+                seconds, self._on_button_timeout
+            )
+        except Exception:
+            LOGGER.debug("could not arm the button hide timer")
+
+    def _on_button_timeout(self) -> bool:
+        self._button_timeout_id = None  # this source ends here
+        if self._button_pointer_inside:
+            return False  # the leave handler re-arms the timer
+        self._hide_selection_button("timeout")
+        return False
+
+    def _on_button_pointer_enter(self, *_args) -> None:
+        self._button_pointer_inside = True
+        self._cancel_button_timeout()
+
+    def _on_button_pointer_leave(self, *_args) -> None:
+        self._button_pointer_inside = False
+        if self._button_window is not None:
+            self._arm_button_timeout()
+
     # -- popup closing: outside-click catcher ------------------------------
     def _close_on_outside_click_enabled(self) -> bool:
         """``popup.closeOnOutsideClick`` (older configs lack it): default True."""
@@ -2847,7 +3138,12 @@ class _DaemonController:
 
     def _on_outside_click(self) -> None:
         """A catcher surface received a click: it is an outside click."""
+        self._hide_selection_button("click-outside")
         self._hide_popup("click-outside")
+
+    def _click_catcher_mapped(self) -> bool:
+        catcher = self._click_catcher
+        return bool(catcher is not None and catcher.windows)
 
     # -- popup closing: raw pointer clicks ---------------------------------
     def _pointer_clicks_enabled(self) -> bool:
@@ -2866,14 +3162,10 @@ class _DaemonController:
         if not self._pointer_clicks_enabled():
             LOGGER.debug("pointer-click dismiss is disabled in the configuration")
             return
-        if self._close_on_outside_click_enabled() and not force:
-            # The layer-shell catcher already owns the dismiss path and needs no
-            # device group, so the raw listener would only duplicate the work.
-            LOGGER.info(
-                "pointerClicks is on but the outside-click catcher serves dismiss; "
-                "the raw pointer listener stays off"
-            )
-            return
+        # The listener also runs when the catcher serves the popup: it is the
+        # only way to see a click outside the mini translate button WITHOUT
+        # consuming that click.  While a catcher is mapped, the popup dismiss
+        # stays with the catcher (see _on_click_grace).
         listener = _PointerClickListener(self._on_raw_pointer_press)
         if not listener.start():
             return
@@ -2955,8 +3247,15 @@ class _DaemonController:
         """Grace elapsed: hide unless the popup handled the button press."""
         self._click_grace_id = None
         try:
+            if self._button_window is not None:
+                if self._button_pointer_inside or self._popup_handled_click():
+                    LOGGER.debug("click ignored: it landed on the translate button")
+                else:
+                    self._hide_selection_button("click-outside")
             if self.popup is None or not self.popup.get_visible():
                 return False
+            if self._click_catcher_mapped():
+                return False  # the catcher owns the popup dismiss
             if self._popup_handled_click():
                 LOGGER.debug("click ignored: the popup handled it itself")
                 return False

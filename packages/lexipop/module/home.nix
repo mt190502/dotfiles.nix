@@ -48,6 +48,8 @@ let
         inherit (cfg.popup)
           enabled
           onEverySelection
+          trigger
+          buttonHideAfterSeconds
           hideWhenFocusChanges
           hideWhenSelectionCleared
           closeOnOutsideClick
@@ -84,7 +86,10 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Dismiss the popup on any real left-click anywhere. Requires the
+        Dismiss the popup on any real left-click anywhere. It also hides the
+        translate button on a click outside it, and that click still reaches
+        the application below. Without it, the button uses the click catcher
+        (closeOnOutsideClick), which consumes that one click. Requires the
         matching NixOS module (programs.lexipop.pointerAccess), which the host
         enables automatically when this option is true.
       '';
@@ -205,6 +210,28 @@ in
         default = true;
         description = "Show the popup for every selection, not only for words.";
       };
+      trigger = lib.mkOption {
+        type = lib.types.enum [
+          "button"
+          "auto"
+        ];
+        default = "button";
+        description = ''
+          What a new selection does. "button" shows a small translate button
+          near the pointer, and lexipop translates the text only when you click
+          it. "auto" translates every selection and opens the popup at once.
+          Without layer shell, lexipop always uses "auto".
+        '';
+      };
+      buttonHideAfterSeconds = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 4;
+        description = ''
+          Hide the translate button after this many seconds without a click
+          (0 = keep it until the selection changes or is cleared). The timer
+          stops while the pointer is over the button.
+        '';
+      };
       hideWhenFocusChanges = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -268,6 +295,8 @@ in
           preview = "Preview";
           reset = "Reset";
           coloursHint = "Colours appear after an AI translation.";
+          translateButton = "󰗊";
+          translateButtonTooltip = "Translate";
         };
         description = "Literal UI strings shown in the popup and the editor.";
       };
