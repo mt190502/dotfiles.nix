@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  size = builtins.toString config.fontcfg.sizes.terminal;
+  size = toString config.fontcfg.sizes.terminal;
   font = config.fontcfg.monospace.name;
 in
 {
