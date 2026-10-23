@@ -79,6 +79,7 @@ in
       slurp
       system-config-printer
       telegram-desktop
+      upterm
       wl-clipboard
       wlr-randr
       wtype
