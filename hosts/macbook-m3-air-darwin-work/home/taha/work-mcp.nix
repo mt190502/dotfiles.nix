@@ -20,12 +20,14 @@
       workRoot = "${config.home.homeDirectory}/Projects/work";
       excludeCustomers = [ ".shell" ];
     };
-
     prime-agent.settings.mcpServers.work-mcp = {
       type = "http";
       url = config.programs.work-mcp.url;
     };
-
+    yazi-agent.mcps.work-mcp = {
+      transport = "http";
+      endpoint = config.programs.work-mcp.url;
+    };
     opencode.settings.mcp.work-mcp = {
       type = "remote";
       url = config.programs.work-mcp.url;

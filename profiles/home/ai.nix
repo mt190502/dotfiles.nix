@@ -4,6 +4,7 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   pkgs-unstable,
   ...
@@ -99,6 +100,7 @@ let
 in
 {
   imports = [
+    inputs.yazi-agent.homeManagerModules.default
     inputs.self.homeModules.prime-agent
     inputs.self.homeModules.api-auth-sync
     inputs.self.homeModules.work-mcp
@@ -396,6 +398,185 @@ in
 
     ########################################
     #
+    ## Yazi coding agent
+    #
+    ########################################
+    yazi-agent = {
+      enable = true;
+      settings = {
+        configDir = "${config.home.homeDirectory}/.config/yazi-agent";
+        stateDir = "${config.xdg.stateHome}/yazi-agent";
+        databasePath = "${config.xdg.stateHome}/yazi-agent/agent.db";
+        socketPath = "${config.xdg.stateHome}/yazi-agent/daemon-v2.sock";
+        startOnFirstPrompt = true;
+        rememberLastSelection = true;
+        provider = {
+          id = "nanogpt";
+          model = lib.mkDefault "z-ai/glm-5.3-flash";
+          effort = lib.mkDefault "high";
+        };
+        python = {
+          executable = "python3";
+          uv = "${pkgs.uv}/bin/uv";
+          verify = false;
+        };
+        tools = {
+          mode = "";
+          allow = [ ];
+          deny = [ ];
+        };
+        agents = {
+          maxDepth = 1;
+        };
+        sandbox = {
+          socket = "";
+          image = "ghcr.io/kreatoo/yazi-docker:latest";
+          extraDNS = [
+            "100.100.100.100"
+            "1.1.1.1"
+            "9.9.9.9"
+          ];
+          bindings =
+            lib.optionals (config.sops.secrets ? roberto) [
+              {
+                type = "filesystem";
+                source = config.sops.secrets.roberto.path;
+                dest = config.sops.secrets.roberto.path;
+                access = "ro";
+              }
+            ]
+            ++ lib.optional (pkgs.stdenv.hostPlatform.isLinux && config.programs.work-mcp.enable) {
+              type = "hostport";
+              source = "127.0.0.1:${toString config.programs.work-mcp.port}";
+              dest = "127.0.0.1:${toString config.programs.work-mcp.port}";
+            };
+        };
+        packages = [ ];
+        plugins = { };
+      };
+      skills.main = "${config.home.homeDirectory}/.config/opencode/skills";
+      providers = { };
+      mcps = {
+        context7 = {
+          transport = "http";
+          endpoint = "https://mcp.context7.com/mcp";
+        };
+        gh_grep = {
+          transport = "http";
+          endpoint = "https://mcp.grep.app";
+        };
+        exa = {
+          transport = "http";
+          endpoint = "https://mcp.exa.ai/mcp";
+        };
+        roberto = {
+          transport = "http";
+          endpoint = "http://silverbullet-mcp.silverbullet.svc.cluster.local:8765/mcp";
+        };
+        roberto-ext = {
+          transport = "http";
+          endpoint = "https://md.mtaha.dev/mcp";
+          tokenFile = config.sops.secrets."roberto".path;
+        };
+      };
+      keybindings = {
+        "tui.editor.cursorLeft" = [
+          "left"
+          "alt+shift+b"
+        ];
+        "tui.editor.cursorRight" = [
+          "right"
+          "alt+shift+f"
+        ];
+        "tui.editor.cursorWordLeft" = [
+          "alt+left"
+          "alt+b"
+          "alt+shift+left"
+        ];
+        "tui.editor.cursorWordRight" = [
+          "alt+right"
+          "alt+f"
+          "alt+shift+right"
+        ];
+        "tui.editor.cursorLineStart" = [
+          "home"
+          "alt+shift+a"
+        ];
+        "tui.editor.cursorLineEnd" = [
+          "end"
+          "alt+shift+e"
+        ];
+        "tui.editor.jumpForward" = [ "alt+shift+]" ];
+        "tui.editor.jumpBackward" = [ "alt+shift+[" ];
+        "tui.editor.deleteCharForward" = [
+          "delete"
+          "alt+shift+d"
+        ];
+        "tui.editor.deleteWordBackward" = [
+          "alt+backspace"
+          "alt+shift+w"
+        ];
+        "tui.editor.deleteToLineStart" = [ "alt+shift+u" ];
+        "tui.editor.deleteToLineEnd" = [ "alt+shift+k" ];
+        "tui.editor.yank" = [ "alt+shift+y" ];
+        "tui.editor.undo" = [ "alt+shift+-" ];
+        "tui.input.newLine" = [
+          "shift+enter"
+          "alt+shift+enter"
+        ];
+        "tui.input.tab" = [ ];
+        "tui.input.copy" = [ "alt+shift+c" ];
+        "tui.viewport.follow" = [
+          "ctrl+shift+down"
+          "alt+shift+down"
+        ];
+        "tui.select.cancel" = [
+          "escape"
+          "alt+shift+0"
+        ];
+        "app.clear" = [
+          "ctrl+c"
+          "alt+shift+q"
+        ];
+        "app.exit" = [ "alt+shift+x" ];
+        "app.suspend" = [ "alt+shift+z" ];
+        "app.model.select" = [ "alt+shift+l" ];
+        "app.tools.expand" = [ "alt+shift+o" ];
+        "app.heartbeats.open" = [ "alt+shift+r" ];
+        "app.editor.external" = [ "alt+shift+g" ];
+        "app.prompt.stash" = [ "alt+shift+s" ];
+        "app.message.moveEarlier" = [ "alt+shift+pageUp" ];
+        "app.message.moveLater" = [ "alt+shift+pageDown" ];
+        "app.clipboard.pasteImage" = [
+          "ctrl+v"
+          "alt+shift+v"
+        ];
+        "app.agents.new" = [ "alt+shift+n" ];
+        "app.agents.delete" = [ "alt+shift+delete" ];
+        "app.agents.program" = [ "alt+shift+1" ];
+        "app.agents.rename" = [ "alt+shift+2" ];
+        "app.agents.reply" = [ "space" ];
+        "app.tree.foldOrUp" = [ "alt+shift+home" ];
+        "app.tree.unfoldOrDown" = [ "alt+shift+end" ];
+        "app.models.save" = [ "alt+shift+3" ];
+        "app.models.enableAll" = [ "alt+shift+4" ];
+        "app.models.clearAll" = [ "alt+shift+5" ];
+        "app.models.toggleProvider" = [ "alt+shift+6" ];
+        "app.tree.filter.default" = [ "alt+shift+7" ];
+        "app.tree.filter.noTools" = [ "alt+shift+8" ];
+        "app.tree.filter.userOnly" = [ "alt+shift+9" ];
+        "app.tree.filter.labeledOnly" = [ "alt+shift+," ];
+        "app.tree.filter.all" = [ "alt+shift+." ];
+        "app.tree.filter.cycleForward" = [ "alt+shift+/" ];
+        "app.tree.filter.cycleBackward" = [
+          "shift+ctrl+o"
+          "alt+shift+\\"
+        ];
+      };
+    };
+
+    ########################################
+    #
     ## OpenCode
     #
     ########################################
@@ -490,6 +671,7 @@ in
   home = {
     sessionVariables.OPENCODE_CONFIG_DIR = "${config.home.homeDirectory}/.config/opencode/config.d";
     file = {
+      "${config.programs.yazi-agent.settings.configDir}/AGENTS.md".text = commonContext;
       ".config/opencode/config.d/.keep".text = "";
       ".config/opencode/config.d/AGENTS.md".text = commonContext;
       ".config/opencode/skills/.keep".text = "";

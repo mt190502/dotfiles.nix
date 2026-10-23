@@ -83,6 +83,11 @@
       url = "github:vicinaehq/extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    yazi-agent = {
+      url = "git+https://src.krea.to/kreato/yazi";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     zmem = {
       url = "github:xeome/zmem";
       inputs.nixpkgs.follows = "nixpkgs";

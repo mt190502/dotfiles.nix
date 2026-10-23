@@ -839,6 +839,7 @@
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "vicinae-extensions": "vicinae-extensions",
+        "yazi-agent": "yazi-agent",
         "zmem": "zmem"
       }
     },
@@ -1191,6 +1192,29 @@
         "owner": "vicinaehq",
         "repo": "extensions",
         "type": "github"
+      }
+    },
+    "yazi-agent": {
+      "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792777060,
+        "narHash": "sha256-cE/V8PsfvcCzjOCKiE6igvPoLz731gSRNyBBqdDfTFk=",
+        "ref": "refs/heads/main",
+        "rev": "6421945cd440d7c2a92d161ad041460d6272beba",
+        "revCount": 1156,
+        "type": "git",
+        "url": "https://src.krea.to/kreato/yazi"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://src.krea.to/kreato/yazi"
       }
     },
     "zmem": {
