@@ -4,30 +4,44 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
+    - cron: "0 1 * * 0"
 
 jobs:
   update-flake-lock:
-    permissions:
+    if: github.event.schedule != '0 1 * * 0'
+    permissions: &permissions
       contents: write
-    runs-on: ubuntu-latest
+    runs-on: &runner ubuntu-latest
+    env:
+      COMMIT_MESSAGE: "update(automated): update flake.lock automatically"
     steps:
-      - name: Checkout
+      - &checkout
+        name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-    
-      - name: Install Nix
+      - &install-nix
+        name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-
       - name: Update flake.lock
         run: |
-          inputs=$(nix flake metadata --json | jq -r '.locks.nodes.root.inputs | keys[]' | grep -v -- '-unstable$' || true)
-          echo "Updating: $inputs"
-          nix flake update $inputs
-
-      - name: Commit and push changes
+          # A manual run updates everything; the scheduled run skips the
+          # "-unstable" inputs, which the weekly job below handles.
+          skip='-unstable$'
+          if [[ $GITHUB_EVENT_NAME == workflow_dispatch ]]; then
+            skip='^$'
+          fi
+          mapfile -t inputs < <(
+            nix flake metadata --json \
+              | jq -r '.locks.nodes.root.inputs | keys[]' \
+              | grep -vE -- "$skip" || true
+          )
+          echo "Updating: ${inputs[*]}"
+          nix flake update "${inputs[@]}"
+      - &commit
+        name: Commit and push changes
         run: |
           if [[ -z $(git status -s) ]]; then
             echo "No changes to commit"
@@ -36,5 +50,18 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add flake.lock
-          git commit -m "update(automated): update flake.lock automatically"
+          git commit -m "$COMMIT_MESSAGE"
           git push
+
+  update-nixpkgs-unstable:
+    if: github.event.schedule == '0 1 * * 0'
+    permissions: *permissions
+    runs-on: *runner
+    env:
+      COMMIT_MESSAGE: "update(automated): update nixpkgs-unstable"
+    steps:
+      - *checkout
+      - *install-nix
+      - name: Update nixpkgs-unstable
+        run: nix flake update nixpkgs-unstable
+      - *commit
