@@ -8,7 +8,7 @@
 }:
 
 {
-  imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
+  imports = [ inputs.nix-flatpak-unstable.homeManagerModules.nix-flatpak ];
   programs.fish.shellAliases = {
     sysdup = lib.mkOverride 500 "nix-channel --update && sudo nix-channel --update && ${lib.getExe' pkgs.flatpak "flatpak"} update && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/.config/dotfiles.nix#${flakeName} --upgrade";
     sysclean = lib.mkOverride 500 "${lib.getExe' pkgs.flatpak "flatpak"} remove --unused && nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
