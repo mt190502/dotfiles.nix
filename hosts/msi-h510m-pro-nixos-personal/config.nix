@@ -17,6 +17,7 @@
     "lexipop"
     "libvirt"
     "mate-polkit"
+    "modprobed-db"
     "onepassword"
     "pipewire"
     "plasma"
