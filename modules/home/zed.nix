@@ -13,15 +13,25 @@
     extensions = [
       "basher"
       "dockerfile"
+      "emmet"
       "html"
       "markdownlint"
       "material-icon-theme"
       "nix"
       "rainbow-csv"
+      "svelte"
       "terraform"
     ];
     extraPackages = with pkgs; [
+      # C / C++
+      clang-tools
+      # Go
+      gopls
+      # Nix
       nixd
+      # Rust
+      rust-analyzer
+      # TypeScript / JavaScript
       vtsls
     ];
     userSettings = {
@@ -68,11 +78,13 @@
       auto_install_extensions = {
         basher = true;
         dockerfile = true;
+        emmet = true;
         html = true;
         markdownlint = true;
         "material-icon-theme" = true;
         nix = true;
         "rainbow-csv" = true;
+        svelte = true;
         terraform = true;
       };
       autosave = {
@@ -87,6 +99,7 @@
       buffer_line_height = {
         custom = 1.25;
       };
+      cli_default_open_behavior = "existing_window";
       collaboration_panel = {
         dock = "left";
       };
@@ -99,11 +112,13 @@
           padding = 4;
         };
       };
+      diff_view_style = "split";
       edit_predictions = {
         copilot = {
           enable_next_edit_suggestions = true;
         };
         mode = "eager";
+        provider = "copilot";
       };
       git_panel = {
         dock = "left";
@@ -129,12 +144,27 @@
         };
       };
       languages = {
+        C = {
+          language_servers = [ "clangd" ];
+        };
+        "C++" = {
+          language_servers = [ "clangd" ];
+        };
+        Go = {
+          language_servers = [ "gopls" ];
+        };
         Nix = {
           language_servers = [
             "nixd"
             "!nil"
           ];
           show_edit_predictions = true;
+        };
+        Rust = {
+          language_servers = [ "rust-analyzer" ];
+        };
+        Svelte = {
+          language_servers = [ "svelte-language-server" ];
         };
         TypeScript = {
           code_actions_on_format = {
@@ -320,6 +350,19 @@
             "editor::SelectNext"
             { replace_newest = false; }
           ];
+        };
+      }
+      {
+        context = "(Editor && (edit_prediction && (showing_completions || in_leading_whitespace)))";
+        bindings = {
+          alt-l = null;
+          tab = "editor::AcceptEditPrediction";
+        };
+      }
+      {
+        context = "((os != macos && Editor) && (edit_prediction && (showing_completions || in_leading_whitespace)))";
+        bindings = {
+          alt-l = null;
         };
       }
     ];
