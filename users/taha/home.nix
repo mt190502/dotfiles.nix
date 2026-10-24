@@ -31,6 +31,7 @@ in
       flameshot
       jetbrains-toolbox
       okular
+      setup-devenv
     ])
     ++ (with pkgs; [
       #~ fonts ~#

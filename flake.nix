@@ -118,7 +118,10 @@
           pre-commit.settings.hooks = {
             nixfmt.enable = true;
             nil.enable = true;
-            deadnix.enable = true;
+            deadnix = {
+              enable = true;
+              excludes = [ "^packages/setup-devenv/templates/.*" ];
+            };
             statix.enable = true;
             check-sops = {
               enable = true;

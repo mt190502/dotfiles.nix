@@ -1,0 +1,16 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "Project",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "bun run src/main.ts",
+        "test": "bun test"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "prettier": "^3.5.3",
+        "typescript": "^5.8.3"
+    }
+}

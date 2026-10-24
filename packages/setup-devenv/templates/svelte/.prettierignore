@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.svelte-kit
+pnpm-lock.yaml
+bun.lock
+bun.lockb
+package-lock.json
+yarn.lock
+.gitignore

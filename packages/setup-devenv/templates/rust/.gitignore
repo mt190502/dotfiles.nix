@@ -1,0 +1,52 @@
+# Shell & Environment
+**/.bash*
+**/.direnv
+**/.envrc
+**/.zcompdump*
+**/.zsh*
+
+# IDE & Editor
+**/.idea
+**/.vscode
+
+# Configuration files
+**/config*
+!**/config/*-example.yml
+
+# Database & Logs
+**/*.db
+**/*.log
+**/logs
+
+# Process files & Temporary
+**/*.pid
+**/*.pid.lock
+**/*.seed
+**/*.tmp
+**/pids
+
+# Caches & Package manager
+**/.cache
+
+# Node modules & build artifacts
+**/build
+**/dist
+**/out
+**/result
+**/target
+
+# Libraries
+**/*.a
+**/*.la
+**/*.lib
+**/*.lo
+
+# Shared objects (inc. Windows DLLs)
+**/*.dll
+**/*.dylib
+**/*.so
+**/*.so.*
+
+# Miscellaneous
+**/TODO.md
+

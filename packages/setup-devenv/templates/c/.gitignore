@@ -1,0 +1,93 @@
+# Shell & Environment
+**/.bash*
+**/.direnv
+**/.envrc
+**/.zcompdump*
+**/.zsh*
+
+# IDE & Editor
+**/.idea
+**/.vscode
+
+# Configuration files
+**/config*
+!**/config/*-example.yml
+
+# Database & Logs
+**/*.db
+**/*.log
+**/logs
+
+# Process files & Temporary
+**/*.pid
+**/*.pid.lock
+**/*.seed
+**/*.tmp
+**/pids
+
+# Caches & Package manager
+**/.cache
+
+# Node modules & build artifacts
+**/build
+**/obj
+**/dist
+**/out
+**/result
+**/target
+
+# Prerequisites
+**/*.d
+
+# Object files
+**/*.elf
+**/*.ko
+**/*.o
+**/*.obj
+
+# Linker output
+**/*.exp
+**/*.ilk
+**/*.map
+
+# Precompiled Headers
+**/*.gch
+**/*.pch
+
+# Libraries
+**/*.a
+**/*.la
+**/*.lib
+**/*.lo
+
+# Shared objects (inc. Windows DLLs)
+**/*.dll
+**/*.dylib
+**/*.so
+**/*.so.*
+
+# Executables
+**/*.app
+**/*.exe
+**/*.hex
+**/*.i*86
+**/*.out
+**/*.x86_64
+
+# Debug files
+**/*.dSYM/
+**/*.idb
+**/*.pdb
+**/*.su
+
+# Kernel Module Compile Results
+**/.tmp_versions/
+**/*.cmd
+**/*.mod*
+**/dkms.conf
+**/Mkfile.old
+**/Module.symvers
+**/modules.order
+
+# Miscellaneous
+**/TODO.md

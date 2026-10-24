@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "composite": true,
+        "downlevelIteration": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["ES5", "ES6", "ES2024"],
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "paths": {
+            "@config/*": ["./config/*"],
+            "@src/*": ["./src/*"],
+            "*": ["./node_modules/*"]
+        },
+        "strict": true,
+        "target": "ES2024",
+        "types": ["bun"],
+        "skipLibCheck": true
+    },
+    "compileOnSave": true,
+    "exclude": ["node_modules/**", "dist"],
+    "include": ["./src/**/*"]
+}
