@@ -416,8 +416,8 @@ in
           effort = lib.mkDefault "high";
         };
         python = {
-          executable = "python3";
-          uv = "${pkgs.uv}/bin/uv";
+          executable = "${lib.getExe pkgs.python3}";
+          uv = "${lib.getExe pkgs.uv}";
           verify = false;
         };
         tools = {
