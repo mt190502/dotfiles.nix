@@ -6,16 +6,17 @@
   ...
 }:
 
+let
+  op = osConfig != null && (osConfig.programs._1password-gui.enable or false);
+in
 {
   programs.git = {
     enable = true;
     settings = {
-      commit.gpgsign = true;
+      commit.gpgsign = lib.mkDefault op;
       gpg = {
         format = "ssh";
-        "ssh".program = lib.mkIf (osConfig != null) (
-          lib.getExe' osConfig.programs._1password-gui.package "op-ssh-sign"
-        );
+        "ssh".program = lib.mkIf op (lib.getExe' osConfig.programs._1password-gui.package "op-ssh-sign");
       };
     };
   };
