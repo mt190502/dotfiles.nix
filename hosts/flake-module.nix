@@ -55,7 +55,7 @@ let
         (cfg.profiles or [ ]) ++ defaultNixosProfiles
       );
       moduleConfigs = map (m: inputs.self.nixosModules.${m} or { }) (
-        (cfg.modules or [ ]) ++ defaultNixosModules
+        lib.unique ((cfg.modules or [ ]) ++ defaultNixosModules)
       );
       homeModules = map (m: inputs.self.homeModules.${m} or { }) defaultHomeModules;
       hostConfig = {
