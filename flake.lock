@@ -1190,14 +1190,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1792846621,
-        "narHash": "sha256-+QALlVBdugiZ+mBuyG2alJlflHilHrucHNTsaGT5XYI=",
-        "path": "/home/taha/Projects/yazi-agent",
-        "type": "path"
+        "lastModified": 1792788115,
+        "narHash": "sha256-X7lxT/UHXzOG6VInyLyANvrsSm48bSgxC19SaGleWM4=",
+        "ref": "refs/heads/main",
+        "rev": "20d73da480af6c94bc0de33c4caf15f6c04d86c8",
+        "revCount": 1173,
+        "type": "git",
+        "url": "https://src.krea.to/kreato/yazi"
       },
       "original": {
-        "path": "/home/taha/Projects/yazi-agent",
-        "type": "path"
+        "type": "git",
+        "url": "https://src.krea.to/kreato/yazi"
       }
     },
     "zmem": {

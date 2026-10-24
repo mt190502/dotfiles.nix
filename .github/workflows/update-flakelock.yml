@@ -22,7 +22,10 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Update flake.lock
-        run: nix flake update
+        run: |
+          inputs=$(nix flake metadata --json | jq -r '.locks.nodes.root.inputs | keys[]' | grep -v -- '-unstable$' || true)
+          echo "Updating: $inputs"
+          nix flake update $inputs
 
       - name: Commit and push changes
         run: |
