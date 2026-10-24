@@ -42,7 +42,6 @@ in
       lsd
       mpc
       pipes-rs
-      r2modman
       rclone
       ripgrep-all
       rsync
