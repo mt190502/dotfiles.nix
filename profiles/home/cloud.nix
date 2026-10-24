@@ -16,7 +16,6 @@ let
       gke-gcloud-auth-plugin
     ]
   );
-  inherit (pkgs) ansible;
 in
 rec {
   ########################################
@@ -26,13 +25,11 @@ rec {
   ########################################
   home.packages =
     (with pkgs-unstable; [
-      cilium-cli
       dive
       lefthook
       talosctl
     ])
     ++ (with pkgs; [
-      ansible
       awscli2
       eks-node-viewer
       gke-plugins
@@ -220,8 +217,8 @@ rec {
       };
     };
     shellAliases = {
-      a = lib.getExe' pkgs.ansible "ansible";
-      ap = "clear; ${lib.getExe' pkgs.ansible "ansible-playbook"}";
+      # a = "ansible";
+      # ap = "clear; ansible-playbook";
       d = "docker";
     };
     shellInit = ''
