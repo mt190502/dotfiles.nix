@@ -116,9 +116,15 @@
       ];
     };
   };
-  services.fstrim = {
-    enable = true;
-    interval = "weekly";
+  services = {
+    fstrim = {
+      enable = true;
+      interval = "weekly";
+    };
+    scx = {
+      enable = lib.mkDefault true;
+      scheduler = lib.mkDefault "scx_bpfland";
+    };
   };
   time = {
     hardwareClockInLocalTime = false;

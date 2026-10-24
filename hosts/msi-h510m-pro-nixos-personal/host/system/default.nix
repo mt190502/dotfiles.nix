@@ -21,5 +21,6 @@
       ];
     };
   };
+  services.scx.scheduler = "scx_lavd";
   xdg.autostart.enable = true;
 }

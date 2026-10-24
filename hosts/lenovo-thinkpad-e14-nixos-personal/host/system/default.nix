@@ -9,6 +9,10 @@
         driver = pkgs.libfprint-2-tod1-elan;
       };
     };
+    scx = {
+      scheduler = "scx_lavd";
+      extraArgs = [ "--autopower" ];
+    };
     tlp.settings = {
       PCIE_ASPM_ON_BAT = "powersave";
       PLATFORM_PROFILE_ON_BAT = lib.mkForce "low-power";
