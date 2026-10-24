@@ -7,6 +7,9 @@
       buildInputs = old.buildInputs ++ [ pkgs.libayatana-appindicator ];
     });
   };
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.package = pkgs.qemu_kvm;
+  };
   virtualisation.spiceUSBRedirection.enable = true;
 }
