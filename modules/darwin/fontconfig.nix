@@ -10,7 +10,6 @@
     jetbrains-mono
     meslo-lgs-nf
     nerd-fonts.droid-sans-mono
-    nerd-fonts.iosevka
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif

@@ -10,7 +10,6 @@
         corefonts
         eb-garamond
         msfonts
-        sf-pro-nerd
         sf-mono
         vista-fonts
         vista-fonts-chs
