@@ -20,6 +20,7 @@
   };
   programs.nixvim = {
     enable = true;
+    nixpkgs.source = inputs.nixpkgs.outPath;
     colorschemes.catppuccin = {
       enable = true;
       settings = {
