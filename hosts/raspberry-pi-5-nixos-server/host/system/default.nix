@@ -2,6 +2,7 @@
 
 {
   services = {
+    scx.enable = false;
     k3s = {
       package = pkgs-unstable.k3s;
       nodeName = "srv-dev.mtaha.dev";
