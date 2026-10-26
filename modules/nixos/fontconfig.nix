@@ -9,6 +9,7 @@
       [
         corefonts
         eb-garamond
+        iosevka-nerd-font
         msfonts
         sf-mono
         vista-fonts
