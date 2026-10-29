@@ -17,8 +17,9 @@
     nfs.server = {
       enable = true;
       exports = ''
-        /mnt/ssd/nfs/win   192.168.1.51/32(rw,no_subtree_check,no_root_squash)
-        /mnt/ssd/nfs       192.168.1.50/32(rw,no_subtree_check,anonuid=1000,anongid=1000)
+        /mnt/ssd/nfs/win         192.168.1.51/32(rw,no_subtree_check,no_root_squash)
+        /mnt/ssd/nfs             192.168.1.50/32(rw,no_subtree_check,anonuid=1000,anongid=1000)
+        /mnt/ssd/data/torrenting 192.168.1.50/32(rw,no_subtree_check,anonuid=1000,anongid=1000)
       '';
     };
   };

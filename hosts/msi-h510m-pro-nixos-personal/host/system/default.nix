@@ -10,6 +10,16 @@
         "x-systemd.automount"
       ];
     };
+    "/mnt/torrenting" = {
+      device = "192.168.1.200:/mnt/ssd/data/torrenting";
+      fsType = "nfs";
+      options = [
+        "nfsvers=4"
+        "noauto"
+        "nofail"
+        "x-systemd.automount"
+      ];
+    };
     "/mnt/nfs" = {
       device = "192.168.1.200:/mnt/ssd/nfs";
       fsType = "nfs";

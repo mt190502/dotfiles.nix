@@ -10,6 +10,7 @@
     "clevis"
     "initrd-tools"
     "lanzaboote"
+    "qbittorrent"
     "syncthing"
   ];
   profiles = [
