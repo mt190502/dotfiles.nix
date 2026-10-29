@@ -131,6 +131,21 @@ in
     ########################################
     anki = {
       enable = true;
+      package = pkgs.anki.overrideAttrs (
+        finalAttrs: oldAttrs: {
+          env = (oldAttrs.env or { }) // {
+            SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+          };
+          passthru = (oldAttrs.passthru or { }) // {
+            withAddons =
+              ankiAddons:
+              pkgs.callPackage "${pkgs.path}/pkgs/by-name/an/anki/with-addons.nix" {
+                anki = finalAttrs.finalPackage;
+                inherit ankiAddons;
+              };
+          };
+        }
+      );
       language = "en_US";
       answerKeys = [
         {
