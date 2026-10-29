@@ -26,6 +26,7 @@
       # C / C++
       clang-tools
       # Go
+      go
       gopls
       # Nix
       nixd
