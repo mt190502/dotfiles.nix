@@ -35,6 +35,7 @@ let
                         "SentTr"
                         "SentAudio"
                         "Image"
+                        "Notes"
                       ]
                     },
                     cardTemplates=[{
@@ -42,6 +43,14 @@ let
                         "Front": "{{SentEng}}",
                         "Back": "{{SentTr}}<br>{{SentAudio}}<br>{{Image}}",
                     }],
+                )
+            fields = _anki_connect("modelFieldNames", modelName="English sentences")
+            if "Notes" not in (fields.get("result") or []):
+                _anki_connect(
+                    "modelFieldAdd",
+                    modelName="English sentences",
+                    fieldName="Notes",
+                    index=len(fields.get("result") or []),
                 )
         except Exception as e:
             print(f"mpvacious-bootstrap: failed: {e}")

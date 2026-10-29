@@ -8,6 +8,7 @@
 let
   home = config.home.homeDirectory;
   inherit (pkgs.stdenv.hostPlatform) system;
+  hasLexipop = config.programs ? lexipop && config.programs.lexipop.enable;
 in
 {
   programs.mpv = {
@@ -18,6 +19,10 @@ in
       "Shift+s" = "cycle secondary-sid";
       "Shift+z" = "add secondary-sub-delay -0.1";
       "Shift+x" = "add secondary-sub-delay +0.1";
+    }
+    // lib.optionalAttrs hasLexipop {
+      "Ctrl+l" =
+        ''set pause yes; run "${lib.getExe config.programs.lexipop.package}" show --source mpv "--text=''${sub-text}"'';
     };
     config = {
       #################################################
@@ -184,7 +189,7 @@ in
       #~ Remove all spaces from the primary subtitle text.
       #~ Set this to "yes" for languages without spaces like Japanese.
       #~ However, if mpvacious detects any latin characters in the string, spaces will not be removed.
-      nuke_spaces = "yes";
+      nuke_spaces = "no";
 
       #~ if set to `yes`, the volume of the outputted audio file
       #~ depends on the volume of the player at the time of export
@@ -320,7 +325,7 @@ in
 
       #~ Set a pad to the dialog timings. 0.5 = half a second.
       #~ Pads are never applied to manually set timings.
-      audio_padding = "0.0";
+      audio_padding = "0.12";
       #audio_padding=0.5
 
       #################################################
@@ -364,7 +369,7 @@ in
 
       #~ Language of secondary subs. This is your native language or a language you know well.
       #~ If you leave this parameter empty, secondary subs will NOT be automatically loaded.
-      secondary_sub_lang = "eng,en,tr,trTR";
+      secondary_sub_lang = "tr,trTR,tur";
       #secondary_sub_lang=
 
       #~ Hover area.
@@ -412,4 +417,45 @@ in
       #mpv_audio_args=--af-append=silenceremove=1:0:-50dB
     };
   };
+
+  #~ The movie archive stores subtitles as `en.srt`/`tr.srt` next to `video.mp4`
+  #~ (~/Videos/Movies/<Title>/S1E1/). mpv cannot guess a language from such a
+  #~ name (track lang = nil), so `slang` and mpvacious' secondary_sub_lang never
+  #~ match: pick English as the primary and Turkish as the secondary track by
+  #~ file name before track selection.
+  xdg.configFile."mpv/scripts/archive-subs.lua".text = ''
+    local mp = require("mp")
+    local primary = { en = true, eng = true }
+    local secondary = { tr = true, tur = true }
+
+    local function name_lang(track)
+      local path = track["external-filename"]
+      if not track.external or not path then
+        return nil
+      end
+      local stem = path:match("([^/]+)%.[^./]+$")
+      return stem and stem:lower() or nil
+    end
+
+    mp.add_hook("on_preloaded", 50, function()
+      local sid, secondary_sid
+      for _, track in ipairs(mp.get_property_native("track-list") or {}) do
+        if track.type == "sub" then
+          local lang = name_lang(track)
+          if lang and primary[lang] and not sid then
+            sid = track.id
+          end
+          if lang and secondary[lang] and not secondary_sid then
+            secondary_sid = track.id
+          end
+        end
+      end
+      if sid then
+        mp.set_property_native("sid", sid)
+      end
+      if secondary_sid then
+        mp.set_property_native("secondary-sid", secondary_sid)
+      end
+    end)
+  '';
 }

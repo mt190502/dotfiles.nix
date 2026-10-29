@@ -11,6 +11,7 @@ Commands:
       classify    classify a text as word or sentence
       save        translate (unless given) and add an Anki note
       ocr         OCR a screen region and feed it to the popup/editor
+      show        show a given text in the daemon popup (editor if none)
 
 Exit codes: 0 ok, 1 runtime error, 2 usage error.  ``--json`` prints a single
 JSON object on stdout.
@@ -154,6 +155,28 @@ def cmd_ocr(cfg: config_module.Config, args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def cmd_show(cfg: config_module.Config, args: argparse.Namespace) -> int:
+    """Show a given text in the running daemon's popup, like a selection.
+
+    Meant for programs that cannot set the primary selection, e.g. an mpv key
+    binding that passes the current subtitle line.  Line breaks are joined so
+    a two-line subtitle becomes one sentence.  When no daemon answers, the
+    editor window opens with the text (same fallback as ``ocr``).
+    """
+    from . import ocr as ocr_module
+
+    text = " ".join((args.text or "").split())
+    if not text:
+        print("lexipop: nothing to show (empty text)", file=sys.stderr)
+        return EXIT_ERROR
+
+    if not ocr_module.deliver_to_daemon(text, source=args.source):
+        from .app import run_editor
+
+        return int(run_editor(cfg, text=text, lang=None, kind=None))
+    return EXIT_OK
+
+
 def cmd_save(cfg: config_module.Config, args: argparse.Namespace) -> int:
     """Translate (unless provided) and add one Anki note."""
     from . import anki as anki_module
@@ -216,10 +239,13 @@ _HANDLERS = {
     "classify": cmd_classify,
     "save": cmd_save,
     "ocr": cmd_ocr,
+    "show": cmd_show,
 }
 
 #: Commands that need a loaded config; ``version`` must work without one.
-_CONFIG_COMMANDS = frozenset({"daemon", "editor", "translate", "classify", "save", "ocr"})
+_CONFIG_COMMANDS = frozenset(
+    {"daemon", "editor", "translate", "classify", "save", "ocr", "show"}
+)
 
 
 # --------------------------------------------------------------------------
@@ -307,6 +333,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="print the recognised text on stdout and do not contact the daemon",
     )
     _add_json(ocr)
+
+    show = subparsers.add_parser(
+        "show", help="show a text in the running daemon's popup (editor if none)"
+    )
+    show.add_argument("--text", required=True, help="text to show")
+    show.add_argument(
+        "--source",
+        default="external",
+        help="label written to the daemon log (default: external)",
+    )
 
     return parser
 
