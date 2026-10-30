@@ -857,11 +857,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793174968,
-        "narHash": "sha256-u5nUf4cewaT36iIzG1s/VECktqUMiZaGF5BsgervsvQ=",
+        "lastModified": 1793261817,
+        "narHash": "sha256-fAvtOccUXHVAH5wXK+ABYUUC47W2qTb9T9EefLcS9ME=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "19ecdd08213836b36c4296a3a4f4af5a3d5308db",
+        "rev": "afcefd09c71e63663a46e4ce5e09968584f2c709",
         "type": "github"
       },
       "original": {
@@ -1190,11 +1190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793220476,
-        "narHash": "sha256-SxQYze/qafgHBZPX5d5ASACPY5ScSVtgpX7aY8t9RT8=",
+        "lastModified": 1793312419,
+        "narHash": "sha256-N+LX225s2oHe4ugb/E+LFqKtLhKKSGqZctBkN8129lE=",
         "ref": "refs/heads/main",
-        "rev": "0fa8e9409cbd8d74bf652a19041c6b2439623047",
-        "revCount": 1397,
+        "rev": "27c4bd182f8e954e5bc6f97eaa25963fa2edeaee",
+        "revCount": 1428,
         "type": "git",
         "url": "https://src.krea.to/kreato/yazi"
       },
