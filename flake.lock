@@ -1190,11 +1190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793312419,
-        "narHash": "sha256-N+LX225s2oHe4ugb/E+LFqKtLhKKSGqZctBkN8129lE=",
+        "lastModified": 1793345098,
+        "narHash": "sha256-p7AttvCzESXAmaGp5XmemnFt9hO7otqTDYyqlEXd2Tk=",
         "ref": "refs/heads/main",
-        "rev": "27c4bd182f8e954e5bc6f97eaa25963fa2edeaee",
-        "revCount": 1428,
+        "rev": "c40c9a95c65eda07e67e23a373b49991cc3750ef",
+        "revCount": 1437,
         "type": "git",
         "url": "https://src.krea.to/kreato/yazi"
       },

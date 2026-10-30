@@ -11,7 +11,6 @@
 let
   inherit (lib) getExe getExe';
   fastfetch = getExe config.programs.fastfetch.package;
-  bunx = getExe' pkgs.bun "bunx";
   gh = getExe pkgs.gh;
   git = getExe pkgs.git;
   grc = getExe pkgs.grc;
@@ -117,7 +116,6 @@ in
           echo "Aborted."
         end
       '';
-      tokscale = "${bunx} tokscale@latest";
       ufshell = "NIXPKGS_ALLOW_UNFREE=1 nix shell --impure nixpkgs#$argv";
       watchdiff = ''
         if test (count $argv) -lt 1

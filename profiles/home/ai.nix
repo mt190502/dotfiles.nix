@@ -106,6 +106,10 @@ in
     inputs.self.homeModules.work-mcp
   ];
 
+  home.packages = [
+    inputs.yazi-agent.packages.${pkgs.stdenv.hostPlatform.system}.tokscale
+  ];
+
   programs = {
     ########################################
     #
@@ -410,6 +414,7 @@ in
         socketPath = "${config.xdg.stateHome}/yazi-agent/daemon-v2.sock";
         startOnFirstPrompt = true;
         rememberLastSelection = true;
+        theme = lib.mkIf (config.lib ? stylix) "stylix";
         provider = {
           id = "nanogpt";
           model = lib.mkDefault "z-ai/glm-5.3-flash";
@@ -454,6 +459,28 @@ in
         packages = [ ];
         plugins = { };
       };
+      themes = lib.mkIf (config.lib ? stylix) (
+        with config.lib.stylix.colors.withHashtag;
+        {
+          stylix = {
+            name = "Stylix";
+            palette = {
+              background = base00;
+              surface = base01;
+              overlay = base02;
+              foreground = base05;
+              muted = base04;
+              dim = base03;
+              border = base03;
+              accent = base0D;
+              success = base0B;
+              warning = base0A;
+              error = base08;
+              info = base0C;
+            };
+          };
+        }
+      );
       skills.main = "${config.home.homeDirectory}/.config/opencode/skills";
       providers = { };
       mcps = {
