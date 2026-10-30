@@ -409,11 +409,12 @@ in
       enable = true;
       settings = {
         configDir = "${config.home.homeDirectory}/.config/yazi-agent";
-        stateDir = "${config.xdg.stateHome}/yazi-agent";
         databasePath = "${config.xdg.stateHome}/yazi-agent/agent.db";
-        socketPath = "${config.xdg.stateHome}/yazi-agent/daemon-v2.sock";
-        startOnFirstPrompt = true;
         rememberLastSelection = true;
+        socketPath = "${config.xdg.stateHome}/yazi-agent/daemon-v2.sock";
+        speed = true;
+        startOnFirstPrompt = true;
+        stateDir = "${config.xdg.stateHome}/yazi-agent";
         theme = lib.mkIf (config.lib ? stylix) "stylix";
         provider = {
           id = "nanogpt";
