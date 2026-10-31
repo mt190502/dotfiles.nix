@@ -68,7 +68,8 @@
       "datasourceTemplate": "git-refs",
       "packageNameTemplate": "https://github.com/raycast/extensions",
       "currentValueTemplate": "main",
-      "depNameTemplate": "raycast/extensions"
+      "depNameTemplate": "raycast/extensions",
+      "description": "Commit-hash (digest) updates run weekly, since git-refs cannot do age-based checks"
     },
     {
       "customType": "regex",
@@ -77,7 +78,15 @@
         "fetchGit\\s*\\{[\\s\\S]*?url\\s*=\\s*\"(?<packageName>[^\"]+)\";\\s*rev\\s*=\\s*\"(?<currentDigest>[a-f0-9]+)\";\\s*ref\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
       "datasourceTemplate": "git-refs",
-      "depNameTemplate": "{{{packageName}}}"
+      "depNameTemplate": "{{{packageName}}}",
+      "description": "Commit-hash (digest) updates run weekly, since git-refs cannot do age-based checks"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Hash (digest) updates from git-refs run weekly on Sundays: the git-refs datasource has no release timestamps, so minimumReleaseAge cannot age-gate them",
+      "matchDatasources": [ "git-refs" ],
+      "schedule": [ "on sunday" ]
     }
   ]
 }
