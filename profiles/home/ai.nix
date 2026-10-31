@@ -11,6 +11,7 @@
 }:
 
 let
+  colors = import "${inputs.self}/lib/colors.nix" { inherit lib; };
   commonContext = ''
     # NixOS Environment
 
@@ -478,6 +479,13 @@ in
               warning = base0A;
               error = base08;
               info = base0C;
+            };
+            colors = {
+              userMessageBg = base01;
+              toolPendingBg = colors.blend 0.4 base01 base02;
+              toolSuccessBg = colors.blend 0.4 base01 base02;
+              toolErrorBg = colors.blend 0.4 base01 base02;
+              toolPanelBg = colors.blend 0.4 base01 base02;
             };
           };
         }
