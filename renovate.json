@@ -86,7 +86,7 @@
     {
       "description": "Hash (digest) updates from git-refs run weekly on Sundays: the git-refs datasource has no release timestamps, so minimumReleaseAge cannot age-gate them",
       "matchDatasources": [ "git-refs" ],
-      "schedule": [ "on sunday" ]
+      "schedule": [ "* 0 * * SUN" ]
     }
   ]
 }
