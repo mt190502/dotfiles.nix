@@ -307,7 +307,7 @@ in
       srm = "${trash} -i";
       sysclean = lib.mkDefault (
         if isDarwin then
-          "nix-collect-garbage -d"
+          "nix-collect-garbage -d && sudo nix-collect-garbage -d"
         else
           "nix-collect-garbage -d && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot"
       );
