@@ -142,6 +142,9 @@ in
           exa = {
             type = "http";
             url = "https://mcp.exa.ai/mcp";
+            headers = {
+              "x-api-key" = "__EXA_API_KEY__";
+            };
           };
           roberto = {
             type = "http";
@@ -158,6 +161,7 @@ in
       };
       substitutions = {
         __ROBERTO_TOKEN__ = config.sops.secrets."roberto".path;
+        __EXA_API_KEY__ = config.sops.secrets."exa".path;
       };
       keybindings = {
         "tui.editor.cursorLeft" = [
@@ -504,6 +508,7 @@ in
         exa = {
           transport = "http";
           endpoint = "https://mcp.exa.ai/mcp";
+          tokenFile = config.sops.secrets."exa".path;
         };
         roberto = {
           transport = "http";
@@ -640,6 +645,9 @@ in
           exa = {
             type = "remote";
             url = "https://mcp.exa.ai/mcp";
+            headers = {
+              "x-api-key" = "{file:${config.sops.secrets."exa".path}}";
+            };
           };
           roberto = {
             type = "remote";
