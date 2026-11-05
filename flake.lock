@@ -857,11 +857,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793697474,
-        "narHash": "sha256-KgJnMIR0ltd7pMcpDWn5q40bzmC7xtlb71clPFNUu+Y=",
+        "lastModified": 1793782363,
+        "narHash": "sha256-5Vod7vKm10hOilQvEhTwXbhBE+V0ZqXH0jBQJhkX3KQ=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "fb3eee9d296214ebbcc53921f34e80bb4166e859",
+        "rev": "7fcafdf6f0761462d68012aba6a627be3f008d68",
         "type": "github"
       },
       "original": {
@@ -1167,11 +1167,11 @@
         "vicinae": "vicinae"
       },
       "locked": {
-        "lastModified": 1791891664,
-        "narHash": "sha256-kc51qTJKEnSiiN4mAkoXHkjq8In28rPHbW4+Hm9CLWY=",
+        "lastModified": 1793810868,
+        "narHash": "sha256-UR269g8GwB5jywGcxqViVscjl8gtvRO9XjtCoGnUbSs=",
         "owner": "vicinaehq",
         "repo": "extensions",
-        "rev": "0e3953058fb787d2a96e5ac0cec462440c07cd07",
+        "rev": "181904331f5289b53ee3443f98cfa5441d399f35",
         "type": "github"
       },
       "original": {
@@ -1190,11 +1190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793638425,
-        "narHash": "sha256-opg5cUHyd9/Uqm+roibA8GeDqr3jimlyNWSanQHRFs0=",
+        "lastModified": 1793834498,
+        "narHash": "sha256-5KZyS3vejUrqIdyYyuy5+WN1LGH8Bl+ag0eituWz0XE=",
         "ref": "refs/heads/main",
-        "rev": "7b24c31329bb0127e0107b19df115a2982abe467",
-        "revCount": 1493,
+        "rev": "e990cd68d8aafa93ec919df18f4e777f60476736",
+        "revCount": 1517,
         "type": "git",
         "url": "https://src.krea.to/kreato/yazi"
       },
