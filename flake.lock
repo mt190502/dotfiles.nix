@@ -16,11 +16,11 @@
         "sf-pro": "sf-pro"
       },
       "locked": {
-        "lastModified": 1789419105,
-        "narHash": "sha256-T5A/AqlF4iL908aIZh45e35Mvj8lTJKq8ddS5bk7nd8=",
+        "lastModified": 1793889225,
+        "narHash": "sha256-Fjj4Xtklbx6ki5/O+WgiKbJrm+wsI9lVUVNo7OKXsAo=",
         "owner": "Lyndeno",
         "repo": "apple-fonts.nix",
-        "rev": "3861e2249cb244bfbc7cfab2303c152cf5f9d9e9",
+        "rev": "58b7ab5a049c57c4f38f27eac84f45e2903bb687",
         "type": "github"
       },
       "original": {
@@ -857,11 +857,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793782363,
-        "narHash": "sha256-5Vod7vKm10hOilQvEhTwXbhBE+V0ZqXH0jBQJhkX3KQ=",
+        "lastModified": 1793870170,
+        "narHash": "sha256-0psEeQjs1g9oWQ6eVVGlCom+X3/uHyr6jSMyHVU57u8=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "7fcafdf6f0761462d68012aba6a627be3f008d68",
+        "rev": "19e0e6c951a7a8a7d3232c64e58d26b89df44c60",
         "type": "github"
       },
       "original": {
@@ -897,7 +897,7 @@
     "sf-compact": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-KjCzuJOrNxgptsMLGaR8wcrU/bBxCpwtUGzGDcCxJTc=",
+        "narHash": "sha256-5qI/CsQ4O06tlYKVCw6DDukYEeaWdB6iO6un0XUqTkw=",
         "type": "file",
         "url": "https://devimages-cdn.apple.com/design/resources/download/SF-Compact.dmg"
       },
@@ -945,7 +945,7 @@
     "sf-pro": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-dvGLO786y9ygKRSKDJlhIF6AGmn2NTJ5tBulKinPRxY=",
+        "narHash": "sha256-vDM+4k+glslI427ijDZNXR+5zEfve8FhR1/IiTVNlRQ=",
         "type": "file",
         "url": "https://devimages-cdn.apple.com/design/resources/download/SF-Pro.dmg"
       },
@@ -1190,11 +1190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793834498,
-        "narHash": "sha256-5KZyS3vejUrqIdyYyuy5+WN1LGH8Bl+ag0eituWz0XE=",
+        "lastModified": 1793925278,
+        "narHash": "sha256-1qSExqGixoQJ+K128mjH0AN90VSPNKjMbXBEDuRytUY=",
         "ref": "refs/heads/main",
-        "rev": "e990cd68d8aafa93ec919df18f4e777f60476736",
-        "revCount": 1517,
+        "rev": "2c0ab5cb93d948998ab680fdf6e5b95ef0d0075b",
+        "revCount": 1577,
         "type": "git",
         "url": "https://src.krea.to/kreato/yazi"
       },
@@ -1210,11 +1210,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793687249,
-        "narHash": "sha256-ggnagqEuojDCC10qqRD8OnhEQjqEYTWPfLnNkbgiWj0=",
+        "lastModified": 1793859937,
+        "narHash": "sha256-ci3rmblkJ5ZavnPzJrXQDwqFP6bw+N6o5WhoAwwSSxE=",
         "owner": "xeome",
         "repo": "zmem",
-        "rev": "e7a5ccc887287475e062d018f77a6963a9ff152c",
+        "rev": "b2bf96689640bb2f5dbfd542f2e3aa1f44ffde46",
         "type": "github"
       },
       "original": {
