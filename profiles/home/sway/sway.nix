@@ -49,7 +49,7 @@ let
   playerctl = getExe pkgs.playerctl;
   swayidle = getExe pkgs.swayidle;
   swaymsg = getExe' pkgs.sway "swaymsg";
-  tmux = getExe pkgs.tmux;
+  tmux = getExe config.programs.tmux.package;
   vicinae = getExe pkgs-unstable.vicinae;
   wl-copy = getExe' pkgs.wl-clipboard "wl-copy";
   wlsunset = getExe pkgs.wlsunset;

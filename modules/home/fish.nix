@@ -340,7 +340,9 @@ in
       #### Fish Variables
       #################################################
       set fish_greeting ""
-      export TERM="xterm-256color"
+      if not set -q TERM; or test "$TERM" = dumb
+        set -gx TERM xterm-256color
+      end
 
       #################################################
       #### Home specific fish variables

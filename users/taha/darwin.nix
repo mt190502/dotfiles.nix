@@ -51,7 +51,6 @@ rec {
         cloud
         development
         neovim
-        tmux
       ]);
     };
   };

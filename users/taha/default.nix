@@ -47,7 +47,6 @@ in
       rsync
       scrcpy
       tesseract
-      tmux
       translate-shell
       trash-cli
       tree

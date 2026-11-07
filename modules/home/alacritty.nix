@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -30,7 +29,7 @@
             style = "Bold Italic";
           };
         };
-        terminal.shell.program = lib.getExe' pkgs.tmux "tmux";
+        terminal.shell.program = lib.getExe' config.programs.tmux.package "tmux";
         window.dynamic_title = true;
       };
     };

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs-unstable, ... }:
 
 let
   home = config.home.homeDirectory;
@@ -12,6 +12,7 @@ in
     historyLimit = 30000;
     keyMode = "vi";
     mouse = true;
+    package = pkgs-unstable.tmux;
     prefix = "C-b";
     sensibleOnTop = false;
     terminal = "xterm";
@@ -40,6 +41,7 @@ in
       set -s  extended-keys       on
       set -s  focus-events        on
       set -as terminal-features  'xterm*:extkeys'
+      set -as terminal-features  'foot*:sixel'
 
       #~ window-based settings
       setw -g xterm-keys          on
