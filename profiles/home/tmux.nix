@@ -1,4 +1,4 @@
-{ config, pkgs-unstable, ... }:
+{ config, ... }:
 
 let
   home = config.home.homeDirectory;
@@ -12,7 +12,6 @@ in
     historyLimit = 30000;
     keyMode = "vi";
     mouse = true;
-    package = pkgs-unstable.tmux;
     prefix = "C-b";
     sensibleOnTop = false;
     terminal = "xterm";
