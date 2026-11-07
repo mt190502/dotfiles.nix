@@ -23,4 +23,5 @@ in
       "--advertise-tags=${tags}"
     ];
   };
+  services.resolved.settings.Resolve.DNS = lib.mkBefore [ "100.100.100.100" ];
 }

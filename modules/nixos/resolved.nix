@@ -6,8 +6,7 @@
         "1.1.1.1"
         "9.9.9.9"
       ];
-      DNSOverTLS = "true";
-      DNSStubListener = "no";
+      DNSOverTLS = "opportunistic";
     };
   };
 }
