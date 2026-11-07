@@ -97,6 +97,19 @@ let
     - any activation, restart, deployment, or manual verification still required.
 
     If the task is blocked, state the exact blocker and the smallest next action instead of guessing.
+
+    # Subagent Model Selection
+
+    This policy is mandatory until further notice. Never run a subagent on a model other than the two listed here.
+
+    - Heavy work (large refactors, multi-file implementation, deep investigation, long test or build runs): use `commandcode/z-ai/glm-5.3-flash`.
+      - Fallback 1: `nanogpt/z-ai/glm-5.3-flash:high`.
+      - Fallback 2: if both are unavailable, list the available models and use another model that serves `glm-5.3-flash`.
+      - Fallback 3: if that is also unavailable, use a DeepSeek model.
+    - Light and fast work (single-file edits, quick lookups, short reviews, summaries): use `commandcode/deepseek/deepseek-v4.1-flash`.
+      - Fallback 1: `nanogpt/deepseek/deepseek-v4.1-flash:high`.
+      - Fallback 2: if both are unavailable, ask the user which model to use and wait for the answer.
+    - Using any other model for subagents is forbidden until a new instruction says otherwise.
   '';
 in
 {
@@ -622,7 +635,7 @@ in
     #
     ########################################
     opencode = {
-      enable = true;
+      enable = false;
       enableMcpIntegration = true;
       package = pkgs-unstable.opencode;
       context = commonContext;
