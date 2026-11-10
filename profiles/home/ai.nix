@@ -534,9 +534,40 @@ in
         };
       };
       keybindings = {
+        "app.agents.delete" = [ "alt+shift+delete" ];
+        "app.agents.new" = [ "alt+shift+n" ];
+        "app.clear" = [
+          "ctrl+c"
+          "alt+shift+q"
+        ];
+        "app.editor.external" = [ "alt+shift+g" ];
+        "app.exit" = [ "alt+shift+x" ];
+        "app.message.moveEarlier" = [ "alt+shift+pageUp" ];
+        "app.message.moveLater" = [ "alt+shift+pageDown" ];
+        "app.model.select" = [ "alt+shift+l" ];
+        "app.prompt.stash" = [ "alt+shift+s" ];
+        "app.tools.expand" = [ "alt+shift+o" ];
+        "app.tree.filter.all" = [ "alt+shift+." ];
+        "app.tree.filter.cycleBackward" = [
+          "shift+ctrl+o"
+          "alt+shift+\\"
+        ];
+        "app.tree.filter.cycleForward" = [ "alt+shift+/" ];
+        "app.tree.filter.default" = [ "alt+shift+7" ];
+        "app.tree.filter.labeledOnly" = [ "alt+shift+," ];
+        "app.tree.filter.noTools" = [ "alt+shift+8" ];
+        "app.tree.filter.userOnly" = [ "alt+shift+9" ];
         "tui.editor.cursorLeft" = [
           "left"
           "alt+shift+b"
+        ];
+        "tui.editor.cursorLineEnd" = [
+          "end"
+          "alt+shift+e"
+        ];
+        "tui.editor.cursorLineStart" = [
+          "home"
+          "alt+shift+a"
         ];
         "tui.editor.cursorRight" = [
           "right"
@@ -552,79 +583,30 @@ in
           "alt+f"
           "alt+shift+right"
         ];
-        "tui.editor.cursorLineStart" = [
-          "home"
-          "alt+shift+a"
-        ];
-        "tui.editor.cursorLineEnd" = [
-          "end"
-          "alt+shift+e"
-        ];
-        "tui.editor.jumpForward" = [ "alt+shift+]" ];
-        "tui.editor.jumpBackward" = [ "alt+shift+[" ];
         "tui.editor.deleteCharForward" = [
           "delete"
           "alt+shift+d"
         ];
+        "tui.editor.deleteToLineEnd" = [ "alt+shift+k" ];
+        "tui.editor.deleteToLineStart" = [ "alt+shift+u" ];
         "tui.editor.deleteWordBackward" = [
           "alt+backspace"
           "alt+shift+w"
         ];
-        "tui.editor.deleteToLineStart" = [ "alt+shift+u" ];
-        "tui.editor.deleteToLineEnd" = [ "alt+shift+k" ];
-        "tui.editor.yank" = [ "alt+shift+y" ];
         "tui.editor.undo" = [ "alt+shift+-" ];
+        "tui.editor.yank" = [ "alt+shift+y" ];
         "tui.input.newLine" = [
           "shift+enter"
           "alt+shift+enter"
         ];
         "tui.input.tab" = [ ];
-        "tui.input.copy" = [ "alt+shift+c" ];
-        "tui.viewport.follow" = [
-          "ctrl+shift+down"
-          "alt+shift+down"
-        ];
         "tui.select.cancel" = [
           "escape"
           "alt+shift+0"
         ];
-        "app.clear" = [
-          "ctrl+c"
-          "alt+shift+q"
-        ];
-        "app.exit" = [ "alt+shift+x" ];
-        "app.suspend" = [ "alt+shift+z" ];
-        "app.model.select" = [ "alt+shift+l" ];
-        "app.tools.expand" = [ "alt+shift+o" ];
-        "app.heartbeats.open" = [ "alt+shift+r" ];
-        "app.editor.external" = [ "alt+shift+g" ];
-        "app.prompt.stash" = [ "alt+shift+s" ];
-        "app.message.moveEarlier" = [ "alt+shift+pageUp" ];
-        "app.message.moveLater" = [ "alt+shift+pageDown" ];
-        "app.clipboard.pasteImage" = [
-          "ctrl+v"
-          "alt+shift+v"
-        ];
-        "app.agents.new" = [ "alt+shift+n" ];
-        "app.agents.delete" = [ "alt+shift+delete" ];
-        "app.agents.program" = [ "alt+shift+1" ];
-        "app.agents.rename" = [ "alt+shift+2" ];
-        "app.agents.reply" = [ "space" ];
-        "app.tree.foldOrUp" = [ "alt+shift+home" ];
-        "app.tree.unfoldOrDown" = [ "alt+shift+end" ];
-        "app.models.save" = [ "alt+shift+3" ];
-        "app.models.enableAll" = [ "alt+shift+4" ];
-        "app.models.clearAll" = [ "alt+shift+5" ];
-        "app.models.toggleProvider" = [ "alt+shift+6" ];
-        "app.tree.filter.default" = [ "alt+shift+7" ];
-        "app.tree.filter.noTools" = [ "alt+shift+8" ];
-        "app.tree.filter.userOnly" = [ "alt+shift+9" ];
-        "app.tree.filter.labeledOnly" = [ "alt+shift+," ];
-        "app.tree.filter.all" = [ "alt+shift+." ];
-        "app.tree.filter.cycleForward" = [ "alt+shift+/" ];
-        "app.tree.filter.cycleBackward" = [
-          "shift+ctrl+o"
-          "alt+shift+\\"
+        "tui.viewport.follow" = [
+          "alt+shift+down"
+          "ctrl+shift+down"
         ];
       };
     };
