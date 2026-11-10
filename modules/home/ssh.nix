@@ -2,6 +2,7 @@
   inputs,
   lib,
   osConfig ? null,
+  pkgs,
   ...
 }:
 
@@ -49,6 +50,7 @@ let
   );
 in
 {
+  home.packages = with pkgs; [ sshpass ];
   programs.ssh = {
     enable = true;
     enableDefaultConfig = lib.mkDefault false;
