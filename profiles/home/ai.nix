@@ -5,6 +5,7 @@
   config,
   inputs,
   lib,
+  osConfig ? null,
   pkgs,
   pkgs-unstable,
   ...
@@ -12,6 +13,7 @@
 
 let
   colors = import "${inputs.self}/lib/colors.nix" { inherit lib; };
+  onePasswordAgentSocket = "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
   commonContext = ''
     # NixOS Environment
 
@@ -425,6 +427,27 @@ in
     ########################################
     yazi-agent = {
       enable = true;
+      package =
+        lib.mkIf
+          (
+            pkgs.stdenv.hostPlatform.isDarwin
+            && lib.any (c: (c.name or c) == "1password") (osConfig.homebrew.casks or [ ])
+          )
+          (
+            with pkgs;
+            symlinkJoin {
+              name = "yazi-agent-1password";
+              paths = [ inputs.yazi-agent.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+              nativeBuildInputs = [ makeWrapper ];
+              postBuild = ''
+                for program in yazi yazi-runtime; do
+                  if [ -x "$out/bin/$program" ]; then
+                    wrapProgram "$out/bin/$program" --run ${lib.escapeShellArg "if [ -S ${lib.escapeShellArg onePasswordAgentSocket} ]; then export SSH_AUTH_SOCK=${lib.escapeShellArg onePasswordAgentSocket}; fi"}
+                  fi
+                done
+              '';
+            }
+          );
       settings = {
         configDir = "${config.home.homeDirectory}/.config/yazi-agent";
         databasePath = "${config.xdg.stateHome}/yazi-agent/agent.db";
