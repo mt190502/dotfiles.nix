@@ -541,11 +541,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794132860,
-        "narHash": "sha256-iGNtQnUZsi+v6/4NbtYr+dsmASa6GkzXtUcTpE8F3mE=",
+        "lastModified": 1794739050,
+        "narHash": "sha256-PCGNIyAydZcdUXCxEXTjrS1+wWS+k9E+ENqBkUK2Mpg=",
         "owner": "nix-community",
         "repo": "nix-index-database",
-        "rev": "af9249ca33bc2efaae5d071e4c67ddef19dcb681",
+        "rev": "9bd074026d6db75b59aae8cd6071b5f2fe27a36c",
         "type": "github"
       },
       "original": {
@@ -857,11 +857,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794646145,
-        "narHash": "sha256-rpqDyUM/d5fACYB8W+wKxxO57ICWjjalzb2X25oFFkY=",
+        "lastModified": 1794733384,
+        "narHash": "sha256-VaXNWDU+9dXckN4BlZbrcYTTd9pIscLeiknbhHX4+lk=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "5b87ee0513c29127a01ad06e9cb362ea5ce91e78",
+        "rev": "67f1944c7c99d8dbb57fa3d83043bc0a92cbcc56",
         "type": "github"
       },
       "original": {
@@ -1190,11 +1190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794424264,
-        "narHash": "sha256-2F1AVlvj5GerwuhpRlDEHOHswQ6VAWTzyrgoMKZ3TPI=",
+        "lastModified": 1794747846,
+        "narHash": "sha256-YqyfPzoKZXtoLl2d5Y8vZA0NqtRgRcAFex4DaQy3xCY=",
         "ref": "refs/heads/main",
-        "rev": "15f9a572dc348607fd994757e5ac2d61c3500b31",
-        "revCount": 1821,
+        "rev": "d5433f75fd5aebfd84ab359bbbf962461c841e03",
+        "revCount": 1829,
         "type": "git",
         "url": "https://src.krea.to/kreato/yazi"
       },
