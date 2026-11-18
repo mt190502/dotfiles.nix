@@ -26,6 +26,11 @@ in
   programs.librewolf = {
     enable = true;
     nativeMessagingHosts = [ _1password-native-messaging-host ];
+    policies.SearchEngines.Remove = [
+      "Bing"
+      "Mojeek"
+      "Startpage"
+    ];
     profiles = {
       main = {
         isDefault = true;
@@ -74,6 +79,192 @@ in
           };
         };
         containersForce = true;
+        search = {
+          force = true;
+          default = "ddg-noai";
+          engines = {
+            ddg = {
+              name = "DuckDuckGo";
+              icon = "https://duckduckgo.com/favicon.ico";
+              definedAliases = [
+                "@d"
+                "@ddg"
+                "@g"
+                "g"
+                "@goog"
+                "goog"
+                "google"
+              ];
+              urls = [
+                {
+                  template = "https://duckduckgo.com/";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            ddg-noai = {
+              name = "DuckDuckGo (No AI)";
+              icon = "https://duckduckgo.com/favicon.ico";
+              definedAliases = [
+                "@dnoai"
+                "@ddgnoai"
+                "@gnoai"
+                "gn"
+                "@goognoai"
+                "googno"
+                "googlenoai"
+              ];
+              urls = [
+                {
+                  template = "https://duckduckgo.com/";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                    {
+                      name = "ia";
+                      value = "web";
+                    }
+                  ];
+                }
+              ];
+            };
+            github = {
+              name = "GitHub";
+              icon = "https://github.com/favicon.ico";
+              definedAliases = [
+                "@gh"
+                "@github"
+              ];
+              urls = [
+                {
+                  template = "https://github.com/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            google = {
+              name = "Google";
+              icon = "https://www.google.com/favicon.ico";
+              definedAliases = [
+                "@gg"
+                "gg"
+              ];
+              urls = [
+                {
+                  template = "https://www.google.com/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            nio = {
+              name = "Nix Options";
+              definedAliases = [
+                "@nio"
+                "@nixopt"
+              ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              urls = [
+                {
+                  template = "https://search.nixos.org/options";
+                  params = [
+                    {
+                      name = "type";
+                      value = "options";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            nip = {
+              name = "Nix Packages";
+              definedAliases = [
+                "@nip"
+                "@nixpkgs"
+              ];
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              urls = [
+                {
+                  template = "https://search.nixos.org/packages";
+                  params = [
+                    {
+                      name = "type";
+                      value = "packages";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            sxng = {
+              name = "SearxNG";
+              icon = "https://paulgo.io/static/themes/simple/img/favicon.svg";
+              definedAliases = [
+                "sx"
+                "sxng"
+                "@sxng"
+                "@searxng"
+              ];
+              urls = [
+                {
+                  template = "https://paulgo.io/";
+                  params = [
+                    {
+                      name = "preferences";
+                      value = "eJx1WMmS47wNfpr4ooprJpOlcvApleQB8t9VEAlLHFGEmott9dMH0Epa3Yde9HEDsX6ggogteYPh1qJDD_ZiwbUJWrxBinSxpMDiDd1FPhUNo8WIt5aotXi5w8MocrXHQPaBfsMHjB3p23___cclwB0Dglfd7ecldjjgLRjZ5cKLko2h5vUOn3WE5vYfsAEvmsyxIwF_Xsm3l2VZHeJkV-EUuoi-BmtaN_D_6_qPhH6qjaujiTx1ARcZ5DC13HmqA1pU8faHT3jpKPY4hZvGO7BUl-RtfSc_QIzGtbfRY4zTRZsAjUVdo2uNY6X9-vuPdeN61d-f_vKvHaweRiOFul7-8tA_W2jrOpAyYKsBtQEGoVFu6lCuku0C6p5cthTsyEdW1rj0qkZQPduItzZRxpyDUMmR5oF1fTcW5yUuQC3KnT_GvhqM9-S3RSOrs-LfVYjkcd8K2KIa1k9nXhSqp-nNNu6jUfz_IMcv3yFCNKzYA2zA6JRfZgaqZfx9XtWDuW_nNcYa-cku3rABKrnEfpUZOem2MVF1KWIJNUn1GLfdCbz2CLpUdQG_GacZm2Jq1KZtDxXTiI7dNGB2q3npVSl11bkwClQ3VazNN-MpTyF4vPPRyqBTuGBP_TAcFtnZE475p0re8_QpxzTip1xiSMGo-Xs2Dh9FHHteEN1W7OTGGbFZyBfLZsrS2aGRpTH62EPcQUOE4mTWs_y0VD2x-WbkZLNsrLBwsRvIscfpi98OMPJ0_i3yDfTbjKL1YxaHLU6Yy3GHEBuKBWScni15GHSHzt56DJ3ucQzNmj8MIAOxgzhw4iu28tiAtaUwC1ZqYkfPZ3rEKtA9PsFjpXmeipLWFq-6e-N6A3mo3ieniwOnKTNqCw24z8KmLZrPjrNnNgmdSeG4Hn9HovXIltMtNJtXk8YGfXuMIccEDdv38CpOIpoDMD9qLiVvkxg522XFRwuTpLMtrnJ4IA6mXHkdNB7k1zq545hEv2h-AfC1xycXjHA12zWNrUYKcbdQl1ouBu0d1JZDM6SSOAkYwxdDgRPBngXMoJvj8sZBJiz7tud4nbI7mw8z5UnytwkdHes5iXrwUyXKCyZzby4f7aMwsqUmRLz6TRCblNFFOoPWmbs49bY7l3dQI7h1xWAkhbEjVpZTx47SZ2fyg4bn0BQO74Q78E92DTduDuImgCzN6ilgnkzJWhi2oiFJGNj_x9RYo2BNbEc2ncetGLTEVi3lMgnM18NMlwLx3pRpccngJmx1ZTQvjp5pd81t6YafYnckrTr2iyytsfBcLx7bjvNVKk0DGLfse9T33TQfCXyfiz8D5wj5eIKLZV5ZoJNgnmKUmGbiQ_lNlqIwTMHEIiaZQ927ECsxZX5ioJYKBjADZ8kW-CTGAj-RlXQEGrMvlUK4jhOzy83NFGg9SWIZ0hoii0H-3JHFM-7NA9T0fEu9GXwWMR88C8ppbciqDvUTReJY7CU8Nn-JslXgy6T9MrGI95hCf667B3qWKhs7CZWNFTZPLnA2DN1x7gROY5GJF-R83oq_lbeHGTCP36dpinASptAQ9eEd_EhUOpKAgZJXZ3RENSfvb-AjpgUWMjbbu5z9oIkvUqBk755ziB27ksgYFT_JFXOHies319YqeubUlutBUUh__vr1j9dhbZ00ujx0Pp34SLadVKPRWCEj2yw3py0mno9kZZ6Q4DjN5aOBsFUWB4-Sus7A2VoLXBh_gc4Bn5qpxWHL_iOij6nJU-1MZ1nKXvjozO32oQlK-infZ2F84sSf7-jRSluXr1yawS65ty4ox7_IHrOTl0HzpJfpyXEurcLkyE1CvDYtp9eTC2C2w4OMnluq9f6P1KVHvt0MnE9e4JM2xdUG5tb5Dp8wSsEsugjPxrgW5uFadNTgJRC4mdms0rfXlrLyENAF5ZnCc6-b1WXmvMxWuBAvDduMX7j2FT3r3378GF8ZnZY0sXSVRZv3Mo88tpgcagXDeMS-zF5Jd3azWb3l91l7qsN7TypLRHy19xKiSShZ1aWNUmLyXIvHQeVyHZ3CNz3H6XCM00Bc-12muZ-ZQu7ak3Q7C43mYJ-fODIazYW59zn_NGM3Fd_xEHploYWtV-zkPSuuwle0l9FvqS-XFrLgc71wAUcvjey7WruVVy-sUxjYvSCWQ5vyy_V8WQg5g8RhmKqtsC4ZuGyZlxmJ2c13Y8KfvxuTnZmBnIcH7t9Ik_tm532YeVXHBfeLGfpgrC9udJM-nHkA7pZw6wY2QnmQ95I4hsi9V-Tmc-tARy0p85g04gvzvmnsmBW4fbZRvzknUk4UJcHhTCh33mGk8WD6mPHO1AxSerKDpnEL2ZnRFWRwpnjndAzaUNVwTx_ypwKPKc56XZ00cIWCjZMcfKejkR1GnoxUn9U4SpweSpUGbhJ64qJzt_Tc8pYsC04Ut-ef0KeG83vapiTudlLYbRGQbcMx-JWTB7JGc9PrF4fZ1DRBR0U6mCi9FbUd2V9KwFjOC8tDVpHPi9BlYK7T0jXkzyHitRxn15O288Evy8U2CElLi5ln123o7YniSV470-esk6I8NHzxfPWM0V9Nxkbm0nOuReenuRk-P7LFv26vX8dr6GgTl5ZwM25-V8L_cT9oZwJLvuZcr_q9CG1TpW-oeT7JLCaRtVAuqQxgVeKcSyKrRPK6Qmo3b11zvmKPiktjBvXyVPzkSiiLmZ1Jyajl8dYzYeOZF2bkHK-3_wPUdKOK";
+                    }
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            youtube = {
+              name = "YouTube";
+              icon = "https://www.youtube.com/favicon.ico";
+              definedAliases = [
+                "@yt"
+                "@youtube"
+              ];
+              urls = [
+                {
+                  template = "https://www.youtube.com/results";
+                  params = [
+                    {
+                      name = "search_query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+          };
+        };
         settings = {
           "browser.download.autohideButton" = true;
           "browser.newtabpage.activity-stream.feeds.topsites" = true;
