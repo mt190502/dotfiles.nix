@@ -7,7 +7,6 @@
     "rose"
   ];
   modules = [
-    "docker"
     "evolution"
     "fontconfig"
     "gpu-screen-recorder"
@@ -19,6 +18,7 @@
     "modprobed-db"
     "onepassword"
     "pipewire"
+    "podman"
     "plasma"
     "printer"
     "steam"

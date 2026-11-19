@@ -5,8 +5,8 @@
   primaryUser = "srvadmin";
   users = [ "srvadmin" ];
   modules = [
-    "docker"
     "initrd-tools"
+    "podman"
   ];
   profiles = [
     "k3s"
