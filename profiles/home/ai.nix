@@ -473,6 +473,7 @@ in
           deny = [ ];
         };
         agents = {
+          idleTimeout = "15m";
           maxDepth = 1;
         };
         sandbox = {
