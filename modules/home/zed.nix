@@ -49,6 +49,9 @@
         };
         dock = "right";
         model_parameters = [ ];
+        threads_sidebar = {
+          position = "right";
+        };
         tool_permissions = {
           tools = {
             terminal = {
